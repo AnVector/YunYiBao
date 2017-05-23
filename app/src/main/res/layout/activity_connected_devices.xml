@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_connected_devices"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background_color"
+    android:orientation="vertical"
+    tools:context="com.anyihao.ayb.frame.activity.ConnectedDevicesActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:background="@drawable/connected_device_header_bg"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+        <include layout="@layout/toolbar"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:layout_marginTop="60dp"
+            android:src="@drawable/ic_connected_device"/>
+        <TextView
+            android:id="@+id/tv_count"
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:text="@string/connected_devices_hint"
+            android:textStyle="bold"
+            android:textSize="@dimen/font_size_fif"/>
+    </LinearLayout>
+    <include
+        layout="@layout/item_connected_device_list"/>
+
+    <com.marshalchen.ultimaterecyclerview.UltimateRecyclerView
+        android:id="@+id/ultimate_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:recyclerviewClipToPadding="true"
+        app:recyclerviewDefaultSwipeColor="@array/google_colors"
+        app:recyclerviewFloatingActionView="@layout/floating_view"
+        app:recyclerviewScrollbars="vertical"/>
+</LinearLayout>

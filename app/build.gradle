@@ -1,0 +1,238 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.getkeepsafe.dexcount'
+apply plugin: 'org.greenrobot.greendao'
+
+//定义打包时间方法
+def static releaseTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+}
+
+//定义versionName
+def static String releaseVName() {
+    return "1.0.0"
+}
+
+//定义versionCode
+def static int releaseVCode() {
+    return 1
+}
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+    defaultConfig {
+        applicationId "com.anyihao.ayb"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode releaseVCode()
+        versionName releaseVName()
+        multiDexEnabled true //Enable multidex support
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [UMENG_CHANNEL_VALUE: "GooglePlay",
+                                BUGLY_APP_ID       : "900029763",
+                                BUGLY_APP_Version  : releaseVName(),
+                                BUGLY_APP_Channel  : name,
+                                BUGLY_APP_IsDebug  : "false"]
+//        resConfigs "zh"//设置支持的语言
+//        resValue "string", "build_time", buildTime()
+//        resValue "string", "build_host", hostName()
+//        resValue "string", "build_revision", revision()
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    aaptOptions {
+        cruncherEnabled = false
+        useNewCruncher = false
+    }
+
+    //是否执行lint检查-若执行lint检查，有任何的错误或者警告提示，都会终止构建。
+    lintOptions {
+        disable 'InvalidPackage'
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
+
+
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/java', 'src/main/aidl']
+            jni.srcDirs = ['src/main/jni', 'src/main/jni/']
+        }
+    }
+
+    greendao {
+        schemaVersion 1 //数据库schema版本号
+        daoPackage 'com.anyihao.ayb.db.gen'
+        targetGenDir 'src/main/java'
+    }
+
+//打包时去掉如下配置文件信息
+    packagingOptions {
+        exclude 'proguard-project.txt'
+        exclude 'project.properties'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/DEPENDENCIES'
+    }
+
+    //签名配置
+    signingConfigs {
+
+        debug {
+            storeFile file(RELEASE_STOREFILE)
+            storePassword RELEASE_STORE_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_KEY_PASSWORD
+        }
+        release {
+            storeFile file(RELEASE_STOREFILE)//KeyStore文件的存放路径，绝对路径或者相对路径
+            storePassword RELEASE_STORE_PASSWORD//KeyStore的密钥库口令
+            keyAlias RELEASE_KEY_ALIAS //KeyStore的别名
+            keyPassword RELEASE_KEY_PASSWORD//KeyStore的密钥口令
+        }
+    }
+
+    /*多渠道打包*/
+    productFlavors {
+        _360 {
+            applicationId = "com.anyihao.ayb"
+//            applicationIdSuffix '.kale.dev'
+//            manifest.srcFile 'hip/AndroidManifest.xml'
+        }
+        tencent {
+            applicationId = "com.anyihao.ayb"
+            //applicationIdSuffix '.kale.dev'
+//            manifest.srcFile 'hip/AndroidManifest.xml'
+
+        }
+        baidu {
+            applicationId = "com.anyihao.ayb"
+            //applicationIdSuffix '.kale.dev'
+//            manifest.srcFile 'hip/AndroidManifest.xml'
+
+        }
+    }
+    productFlavors.all {
+        flavor ->
+            flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name,
+                                           BUGLY_APP_ID       : "900029763",
+                                           BUGLY_APP_Version  : releaseVName(),
+                                           BUGLY_APP_Channel  : name,
+                                           BUGLY_APP_isDebug  : "false"]
+
+    }
+
+    //重命名生成的apk文件
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                // 输出apk名称为boohee_v1.0_2015-01-15_wandoujia.apk
+                def fileName = "ayb_V${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}.apk"
+                output.outputFile = new File(outputFile.parent, fileName)
+            }
+        }
+    }
+
+//    更改生成文件的位置
+//    android.libraryVariants.all { variant ->
+//        variant.outputs.each { output ->
+//            if (output.outputFile != null && output.outputFile.name.endsWith('.apk')) {
+////                def name = "${rootDir}/demo/libs/library.aar"
+//                def name = "${rootDir}/ayb_V${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}.apk"
+//                output.outputFile = file(name)
+//            }
+//        }
+//    }
+
+//    删除无用的apk中间产物 unaligned apk
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            if (output.zipAlign != null) {
+                output.zipAlign.doLast {
+                    output.zipAlign.inputFile.delete()
+                }
+            }
+
+        }
+
+    }
+
+    buildTypes {
+        debug {
+            // 显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+//            buildConfigField "String", "API_URL", '"http://dev.goodev.org/"'
+            versionNameSuffix "-debug"
+            minifyEnabled false //是否进行混淆
+            zipAlignEnabled false //Zipalign优化
+            shrinkResources false //是否移除无用的resource文件
+            signingConfig signingConfigs.debug //签名配置
+            jniDebuggable = true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release {
+            //不显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            signingConfig signingConfigs.release //签名配置
+            shrinkResources false //是否移除无用的resource文件
+            minifyEnabled false //是否进行混淆
+            zipAlignEnabled true //Zipalign优化
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    return void
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    //剔除某个特定的库
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile project(':androidbase')
+    //okhttp
+    compile project(':okhttputils')
+    //socketutils
+    compile project(':socketutils')
+    //ultimaterecyclerview
+    compile project(':ultimaterecyclerview')
+    //友盟推送
+    //使用动态依赖关系(例如palette-v7:23.0.+)可能会导致意外的版本更新和回归不兼容的问题，建议明确指定库版本(如palette-v7:24.2.0)
+    compile 'com.android.support:support-v4:25.1.1'
+    compile 'com.android.support:appcompat-v7:25.1.1'
+    compile 'com.android.support:design:25.1.1'
+    //Material Design CardView SupportLibrary
+    compile 'com.android.support:cardview-v7:25.1.1'
+    compile 'com.android.support:multidex:1.0.1'
+    //swipe card
+    compile 'com.github.mcxtzhang:ZLayoutManager:V1.1.0'
+    compile 'com.github.mcxtzhang:all-base-adapter:V1.5.2'
+    //GreenDao
+    compile 'org.greenrobot:greendao:3.2.0'
+    // convenientBanner
+    compile 'com.bigkoo:convenientbanner:2.0.5'
+    //CircleImageView
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    //zxing
+    compile 'com.google.zxing:core:3.2.1'
+    compile 'com.journeyapps:zxing-android-embedded:3.5.0'
+    //MPAndroidChart
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+    //android-pickerView
+    compile 'com.contrarywind:Android-PickerView:3.2.4'
+    //
+    compile 'com.feezu.liuli:timeselector:1.1.3'
+    compile 'com.github.castorflex.smoothprogressbar:library:1.0.1-SNAPSHOT@aar'
+    compile 'com.github.castorflex.smoothprogressbar:library-circular:1.0.1'
+}

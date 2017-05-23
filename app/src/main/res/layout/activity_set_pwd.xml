@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_set_pwd"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/content_bg_color"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context="com.anyihao.ayb.frame.activity.SetPwdActivity">
+
+    <include
+        layout="@layout/toolbar_common"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left|center_vertical"
+            android:text="@string/identifying_code_text_hint"
+            android:textColor="@color/user_account_color"
+            android:textSize="@dimen/font_size_normal_high"/>
+
+        <EditText
+            android:id="@+id/input_verify_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="@string/identifying_code_input_hint"
+            android:maxLines="1"
+            android:paddingLeft="42dp"
+            android:paddingRight="42dp"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_thi"/>
+
+        <View
+            android:layout_width="0.6dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:background="@color/line_color"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:gravity="center"
+            android:text="@string/get_verify_code"
+            android:textColor="@color/toolbar_title_color"
+            android:textSize="@dimen/font_size_normal_high"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:layout_marginLeft="12dp"
+        android:background="@color/line_color"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left|center_vertical"
+            android:text="@string/set_pwd"
+            android:textColor="@color/user_account_color"
+            android:textSize="@dimen/font_size_normal_high"/>
+
+        <EditText
+            android:id="@+id/input_set_pwd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="@string/set_pwd_input_hint"
+            android:inputType="phone"
+            android:maxLines="1"
+            android:paddingLeft="26dp"
+            android:paddingRight="26dp"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_thi"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:layout_marginLeft="12dp"
+        android:background="@color/line_color"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left|center_vertical"
+            android:text="@string/confirm_pwd"
+            android:textColor="@color/user_account_color"
+            android:textSize="@dimen/font_size_normal_high"/>
+
+        <EditText
+            android:id="@+id/input_confirm_pwd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="@string/confirm_pwd_input_hint"
+            android:maxLines="1"
+            android:paddingLeft="26dp"
+            android:paddingRight="26dp"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_thi"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:layout_marginLeft="12dp"
+        android:background="@color/line_color"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:textColor="@color/light_gray"
+        android:textSize="@dimen/font_size_small"/>
+
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_register"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/btn_register"
+        android:gravity="center"
+        android:text="@string/register_hint"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_size_large"/>
+</LinearLayout>

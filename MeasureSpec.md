@@ -1,0 +1,11 @@
+系统会将View的LayoutParams根据父容器所施加的规则转换成对应的MeasureSpec,然后再根据这个MeasureSpec来测量出View的宽高
+
+1. MeasureSpect代表一个32位的int值，高2位代表SpecMode，低30位代表SpecSize,SpecMode代表测量模式，SpecSize指在特定测量模式下的规格大小。
+2. SpecMode分为三类，分别为UNSPECIFIED,EXACTLY,AT_MOST。
+3. 在平时的开发中，我们给View设置LayoutParams来限制View的显示，在View测量的时候，系统会将LayoutParams**在父容器的约束下**转换成对应的MeasureSpec,然后再根据这个MeasureSpec来确定View测量后的宽/高。**需要注意的是，MeasureSpec不是唯一由LayoutParams决定的，LayoutParams需要和父容器一起才能决定View的MeasureSpec,从而进一步决定View的宽/高**。
+4. 对应定级View(即DecorView)和普通View来说，MeasureSpec的转换过程略有不同。对于DecorView,其MeasureSpec由窗口的尺寸和其自身的LayoutParams来共同决定；对于普通的View,其MeasureSpec由父容器的MeasureSpec和自身的LayoutParams来共同决定，此外还和View的margin及padding有关，MesureSpec一旦确定后，onMeausre中就可以确定View的测量宽/高。
+5. 对于普通的View,当其LayoutParams中使用固定宽/高的时候，不管父容器的MeasureSpec是什么，View的MeasureSpec都是精确模式并且其大小遵循LayoutParams中的大小。
+6. 对于普通的View,当其LayoutParams中宽/高是match_parent时，①如果父容器是精确模式，那么View也是精确模式并且其大小是父容器的剩余空间；②如果父容器是最大模式，那么View也是最大模式并且其大小不会超过父容器的剩余空间。
+7. 对于普通的View，当其LayoutParams中宽/高是wrap_content时，不管父容器的模式是精确还是最大化，View的模式总是最大化并且大小不能超过父容器的剩余空间。
+8. View的工作流程主要是指measure,layout,draw,即测量、布局和绘制，measure确定View的测量宽/高，layout确定View的最终宽/高和四个顶点的位置，而draw则将View绘制到屏幕上。
+9. View的measure过程是由measure()方法完成，measure()方法是一个final方法，子类不能重写该方法，在View的measure()方法中会调用View的onMeasure()方法，因此只需重写onMeasure()方法即可。

@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.anyihao.ayb">
+
+    <!-- 自定义permission -->
+    <permission
+        android:name="com.anyihao.ayb.permission.ACCESS_POLLING_SERVICE"
+        android:protectionLevel="normal"/>
+    <!-- JPush Required -->
+    <permission
+        android:name="com.anyihao.ayb.permission.JPUSH_MESSAGE"
+        android:protectionLevel="signature"/>
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- 用于获取运营商信息，用于支持提供运营商信息相关的接口 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <!-- 用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <!-- 用于读取手机当前的状态 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <!-- 允许应用读取外部存储 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <!-- 用于写入缓存数据到扩展存储卡 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.READ_LOGS"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
+    <uses-permission android:name="com.anyihao.ayb.permission.ACCESS_POLLING_SERVICE"/>
+    <!-- JPush Required -->
+    <uses-permission android:name="com.anyihao.ayb.permission.JPUSH_MESSAGE"/>
+
+    <!-- 高德地图权限申请 -->
+    <!-- 用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!-- 用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <!-- 用于申请调用A-GPS模块 -->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
+    <!-- 用于申请获取蓝牙信息进行室内定位 -->
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+
+    <!-- JPush 权限申请 -->
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT"/>
+    <!-- 允许应用在手机屏幕关闭后后台进程仍然运行 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <!-- 允许应用读写系统设置项 -->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <!-- 允许应用震动 -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <!-- 允许应用挂载/卸载 外部文件系统 -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+
+    <!-- Optional for location -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/> <!-- 用于开启 debug 版本的应用在6.0 系统上 层叠窗口权限 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.READ_PROFILE"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+
+    <application
+        android:name=".common.UApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.anyihao.ayb.common.GlideConfig"
+            android:value="GlideConfig"/>
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="580498fae0f55a28f400166a"/>
+        <meta-data
+            android:name="UMENG_MESSAGE_SECRET"
+            android:value="24c18d51d216d379ca4d8e30b6334d0f">
+        </meta-data>
+        <!-- Umeng渠道配置 -->
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${UMENG_CHANNEL_VALUE}"/>
+        <!-- 配置Bugly APP ID -->
+        <meta-data
+            android:name="BUGLY_APPID"
+            android:value="${BUGLY_APP_ID}"/>
+        <!-- 配置 Bugly APP版本号 -->
+        <meta-data
+            android:name="BUGLY_APP_VERSION"
+            android:value="${BUGLY_APP_Version}"/>
+        <!-- 配置 Bugly APP渠道号 -->
+        <meta-data
+            android:name="BUGLY_APP_CHANNEL"
+            android:value="${BUGLY_APP_Channel}"/>
+        <!-- 配置Bugly调试模式（true或者false） -->
+        <meta-data
+            android:name="BUGLY_ENABLE_DEBUG"
+            android:value="${BUGLY_APP_IsDebug}"/>
+        <!-- 高德地图 -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="a1e6340e46898afd4d3bc04142c5a1d5"/>
+        <!-- JPush -->
+        <!-- Required  . Enable it you can get statistics data with channel -->
+        <meta-data
+            android:name="JPUSH_CHANNEL"
+            android:value="developer-default"/>
+        <meta-data
+            android:name="JPUSH_APPKEY"
+            android:value="您应用的Appkey"/> <!-- 值来自开发者平台取得的AppKey -->
+
+
+        <!-- Rich push 核心功能 since 2.0.6 -->
+        <activity
+            android:name="cn.jpush.android.ui.PopWinActivity"
+            android:exported="false"
+            android:theme="@style/MyDialogStyle">
+        </activity>
+
+        <!-- Required SDK核心功能 -->
+        <activity
+            android:name="cn.jpush.android.ui.PushActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:exported="false"
+            android:theme="@android:style/Theme.NoTitleBar">
+            <intent-filter>
+                <action android:name="cn.jpush.android.ui.PushActivity"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="com.anyihao.ayb"/>
+            </intent-filter>
+        </activity>
+        <!-- Required  SDK核心功能 -->
+        <service
+            android:name="cn.jpush.android.service.DownloadService"
+            android:enabled="true"
+            android:exported="false">
+        </service>
+
+        <!-- Required SDK 核心功能 -->
+        <!-- 可配置android:process参数将PushService放在其他进程中 -->
+        <service
+            android:name="cn.jpush.android.service.PushService"
+            android:process=":mult">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTER"/>
+                <action android:name="cn.jpush.android.intent.REPORT"/>
+                <action android:name="cn.jpush.android.intent.PushService"/>
+                <action android:name="cn.jpush.android.intent.PUSH_TIME"/>
+            </intent-filter>
+        </service>
+
+        <!-- since 1.8.0 option 可选项。用于同一设备中不同应用的JPush服务相互拉起的功能。 -->
+        <!-- 若不启用该功能可删除该组件，将不拉起其他应用也不能被其他应用拉起 -->
+        <service
+            android:name="cn.jpush.android.service.DaemonService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.DaemonService"/>
+
+                <category android:name="com.anyihao.ayb"/>
+            </intent-filter>
+        </service>
+
+        <!-- Required SDK核心功能 -->
+        <receiver
+            android:name="cn.jpush.android.service.PushReceiver"
+            android:enabled="true">
+            <intent-filter android:priority="1000">
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY"/> <!-- Required  显示通知栏 -->
+                <category android:name="com.anyihao.ayb"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.USER_PRESENT"/>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+            <!-- Optional -->
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED"/>
+                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+
+                <data android:scheme="package"/>
+            </intent-filter>
+        </receiver>
+
+        <!-- Required SDK核心功能 -->
+        <receiver
+            android:name="cn.jpush.android.service.AlarmReceiver"
+            android:exported="false"/>
+
+        <activity
+            android:name=".frame.activity.SplashActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTranslucent">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <!-- 动态更换icon -->
+        <!-- <activity-alias -->
+        <!-- android:name=".frame.activity.NewIcon" -->
+        <!-- android:enabled="false" -->
+        <!-- android:ic_profile="@drawable/new_ic_launcher" -->
+        <!-- android:label="@string/app_name" -->
+        <!-- android:targetActivity=".frame.activity.SplashActivity"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.MAIN"/> -->
+
+
+        <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
+        <!-- </intent-filter> -->
+        <!-- </activity-alias> -->
+
+        <activity
+            android:name=".frame.activity.MainActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".frame.activity.GuideActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".frame.activity.MainFragmentActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <service
+            android:name=".common.PollingService"
+            android:enabled="true"
+            android:permission="com.looper.easylife.permission.ACCESS_POLLING_SERVICE"
+            android:process=":remote">
+            <intent-filter>
+                <action android:name="com.easylife.pollingservice"/>
+            </intent-filter>
+        </service>
+        <!-- 后台进程被杀死以后，无法收到系统发送的网络状态切换的广播 -->
+        <receiver android:name=".common.UBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".frame.activity.DetailActivity"
+            android:launchMode="singleTop">
+        </activity>
+
+        <service
+            android:name=".common.UService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
+
+        <activity
+            android:name=".frame.activity.LoginActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.SignupActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.ReportActivity"
+            android:launchMode="singleTop">
+        </activity>
+
+        <!-- 微信支付回调 -->
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"/>
+        <!-- 支付宝H5支付 -->
+        <activity
+            android:name="com.alipay.sdk.app.H5PayActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|stateHidden">
+        </activity>
+        <activity
+            android:name="com.alipay.sdk.auth.AuthActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind">
+        </activity>
+
+        <!-- 新浪微博分享 -->
+        <activity
+            android:name=".wbapi.WBShareActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <!-- 微信分享 -->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity
+            android:name="com.umeng.qq.tencent.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data android:scheme="tencent1105774848"/>
+            </intent-filter>
+        </activity>
+        <!-- QQ精简版分享 -->
+        <activity
+            android:name="com.umeng.qq.tencent.AssistActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <!-- 新浪微博精简版分享编辑页 -->
+        <activity
+            android:name="com.umeng.socialize.editorpage.ShareActivity"
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.UMDefault"/>
+        <activity
+            android:name=".frame.activity.OrderActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.ShareActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.PayActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.AliPayActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <!-- 高德定位 service -->
+        <service android:name="com.amap.api.location.APSService">
+        </service>
+
+        <!-- zxing change the orientation -->
+        <activity android:name=".frame.activity.QRScanActivity"/>
+        <!-- android:screenOrientation="fullSensor" -->
+        <!-- tools:replace="screenOrientation"/> -->
+        <activity
+            android:name=".frame.activity.RegisterActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.SetPwdActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.RetrievePwdActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.ResetPwdActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.BindDeviceActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.MessageDetailsActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.SettingsActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.UpdateSelfDataActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.ModifyDeviceInfoActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.FeedbackActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.MessageActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.QuestionsActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.RechargeRecordDetailsActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.PayResultActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.MeActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.ConnectedDevicesActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.RechargeRecordActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.BondDevicesActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.RechargeActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.FlowAccountActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.FlowChartActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.SearchActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.RdoActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.InviteFriendsActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.CreditActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.DeviceManageActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.SayHiActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.BriberyMoneyActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.ScanActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.AboutUsActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.AccountManageActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.SystemRecordActivity"
+            android:launchMode="singleTop">
+        </activity>
+    </application>
+
+</manifest>

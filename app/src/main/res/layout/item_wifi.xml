@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:padding="20dp">
+
+    <ImageView
+        android:id="@+id/wifi_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/wifi_ssid"
+        android:layout_width="320dp"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@id/wifi_icon"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/wifi_icon"
+        android:gravity="center_vertical"
+        android:textSize="@dimen/font_size_normal_high"/>
+
+    <ImageView
+        android:id="@+id/wifi_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/wifi_icon"
+        android:src="@drawable/wifi_status_connected"/>
+
+    <TextView
+        android:id="@+id/wifi_attached"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@id/wifi_icon"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@id/wifi_state"
+        android:gravity="center_vertical"
+        android:text="@string/attached"
+        android:textSize="@dimen/font_size_normal"/>
+</RelativeLayout>

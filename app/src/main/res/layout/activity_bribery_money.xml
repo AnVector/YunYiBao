@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_bribery_money"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background_color"
+    android:orientation="vertical"
+    tools:context="com.anyihao.ayb.frame.activity.BriberyMoneyActivity">
+
+    <include layout="@layout/toolbar_common"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="left|center_vertical"
+            android:text="@string/user_name"
+            android:textColor="@color/user_account_color"
+            android:textSize="@dimen/font_size_normal_high"/>
+
+        <EditText
+            android:id="@+id/tv_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:textSize="@dimen/font_size_thi"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:layout_marginLeft="12dp"
+        android:background="@color/line_color"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="left|center_vertical"
+            android:text="@string/data_flow"
+            android:textColor="@color/user_account_color"
+            android:textSize="@dimen/font_size_normal_high"/>
+
+        <EditText
+            android:id="@+id/tv_data_amount"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_gravity="center_vertical"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:textSize="@dimen/font_size_thi"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:layout_marginLeft="12dp"
+        android:background="@color/line_color"/>
+
+
+    <EditText
+        android:id="@+id/tv_remark"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:hint="@string/remark"
+        android:maxLines="1"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:textSize="@dimen/font_size_small"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/btn_register"
+        android:gravity="center"
+        android:text="@string/confirm_to_gift"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_size_large"/>
+</LinearLayout>

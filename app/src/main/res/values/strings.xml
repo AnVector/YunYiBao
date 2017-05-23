@@ -1,0 +1,255 @@
+<resources>
+    <string name="company">翰隆科技</string>
+    <string name="app_name">云逸宝</string>
+    <string name="timer_seconds">跳过&#160;%1$ds</string>
+    <string name="home">首页</string>
+    <string name="device">设备</string>
+    <string name="discovery">发现</string>
+    <string name="task">任务</string>
+    <string name="wifi_ssid">AYB-100151</string>
+    <string name="attached">已绑定</string>
+    <string name="bg_proc">开启后台进程</string>
+
+    <string name="bat_power">电量：%1$d</string>
+    <string name="con_count">连接数：%1$d</string>
+    <string name="signal_intensity">信号强度：%1$d</string>
+    <string name="signal_type">信号类型：%1$s</string>
+    <string name="net_speed">网速：%1$s</string>
+    <string name="dev_name">设备名称：%1$s</string>
+    <string name="menu_search">查找</string>
+    <string name="menu_notifications">通知</string>
+    <string name="menu_settings">设置</string>
+    <string name="menu_about_us">关于</string>
+    <string name="home_page">首页</string>
+    <string name="info_date">时间：</string>
+    <string name="user_name_hint">请输入用户名或手机号</string>
+    <string name="password_hint">请输入密码</string>
+    <string name="login">登录</string>
+    <string name="register_hint">注册</string>
+    <string name="message_login">手机动态密码登录</string>
+    <string name="forget_password">忘记密码？</string>
+    <string name="get_verify_code">获取验证码</string>
+    <string name="social_account_login">社交账号登录</string>
+
+    <!--我的-->
+    <string name="about_me">个人中心</string>
+    <string name="my_balance">我的流量</string>
+    <string name="data_flow_shop">流量商城</string>
+    <string name="data_flow_chart">流量报表</string>
+    <string name="recharge_record">充值记录</string>
+    <string name="invite_friends">邀请好友</string>
+    <string name="help_center">使用帮助</string>
+    <string name="data_flow_exchange">我要兑换</string>
+
+    <!--Toolbar Title-->
+    <string name="yun_bao">安逸宝</string>
+    <string name="data_flow_charge">流量充值</string>
+    <string name="me">我的</string>
+    <string name="message">我的消息</string>
+    <string name="linker_num">WIFI连接数</string>
+    <string name="linked_devices">已连接设备</string>
+    <string name="pay_succeed">支付成功</string>
+    <string name="pay_failed">支付失败</string>
+    <string name="nick_name">昵称</string>
+    <string name="modify_device_info">修改设备信息</string>
+    <string name="common_questions">常见问题</string>
+    <string name="message_details">消息详情</string>
+    <string name="recharge_record_details">充值记录详情</string>
+    <string name="feedback">反馈</string>
+    <string name="settings">设置</string>
+    <string name="device_num">设备编号</string>
+    <string name="retrieve_pwd">找回密码</string>
+    <string name="reset_pwd">设置新密码</string>
+    <string name="verify_original_phone">验证原手机</string>
+    <string name="register_by_phone">手机注册</string>
+    <string name="set_login_pwd">设置登录密码</string>
+    <string name="pay">支付</string>
+    <string name="device_list">设备列表</string>
+    <string name="scan">扫描</string>
+
+    <!--user register-->
+    <string name="phone_num_input_hint">请填写注册手机号</string>
+    <string name="phone_num_text_hint">我们将发送验证码到您的手机</string>
+    <string name="next_step">下一步</string>
+    <string name="identifying_code_text_hint">验证码：</string>
+    <string name="identifying_code_input_hint">请输入验证码</string>
+    <string name="set_pwd">设置密码：</string>
+    <string name="confirm_pwd">确认密码：</string>
+    <string name="set_pwd_input_hint">6&#8211;16位字母、数字组合</string>
+    <string name="confirm_pwd_input_hint">确认新密码</string>
+
+    <!--retrieve password-->
+    <string name="retrieve_input_hint">请输入手机号</string>
+
+    <!--reset password-->
+    <string name="new_pwd_hint">新密码，6&#8211;16位字母、数字组合</string>
+    <string name="submit">确认提交</string>
+
+    <!--bind device-->
+    <string name="device_bind_input_hint">请输入设备编号</string>
+    <string name="confirm">确认</string>
+    <string name="bind_device">绑定设备</string>
+
+    <!--messages details-->
+    <string name="example_text">如果你无法简洁的表达你的想法，那只能说明你还不够了解它。——阿尔伯特 爱因斯坦</string>
+    <string name="example_date">3月25日</string>
+
+    <!--settings-->
+    <string name="change_pwd">修改密码</string>
+    <string name="change_phone">修改手机</string>
+    <string name="suggestion">意见反馈</string>
+    <string name="contact_us">客服热线</string>
+    <string name="about_us">关于安逸宝</string>
+    <string name="logout">退出登录</string>
+
+    <!--modify self info-->
+    <string name="save">保存</string>
+
+    <!--modify device info-->
+
+    <!--feedback-->
+    <string name="feedback_hint">请详细描述您的问题或建议，我们将及时解决</string>
+    <string name="submit_feedback">提交</string>
+
+    <!--recharge record details-->
+    <string name="price">-4.00</string>
+    <string name="pay_success">交易成功</string>
+
+    <!--payment result-->
+    <string name="payment_suceess">恭喜，流量购买成功！</string>
+    <string name="payment_failed">对不起，流量购买失败！如有疑问可以联系我们的客服解决哦~~</string>
+    <string name="purchase_amount">充值量：</string>
+    <string name="period_of_validity">有效期：</string>
+    <string name="fee">费用：</string>
+    <string name="back_to_main">返回首页</string>
+    <string name="fee_value">&#165;3.00</string>
+    <string name="goto_recharge_record">进入充值记录</string>
+
+    <!--home-->
+    <string name="connected">已连接</string>
+    <string name="disconnected">未连接</string>
+    <string name="power_of_battery">设备电量</string>
+    <string name="binding_devices">绑定设备数</string>
+    <string name="connected_devices_amount">WIFI连接数</string>
+    <string name="leasing_equipment">租赁设备</string>
+    <string name="return_equipment">归还设备</string>
+    <string name="advertisement">流量大减价，一律两元！一律两元！</string>
+
+    <!--empty view-->
+    <string name="no_network">亲，网络不给力啊&#8230;</string>
+    <string name="no_message">暂无消息哦&#8230;</string>
+    <string name="no_recharge_record">您还没有充值记录&#8230;</string>
+    <string name="no_binding_devices">您还没有绑定的设备&#8230;</string>
+
+    <!--pay page-->
+    <string name="order_details">订单详情</string>
+    <string name="pay_amount">支付金额：</string>
+    <string name="valid_period">有效期限：</string>
+    <string name="pay_mode">支付方式</string>
+    <string name="pay_by_ali_pay">支付宝支付</string>
+    <string name="pay_by_wx">微信支付</string>
+    <string name="confirm_to_pay">确认支付</string>
+
+    <!--connected devices-->
+    <string name="connected_devices">设备连接数</string>
+
+    <!--recharge page-->
+    <string name="package_description">全国可用，即时生效，有效期30天</string>
+    <string name="confirm_to_recharge">确认充值</string>
+    <!--bond device list-->
+    <string name="device_name">AYM-100201</string>
+    <string name="device_on">已开启</string>
+    <string name="device_off">未开启</string>
+    <!--connected device list-->
+    <string name="device_of_mine">本机</string>
+    <string name="device_of_unknown">未知设备</string>
+    <string name="cancle">取消</string>
+    <string name="defriend">拉黑用户</string>
+
+    <!--RdoCash ratio-->
+    <string name="ratio_day_chart">转化率日报表</string>
+    <string name="rdo_cash_of_zm">掌盟代计费</string>
+    <string name="description">描述</string>
+    <string name="count">数量</string>
+    <string name="percent">占比</string>
+    <string name="total">合计</string>
+    <string name="search">查询</string>
+    <string name="picker_time">时间选择器</string>
+    <string name="picker_province">条件选择器</string>
+    <string name="picker_custom_time">时间选择器自定义布局</string>
+    <string name="picker_custom_province">条件选择器自定义布局</string>
+    <string name="start_time">起始时间：</string>
+    <string name="end_time">截止时间：</string>
+    <string name="channel">渠道:</string>
+    <string name="customer">公司：</string>
+    <string name="client_id">客户端编号：</string>
+    <string name="client_id_hint">请输入客户端编号</string>
+    <string name="type_of_service">业务类型：</string>
+    <string name="loading">正在加载中，请稍后&#8230;</string>
+    <string name="no_data">暂无数据，请稍后重试&#8230;</string>
+    <string name="all_channel">全部</string>
+    <string name="AEE_channel">AEE</string>
+    <string name="except_AEE_channel">非AEE</string>
+
+    <!--invite friends-->
+    <string name="share_to">分享到</string>
+    <string name="share_account">您已成功邀请12人</string>
+
+    <!--my credit-->
+    <string name="my_points">我的积分</string>
+    <!--connected devices-->
+    <string name="connected_devices_hint">发现4台设备接入当前WIFI</string>
+    <string name="menu_hint">去和心仪的人打个招呼吧，用红包打招呼收到回应的机会会更上一层楼哦~~</string>
+    <string name="say_hi">打招呼</string>
+    <string name="bribery_money">发红包</string>
+    <string name="cancel">取消</string>
+    <!--Authorization device-->
+    <string name="authorization_device">授权设备</string>
+    <string name="no_authorization_device">暂无授权设备</string>
+    <string name="add_authorization_device">添加授权设备</string>
+    <string name="unbind_auth_device">解除授权</string>
+    <!--say hi-->
+    <string name="say_hi_hint">说句话打个招呼（50字以内）</string>
+    <string name="send_hi">发送</string>
+    <!--bribery money-->
+    <string name="user_name">用户名：</string>
+    <string name="data_flow">流量：</string>
+    <string name="remark">添加备注（30字以内）</string>
+    <string name="confirm_to_gift">确认</string>
+    <string name="gift_data">转赠流量</string>
+    <string name="gift_history">转赠记录</string>
+    <!--QR scan-->
+    <string name="manual_input_validation_code">手动输入验证码</string>
+    <string name="invite_code_hint">您的邀请码为：</string>
+
+    <!--about us-->
+    <string name="abount_yunyibao">关于云逸宝</string>
+    <!--account manage-->
+    <string name="account_binding">账号绑定</string>
+    <string name="account_management">账号管理</string>
+    <!--系统赠送记录-->
+    <string name="system_gift_record">系统赠送记录</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_login">Sign in</string>
+
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">Contacts permissions are needed for providing email
+        completions.</string>
+    <string name="progress_on_loading">加载中&#8230;</string>
+    <string name="delete_toolbar">delete</string>
+    <string name="add_toolbar">add</string>
+    <string name="empty_view_hint">No data here - This is the custom empty view</string>
+    <!--微信支付-->
+    <string name="pay_by_wx_title">通过微信支付</string>
+    <string name="pay_by_wxap">服务器端签名微信支付</string>
+</resources>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.anyihao.ayb.frame.activity.MainFragmentActivity">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp">
+
+        <RadioButton
+            android:id="@+id/radio_button_device"
+            style="@style/radio_button_style"
+            android:drawableTop="@drawable/device_normal"
+            android:text="@string/device"/>
+
+        <RadioButton
+            android:id="@+id/radio_button_discovery"
+            style="@style/radio_button_style"
+            android:drawableTop="@drawable/discovery_normal"
+            android:text="@string/discovery"/>
+
+        <RadioButton
+            android:id="@+id/radio_button_task"
+            style="@style/radio_button_style"
+            android:drawableTop="@drawable/task_normal"
+            android:text="@string/task"/>
+
+        <RadioButton
+            android:id="@+id/radio_button_me"
+            style="@style/radio_button_style"
+            android:drawableTop="@drawable/me_normal"
+            android:text="@string/me"/>
+    </RadioGroup>
+</RelativeLayout>

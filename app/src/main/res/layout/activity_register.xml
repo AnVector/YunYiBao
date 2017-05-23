@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_register"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/content_bg_color"
+    android:orientation="vertical"
+    tools:context="com.anyihao.ayb.frame.activity.RegisterActivity">
+
+    <include
+        layout="@layout/toolbar_common"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/edit_text_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/ic_mobile"/>
+
+        <View
+            android:layout_width="0.6dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
+            android:background="@color/line_color"/>
+
+        <EditText
+            android:id="@+id/input_phone_num"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="@string/phone_num_input_hint"
+            android:inputType="phone"
+            android:maxLines="1"
+            android:paddingLeft="11dp"
+            android:paddingRight="11dp"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_thi"/>
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="8dp"
+        android:gravity="left"
+        android:text="@string/phone_num_text_hint"
+        android:textColor="@color/light_gray"
+        android:textSize="@dimen/font_size_small"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_next"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/btn_register"
+        android:gravity="center"
+        android:text="@string/next_step"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_size_large"/>
+</LinearLayout>

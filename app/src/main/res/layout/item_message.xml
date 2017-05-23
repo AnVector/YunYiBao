@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="340dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/edit_text_bg"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="16dp">
+
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:gravity="left|top"
+        android:textSize="@dimen/font_size_normal_high"/>
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/tv_status"
+        android:gravity="right|top"
+        android:textColor="@color/light_gray"
+        android:textSize="@dimen/font_size_ele"/>
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv_status"
+        android:layout_below="@id/tv_status"
+        android:layout_marginTop="10dp"
+        android:ellipsize="end"
+        android:gravity="left|top"
+        android:maxLines="2"
+        android:textColor="@color/pay_title_text_color"
+        android:textSize="@dimen/font_size_thi"/>
+</RelativeLayout>

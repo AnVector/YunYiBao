@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_recharge_record_details"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background_color"
+    android:orientation="vertical"
+    tools:context="com.anyihao.ayb.frame.activity.RechargeRecordDetailsActivity">
+
+    <include
+        layout="@layout/toolbar_common"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="344dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/ic_app"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginLeft="130dp"
+            android:layout_marginTop="15dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="28dp"
+            android:layout_alignTop="@id/ic_app"
+            android:layout_marginLeft="12dp"
+            android:layout_toRightOf="@id/ic_app"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:textSize="@dimen/font_size_normal"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ic_app"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="23dp"
+            android:gravity="center_horizontal"
+            android:text="@string/price"
+            android:textColor="@color/user_account_color"
+            android:textSize="@dimen/font_size_thirty"/>
+
+        <TextView
+            android:id="@+id/tv_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_price"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/pay_success"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_normal"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_description"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+</LinearLayout>
