@@ -20,6 +20,7 @@ import com.anyihao.ayb.frame.activity.FlowAccountActivity;
 import com.anyihao.ayb.frame.activity.FlowChartActivity;
 import com.anyihao.ayb.frame.activity.InviteFriendsActivity;
 import com.anyihao.ayb.frame.activity.MeActivity;
+import com.anyihao.ayb.frame.activity.MerchantPrivilegeActivity;
 import com.anyihao.ayb.frame.activity.RechargeActivity;
 import com.anyihao.ayb.frame.activity.RechargeRecordActivity;
 import com.anyihao.ayb.frame.activity.SettingsActivity;
@@ -124,6 +125,8 @@ public class MeFragment extends ABaseFragment {
                             startActivity(intent);
                             break;
                         case "商家特权":
+                            intent = new Intent(getActivity(), MerchantPrivilegeActivity.class);
+                            startActivity(intent);
                             break;
                         case "授权设备管理":
                             intent = new Intent(getActivity(), DeviceManageActivity.class);

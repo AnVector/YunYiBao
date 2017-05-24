@@ -1,14 +1,17 @@
 package com.anyihao.ayb.frame.activity;
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.SettingsAdapter;
 import com.anyihao.ayb.adapter.SystemRecordAdapter;
+import com.anyihao.ayb.listener.OnItemClickListener;
 
 import java.util.Arrays;
 import java.util.List;
@@ -57,6 +60,20 @@ public class SystemRecordActivity extends ABaseActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+            }
+        });
+
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(ViewGroup parent, View view, Object o, int position) {
+                Intent intent = new Intent(SystemRecordActivity.this, SysRecordDetailsActivity
+                        .class);
+                startActivity(intent);
+            }
+
+            @Override
+            public boolean onItemLongClick(ViewGroup parent, View view, Object o, int position) {
+                return false;
             }
         });
 

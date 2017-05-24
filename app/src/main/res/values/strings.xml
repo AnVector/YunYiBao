@@ -229,6 +229,25 @@
     <string name="account_management">账号管理</string>
     <!--系统赠送记录-->
     <string name="system_gift_record">系统赠送记录</string>
+    <!--system record details-->
+    <string name="record_details">记录详情</string>
+    <string name="system_gift">系统赠送</string>
+    <string name="data_gift">赠送流量</string>
+    <string name="expires">有效期限</string>
+    <string name="gift_time">赠送时间</string>
+    <!--merchat privilege-->
+    <string name="merchat_privilege">商家特权</string>
+    <string name="direction_for_use">使用说明</string>
+    <!--add auth device-->
+    <string name="add_auth_device">添加授权设备</string>
+    <string name="mac_address">Mac地址：</string>
+    <string name="mac_address_hint">请输入要授权的设备的Mac地址</string>
+    <string name="mobile">手机</string>
+    <string name="pad">Pad</string>
+    <string name="computer">电脑</string>
+    <string name="others">其他</string>
+    <string name="questions">如何查看Mac地址</string>
+    <string name="introduction">请添加正确的授权设备的MAC地址以及正确的设备类型，否则将造成您的设备无法正常上网</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">Sign in</string>

@@ -498,6 +498,12 @@
             android:name=".frame.activity.SystemRecordActivity"
             android:launchMode="singleTop">
         </activity>
+        <activity android:name=".frame.activity.SysRecordDetailsActivity">
+        </activity>
+        <activity android:name=".frame.activity.MerchantPrivilegeActivity">
+        </activity>
+        <activity android:name=".frame.activity.AddAuthDeviceActivity">
+        </activity>
     </application>
 
 </manifest>

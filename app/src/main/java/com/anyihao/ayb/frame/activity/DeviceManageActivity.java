@@ -1,5 +1,6 @@
 package com.anyihao.ayb.frame.activity;
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -27,7 +28,8 @@ public class DeviceManageActivity extends ABaseActivity {
     @BindView(R.id.btn_add_auth_device)
     Button btnAddAuthDevice;
     private AuthDeviceAdapter mAdapter;
-    String[] array = new String[]{"0a:ee:32:44:23:55", "0a:ee:32:44:23:55", "0a:ee:32:44:23:55", "0a:ee:32:44:23:55"};
+    String[] array = new String[]{"0a:ee:32:44:23:55", "0a:ee:32:44:23:55", "0a:ee:32:44:23:55",
+            "0a:ee:32:44:23:55"};
     private List<String> mData = Arrays.asList(array);
 
     @Override
@@ -58,6 +60,13 @@ public class DeviceManageActivity extends ABaseActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+            }
+        });
+        btnAddAuthDevice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DeviceManageActivity.this, AddAuthDeviceActivity.class);
+                startActivity(intent);
             }
         });
 

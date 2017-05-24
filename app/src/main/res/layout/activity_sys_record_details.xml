@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_sys_record_details"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background_color"
+    android:orientation="vertical"
+    tools:context="com.anyihao.ayb.frame.activity.SysRecordDetailsActivity">
+
+    <include layout="@layout/toolbar_common"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="266dp"
+        android:background="@color/white"
+        android:padding="12dp">
+
+        <ImageView
+            android:id="@+id/iv_system"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="26dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_system"/>
+
+        <TextView
+            android:id="@+id/tv_system_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_system"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:text="@string/system_gift"
+            android:textColor="@color/toolbar_title_color"
+            android:textSize="@dimen/font_size_normal"/>
+
+        <TextView
+            android:id="@+id/tv_gift_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:gravity="left|center_vertical"
+            android:text="@string/gift_time"
+            android:textColor="@color/pay_title_text_color"
+            android:textSize="@dimen/font_size_normal"/>
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:gravity="right|center_vertical"
+            android:text="2017-03-25 17:22:22"
+            android:textColor="@color/toolbar_register_color"
+            android:textSize="@dimen/font_size_normal"/>
+
+        <TextView
+            android:id="@+id/tv_expires_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/tv_gift_date"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="18dp"
+            android:gravity="left|center_vertical"
+            android:text="@string/expires"
+            android:textColor="@color/pay_title_text_color"
+            android:textSize="@dimen/font_size_normal"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@id/tv_expires_hint"
+            android:gravity="right|center_vertical"
+            android:text="一年"
+            android:textColor="@color/toolbar_register_color"
+            android:textSize="@dimen/font_size_normal"/>
+
+        <TextView
+            android:id="@+id/tv_gift_data_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/tv_expires_hint"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="18dp"
+            android:layout_marginTop="18dp"
+            android:gravity="left|center_vertical"
+            android:text="@string/gift_data"
+            android:textColor="@color/pay_title_text_color"
+            android:textSize="@dimen/font_size_normal"/>
+
+        <TextView
+            android:id="@+id/tv_data_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@id/tv_gift_data_hint"
+            android:gravity="right|center_vertical"
+            android:text="100M"
+            android:textColor="@color/toolbar_title_color"
+            android:textSize="@dimen/font_size_normal"/>
+
+    </RelativeLayout>
+</LinearLayout>
