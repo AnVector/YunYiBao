@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_set_pwd"
     android:layout_width="match_parent"
@@ -31,18 +32,20 @@
             android:textColor="@color/user_account_color"
             android:textSize="@dimen/font_size_normal_high"/>
 
-        <EditText
+        <com.chaychan.viewlib.PowerfulEditText
             android:id="@+id/input_verify_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
+            android:drawableRight="@drawable/edit_text_selector"
             android:gravity="center_vertical"
             android:hint="@string/identifying_code_input_hint"
             android:maxLines="1"
             android:paddingLeft="42dp"
             android:paddingRight="42dp"
-            android:textColor="@color/light_gray"
-            android:textSize="@dimen/font_size_thi"/>
+            android:textColorHint="@color/light_gray"
+            android:textSize="@dimen/font_size_thi"
+            app:funcType="canClear"/>
 
         <View
             android:layout_width="0.6dp"
@@ -83,19 +86,21 @@
             android:textColor="@color/user_account_color"
             android:textSize="@dimen/font_size_normal_high"/>
 
-        <EditText
+        <com.chaychan.viewlib.PowerfulEditText
             android:id="@+id/input_set_pwd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
+            android:drawableRight="@drawable/edit_text_selector"
             android:gravity="center_vertical"
-            android:hint="@string/set_pwd_input_hint"
+            android:hint="@string/identifying_code_input_hint"
             android:inputType="phone"
             android:maxLines="1"
             android:paddingLeft="26dp"
             android:paddingRight="26dp"
-            android:textColor="@color/light_gray"
-            android:textSize="@dimen/font_size_thi"/>
+            android:textColorHint="@color/light_gray"
+            android:textSize="@dimen/font_size_thi"
+            app:funcType="canClear"/>
     </LinearLayout>
 
     <View

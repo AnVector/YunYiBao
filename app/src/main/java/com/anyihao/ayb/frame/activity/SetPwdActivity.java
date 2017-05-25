@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.anyihao.ayb.R;
+import com.chaychan.viewlib.PowerfulEditText;
 
 import butterknife.BindView;
 
@@ -17,14 +18,14 @@ public class SetPwdActivity extends ABaseActivity {
     TextView titleMid;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.input_verify_code)
-    EditText verifyCode;
-    @BindView(R.id.input_set_pwd)
-    EditText setPwd;
     @BindView(R.id.input_confirm_pwd)
     EditText confirmPwd;
     @BindView(R.id.btn_register)
     AppCompatButton btnRegister;
+    @BindView(R.id.input_verify_code)
+    PowerfulEditText inputVerifyCode;
+    @BindView(R.id.input_set_pwd)
+    PowerfulEditText inputSetPwd;
 
     @Override
     protected int getContentViewId() {
@@ -48,7 +49,7 @@ public class SetPwdActivity extends ABaseActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SetPwdActivity.this,BindDeviceActivity.class);
+                Intent intent = new Intent(SetPwdActivity.this, BindDeviceActivity.class);
                 startActivity(intent);
             }
         });

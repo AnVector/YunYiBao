@@ -5,20 +5,15 @@
               android:background="@color/app_background_color"
               android:orientation="vertical"
               tools:context="com.anyihao.ayb.frame.fragment.MeFragment">
-
     <include
         layout="@layout/toolbar"/>
-
-    <View
-        android:id="@+id/space"
-        android:layout_width="match_parent"
-        android:layout_height="10dp"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="85dp"
         android:layout_gravity="center_vertical"
         android:background="@color/white"
+        android:layout_marginTop="10dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp">
 

@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.anyihao.ayb.R;
+import com.chaychan.viewlib.PowerfulEditText;
 
 import butterknife.BindView;
 
@@ -17,12 +18,12 @@ public class ResetPwdActivity extends ABaseActivity {
     TextView titleMid;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.edt_new_pwd)
-    EditText edtNewPwd;
-    @BindView(R.id.edt_comfirm_pwd)
-    EditText edtComfirmPwd;
     @BindView(R.id.btn_submit)
     AppCompatButton btnSubmit;
+    @BindView(R.id.edt_new_pwd)
+    PowerfulEditText edtNewPwd;
+    @BindView(R.id.edt_comfirm_pwd)
+    PowerfulEditText edtComfirmPwd;
 
     @Override
     protected int getContentViewId() {
@@ -53,7 +54,6 @@ public class ResetPwdActivity extends ABaseActivity {
                 onBackPressed();
             }
         });
-
     }
 
     @Override

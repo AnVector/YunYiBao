@@ -11,6 +11,15 @@
     <include
         layout="@layout/toolbar_invite_friends"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="@string/remind_words"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_size_fif"/>
+
     <LinearLayout
         android:layout_width="215dp"
         android:layout_height="106dp"
@@ -37,8 +46,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="14dp"
-            android:maxLines="1"
             android:gravity="center"
+            android:maxLines="1"
             android:text="1234985"
             android:textColor="@color/white"
             android:textSize="24sp"/>

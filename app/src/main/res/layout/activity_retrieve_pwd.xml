@@ -1,83 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_retrieve_pwd"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
     android:background="@color/content_bg_color"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
     tools:context="com.anyihao.ayb.frame.activity.RetrievePwdActivity">
+
     <include
         layout="@layout/toolbar_common"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
         android:background="@drawable/edit_text_bg"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_mobile"
-            android:layout_marginLeft="20dp"/>
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/ic_mobile"/>
+
         <View
             android:layout_width="0.6dp"
             android:layout_height="15dp"
-            android:layout_marginLeft="8dp"
             android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
             android:background="@color/line_color"/>
-        <EditText
+
+        <com.chaychan.viewlib.PowerfulEditText
             android:id="@+id/edt_phone_num"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="11dp"
             android:background="@null"
+            android:drawableRight="@drawable/edit_text_selector"
             android:gravity="left|center_vertical"
             android:hint="@string/retrieve_input_hint"
-            android:textColor="@color/light_gray"
-            android:textSize="@dimen/font_size_fif"/>
+            android:maxLines="1"
+            android:paddingLeft="11dp"
+            android:paddingRight="11dp"
+            android:textColorHint="@color/light_gray"
+            android:textSize="@dimen/font_size_fif"
+            app:funcType="canClear"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:gravity="center_vertical"
-        android:background="@drawable/edit_text_bg"
-        android:orientation="horizontal"
-        android:layout_marginTop="15dp"
         android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp">
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/edit_text_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-        <EditText
+        <com.chaychan.viewlib.PowerfulEditText
             android:id="@+id/input_verify_code"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="237dp"
+            android:layout_height="match_parent"
             android:background="@null"
-            android:gravity="center|center_vertical"
+            android:drawableRight="@drawable/edit_text_selector"
+            android:gravity="left|center_vertical"
             android:hint="@string/identifying_code_input_hint"
             android:maxLines="1"
             android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:textColor="@color/light_gray"
-            android:textSize="@dimen/font_size_fif"/>
+            android:paddingRight="5dp"
+            android:textColorHint="@color/light_gray"
+            android:textSize="@dimen/font_size_fif"
+            app:funcType="canClear"/>
 
         <View
             android:layout_width="0.6dp"
             android:layout_height="15dp"
-            android:layout_marginLeft="90dp"
             android:layout_gravity="center_vertical"
             android:background="@color/line_color"/>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:gravity="center"
-            android:layout_marginLeft="16dp"
             android:text="@string/get_verify_code"
             android:textColor="@color/toolbar_title_color"
             android:textSize="@dimen/font_size_normal_high"/>
@@ -96,5 +106,4 @@
         android:text="@string/next_step"
         android:textColor="@color/white"
         android:textSize="@dimen/font_size_large"/>
-
 </LinearLayout>

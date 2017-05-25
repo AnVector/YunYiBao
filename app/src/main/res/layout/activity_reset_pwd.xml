@@ -1,77 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_reset_pwd"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/content_bg_color"
+    android:orientation="vertical"
     tools:context="com.anyihao.ayb.frame.activity.ResetPwdActivity">
+
     <include
         layout="@layout/toolbar_common"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
         android:background="@drawable/edit_text_bg"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_lock"
-            android:layout_marginLeft="20dp"/>
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/ic_lock"/>
+
         <View
             android:layout_width="0.6dp"
             android:layout_height="20dp"
-            android:layout_marginLeft="8dp"
             android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
             android:background="@color/line_color"/>
-        <EditText
+
+        <com.chaychan.viewlib.PowerfulEditText
             android:id="@+id/edt_new_pwd"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="11dp"
             android:background="@null"
+            android:drawableRight="@drawable/edit_text_selector"
             android:gravity="left|center_vertical"
             android:hint="@string/new_pwd_hint"
-            android:textColor="@color/light_gray"
-            android:textSize="@dimen/font_size_fif"/>
+            android:maxLines="1"
+            android:paddingRight="10dp"
+            android:textColorHint="@color/light_gray"
+            android:textSize="@dimen/font_size_fif"
+            app:funcType="canClear"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginTop="15dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:orientation="horizontal"
+        android:layout_marginTop="15dp"
         android:background="@drawable/edit_text_bg"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_lock"
-            android:layout_marginLeft="20dp"/>
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/ic_lock"/>
+
         <View
             android:layout_width="0.6dp"
             android:layout_height="20dp"
-            android:layout_marginLeft="8dp"
             android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
             android:background="@color/line_color"/>
-        <EditText
+
+        <com.chaychan.viewlib.PowerfulEditText
             android:id="@+id/edt_comfirm_pwd"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="11dp"
             android:background="@null"
+            android:drawableRight="@drawable/edit_text_selector"
             android:gravity="left|center_vertical"
-            android:hint="@string/confirm_pwd_input_hint"
-            android:textColor="@color/light_gray"
-            android:textSize="@dimen/font_size_fif"/>
+            android:hint="@string/identifying_code_input_hint"
+            android:maxLines="1"
+            android:paddingRight="10dp"
+            android:textColorHint="@color/light_gray"
+            android:textSize="@dimen/font_size_fif"
+            app:funcType="canClear"/>
     </LinearLayout>
 
     <android.support.v7.widget.AppCompatButton

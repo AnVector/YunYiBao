@@ -259,11 +259,6 @@
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name=".frame.activity.DetailActivity"
-            android:launchMode="singleTop">
-        </activity>
-
         <service
             android:name=".common.UService"
             android:enabled="true"

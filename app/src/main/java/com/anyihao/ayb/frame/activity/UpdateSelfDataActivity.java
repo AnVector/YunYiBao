@@ -2,12 +2,15 @@ package com.anyihao.ayb.frame.activity;
 
 import android.content.Intent;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
+import com.chaychan.viewlib.PowerfulEditText;
 
 import butterknife.BindView;
 
@@ -22,10 +25,10 @@ public class UpdateSelfDataActivity extends ABaseActivity {
     Toolbar toolbar;
     @BindView(R.id.tv_self_info)
     TextView tvSelfInfo;
-    @BindView(R.id.input_self_info)
-    EditText inputSelfInfo;
     public static final String INFORMATION_KEY = "information_key";
     public static final String INFORMATION_VALUE = "information_value";
+    @BindView(R.id.input_self_info)
+    PowerfulEditText inputSelfInfo;
     private String key;
     private String value;
 

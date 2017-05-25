@@ -194,6 +194,7 @@
     <!--invite friends-->
     <string name="share_to">分享到</string>
     <string name="share_account">您已成功邀请12人</string>
+    <string name="remind_words">邀请成功即送100积分，上不封顶哦！</string>
 
     <!--my credit-->
     <string name="my_points">我的积分</string>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_credit"
     android:layout_width="match_parent"
@@ -17,16 +18,18 @@
 
         <include layout="@layout/toolbar"/>
 
-        <TextView
+        <com.chaychan.viewlib.NumberRunningTextView
             android:id="@+id/tv_points"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="60dp"
             android:gravity="center"
-            android:text="24523"
             android:textColor="@color/white"
-            android:textSize="60sp"/>
+            android:textSize="60sp"
+            app:runWhenChange="false"
+            app:frameNum="60"
+            app:textType="num"/>
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView

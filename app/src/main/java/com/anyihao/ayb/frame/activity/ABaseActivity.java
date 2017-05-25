@@ -10,7 +10,6 @@ public abstract class ABaseActivity extends BKBaseActivity implements IView<Inte
     @Override
     protected void setStatusBarTheme() {
         StatusBarUtils.setTransparent(this);
-//        StatusBarUtils.setColor(this, getResources().getColor(R.color.white));
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.anyihao.ayb.R;
+import com.chaychan.viewlib.PowerfulEditText;
 
 import butterknife.BindView;
 
@@ -18,15 +19,15 @@ public class RetrievePwdActivity extends ABaseActivity {
     TextView titleMid;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.edt_phone_num)
-    EditText edtPhoneNum;
-    @BindView(R.id.input_verify_code)
-    EditText inputVerifyCode;
     @BindView(R.id.btn_next)
     AppCompatButton btnNext;
     public static final int RETRIEVE_ORIGINAL_PASSWORD = 0;
     public static final int VERIFY_ORIGINAL_PHONE = 1;
     public static String REQUEST_TYPE = "type";
+    @BindView(R.id.edt_phone_num)
+    PowerfulEditText edtPhoneNum;
+    @BindView(R.id.input_verify_code)
+    PowerfulEditText inputVerifyCode;
     private int type;
 
     @Override

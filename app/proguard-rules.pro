@@ -108,12 +108,15 @@
 #butterknife
 -keep class butterknife.** { *; }
 -dontwarn butterknife.internal.**
+-dontwarn butterknife.compiler.**
 -keep class **$$ViewBinder { *; }
 
 -keepclasseswithmembernames class * {
-    @butterknife.* ;
+    @butterknife.* <fields>;
 }
-
+-keepclasseswithmembernames class * {
+    @butterknife.* <methods>;
+}
 #nineold androids
 -dontwarn com.nineoldandroids.*
 -keep class com.nineoldandroids.** { *;}
@@ -129,9 +132,13 @@
 public static java.lang.String TABLENAME;
 }
 -keep class **$Properties
+-keep class org.greenrobot.greendao.** { *; }
+-dontwarn org.greenrobot.greendao.**
+-keep class android.databinding.** { *; }
+-dontwarn android.databinding.**
 
 ### alipay
--libraryjars libs/alipaySDK-20170309.jar
+#-libraryjars libs/alipaySDK-20170309.jar
 
 -keep class com.alipay.android.app.IAlixPay{*;}
 -keep class com.alipay.android.app.IAlixPay$Stub{*;}
@@ -139,6 +146,8 @@ public static java.lang.String TABLENAME;
 -keep class com.alipay.android.app.IRemoteServiceCallback$Stub{*;}
 -keep class com.alipay.sdk.app.PayTask{ public *;}
 -keep class com.alipay.sdk.app.AuthTask{ public *;}
+-keep class com.alipay.android.phone.** { *; }
+-dontwarn com.alipay.android.phone.**
 
 ### UShare
 -dontusemixedcaseclassnames
@@ -227,6 +236,19 @@ public static final ** CREATOR;
 
 #---------------------------------3.默认保留区---------------------------------
 # 保持以下类不被混淆
+-keep class com.google.common.** { *; }
+-dontwarn com.google.common.**
+-keep class com.google.auto.common.** { *; }
+-dontwarn com.google.auto.common.**
+-keep class com.google.auto.service.** { *; }
+-dontwarn com.google.auto.service.**
+-keep class com.squareup.javapoet.** { *; }
+-dontwarn com.squareup.javapoet.**
+-keep class com.loc.** { *; }
+-dontwarn com.loc.**
+
+-keep class javax.annotation.** { *; }
+-dontwarn javax.annotation.**
 -keep interface android.support.v4.app.** { *; }
 -keep public class * extends android.support.v4.**
 -keep public class * extends android.app.Fragment
