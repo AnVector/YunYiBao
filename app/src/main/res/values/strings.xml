@@ -40,6 +40,9 @@
     <string name="invite_friends">邀请好友</string>
     <string name="help_center">使用帮助</string>
     <string name="data_flow_exchange">我要兑换</string>
+    <string name="exchange_flow">兑换流量</string>
+    <string name="exchange_flow_hint">请输入邀请码/兑换码</string>
+    <string name="ok">确定</string>
 
     <!--Toolbar Title-->
     <string name="yun_bao">安逸宝</string>
@@ -249,6 +252,11 @@
     <string name="others">其他</string>
     <string name="questions">如何查看Mac地址</string>
     <string name="introduction">请添加正确的授权设备的MAC地址以及正确的设备类型，否则将造成您的设备无法正常上网</string>
+
+    <!--红包领取页面-->
+    <string name="red_envelope">红包</string>
+    <string name="congratulations">恭喜获得流量红包一个！</string>
+    <string name="unfold_it">拆开它</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">Sign in</string>

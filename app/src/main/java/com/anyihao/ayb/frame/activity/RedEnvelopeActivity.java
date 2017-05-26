@@ -3,31 +3,27 @@ package com.anyihao.ayb.frame.activity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.anyihao.ayb.R;
-import com.chaychan.viewlib.PowerfulEditText;
 
 import butterknife.BindView;
 
-public class AddAuthDeviceActivity extends ABaseActivity {
+public class RedEnvelopeActivity extends ABaseActivity {
 
     @BindView(R.id.toolbar_title_mid)
     TextView toolbarTitleMid;
-    @BindView(R.id.toolbar_title_right)
-    TextView toolbarTitleRight;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.tv_help)
-    TextView tvHelp;
-    @BindView(R.id.btn_add_auth_device)
-    AppCompatButton btnAddAuthDevice;
-    @BindView(R.id.et_mac_address)
-    PowerfulEditText etMacAddress;
+    @BindView(R.id.iv_user_profile)
+    ImageView ivUserProfile;
+    @BindView(R.id.btn_unfold_it)
+    AppCompatButton btnUnfoldIt;
 
     @Override
     protected int getContentViewId() {
-        return R.layout.activity_add_auth_device;
+        return R.layout.activity_red_envelope;
     }
 
     @Override
@@ -37,18 +33,24 @@ public class AddAuthDeviceActivity extends ABaseActivity {
 
     @Override
     protected void initData() {
-
         toolbar.setNavigationIcon(R.drawable.ic_back);
-        toolbarTitleMid.setText(getString(R.string.add_auth_device));
+        toolbarTitleMid.setText(getString(R.string.red_envelope));
+
     }
 
     @Override
     protected void initEvent() {
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+            }
+        });
+
+        btnUnfoldIt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 

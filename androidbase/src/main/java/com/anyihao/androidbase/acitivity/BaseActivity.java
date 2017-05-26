@@ -16,11 +16,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        init();
+        init(savedInstanceState);
     }
 
     /**
      * 获取布局文件Id
+     *
      * @return layoutId
      */
     protected abstract int getContentViewId();
@@ -50,7 +51,8 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected abstract void initEvent();
 
-    protected void init() {
+    protected void init(Bundle savedInstanceState) {
+        saveInstanceState(savedInstanceState);
         setContentView(getContentViewId());
         setStatusBarTheme();
         ActivityManager.getInstance().addActivity(this);
@@ -58,6 +60,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         initView();
         initData();
         initEvent();
+    }
+
+    protected void saveInstanceState(Bundle savedInstanceState) {
+
     }
 
     @Override
@@ -84,7 +90,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         //此切换动画应用在本Activity的退出和目的Acitity的进入
 //      overridePendingTransition(R.anim.activity_fade_in,R.anim.activity_fade_out);
 //        overridePendingTransition(R.anim.activity_zoom_in, R.anim.activity_zoom_out);
-        overridePendingTransition( R.anim.activity_slide_out_left_anim,R.anim.activity_slide_in_left_anim);
+        overridePendingTransition(R.anim.activity_slide_out_left_anim, R.anim
+                .activity_slide_in_left_anim);
     }
 
     @Override
@@ -93,6 +100,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         //overridePendingTransition(R.anim.activity_fade_in,R.anim.activity_fade_out);
         //overridePendingTransition(R.anim.activity_zoom_in, R.anim.activity_zoom_out);
         //bug fix startActivity和finish方法同时加入切换动画会出现闪屏问题
-        // overridePendingTransition( R.anim.activity_slide_in_left_anim,R.anim.activity_slide_in_left_anim);
+        // overridePendingTransition( R.anim.activity_slide_in_left_anim,R.anim
+        // .activity_slide_in_left_anim);
     }
 }

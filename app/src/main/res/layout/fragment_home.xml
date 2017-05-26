@@ -80,6 +80,14 @@
                 android:textColor="@color/main_device_info_text_color"
                 android:textSize="@dimen/font_size_normal"/>
 
+            <View
+                android:layout_width="1dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="25dp"
+                android:layout_toRightOf="@id/tv_leasing"
+                android:background="@color/white"/>
+
             <TextView
                 android:id="@+id/tv_return"
                 android:layout_width="wrap_content"
@@ -89,6 +97,14 @@
                 android:text="@string/return_equipment"
                 android:textColor="@color/main_device_info_text_color"
                 android:textSize="@dimen/font_size_normal"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="25dp"
+                android:layout_toRightOf="@id/tv_return"
+                android:background="@color/white"/>
 
             <TextView
                 android:id="@+id/tv_shop"
@@ -112,11 +128,12 @@
         android:paddingRight="15dp">
 
         <ImageView
+            android:id="@+id/iv_bell"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:scaleType="fitXY"
-            android:src="@drawable/ic_bell"/>
+            android:src="@drawable/alarming"/>
 
         <ViewFlipper
             android:id="@+id/flipper"

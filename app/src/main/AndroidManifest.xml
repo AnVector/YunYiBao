@@ -499,6 +499,8 @@
         </activity>
         <activity android:name=".frame.activity.AddAuthDeviceActivity">
         </activity>
+        <activity android:name=".frame.activity.RedEnvelopeActivity">
+        </activity>
     </application>
 
 </manifest>

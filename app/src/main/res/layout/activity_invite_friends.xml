@@ -12,10 +12,13 @@
         layout="@layout/toolbar_invite_friends"/>
 
     <TextView
+        android:id="@+id/tv_remind"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="240dp"
         android:gravity="center"
+        android:rotation="-5"
         android:text="@string/remind_words"
         android:textColor="@color/white"
         android:textSize="@dimen/font_size_fif"/>
@@ -23,8 +26,9 @@
     <LinearLayout
         android:layout_width="215dp"
         android:layout_height="106dp"
+        android:layout_below="@id/tv_remind"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="329dp"
+        android:layout_marginTop="57dp"
         android:background="@drawable/card_bg"
         android:orientation="vertical">
 
@@ -52,6 +56,7 @@
             android:textColor="@color/white"
             android:textSize="24sp"/>
     </LinearLayout>
+
 
     <RelativeLayout
         android:layout_width="match_parent"

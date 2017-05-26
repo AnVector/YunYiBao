@@ -2,12 +2,14 @@ package com.anyihao.ayb.frame.fragment;
 
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -54,13 +56,18 @@ public class HomeFragment extends ABaseFragment {
     LinearLayout networkLl;
     @BindView(R.id.flipper)
     ViewFlipper flipper;
+    @BindView(R.id.iv_bell)
+    ImageView ivBell;
     private MainAdapter mAdapter;
     String[] advertisement = new String[]{"流量大减价，一律两元！一律两元！", "流量大减价，一律两元！一律两元！"};
     String[] array = new String[]{"AYB-10086", "AYB-10010"};
     private List<String> mData = Arrays.asList(array);
+    private AnimationDrawable animationDrawable;
 
     @Override
     protected void initData() {
+        animationDrawable = (AnimationDrawable) ivBell.getDrawable();
+        animationDrawable.start();
         toolbar.setBackground(null);
         toolbarTitle.setTextColor(getResources().getColor(R.color.white));
         toolbarTitle.setText(getString(R.string.yun_bao));
@@ -73,7 +80,7 @@ public class HomeFragment extends ABaseFragment {
         recyclerview.setHasFixedSize(true);
         mAdapter.add(0, mData.size(), mData);
 
-        for(int i = 0; i < advertisement.length; i++) {
+        for (int i = 0; i < advertisement.length; i++) {
             View ll_content = View.inflate(getActivity(), R.layout.item_flipper, null);
             TextView tv_content = (TextView) ll_content.findViewById(R.id.tv_content);
             tv_content.setText(advertisement[i]);
@@ -189,5 +196,14 @@ public class HomeFragment extends ABaseFragment {
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (animationDrawable == null) {
+            return;
+        }
+        animationDrawable.stop();
     }
 }

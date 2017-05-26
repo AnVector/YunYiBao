@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_add_auth_device"
     android:layout_width="match_parent"
@@ -29,16 +30,20 @@
             android:textColor="@color/user_account_color"
             android:textSize="@dimen/font_size_normal_high"/>
 
-        <EditText
+        <com.chaychan.viewlib.PowerfulEditText
             android:id="@+id/et_mac_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:background="@null"
+            android:drawableRight="@drawable/edit_text_selector"
             android:gravity="left|center_vertical"
             android:hint="@string/mac_address_hint"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:textColorHint="@color/light_gray"
-            android:textSize="@dimen/font_size_normal_high"/>
+            android:textSize="@dimen/font_size_normal_high"
+            app:funcType="canClear"/>
     </LinearLayout>
 
     <TextView
