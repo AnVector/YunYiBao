@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp">
+
+    <ImageView
+        android:id="@+id/iv_advertisement"
+        android:layout_width="169dp"
+        android:layout_height="105dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/item_ad"/>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/iv_advertisement"
+        android:layout_below="@id/iv_advertisement"
+        android:layout_marginTop="7dp"
+        android:gravity="center"
+        android:text="2017元现金红包"
+        android:textColor="#020202"
+        android:textSize="@dimen/font_size_fif"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tv_points_get"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv_title"
+        android:layout_below="@id/tv_title"
+        android:layout_marginTop="11dp"
+        android:gravity="center"
+        android:text="30分"
+        android:textColor="#f6ce16"
+        android:textSize="@dimen/font_size_thi"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tv_surplus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/tv_points_get"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/tv_points_get"
+        android:gravity="center"
+        android:text="仅剩328份"
+        android:textColor="#929292"
+        android:textSize="@dimen/font_size_thi"/>
+</RelativeLayout>

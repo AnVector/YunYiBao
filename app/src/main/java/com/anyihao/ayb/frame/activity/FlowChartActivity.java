@@ -1,5 +1,6 @@
 package com.anyihao.ayb.frame.activity;
 
+import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -12,9 +13,13 @@ import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.UTabAdapter;
 import com.anyihao.ayb.frame.fragment.DayChartFragment;
 import com.anyihao.ayb.frame.fragment.MonthChartFragment;
+import com.bigkoo.pickerview.TimePickerView;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -29,6 +34,8 @@ public class FlowChartActivity extends ABaseActivity {
     TabLayout tabLayout;
     @BindView(R.id.viewpager)
     ViewPager viewpager;
+    private TimePickerView pvDay;
+    private TimePickerView pvHour;
     private UTabAdapter mTabAdapter;
     private List<Fragment> mFragments = new ArrayList<>();
     private String[] mTitleArray = new String[]{"日报表", "月报表"};
@@ -47,6 +54,7 @@ public class FlowChartActivity extends ABaseActivity {
     @Override
     protected void initData() {
         initViewPager();
+        initTimePicker();
         tabLayout.setupWithViewPager(viewpager);
         toolbar.inflateMenu(R.menu.flow_chart_toolbar_menu);
         toolbar.setNavigationIcon(R.drawable.ic_back);
@@ -77,10 +85,53 @@ public class FlowChartActivity extends ABaseActivity {
             public boolean onMenuItemClick(MenuItem item) {
 //                Intent intent = new Intent(getActivity(), SettingsActivity.class);
 //                startActivity(intent);
+                pvDay.show();
                 return true;
             }
         });
 
+    }
+
+    private void initTimePicker() {
+        //控制时间范围(如果不设置范围，则使用默认时间1900-2100年，此段代码可注释)
+        //因为系统Calendar的月份是从0-11的,所以如果是调用Calendar的set方法来设置时间,月份的范围也要是从0-11
+        Calendar selectedDate = Calendar.getInstance();
+        Calendar startDate = Calendar.getInstance();
+        startDate.set(2017,1,1);
+
+        Calendar endDate = Calendar.getInstance();
+        endDate.set(2050,1,1);
+        //时间选择器
+        pvDay = new TimePickerView.Builder(this, new TimePickerView.OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {//选中事件回调
+                // 这里回调过来的v,就是show()方法里面所添加的 View 参数，如果show的时候没有添加参数，v则为null
+            }
+        })
+                .setType(TimePickerView.Type.YEAR_MONTH_DAY)
+                .setLabel("", "", "", "", "", "") //设置空字符串以隐藏单位提示   hide label
+                .setDividerColor(R.color.line_color)
+                .setCancelText("取消")
+                .setSubmitText("确定")
+                .setContentSize(16)
+                .setDate(selectedDate)
+                .setRangDate(startDate,endDate)
+                .build();
+        pvHour = new TimePickerView.Builder(this, new TimePickerView.OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {//选中事件回调
+                // 这里回调过来的v,就是show()方法里面所添加的 View 参数，如果show的时候没有添加参数，v则为null
+            }
+        })
+                .setType(TimePickerView.Type.YEAR_MONTH_DAY_HOUR_MIN)
+                .setLabel("", "", "", "", "", "") //设置空字符串以隐藏单位提示   hide label
+                .setDividerColor(R.color.line_color)
+                .setCancelText("取消")
+                .setSubmitText("确定")
+                .setContentSize(16)
+                .setDate(selectedDate)
+                .setRangDate(startDate,endDate)
+                .build();
     }
 
     @Override

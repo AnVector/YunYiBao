@@ -105,6 +105,12 @@
     <string name="about_us">关于安逸宝</string>
     <string name="logout">退出登录</string>
 
+    <!--task-->
+    <string name="sign_in">签到领积分</string>
+    <string name="limited_exchange">限量兑换</string>
+    <string name="points_exchange">积分兑换</string>
+    <string name="donate_data">转赠流量</string>
+
     <!--modify self info-->
     <string name="save">保存</string>
 
