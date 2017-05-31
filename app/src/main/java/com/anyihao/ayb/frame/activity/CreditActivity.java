@@ -45,7 +45,7 @@ public class CreditActivity extends ABaseActivity {
     @Override
     protected void initData() {
         Typeface fontFace = Typeface.createFromAsset(getAssets(),
-                "fonts/方正兰亭特黑简体.TTF");
+                "fonts/W13.TTF");
         tvPoints.setTypeface(fontFace);
         tvPoints.setContent("24523");
         toolbar.setNavigationIcon(R.drawable.ic_back_white);

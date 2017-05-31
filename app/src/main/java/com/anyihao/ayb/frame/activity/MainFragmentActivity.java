@@ -15,13 +15,13 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.anyihao.androidbase.manager.ActivityManager;
-import com.anyihao.androidbase.utils.StatusBarUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.UFragmentPagerAdapter;
 import com.anyihao.ayb.frame.fragment.DiscoverFragment;
 import com.anyihao.ayb.frame.fragment.HomeFragment;
 import com.anyihao.ayb.frame.fragment.MeFragment;
 import com.anyihao.ayb.frame.fragment.TaskFragment;
+import com.jaeger.library.StatusBarUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -66,7 +66,7 @@ public class MainFragmentActivity extends ABaseActivity {
 
     @Override
     protected void setStatusBarTheme() {
-        StatusBarUtils.setTranslucentForImageViewInFragment(MainFragmentActivity.this, null);
+        StatusBarUtil.setTranslucentForImageViewInFragment(MainFragmentActivity.this, null);
     }
 
     @Override

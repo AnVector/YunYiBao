@@ -2,21 +2,30 @@ package com.anyihao.androidbase.acitivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.anyihao.androidbase.R;
 import com.anyihao.androidbase.manager.ActivityManager;
 import com.umeng.analytics.MobclickAgent;
+import com.zhy.m.permission.MPermissions;
 
 /**
  *
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
+    protected static String TAG;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         init(savedInstanceState);
+    }
+
+    protected String getTag() {
+        return this.getClass().getSimpleName();
     }
 
     /**
@@ -52,6 +61,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected abstract void initEvent();
 
     protected void init(Bundle savedInstanceState) {
+        TAG = getTag();
         saveInstanceState(savedInstanceState);
         setContentView(getContentViewId());
         setStatusBarTheme();
@@ -64,6 +74,23 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void saveInstanceState(Bundle savedInstanceState) {
 
+        Log.d(TAG, "saveInstanceState: " + savedInstanceState);
+
+    }
+
+    protected void permissionsRequest(int requestCode, String... permissions) {
+        if (requestCode == -1 || permissions == null || permissions.length == 0)
+            return;
+        if (!MPermissions.shouldShowRequestPermissionRationale(this, permissions[0], requestCode)) {
+            MPermissions.requestPermissions(this, requestCode, permissions);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        MPermissions.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override

@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.anyihao.androidbase.utils.StatusBarUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.ui.pagetransformer.DepthPageTransformer;
 
@@ -31,11 +30,6 @@ public class GuideActivity extends ABaseActivity {
     @Override
     protected int getContentViewId() {
         return R.layout.activity_guide;
-    }
-
-    @Override
-    protected void setStatusBarTheme() {
-        StatusBarUtils.setTransparent(this);
     }
 
     @Override

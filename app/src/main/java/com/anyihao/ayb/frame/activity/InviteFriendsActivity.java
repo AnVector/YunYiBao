@@ -100,7 +100,7 @@ public class InviteFriendsActivity extends ABaseActivity {
 
     private void setTextFont(TextView tv) {
         Typeface fontFace = Typeface.createFromAsset(getAssets(),
-                "fonts/华康海报体简W12.ttc");
+                "fonts/W12.ttc");
         tv.setTypeface(fontFace);
     }
 

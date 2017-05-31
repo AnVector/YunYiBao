@@ -2,14 +2,14 @@ package com.anyihao.ayb.frame.activity;
 
 import com.anyihao.androidbase.acitivity.BKBaseActivity;
 import com.anyihao.androidbase.mvp.IView;
-import com.anyihao.androidbase.utils.StatusBarUtils;
 import com.anyihao.ayb.common.PresenterFactory;
+import com.jaeger.library.StatusBarUtil;
 
 public abstract class ABaseActivity extends BKBaseActivity implements IView<Integer> {
 
     @Override
     protected void setStatusBarTheme() {
-        StatusBarUtils.setTransparent(this);
+        StatusBarUtil.setTransparent(this);
     }
 
     @Override

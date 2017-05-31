@@ -1,6 +1,8 @@
 package com.anyihao.ayb.frame.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
@@ -11,16 +13,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.anyihao.androidbase.utils.GetJsonDataUtil;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.PersonalInfoAdapter;
-import com.anyihao.ayb.bean.JsonBean;
+import com.anyihao.ayb.bean.ProvinceBean;
 import com.anyihao.ayb.listener.OnItemClickListener;
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,9 +43,10 @@ public class MeActivity extends ABaseActivity {
     String[] array = new String[]{"头像", "昵称", "我的二维码", "性别", "生日", "手机号码", "邮箱", "地区", "押金退款"};
     private List<String> mData = Arrays.asList(array);
 
-    private ArrayList<JsonBean> options1Items = new ArrayList<>();
+    private ArrayList<ProvinceBean> options1Items = new ArrayList<>();
     private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
     private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
+
     private Thread thread;
     private static final int MSG_LOAD_DATA = 0x0001;
     private static final int MSG_LOAD_SUCCESS = 0x0002;
@@ -49,32 +54,6 @@ public class MeActivity extends ABaseActivity {
 
     private boolean isLoaded = false;
 
-    private Handler mHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MSG_LOAD_DATA:
-                    if (thread==null){//如果已创建就不再重新创建子线程了
-                        thread = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // 写子线程中的操作,解析省市区数据
-                                initJsonData();
-                            }
-                        });
-                        thread.start();
-                    }
-                    break;
-
-                case MSG_LOAD_SUCCESS:
-                    isLoaded = true;
-                    break;
-
-                case MSG_LOAD_FAILED:
-                    break;
-
-            }
-        }
-    };
 
     @Override
     protected int getContentViewId() {
@@ -86,8 +65,36 @@ public class MeActivity extends ABaseActivity {
 
     }
 
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_LOAD_DATA:
+                    if (thread == null) {//如果已创建就不再重新创建子线程了
+                        thread = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // 写子线程中的操作,解析省市区数据
+                                initCity();
+                            }
+                        });
+                        thread.start();
+                    }
+                    break;
+                case MSG_LOAD_SUCCESS:
+                    isLoaded = true;
+                    break;
+                case MSG_LOAD_FAILED:
+                    isLoaded = false;
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
     @Override
     protected void initData() {
+        mHandler.sendEmptyMessage(MSG_LOAD_DATA);
         toolbar.setNavigationIcon(R.drawable.ic_back);
         titleMid.setText(getString(R.string.about_me));
         mAdapter = new PersonalInfoAdapter(this, R.layout.item_personal_info);
@@ -96,7 +103,6 @@ public class MeActivity extends ABaseActivity {
                 .VERTICAL, false));
         recyclerview.setHasFixedSize(true);
         mAdapter.add(0, mData.size(), mData);
-
     }
 
     @Override
@@ -113,14 +119,17 @@ public class MeActivity extends ABaseActivity {
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
                 Intent intent = new Intent(MeActivity.this, UpdateSelfDataActivity.class);
                 if (o instanceof String) {
-                    if(o.toString().equals("地区")){
-                        ShowPickerView();
-                    }else {
+                    if (o.toString().equals("地区")) {
+                        if (isLoaded) {
+                            showPickerView(view.findViewById(R.id.value));
+                        } else {
+                            mHandler.sendEmptyMessage(MSG_LOAD_DATA);
+                        }
+                    } else {
                         intent.putExtra(UpdateSelfDataActivity.INFORMATION_KEY, o.toString());
                         intent.putExtra(UpdateSelfDataActivity.INFORMATION_VALUE, o.toString());
                         startActivity(intent);
                     }
-
                 }
             }
 
@@ -132,16 +141,16 @@ public class MeActivity extends ABaseActivity {
 
     }
 
-    private void initJsonData() {//解析数据
+    private void initCity() {//解析数据
 
         /**
          * 注意：assets 目录下的Json文件仅供参考，实际使用可自行替换文件
          * 关键逻辑在于循环体
          *
          * */
-        String JsonData = GetJsonDataUtil.getInstance().getJson(getApplicationContext(),"province.json");//获取assets目录下的json文件数据
+        String JsonData = getCityFromJson(this, "province.json");//获取assets目录下的json文件数据
 
-        ArrayList<JsonBean> jsonBean = parseData(JsonData);//用Gson 转成实体
+        ArrayList<ProvinceBean> jsonBean = parseData(JsonData);//用Gson 转成实体
 
         /**
          * 添加省份数据
@@ -151,11 +160,11 @@ public class MeActivity extends ABaseActivity {
          */
         options1Items = jsonBean;
 
-        for (int i=0;i<jsonBean.size();i++){//遍历省份
+        for (int i = 0; i < jsonBean.size(); i++) {//遍历省份
             ArrayList<String> CityList = new ArrayList<>();//该省的城市列表（第二级）
             ArrayList<ArrayList<String>> Province_AreaList = new ArrayList<>();//该省的所有地区列表（第三极）
 
-            for (int c=0; c<jsonBean.get(i).getCityList().size(); c++){//遍历该省份的所有城市
+            for (int c = 0; c < jsonBean.get(i).getCityList().size(); c++) {//遍历该省份的所有城市
                 String CityName = jsonBean.get(i).getCityList().get(c).getName();
                 CityList.add(CityName);//添加城市
 
@@ -163,11 +172,12 @@ public class MeActivity extends ABaseActivity {
 
                 //如果无地区数据，建议添加空字符串，防止数据为null 导致三个选项长度不匹配造成崩溃
                 if (jsonBean.get(i).getCityList().get(c).getArea() == null
-                        ||jsonBean.get(i).getCityList().get(c).getArea().size()==0) {
+                        || jsonBean.get(i).getCityList().get(c).getArea().size() == 0) {
                     City_AreaList.add("");
-                }else {
+                } else {
 
-                    for (int d=0; d < jsonBean.get(i).getCityList().get(c).getArea().size(); d++) {//该城市对应地区所有数据
+                    for (int d = 0; d < jsonBean.get(i).getCityList().get(c).getArea().size();
+                         d++) {//该城市对应地区所有数据
                         String AreaName = jsonBean.get(i).getCityList().get(c).getArea().get(d);
 
                         City_AreaList.add(AreaName);//添加该城市所有地区数据
@@ -191,46 +201,68 @@ public class MeActivity extends ABaseActivity {
 
     }
 
-    public ArrayList<JsonBean> parseData(String result) {//Gson 解析
-        ArrayList<JsonBean> detail = new ArrayList<>();
-        try {
-            JSONArray data = new JSONArray(result);
-            Gson gson = new Gson();
-            for (int i = 0; i < data.length(); i++) {
-                JsonBean entity = gson.fromJson(data.optJSONObject(i).toString(), JsonBean.class);
-                detail.add(entity);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            mHandler.sendEmptyMessage(MSG_LOAD_FAILED);
-        }
-        return detail;
-    }
+    private void showPickerView(View v) {// 弹出选择器
 
-
-    private void ShowPickerView() {// 弹出选择器
-
-        OptionsPickerView pvOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
+        OptionsPickerView pvOptions = new OptionsPickerView.Builder(this, new OptionsPickerView
+                .OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 //返回的分别是三个级别的选中位置
-                String tx = options1Items.get(options1).getPickerViewText()+
-                        options2Items.get(options1).get(options2)+
+                String tx = options1Items.get(options1).getPickerViewText() + " " +
+                        options2Items.get(options1).get(options2) + " " +
                         options3Items.get(options1).get(options2).get(options3);
+                if (v == null)
+                    return;
+                if (v instanceof TextView) {
+                    ((TextView) v).setText(tx);
+                }
+
             }
         })
 
-                .setTitleText("城市选择")
                 .setDividerColor(R.color.line_color)
                 .setTextColorCenter(Color.BLACK) //设置选中项文字颜色
-                .setContentTextSize(20)
-                .setOutSideCancelable(false)// default is true
+                .setContentTextSize(16)
+                .setSubmitText("确定")
+                .setCancelText("取消")
                 .build();
 
         /*pvOptions.setPicker(options1Items);//一级选择器
         pvOptions.setPicker(options1Items, options2Items);//二级选择器*/
-        pvOptions.setPicker(options1Items, options2Items,options3Items);//三级选择器
-        pvOptions.show();
+        pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器
+        pvOptions.show(v);
+    }
+
+    private String getCityFromJson(Context context, String fileName) {
+
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            AssetManager assetManager = context.getAssets();
+            BufferedReader bf = new BufferedReader(new InputStreamReader(
+                    assetManager.open(fileName)));
+            String line;
+            while ((line = bf.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return stringBuilder.toString();
+    }
+
+    public ArrayList<ProvinceBean> parseData(String result) {//Gson 解析
+        ArrayList<ProvinceBean> detail = new ArrayList<>();
+        try {
+            JSONArray data = new JSONArray(result);
+            for (int i = 0; i < data.length(); i++) {
+                ProvinceBean entity = new Gson().fromJson(data.optJSONObject(i).toString(),
+                        ProvinceBean.class);
+                detail.add(entity);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return detail;
     }
 
     @Override

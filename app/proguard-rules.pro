@@ -227,6 +227,18 @@ public static final ** CREATOR;
 -keep class com.amap.api.fence.**{*;}
 -keep class com.autonavi.aps.amapapi.model.**{*;}
 
+#amap 2d
+-keep class com.amap.api.maps2d.overlay.**{ *; }
+-dontwarn com.amap.api.maps2d.overlay.**
+-keep class com.amap.api.mapcore2d.**{ *; }
+-dontwarn com.amap.api.mapcore2d.**
+
+#MPermissions
+-dontwarn com.zhy.m.**
+-keep class com.zhy.m.** {*;}
+-keep interface com.zhy.m.** { *; }
+-keep class **$$PermissionProxy { *; }
+
 ### JPush
 -dontwarn cn.jpush.**
 -keep class cn.jpush.** { *; }

@@ -1,6 +1,5 @@
 package com.anyihao.ayb.frame.activity;
 
-import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -15,7 +14,6 @@ import com.anyihao.ayb.frame.fragment.DayChartFragment;
 import com.anyihao.ayb.frame.fragment.MonthChartFragment;
 import com.bigkoo.pickerview.TimePickerView;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;

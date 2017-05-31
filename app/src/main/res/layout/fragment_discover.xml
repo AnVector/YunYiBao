@@ -8,10 +8,8 @@
     <include
         layout="@layout/toolbar_common"/>
 
-    <ImageView
+    <com.amap.api.maps2d.MapView
+        android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="-28dp"
-        android:src="@drawable/map"/>
-
+        android:layout_height="match_parent"/>
 </LinearLayout>
