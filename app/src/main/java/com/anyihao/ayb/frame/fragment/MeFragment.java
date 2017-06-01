@@ -6,12 +6,16 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.MeAdapter;
 import com.anyihao.ayb.frame.activity.CreditActivity;
@@ -26,6 +30,12 @@ import com.anyihao.ayb.frame.activity.RechargeRecordActivity;
 import com.anyihao.ayb.frame.activity.SettingsActivity;
 import com.anyihao.ayb.frame.activity.SystemRecordActivity;
 import com.anyihao.ayb.listener.OnItemClickListener;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.Holder;
+import com.orhanobut.dialogplus.OnCancelListener;
+import com.orhanobut.dialogplus.OnClickListener;
+import com.orhanobut.dialogplus.OnDismissListener;
+import com.orhanobut.dialogplus.ViewHolder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -115,6 +125,7 @@ public class MeFragment extends ABaseFragment {
                             startActivity(intent);
                             break;
                         case "输入邀请码":
+                            showDialog();
                             break;
                         case "系统赠送记录":
                             intent = new Intent(getActivity(), SystemRecordActivity.class);
@@ -151,6 +162,51 @@ public class MeFragment extends ABaseFragment {
                 startActivity(intent);
             }
         });
+    }
+
+    private void showDialog() {
+        Holder holder = new ViewHolder(R.layout.me_dialog_content);
+        OnClickListener clickListener = new OnClickListener() {
+            @Override
+            public void onClick(DialogPlus dialog, View view) {
+                switch (view.getId()) {
+                    case R.id.btn_cancel:
+                        dialog.dismiss();
+                        break;
+                    case R.id.btn_ok:
+                        dialog.dismiss();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
+
+        OnDismissListener dismissListener = new OnDismissListener() {
+            @Override
+            public void onDismiss(DialogPlus dialog) {
+//                ToastUtils.showLongToast(getActivity(), "dismiss");
+            }
+        };
+
+        OnCancelListener cancelListener = new OnCancelListener() {
+            @Override
+            public void onCancel(DialogPlus dialog) {
+//                ToastUtils.showLongToast(getActivity(), "cancel");
+            }
+        };
+
+        final DialogPlus dialog = DialogPlus.newDialog(getActivity())
+                .setContentHolder(holder)
+                .setGravity(Gravity.CENTER)
+                .setOnDismissListener(dismissListener)
+                .setOnCancelListener(cancelListener)
+                .setCancelable(true)
+                .setOnClickListener(clickListener)
+                .setContentWidth(ViewGroup.LayoutParams.WRAP_CONTENT)
+                .setContentBackgroundResource(R.drawable.dialog_bg)
+                .create();
+        dialog.show();
     }
 
     @Override

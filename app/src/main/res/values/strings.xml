@@ -141,7 +141,7 @@
     <string name="binding_devices">绑定设备数</string>
     <string name="connected_devices_amount">WIFI连接数</string>
     <string name="leasing_equipment">租赁设备</string>
-    <string name="return_equipment">归还设备</string>
+    <string name="my_devices">我的设备</string>
     <string name="advertisement">流量大减价，一律两元！一律两元！</string>
 
     <!--empty view-->
@@ -263,6 +263,15 @@
     <string name="red_envelope">红包</string>
     <string name="congratulations">恭喜获得流量红包一个！</string>
     <string name="unfold_it">拆开它</string>
+    <!--使用帮助-->
+    <string name="first_step">第一步：获取上网密码</string>
+    <string name="first_to_do">开启网络，点击相应的WIFI获取上网密码，获取密码前，请确保已绑定上网设备（手机、Pad、笔记本电脑）的MAC地址</string>
+    <string name="second_step">第二步：去上网</string>
+    <string name="second_to_do">点击“复制密码链接”，在【无线局域网】点击进入相应的WiFi，长按密码框，粘贴密码即可上网</string>
+    <!--输入邀请码弹框-->
+    <string name="get_data">获取流量</string>
+    <string name="invite_code_input_hint">请输入邀请码/兑换码</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">Sign in</string>

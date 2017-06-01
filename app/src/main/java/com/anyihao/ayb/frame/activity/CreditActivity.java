@@ -1,22 +1,22 @@
 package com.anyihao.ayb.frame.activity;
 
 import android.graphics.Typeface;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.CreditAdapter;
 import com.chaychan.viewlib.NumberRunningTextView;
+import com.jaeger.library.StatusBarUtil;
 
 import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class CreditActivity extends ABaseActivity {
 
@@ -28,6 +28,8 @@ public class CreditActivity extends ABaseActivity {
     RecyclerView recyclerview;
     @BindView(R.id.tv_points)
     NumberRunningTextView tvPoints;
+    @BindView(R.id.ll_header)
+    LinearLayout llHeader;
     private CreditAdapter mAdapter;
     String[] array = new String[]{"购买流量", "兑换流量", "购买会员流量", "下载王者荣耀"};
     private List<String> mData = Arrays.asList(array);
@@ -48,6 +50,10 @@ public class CreditActivity extends ABaseActivity {
                 "fonts/W13.TTF");
         tvPoints.setTypeface(fontFace);
         tvPoints.setContent("24523");
+//        setSupportActionBar(toolbar);
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        }
         toolbar.setNavigationIcon(R.drawable.ic_back_white);
         toolbar.setBackground(null);
         toolbarTitle.setTextColor(getResources().getColor(R.color.white));
@@ -73,6 +79,11 @@ public class CreditActivity extends ABaseActivity {
     }
 
     @Override
+    protected void setStatusBarTheme() {
+        StatusBarUtil.setTranslucentForImageView(this, 0, llHeader);
+    }
+
+    @Override
     public void onSuccess(String result, int page, Integer actionType) {
 
     }
@@ -80,12 +91,5 @@ public class CreditActivity extends ABaseActivity {
     @Override
     public void onFailure(String error, int page, Integer actionType) {
 
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
     }
 }

@@ -50,5 +50,5 @@ dependencies {
     apt 'com.zhy:mpermission-compiler:1.0.0'
     compile 'com.zhy:mpermission-api:1.0.0'
     //StatusBarUtil
-    compile 'com.jaeger.statusbaruitl:library:1.2.5'
+    compile 'com.jaeger.statusbaruitl:library:1.4.0'
 }

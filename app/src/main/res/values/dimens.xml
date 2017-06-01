@@ -17,4 +17,5 @@
     <dimen name="font_size_max">24sp</dimen>
     <dimen name="font_size_thirty">30sp</dimen>
     <dimen name="font_size_36">36sp</dimen>
+    <dimen name="statusbar_view_height">0dp</dimen>
 </resources>

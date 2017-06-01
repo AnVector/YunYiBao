@@ -20,6 +20,7 @@ import com.anyihao.androidbase.utils.DensityUtil;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.ConnectedDeviceAdapter;
 import com.anyihao.ayb.listener.OnItemClickListener;
+import com.jaeger.library.StatusBarUtil;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.itemTouchHelper.SimpleItemTouchHelperCallback;
 
@@ -47,8 +48,8 @@ public class ConnectedDevicesActivity extends ABaseActivity {
     TextView tvUserName;
     @BindView(R.id.tv_online_device)
     TextView tvOnlineDevice;
-    @BindView(R.id.activity_connected_devices)
-    LinearLayout activityConnectedDevices;
+    @BindView(R.id.ll_container)
+    LinearLayout llContainer;
     private ConnectedDeviceAdapter mAdapter;
     private ItemTouchHelper mItemTouchHelper;
     protected LinearLayoutManager layoutManager;
@@ -107,6 +108,11 @@ public class ConnectedDevicesActivity extends ABaseActivity {
 //        recyclerView.reenableLoadmore();
         recyclerView.setAdapter(mAdapter);
 
+    }
+
+    @Override
+    protected void setStatusBarTheme() {
+        StatusBarUtil.setTranslucentForImageView(this, 0, llContainer);
     }
 
     private void changeLeftIcon(TextView tv, Context context, int drawableId) {

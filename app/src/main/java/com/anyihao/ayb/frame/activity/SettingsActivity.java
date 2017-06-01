@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.SettingsAdapter;
 import com.anyihao.ayb.listener.OnItemClickListener;
@@ -112,6 +113,13 @@ public class SettingsActivity extends ABaseActivity {
             @Override
             public boolean onItemLongClick(ViewGroup parent, View view, Object o, int position) {
                 return false;
+            }
+        });
+
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToastUtils.showLongToast(SettingsActivity.this, "退出失败，请稍后重试");
             }
         });
 

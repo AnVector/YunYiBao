@@ -18,6 +18,7 @@ import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.MainAdapter;
 import com.anyihao.ayb.frame.activity.ConnectedDevicesActivity;
+import com.anyihao.ayb.frame.activity.HelpActivity;
 import com.anyihao.ayb.frame.activity.MessageActivity;
 import com.anyihao.ayb.frame.activity.QuestionsActivity;
 import com.anyihao.ayb.frame.activity.RechargeActivity;
@@ -44,8 +45,8 @@ public class HomeFragment extends ABaseFragment {
     TextView toolbarHelp;
     @BindView(R.id.tv_leasing)
     TextView tvLeasing;
-    @BindView(R.id.tv_return)
-    TextView tvReturn;
+    @BindView(R.id.tv_my_devices)
+    TextView tvMyDevices;
     @BindView(R.id.tv_shop)
     TextView tvShop;
     @BindView(R.id.tv_ssid)
@@ -104,7 +105,7 @@ public class HomeFragment extends ABaseFragment {
         toolbarHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), QuestionsActivity.class);
+                Intent intent = new Intent(getActivity(), HelpActivity.class);
                 startActivity(intent);
             }
         });
@@ -133,19 +134,9 @@ public class HomeFragment extends ABaseFragment {
             }
         });
 
-        tvReturn.setOnClickListener(new View.OnClickListener() {
+        tvMyDevices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IntentIntegrator intentIntegrator = IntentIntegrator
-                        .forSupportFragment(HomeFragment.this).setCaptureActivity
-                                (ScanActivity.class);
-                intentIntegrator
-                        .setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
-                        .setPrompt("对准二维码，将会自动扫描")//写那句提示的话
-                        .setOrientationLocked(false)//扫描方向固定
-                        .setCaptureActivity(ScanActivity.class) //
-                        // 设置自定义的activity是CustomActivity
-                        .initiateScan(); // 初始化扫描
 
             }
         });

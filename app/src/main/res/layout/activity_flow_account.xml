@@ -4,9 +4,17 @@
               android:id="@+id/activity_flow_account"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="@color/app_background_color"
               android:orientation="vertical"
-              android:background="@drawable/data_account_bg"
               tools:context="com.anyihao.ayb.frame.activity.FlowAccountActivity">
+
     <include
         layout="@layout/toolbar_common"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/data_account_bg"
+        android:orientation="vertical">
+    </LinearLayout>
 </LinearLayout>

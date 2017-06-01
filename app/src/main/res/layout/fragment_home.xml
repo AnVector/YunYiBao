@@ -1,154 +1,166 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/app_background_color"
-              android:orientation="vertical"
-              tools:context="com.anyihao.ayb.frame.fragment.HomeFragment">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@color/app_background_color"
+             android:orientation="vertical"
+             tools:context="com.anyihao.ayb.frame.fragment.HomeFragment">
 
-    <LinearLayout
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="340dp"
-        android:background="@drawable/home_header_bg"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
-
-        <include layout="@layout/toolbar"/>
-
-        <LinearLayout
-            android:id="@+id/network_ll"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="19dp"
-            android:background="@drawable/ic_circle"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="17dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/ic_connected"/>
-
-            <TextView
-                android:id="@+id/tv_ssid"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:text="@string/company"
-                android:textColor="@color/toolbar_title_color"
-                android:textSize="@dimen/font_size_twenty_one"/>
-
-            <TextView
-                android:id="@+id/tv_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="4dp"
-                android:gravity="center"
-                android:text="@string/connected"
-                android:textColor="@color/toolbar_title_color"
-                android:textSize="@dimen/font_size_normal"/>
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="18dp"
-            android:gravity="center"
-            android:text="剩余：715.6MB"
-            android:textColor="@color/white"
-            android:textSize="@dimen/font_size_fif"/>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="48dp">
-
-            <TextView
-                android:id="@+id/tv_leasing"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="44dp"
-                android:gravity="center"
-                android:text="@string/leasing_equipment"
-                android:textColor="@color/main_device_info_text_color"
-                android:textSize="@dimen/font_size_normal"/>
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="20dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="25dp"
-                android:layout_toRightOf="@id/tv_leasing"
-                android:background="@color/white"/>
-
-            <TextView
-                android:id="@+id/tv_return"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:gravity="center"
-                android:text="@string/return_equipment"
-                android:textColor="@color/main_device_info_text_color"
-                android:textSize="@dimen/font_size_normal"/>
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="20dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="25dp"
-                android:layout_toRightOf="@id/tv_return"
-                android:background="@color/white"/>
-
-            <TextView
-                android:id="@+id/tv_shop"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="44dp"
-                android:gravity="center"
-                android:text="@string/data_flow_shop"
-                android:textColor="@color/main_device_info_text_color"
-                android:textSize="@dimen/font_size_normal"/>
-        </RelativeLayout>
-    </LinearLayout>
+        android:scaleType="centerCrop"
+        android:src="@drawable/home_header_bg"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:background="@color/main_advertisement_bg_color"
-        android:orientation="horizontal"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/iv_bell"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:scaleType="fitXY"
-            android:src="@drawable/alarming"/>
-
-        <ViewFlipper
-            android:id="@+id/flipper"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:autoStart="true"
-            android:flipInterval="3000"
-            android:inAnimation="@anim/push_up_in"
-            android:outAnimation="@anim/push_up_out">
-        </ViewFlipper>
+            android:layout_height="340dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <include layout="@layout/toolbar"/>
+
+            <LinearLayout
+                android:id="@+id/network_ll"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="19dp"
+                android:background="@drawable/ic_circle"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="17dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_connected"/>
+
+                <TextView
+                    android:id="@+id/tv_ssid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="@string/company"
+                    android:textColor="@color/toolbar_title_color"
+                    android:textSize="@dimen/font_size_twenty_one"/>
+
+                <TextView
+                    android:id="@+id/tv_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center"
+                    android:text="@string/connected"
+                    android:textColor="@color/toolbar_title_color"
+                    android:textSize="@dimen/font_size_normal"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="18dp"
+                android:gravity="center"
+                android:text="剩余：715.6MB"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_size_fif"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dp">
+
+                <TextView
+                    android:id="@+id/tv_leasing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="44dp"
+                    android:gravity="center"
+                    android:text="@string/leasing_equipment"
+                    android:textColor="@color/main_device_info_text_color"
+                    android:textSize="@dimen/font_size_normal"/>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="25dp"
+                    android:layout_toRightOf="@id/tv_leasing"
+                    android:background="@color/white"/>
+
+                <TextView
+                    android:id="@+id/tv_my_devices"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:text="@string/my_devices"
+                    android:textColor="@color/main_device_info_text_color"
+                    android:textSize="@dimen/font_size_normal"/>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="25dp"
+                    android:layout_toRightOf="@id/tv_my_devices"
+                    android:background="@color/white"/>
+
+                <TextView
+                    android:id="@+id/tv_shop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="44dp"
+                    android:gravity="center"
+                    android:text="@string/data_flow_shop"
+                    android:textColor="@color/main_device_info_text_color"
+                    android:textSize="@dimen/font_size_normal"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:background="@color/main_advertisement_bg_color"
+            android:orientation="horizontal"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp">
+
+            <ImageView
+                android:id="@+id/iv_bell"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:scaleType="fitXY"
+                android:src="@drawable/alarming"/>
+
+            <ViewFlipper
+                android:id="@+id/flipper"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autoStart="true"
+                android:flipInterval="3000"
+                android:inAnimation="@anim/push_up_in"
+                android:outAnimation="@anim/push_up_out">
+            </ViewFlipper>
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"/>
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"/>
-</LinearLayout>
+</FrameLayout>

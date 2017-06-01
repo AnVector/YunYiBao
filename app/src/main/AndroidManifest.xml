@@ -501,6 +501,8 @@
         </activity>
         <activity android:name=".frame.activity.RedEnvelopeActivity">
         </activity>
+        <activity android:name=".frame.activity.HelpActivity">
+        </activity>
     </application>
 
 </manifest>

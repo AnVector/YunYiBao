@@ -2,6 +2,7 @@ package com.anyihao.androidbase.acitivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -64,12 +65,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         TAG = getTag();
         saveInstanceState(savedInstanceState);
         setContentView(getContentViewId());
-        setStatusBarTheme();
         ActivityManager.getInstance().addActivity(this);
         getExtraParams();
         initView();
         initData();
         initEvent();
+    }
+
+    @Override
+    public void setContentView(@LayoutRes int layoutResID) {
+        super.setContentView(layoutResID);
+        setStatusBarTheme();
     }
 
     protected void saveInstanceState(Bundle savedInstanceState) {

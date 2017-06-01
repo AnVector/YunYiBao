@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_help"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background_color"
+    android:orientation="vertical"
+    tools:context="com.anyihao.ayb.frame.activity.HelpActivity">
+
+    <include layout="@layout/toolbar_common"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingBottom="20dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingTop="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
+                android:text="@string/first_step"
+                android:textColor="@color/user_account_color"
+                android:textSize="@dimen/font_size_normal_high"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="left|center_vertical"
+                android:text="@string/first_to_do"
+                android:textColor="@color/toolbar_register_color"
+                android:textSize="@dimen/font_size_normal"/>
+
+            <ImageView
+                android:layout_width="182dp"
+                android:layout_height="314dp"
+                android:layout_gravity="center_horizontal"
+                android:scaleType="centerCrop"
+                android:src="@drawable/first_sample"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:gravity="left|center_vertical"
+                android:text="@string/second_step"
+                android:textColor="@color/user_account_color"
+                android:textSize="@dimen/font_size_normal_high"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="left|center_vertical"
+                android:text="@string/second_to_do"
+                android:textColor="@color/toolbar_register_color"
+                android:textSize="@dimen/font_size_normal"/>
+
+            <ImageView
+                android:layout_width="182dp"
+                android:layout_height="314dp"
+                android:layout_gravity="center_horizontal"
+                android:scaleType="centerCrop"
+                android:src="@drawable/second_sample"/>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
