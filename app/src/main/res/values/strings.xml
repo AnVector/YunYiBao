@@ -69,6 +69,7 @@
     <string name="pay">支付</string>
     <string name="device_list">设备列表</string>
     <string name="scan">扫描</string>
+    <string name="service_location">设备服务点</string>
 
     <!--user register-->
     <string name="phone_num_input_hint">请填写注册手机号</string>
@@ -271,6 +272,14 @@
     <!--输入邀请码弹框-->
     <string name="get_data">获取流量</string>
     <string name="invite_code_input_hint">请输入邀请码/兑换码</string>
+
+    <!--rented devices-->
+    <string name="rented_devices">我的设备</string>
+    <string name="rented_history">租赁记录</string>
+
+    <!--QR Scan-->
+    <string name="QR_code">二维码</string>
+    <string name="QR_scan_hint">对准二维码，将会自动扫描</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

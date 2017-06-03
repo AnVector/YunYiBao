@@ -17,6 +17,27 @@ def static int releaseVCode() {
     return 1
 }
 
+def gitVersionCode() {
+    def cmd = 'git rev-list HEAD --first-parent --count'
+    cmd.execute().text.trim().toInteger()
+}
+
+def gitVersionTag() {
+    def cmd = 'git describe --tags'
+    def version = cmd.execute().text.trim()
+
+    def pattern = "-(\\d+)-g"
+    def matcher = version =~ pattern
+
+    if (matcher) {
+        version = version.substring(0, matcher.start()) + "." + matcher[0][1]
+    } else {
+        version = version + ".0"
+    }
+
+    return version
+}
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -233,4 +254,5 @@ dependencies {
     compile 'com.github.castorflex.smoothprogressbar:library-circular:1.0.1'
     //dialogplus
     compile 'com.orhanobut:dialogplus:1.11@aar'
+    compile files('libs/AMap_Location_V3.4.0_20170427.jar')
 }

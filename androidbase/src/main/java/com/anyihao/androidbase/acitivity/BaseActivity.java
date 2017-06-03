@@ -5,10 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.anyihao.androidbase.R;
 import com.anyihao.androidbase.manager.ActivityManager;
+import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.m.permission.MPermissions;
 
@@ -63,11 +63,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void init(Bundle savedInstanceState) {
         TAG = getTag();
-        saveInstanceState(savedInstanceState);
         setContentView(getContentViewId());
         ActivityManager.getInstance().addActivity(this);
         getExtraParams();
         initView();
+        saveInstanceState(savedInstanceState);
         initData();
         initEvent();
     }
@@ -80,7 +80,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void saveInstanceState(Bundle savedInstanceState) {
 
-        Log.d(TAG, "saveInstanceState: " + savedInstanceState);
+        if (savedInstanceState == null)
+            return;
+        Logger.d(TAG, "saveInstanceState: " + savedInstanceState);
 
     }
 

@@ -11,12 +11,16 @@ import com.anyihao.ayb.R;
 public class AuthDeviceAdapter extends RecyclerViewAdapter<String> {
 
 
-    public AuthDeviceAdapter(Context context, int layoutId){
-        super(context,layoutId);
+    public AuthDeviceAdapter(Context context, int layoutId) {
+        super(context, layoutId);
     }
+
     @Override
     public void convert(ViewHolder holder, String s) {
 
-        holder.setText(R.id.tv_device,s);
+        holder.setText(R.id.tv_device, s);
+        if (holder.getLayoutPosition() == mDatas.size() - 1) {
+            holder.setVisible(R.id.line, false);
+        }
     }
 }

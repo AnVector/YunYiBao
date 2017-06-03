@@ -5,10 +5,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.m.permission.MPermissions;
 
@@ -26,7 +28,7 @@ public abstract class BaseFragment extends Fragment {
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(getContentViewId(), container, false);
         mContext = getContext();
-        init();
+        init(savedInstanceState);
         return mRootView;
     }
 
@@ -38,10 +40,17 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract int getContentViewId();
 
-    protected void init() {
+    protected void saveInstanceState(Bundle savedInstanceState) {
+        if (savedInstanceState == null)
+            return;
+        Logger.d(TAG, "saveInstanceState: " + savedInstanceState);
+    }
+
+    protected void init(Bundle savedInstanceState) {
         TAG = getPageName();
         initView();
         initData();
+        saveInstanceState(savedInstanceState);
         initEvent();
     }
 

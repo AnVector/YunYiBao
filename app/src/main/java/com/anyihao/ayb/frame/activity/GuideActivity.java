@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.ui.pagetransformer.DepthPageTransformer;
+import com.jaeger.library.StatusBarUtil;
 
 import butterknife.BindView;
 
@@ -89,6 +90,11 @@ public class GuideActivity extends ABaseActivity {
                 return view == object;
             }
         });
+    }
+
+    @Override
+    protected void setStatusBarTheme() {
+        StatusBarUtil.setTransparent(this);
     }
 
     @Override

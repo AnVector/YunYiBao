@@ -59,6 +59,7 @@ public class MeAdapter extends RecyclerViewAdapter<String> {
                 break;
             case "授权设备管理":
                 holder.setCompoundDrawables(R.id.title, R.drawable.ic_manage, 15);
+                holder.setVisible(R.id.line, false);
                 break;
             default:
                 break;

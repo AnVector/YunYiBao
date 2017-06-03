@@ -22,6 +22,7 @@ import com.anyihao.ayb.frame.activity.HelpActivity;
 import com.anyihao.ayb.frame.activity.MessageActivity;
 import com.anyihao.ayb.frame.activity.QuestionsActivity;
 import com.anyihao.ayb.frame.activity.RechargeActivity;
+import com.anyihao.ayb.frame.activity.RentedDevicesActivity;
 import com.anyihao.ayb.frame.activity.ScanActivity;
 import com.anyihao.ayb.listener.OnItemClickListener;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -126,7 +127,6 @@ public class HomeFragment extends ABaseFragment {
                                 (ScanActivity.class);
                 intentIntegrator
                         .setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
-                        .setPrompt("对准二维码，将会自动扫描")//写那句提示的话
                         .setOrientationLocked(false)//扫描方向固定
                         .setCaptureActivity(ScanActivity.class) //
                         // 设置自定义的activity是CustomActivity
@@ -137,7 +137,8 @@ public class HomeFragment extends ABaseFragment {
         tvMyDevices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(getActivity(), RentedDevicesActivity.class);
+                startActivity(intent);
             }
         });
 

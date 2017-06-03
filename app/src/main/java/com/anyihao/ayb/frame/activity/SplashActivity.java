@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.ayb.R;
+import com.jaeger.library.StatusBarUtil;
 
 import butterknife.BindView;
 
@@ -89,6 +90,11 @@ public class SplashActivity extends ABaseActivity {
     @Override
     protected void getExtraParams() {
 
+    }
+
+    @Override
+    protected void setStatusBarTheme() {
+        StatusBarUtil.setTransparent(this);
     }
 
     @Override

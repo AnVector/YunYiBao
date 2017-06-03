@@ -1,5 +1,7 @@
 package com.anyihao.ayb.frame.activity;
 
+import android.graphics.Color;
+
 import com.anyihao.androidbase.acitivity.BKBaseActivity;
 import com.anyihao.androidbase.mvp.IView;
 import com.anyihao.ayb.common.PresenterFactory;
@@ -9,7 +11,7 @@ public abstract class ABaseActivity extends BKBaseActivity implements IView<Inte
 
     @Override
     protected void setStatusBarTheme() {
-        StatusBarUtil.setTransparent(this);
+        StatusBarUtil.setColor(ABaseActivity.this, Color.parseColor("#FFFFFF"), 0);
     }
 
     @Override

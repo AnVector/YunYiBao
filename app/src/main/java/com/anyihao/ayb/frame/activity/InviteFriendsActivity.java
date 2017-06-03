@@ -7,6 +7,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.anyihao.ayb.R;
+import com.jaeger.library.StatusBarUtil;
 
 import butterknife.BindView;
 
@@ -102,6 +103,11 @@ public class InviteFriendsActivity extends ABaseActivity {
         Typeface fontFace = Typeface.createFromAsset(getAssets(),
                 "fonts/W12.ttc");
         tv.setTypeface(fontFace);
+    }
+
+    @Override
+    protected void setStatusBarTheme() {
+        StatusBarUtil.setTransparent(InviteFriendsActivity.this);
     }
 
     @Override
