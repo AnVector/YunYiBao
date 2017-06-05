@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="330dp"
+              android:layout_height="440dp"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginTop="20dp">
+
+        <ImageView
+            android:id="@+id/iv_user_profile"
+            android:layout_width="64dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/user_profile"/>
+
+        <TextView
+            android:id="@+id/tv_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="6dp"
+            android:layout_toRightOf="@id/iv_user_profile"
+            android:gravity="left|center_vertical"
+            android:text="憨豆莹"
+            android:textColor="@color/user_account_color"
+            android:textSize="@dimen/font_size_normal_high"/>
+
+        <ImageView
+            android:id="@+id/iv_sex"
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:layout_alignTop="@id/tv_user_name"
+            android:layout_toRightOf="@id/tv_user_name"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_male"/>
+
+        <TextView
+            android:id="@+id/tv_zone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/tv_user_name"
+            android:layout_below="@id/tv_user_name"
+            android:layout_marginTop="15dp"
+            android:gravity="left|center_vertical"
+            android:text="浙江 杭州"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_small"/>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_qr_code"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="36dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/qr_code"/>
+
+    <TextView
+        android:id="@+id/tv_qr_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="26dp"
+        android:gravity="center"
+        android:text="用云逸宝扫二维码，租赁设备"
+        android:textColor="@color/light_gray"
+        android:textSize="@dimen/font_size_small"/>
+</LinearLayout>

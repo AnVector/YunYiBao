@@ -127,7 +127,8 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date date = new Date(aMapLocation.getTime());
                 df.format(date);//定位时间
-                aMapLocation.getAddress();//地址，如果option中设置isNeedAddress为false，则没有此结果，网络定位结果中会有地址信息，GPS定位不返回地址信息。
+                aMapLocation.getAddress();
+                //地址，如果option中设置isNeedAddress为false，则没有此结果，网络定位结果中会有地址信息，GPS定位不返回地址信息。
                 aMapLocation.getCountry();//国家信息
                 aMapLocation.getProvince();//省信息
                 aMapLocation.getCity();//城市信息
@@ -142,15 +143,19 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
                     //设置缩放级别
                     aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
                     //将地图移动到定位点
-                    aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude())));
+                    aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(aMapLocation
+                            .getLatitude(), aMapLocation.getLongitude())));
                     //点击定位按钮 能够将地图的中心移动到定位点
                     mListener.onLocationChanged(aMapLocation);
                     //添加图钉
                     aMap.addMarker(getMarkerOptions(aMapLocation));
                     //获取定位信息
                     StringBuffer buffer = new StringBuffer();
-                    buffer.append(aMapLocation.getCountry() + "" + aMapLocation.getProvince() + "" + aMapLocation.getCity() + "" + aMapLocation.getProvince() + "" + aMapLocation.getDistrict() + "" + aMapLocation.getStreet() + "" + aMapLocation.getStreetNum());
-                    ToastUtils.showLongToast(getContext(),buffer.toString());
+                    buffer.append(aMapLocation.getCountry() + "" + aMapLocation.getProvince() +
+                            "" + aMapLocation.getCity() + "" + aMapLocation.getProvince() + "" +
+                            aMapLocation.getDistrict() + "" + aMapLocation.getStreet() + "" +
+                            aMapLocation.getStreetNum());
+                    ToastUtils.showLongToast(getContext(), buffer.toString());
                     isFirstLoc = false;
                 }
 
@@ -160,7 +165,7 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
                 Logger.d("AmapError", "location Error, ErrCode:"
                         + aMapLocation.getErrorCode() + ", errInfo:"
                         + aMapLocation.getErrorInfo());
-                ToastUtils.showLongToast(getContext(),"定位失败");
+//                ToastUtils.showLongToast(getContext(),"定位失败");
             }
         }
     }
@@ -174,7 +179,9 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         //位置
         options.position(new LatLng(amapLocation.getLatitude(), amapLocation.getLongitude()));
         StringBuffer buffer = new StringBuffer();
-        buffer.append(amapLocation.getCountry() + "" + amapLocation.getProvince() + "" + amapLocation.getCity() +  "" + amapLocation.getDistrict() + "" + amapLocation.getStreet() + "" + amapLocation.getStreetNum());
+        buffer.append(amapLocation.getCountry() + "" + amapLocation.getProvince() + "" +
+                amapLocation.getCity() + "" + amapLocation.getDistrict() + "" + amapLocation
+                .getStreet() + "" + amapLocation.getStreetNum());
         //标题
         options.title(buffer.toString());
         //子标题
@@ -186,7 +193,7 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
 
     }
 
-    private void initLocation(){
+    private void initLocation() {
 
         //初始化定位参数
         mLocationOption = new AMapLocationClientOption();
@@ -333,7 +340,7 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     @Override
     public void onResume() {
         super.onResume();
-        if(isNeedCheck){
+        if (isNeedCheck) {
             checkPermissions(needPermissions);
         }
         if (mapView == null)
@@ -342,10 +349,8 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     }
 
     /**
-     *
      * @param permissions
      * @since 2.5.0
-     *
      */
     private void checkPermissions(String... permissions) {
         List<String> needRequestPermissonList = findDeniedPermissions(permissions);
@@ -364,10 +369,9 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
      * @param permissions
      * @return
      * @since 2.5.0
-     *
      */
     private List<String> findDeniedPermissions(String[] permissions) {
-        List<String> needRequestPermissonList = new ArrayList<String>();
+        List<String> needRequestPermissonList = new ArrayList<>();
         for (String perm : permissions) {
             if (ContextCompat.checkSelfPermission(getActivity(),
                     perm) != PackageManager.PERMISSION_GRANTED
@@ -405,7 +409,8 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSON_REQUESTCODE) {
             if (!verifyPermissions(grantResults)) {
@@ -417,10 +422,10 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
 
     /**
      * 检测是否说有的权限都已经授权
+     *
      * @param grantResults
      * @return
      * @since 2.5.0
-     *
      */
     private boolean verifyPermissions(int[] grantResults) {
         for (int result : grantResults) {
@@ -435,7 +440,6 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
      * 显示提示信息
      *
      * @since 2.5.0
-     *
      */
     private void showMissingPermissionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

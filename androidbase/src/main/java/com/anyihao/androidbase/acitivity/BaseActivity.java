@@ -1,6 +1,7 @@
 package com.anyihao.androidbase.acitivity;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -64,6 +65,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void init(Bundle savedInstanceState) {
         TAG = getTag();
         setContentView(getContentViewId());
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         ActivityManager.getInstance().addActivity(this);
         getExtraParams();
         initView();

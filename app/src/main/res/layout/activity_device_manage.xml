@@ -5,25 +5,28 @@
     android:id="@+id/activity_device_manage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/app_background_color"
+    android:orientation="vertical"
     tools:context="com.anyihao.ayb.frame.activity.DeviceManageActivity">
+
     <include
         layout="@layout/toolbar_common"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview"
-        android:layout_marginTop="65dp"
-        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <Button
+        android:layout_height="wrap_content"
+        android:layout_marginTop="65dp"
+        android:background="@color/white"/>
+
+    <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_add_auth_device"
         android:layout_width="match_parent"
         android:layout_height="44dp"
+        android:layout_alignParentBottom="true"
         android:background="@color/toolbar_title_color"
         android:gravity="center"
-        android:layout_alignParentBottom="true"
+        android:text="@string/add_authorization_device"
         android:textColor="@color/white"
-        android:textSize="@dimen/font_size_sev"
-        android:text="@string/add_authorization_device"/>
+        android:textSize="@dimen/font_size_sev"/>
 </RelativeLayout>

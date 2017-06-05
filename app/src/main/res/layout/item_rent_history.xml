@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="65dp">
+
+    <TextView
+        android:id="@+id/tv_device_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="12dp"
+        android:gravity="left|center_vertical"
+        android:textColor="@color/user_account_color"
+        android:textSize="@dimen/font_size_normal_high"/>
+
+    <TextView
+        android:id="@+id/tv_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv_device_num"
+        android:layout_below="@id/tv_device_num"
+        android:layout_marginTop="10dp"
+        android:gravity="left|center_vertical"
+        android:textColor="@color/light_gray"
+        android:textSize="@dimen/font_size_thi"/>
+
+</RelativeLayout>

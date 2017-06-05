@@ -63,7 +63,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.GET_TASKS"/>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
@@ -505,6 +505,10 @@
         <activity android:name=".frame.activity.HelpActivity">
         </activity>
         <activity android:name=".frame.activity.RentedDevicesActivity">
+        </activity>
+        <activity android:name=".frame.activity.ExchangeDetailsActivity">
+        </activity>
+        <activity android:name=".frame.activity.RentHistoryActivity">
         </activity>
     </application>
 

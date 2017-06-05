@@ -1,8 +1,10 @@
 package com.anyihao.ayb.frame.activity;
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -58,6 +60,21 @@ public class RentedDevicesActivity extends ABaseActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+            }
+        });
+//        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                Intent intent = new Intent(RentedDevicesActivity.this, RentHistoryActivity.class);
+//                startActivity(intent);
+//                return true;
+//            }
+//        });
+        toolbarTitleRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RentedDevicesActivity.this, RentHistoryActivity.class);
+                startActivity(intent);
             }
         });
 

@@ -1,16 +1,16 @@
 package com.anyihao.ayb.frame.activity;
 
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.UTabAdapter;
-import com.anyihao.ayb.frame.fragment.BriberyMoneyFragment;
 import com.anyihao.ayb.frame.fragment.MeMessageFragment;
 import com.anyihao.ayb.frame.fragment.SysMessageFragment;
 
@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
+import info.hoang8f.android.segmented.SegmentedGroup;
 
 public class MerchantPrivilegeActivity extends ABaseActivity {
 
@@ -28,10 +29,14 @@ public class MerchantPrivilegeActivity extends ABaseActivity {
     TextView toolbarTitleRight;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.tab_layout)
-    TabLayout tabLayout;
     @BindView(R.id.viewpager)
     ViewPager viewpager;
+    @BindView(R.id.rbt_un)
+    RadioButton rbtUn;
+    @BindView(R.id.rbt_al)
+    RadioButton rbtAl;
+    @BindView(R.id.segmented)
+    SegmentedGroup segmented;
     private UTabAdapter mTabAdapter;
     private List<Fragment> mFragments = new ArrayList<>();
     private String[] mTitleArray = new String[]{"未租设备", "已租设备"};
@@ -50,7 +55,6 @@ public class MerchantPrivilegeActivity extends ABaseActivity {
     @Override
     protected void initData() {
         initViewPager();
-        tabLayout.setupWithViewPager(viewpager);
         toolbar.setNavigationIcon(R.drawable.ic_back);
         toolbarTitleMid.setText(getString(R.string.merchat_privilege));
         toolbarTitleRight.setText(getString(R.string.direction_for_use));
@@ -66,6 +70,7 @@ public class MerchantPrivilegeActivity extends ABaseActivity {
         mTabAdapter = new UTabAdapter(getSupportFragmentManager(), mFragments, mTitles);
         viewpager.setAdapter(mTabAdapter);
         viewpager.setCurrentItem(0, true);
+        rbtUn.setChecked(true);
     }
 
     @Override
@@ -84,7 +89,21 @@ public class MerchantPrivilegeActivity extends ABaseActivity {
                 return true;
             }
         });
-
+        segmented.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rbt_un:
+                        viewpager.setCurrentItem(0, true);
+                        break;
+                    case R.id.rbt_al:
+                        viewpager.setCurrentItem(1, true);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     @Override

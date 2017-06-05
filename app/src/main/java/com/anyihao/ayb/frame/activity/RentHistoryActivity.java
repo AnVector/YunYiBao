@@ -1,24 +1,20 @@
 package com.anyihao.ayb.frame.activity;
 
-import android.content.Intent;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.anyihao.ayb.R;
-import com.anyihao.ayb.adapter.AuthDeviceAdapter;
-import com.anyihao.ayb.adapter.CreditAdapter;
+import com.anyihao.ayb.adapter.RentHisAdapter;
 
 import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 
-public class DeviceManageActivity extends ABaseActivity {
+public class RentHistoryActivity extends ABaseActivity {
 
     @BindView(R.id.toolbar_title_mid)
     TextView toolbarTitleMid;
@@ -26,16 +22,14 @@ public class DeviceManageActivity extends ABaseActivity {
     Toolbar toolbar;
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
-    @BindView(R.id.btn_add_auth_device)
-    AppCompatButton btnAddAuthDevice;
-    private AuthDeviceAdapter mAdapter;
-    String[] array = new String[]{"0a:ee:32:44:23:55", "0a:ee:32:44:23:55", "0a:ee:32:44:23:55",
-            "0a:ee:32:44:23:55"};
-    private List<String> mData = Arrays.asList(array);
+    private RentHisAdapter mAdapter;
+    private String[] array = new String[]{"设备编号：iebox100001", "设备编号：iebox100001",
+            "设备编号：iebox100001"};
+    private List<String> data = Arrays.asList(array);
 
     @Override
     protected int getContentViewId() {
-        return R.layout.activity_device_manage;
+        return R.layout.activity_rent_history;
     }
 
     @Override
@@ -46,13 +40,14 @@ public class DeviceManageActivity extends ABaseActivity {
     @Override
     protected void initData() {
         toolbar.setNavigationIcon(R.drawable.ic_back);
-        toolbarTitleMid.setText(getString(R.string.authorization_device));
-        mAdapter = new AuthDeviceAdapter(this, R.layout.item_auth_device);
+        toolbarTitleMid.setText(getString(R.string.rented_history));
+        mAdapter = new RentHisAdapter(this, R.layout.item_rent_history);
         recyclerview.setAdapter(mAdapter);
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager
                 .VERTICAL, false));
         recyclerview.setHasFixedSize(true);
-        mAdapter.add(0, mData.size(), mData);
+        mAdapter.add(0, data.size(), data);
+
     }
 
     @Override
@@ -61,13 +56,6 @@ public class DeviceManageActivity extends ABaseActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
-            }
-        });
-        btnAddAuthDevice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DeviceManageActivity.this, AddAuthDeviceActivity.class);
-                startActivity(intent);
             }
         });
 

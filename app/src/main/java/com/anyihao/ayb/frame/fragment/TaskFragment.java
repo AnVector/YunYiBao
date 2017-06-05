@@ -1,8 +1,10 @@
 package com.anyihao.ayb.frame.fragment;
 
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.AdAdapter;
 import com.anyihao.ayb.adapter.SignInAdapter;
+import com.anyihao.ayb.frame.activity.ExchangeDetailsActivity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -69,6 +72,8 @@ public class TaskFragment extends ABaseFragment {
     TextView tvTicketRightDesc;
     @BindView(R.id.recyclerview_bottom)
     RecyclerView recyclerviewBottom;
+    @BindView(R.id.btn_sign_in)
+    AppCompatButton btnSignIn;
     private AdAdapter mAdapter;
     private SignInAdapter signInAdapter;
     String[] weekendArray = new String[]{"1", "2", "3", "4", "5", "6", "7"};
@@ -105,6 +110,14 @@ public class TaskFragment extends ABaseFragment {
 
     @Override
     protected void initEvent() {
+
+        btnSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ExchangeDetailsActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 

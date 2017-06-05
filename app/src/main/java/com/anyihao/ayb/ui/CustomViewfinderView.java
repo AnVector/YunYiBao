@@ -2,6 +2,7 @@ package com.anyihao.ayb.ui;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Rect;
 import android.graphics.Shader;
@@ -19,10 +20,11 @@ import java.util.List;
  */
 
 public class CustomViewfinderView extends ViewfinderView {
-    public int laserLinePosition=0;
-    public float[] position=new float[]{0f,0.5f,1f};
-    public int[] colors=new int[]{0x00ffffff,0xffffffff,0x00ffffff};
-    public LinearGradient linearGradient ;
+    public int laserLinePosition = 0;
+    public float[] position = new float[]{0f, 0.5f, 1f};
+    public int[] colors = new int[]{0x00ffffff, 0xffffffff, 0x00ffffff};
+    public LinearGradient linearGradient;
+
     public CustomViewfinderView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -30,6 +32,7 @@ public class CustomViewfinderView extends ViewfinderView {
 
     /**
      * 重写draw方法绘制自己的扫描框
+     *
      * @param canvas
      */
     @Override
@@ -46,18 +49,18 @@ public class CustomViewfinderView extends ViewfinderView {
         int height = canvas.getHeight();
         //绘制4个角
 
-        paint.setColor(0xFFFFFFFF);//定义画笔的颜色
-        canvas.drawRect(frame.left, frame.top, frame.left+70, frame.top+10, paint);
+        paint.setColor(Color.parseColor("#2DA8F4"));//定义画笔的颜色
+        canvas.drawRect(frame.left, frame.top, frame.left + 70, frame.top + 10, paint);
         canvas.drawRect(frame.left, frame.top, frame.left + 10, frame.top + 70, paint);
 
-        canvas.drawRect(frame.right-70, frame.top, frame.right, frame.top+10, paint);
-        canvas.drawRect(frame.right-10, frame.top, frame.right, frame.top+70, paint);
+        canvas.drawRect(frame.right - 70, frame.top, frame.right, frame.top + 10, paint);
+        canvas.drawRect(frame.right - 10, frame.top, frame.right, frame.top + 70, paint);
 
-        canvas.drawRect(frame.left, frame.bottom-10, frame.left+70, frame.bottom, paint);
-        canvas.drawRect(frame.left, frame.bottom-70, frame.left+10, frame.bottom, paint);
+        canvas.drawRect(frame.left, frame.bottom - 10, frame.left + 70, frame.bottom, paint);
+        canvas.drawRect(frame.left, frame.bottom - 70, frame.left + 10, frame.bottom, paint);
 
-        canvas.drawRect(frame.right-70, frame.bottom-10, frame.right, frame.bottom, paint);
-        canvas.drawRect(frame.right-10, frame.bottom-70, frame.right, frame.bottom, paint);
+        canvas.drawRect(frame.right - 70, frame.bottom - 10, frame.right, frame.bottom, paint);
+        canvas.drawRect(frame.right - 10, frame.bottom - 70, frame.right, frame.bottom, paint);
         // Draw the exterior (i.e. outside the framing rect) darkened
         paint.setColor(resultBitmap != null ? resultColor : maskColor);
         canvas.drawRect(0, 0, width, frame.top, paint);
@@ -73,18 +76,20 @@ public class CustomViewfinderView extends ViewfinderView {
             //  paint.setAlpha(SCANNER_ALPHA[scannerAlpha]);
             //  scannerAlpha = (scannerAlpha + 1) % SCANNER_ALPHA.length;
             int middle = frame.height() / 2 + frame.top;
-            laserLinePosition=laserLinePosition+5;
-            if(laserLinePosition>frame.height())
-            {
-                laserLinePosition=0;
+            laserLinePosition = laserLinePosition + 5;
+            if (laserLinePosition > frame.height()) {
+                laserLinePosition = 0;
             }
-            linearGradient= new LinearGradient(frame.left + 1, frame.top+laserLinePosition , frame.right -1 , frame.top +10+laserLinePosition, colors, position, Shader.TileMode.CLAMP);
+            linearGradient = new LinearGradient(frame.left + 1, frame.top + laserLinePosition,
+                    frame.right - 1, frame.top + 10 + laserLinePosition, colors, position, Shader
+                    .TileMode.CLAMP);
             // Draw a red "laser scanner" line through the middle to show decoding is active
 
             //  paint.setColor(laserColor);
             paint.setShader(linearGradient);
             //绘制扫描线
-            canvas.drawRect(frame.left + 1, frame.top+laserLinePosition , frame.right -1 , frame.top +10+laserLinePosition, paint);
+            canvas.drawRect(frame.left + 1, frame.top + laserLinePosition, frame.right - 1, frame
+                    .top + 10 + laserLinePosition, paint);
             paint.setShader(null);
             float scaleX = frame.width() / (float) previewFrame.width();
             float scaleY = frame.height() / (float) previewFrame.height();
@@ -117,9 +122,9 @@ public class CustomViewfinderView extends ViewfinderView {
                 }
             }
             postInvalidateDelayed(16,
-                    frame.left ,
-                    frame.top ,
-                    frame.right ,
+                    frame.left,
+                    frame.top,
+                    frame.right,
                     frame.bottom);
             // postInvalidate();
 

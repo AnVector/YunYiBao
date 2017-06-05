@@ -249,6 +249,8 @@
     <!--merchat privilege-->
     <string name="merchat_privilege">商家特权</string>
     <string name="direction_for_use">使用说明</string>
+    <string name="unrented_devices">未租设备</string>
+    <string name="renting_devices">已租设备</string>
     <!--add auth device-->
     <string name="add_auth_device">添加授权设备</string>
     <string name="mac_address">Mac地址：</string>
@@ -280,7 +282,13 @@
     <!--QR Scan-->
     <string name="QR_code">二维码</string>
     <string name="QR_scan_hint">对准二维码，将会自动扫描</string>
-
+    <!--exchange details-->
+    <string name="describe_content">开启网络，点击相应的WIFI获取上网密码，获取密码前，请确保已绑定上网设备（手机、Pad、笔记本电脑）的Mac地址</string>
+    <string name="exchange_method">兑换方法：</string>
+    <string name="exchange">兑换</string>
+    <string name="exchange_details">兑换详情</string>
+    <!--rent history-->
+    <string name="rent_history">租赁记录</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">Sign in</string>

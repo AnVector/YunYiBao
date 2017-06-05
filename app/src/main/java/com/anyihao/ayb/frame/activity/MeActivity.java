@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -19,6 +20,12 @@ import com.anyihao.ayb.bean.ProvinceBean;
 import com.anyihao.ayb.listener.OnItemClickListener;
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.google.gson.Gson;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.Holder;
+import com.orhanobut.dialogplus.OnCancelListener;
+import com.orhanobut.dialogplus.OnClickListener;
+import com.orhanobut.dialogplus.OnDismissListener;
+import com.orhanobut.dialogplus.ViewHolder;
 
 import org.json.JSONArray;
 
@@ -119,16 +126,22 @@ public class MeActivity extends ABaseActivity {
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
                 Intent intent = new Intent(MeActivity.this, UpdateSelfDataActivity.class);
                 if (o instanceof String) {
-                    if (o.toString().equals("地区")) {
-                        if (isLoaded) {
-                            showPickerView(view.findViewById(R.id.value));
-                        } else {
-                            mHandler.sendEmptyMessage(MSG_LOAD_DATA);
-                        }
-                    } else {
-                        intent.putExtra(UpdateSelfDataActivity.INFORMATION_KEY, o.toString());
-                        intent.putExtra(UpdateSelfDataActivity.INFORMATION_VALUE, o.toString());
-                        startActivity(intent);
+                    switch (o.toString()) {
+                        case "地区":
+                            if (isLoaded) {
+                                showPickerView(view.findViewById(R.id.value));
+                            } else {
+                                mHandler.sendEmptyMessage(MSG_LOAD_DATA);
+                            }
+                            break;
+                        case "我的二维码":
+                            showDialog();
+                            break;
+                        default:
+                            intent.putExtra(UpdateSelfDataActivity.INFORMATION_KEY, o.toString());
+                            intent.putExtra(UpdateSelfDataActivity.INFORMATION_VALUE, o.toString());
+                            startActivity(intent);
+                            break;
                     }
                 }
             }
@@ -263,6 +276,41 @@ public class MeActivity extends ABaseActivity {
             e.printStackTrace();
         }
         return detail;
+    }
+
+    private void showDialog() {
+        Holder holder = new ViewHolder(R.layout.me_qr_code_dialog);
+        OnClickListener clickListener = new OnClickListener() {
+            @Override
+            public void onClick(DialogPlus dialog, View view) {
+            }
+        };
+
+        OnDismissListener dismissListener = new OnDismissListener() {
+            @Override
+            public void onDismiss(DialogPlus dialog) {
+//                ToastUtils.showLongToast(getActivity(), "dismiss");
+            }
+        };
+
+        OnCancelListener cancelListener = new OnCancelListener() {
+            @Override
+            public void onCancel(DialogPlus dialog) {
+//                ToastUtils.showLongToast(getActivity(), "cancel");
+            }
+        };
+
+        final DialogPlus dialog = DialogPlus.newDialog(this)
+                .setContentHolder(holder)
+                .setGravity(Gravity.CENTER)
+                .setOnDismissListener(dismissListener)
+                .setOnCancelListener(cancelListener)
+                .setCancelable(true)
+                .setOnClickListener(clickListener)
+                .setContentWidth(ViewGroup.LayoutParams.WRAP_CONTENT)
+                .setContentBackgroundResource(R.drawable.qr_info_dialog_bg)
+                .create();
+        dialog.show();
     }
 
     @Override

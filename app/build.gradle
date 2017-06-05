@@ -254,5 +254,6 @@ dependencies {
     compile 'com.github.castorflex.smoothprogressbar:library-circular:1.0.1'
     //dialogplus
     compile 'com.orhanobut:dialogplus:1.11@aar'
-    compile files('libs/AMap_Location_V3.4.0_20170427.jar')
+//    android-segmented-control
+    compile 'info.hoang8f:android-segmented:1.0.6'
 }
