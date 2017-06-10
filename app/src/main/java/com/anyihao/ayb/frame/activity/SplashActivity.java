@@ -129,7 +129,7 @@ public class SplashActivity extends ABaseActivity {
 
     private void handleGoHome() {
 //        Intent intent = new Intent(SplashActivity.this, MainFragmentActivity.class);
-        Intent intent = new Intent(SplashActivity.this, MainFragmentActivity.class);
+        Intent intent = new Intent(SplashActivity.this, LineChartActivity.class);
         startActivity(intent);
         finish();
     }

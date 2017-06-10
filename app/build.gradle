@@ -243,8 +243,6 @@ dependencies {
     //zxing
     compile 'com.google.zxing:core:3.2.1'
     compile 'com.journeyapps:zxing-android-embedded:3.5.0'
-    //MPAndroidChart
-    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     //android-pickerView
     compile 'com.contrarywind:Android-PickerView:3.2.4'
     //PowerfulViewLibrary
@@ -258,4 +256,6 @@ dependencies {
     compile 'info.hoang8f:android-segmented:1.0.6'
     //safe-java-js-webview-bridge
     compile 'cn.pedant.safewebviewbridge:library:1.4'
+//    hellocharts-android
+    compile 'com.github.lecho:hellocharts-android:v1.5.8'
 }

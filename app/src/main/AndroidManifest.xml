@@ -512,6 +512,8 @@
         </activity>
         <activity android:name=".frame.activity.RadarActivity">
         </activity>
+        <activity android:name=".frame.activity.LineChartActivity">
+        </activity>
     </application>
 
 </manifest>
