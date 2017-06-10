@@ -12,9 +12,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.RadioButton;
-import android.widget.Toast;
 
 import com.anyihao.androidbase.manager.ActivityManager;
+import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.UFragmentPagerAdapter;
 import com.anyihao.ayb.frame.fragment.DiscoverFragment;
@@ -261,7 +261,8 @@ public class MainFragmentActivity extends ABaseActivity {
     private void onAppExit() {
         if (!isExit) {
             isExit = true;
-            Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            ToastUtils.showToast(getApplicationContext(), "再按一次退出程序", R.layout.toast, R.id
+                    .tv_message);
             mHandler.sendEmptyMessageDelayed(0, 2000);
         } else {
             ActivityManager.getInstance().finishAllActivity();

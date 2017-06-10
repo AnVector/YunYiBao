@@ -3,6 +3,11 @@ package com.anyihao.androidbase.utils;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -71,7 +76,8 @@ public class ToastUtils {
      * @param resId   资源Id
      * @param args    参数
      */
-    public static void showShortToastSafe(final Context context, final int resId, final Object... args) {
+    public static void showShortToastSafe(final Context context, final int resId, final Object...
+            args) {
         sHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -87,7 +93,8 @@ public class ToastUtils {
      * @param format  格式
      * @param args    参数
      */
-    public static void showShortToastSafe(final Context context, final String format, final Object... args) {
+    public static void showShortToastSafe(final Context context, final String format, final
+    Object... args) {
         sHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -133,7 +140,8 @@ public class ToastUtils {
      * @param resId   资源Id
      * @param args    参数
      */
-    public static void showLongToastSafe(final Context context, final int resId, final Object... args) {
+    public static void showLongToastSafe(final Context context, final int resId, final Object...
+            args) {
         sHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -149,7 +157,8 @@ public class ToastUtils {
      * @param format  格式
      * @param args    参数
      */
-    public static void showLongToastSafe(final Context context, final String format, final Object... args) {
+    public static void showLongToastSafe(final Context context, final String format, final
+    Object... args) {
         sHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -294,6 +303,30 @@ public class ToastUtils {
      */
     private static void showToast(Context context, String format, int duration, Object... args) {
         showToast(context, String.format(format, args), duration);
+    }
+
+    public static void showToast(Context context, String message, int layoutId, int textId) {
+        //加载Toast布局
+        View toastRoot = LayoutInflater.from(context).inflate(layoutId, null);
+        //初始化布局控件
+        TextView mTextView = (TextView) toastRoot.findViewById(textId);
+        if (mTextView == null)
+            return;
+        //为控件设置属性
+        mTextView.setText(message);
+        //Toast的初始化
+        if (sToast == null) {
+            sToast = new Toast(context);
+
+        }
+        //获取屏幕高度
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        int height = wm.getDefaultDisplay().getHeight();
+        //Toast的Y坐标是屏幕高度的1/3，不会出现不适配的问题
+        sToast.setGravity(Gravity.BOTTOM, 0, height / 10);
+        sToast.setDuration(Toast.LENGTH_SHORT);
+        sToast.setView(toastRoot);
+        sToast.show();
     }
 
     /**

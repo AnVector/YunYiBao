@@ -135,7 +135,10 @@ public class MeActivity extends ABaseActivity {
                             }
                             break;
                         case "我的二维码":
-                            showDialog();
+                            showCodeDialog();
+                            break;
+                        case "押金退款":
+                            showConfirmDialog();
                             break;
                         default:
                             intent.putExtra(UpdateSelfDataActivity.INFORMATION_KEY, o.toString());
@@ -278,7 +281,7 @@ public class MeActivity extends ABaseActivity {
         return detail;
     }
 
-    private void showDialog() {
+    private void showCodeDialog() {
         Holder holder = new ViewHolder(R.layout.me_qr_code_dialog);
         OnClickListener clickListener = new OnClickListener() {
             @Override
@@ -309,6 +312,52 @@ public class MeActivity extends ABaseActivity {
                 .setOnClickListener(clickListener)
                 .setContentWidth(ViewGroup.LayoutParams.WRAP_CONTENT)
                 .setContentBackgroundResource(R.drawable.qr_info_dialog_bg)
+                .create();
+        dialog.show();
+    }
+
+
+    private void showConfirmDialog() {
+        Holder holder = new ViewHolder(R.layout.refund_deposit_dialog);
+        OnClickListener clickListener = new OnClickListener() {
+            @Override
+            public void onClick(DialogPlus dialog, View view) {
+                switch (view.getId()) {
+                    case R.id.btn_cancel:
+                        dialog.dismiss();
+                        break;
+                    case R.id.btn_confirm:
+                        dialog.dismiss();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
+
+        OnDismissListener dismissListener = new OnDismissListener() {
+            @Override
+            public void onDismiss(DialogPlus dialog) {
+//                ToastUtils.showLongToast(getActivity(), "dismiss");
+            }
+        };
+
+        OnCancelListener cancelListener = new OnCancelListener() {
+            @Override
+            public void onCancel(DialogPlus dialog) {
+//                ToastUtils.showLongToast(getActivity(), "cancel");
+            }
+        };
+
+        final DialogPlus dialog = DialogPlus.newDialog(this)
+                .setContentHolder(holder)
+                .setGravity(Gravity.CENTER)
+                .setOnDismissListener(dismissListener)
+                .setOnCancelListener(cancelListener)
+                .setCancelable(true)
+                .setOnClickListener(clickListener)
+                .setContentWidth(ViewGroup.LayoutParams.WRAP_CONTENT)
+                .setContentBackgroundResource(R.drawable.dialog_bg)
                 .create();
         dialog.show();
     }

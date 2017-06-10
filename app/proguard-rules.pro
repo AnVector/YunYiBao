@@ -346,6 +346,21 @@ public static final ** CREATOR;
     public void *(android.webkit.webView, jav.lang.String);
 }
 
+#--------------- BEGIN: Gson防混淆 ----------
+-keepattributes *Annotation*
+-keep class sun.misc.Unsafe { *; }
+-keep class com.idea.fifaalarmclock.entity.***
+-keep class com.google.gson.stream.** { *; }
+#--------------- END ----------
+
+#--------------- BEGIN: 返回到页面的自定义Java对象防混淆 ----------
+-keepclassmembers class cn.pedant.SafeWebViewBridge.sample.HostJsScope$RetJavaObj{ *; }
+#--------------- END ----------
+
+#--------------- BEGIN: 注入到页面的接口类防混淆 ----------
+-keepclassmembers class cn.pedant.SafeWebViewBridge.sample.HostJsScope{ *; }
+#--------------- END ----------
+
 
 #---------------------------------4.基本指令区----------------------------------
 #不进行代码压缩

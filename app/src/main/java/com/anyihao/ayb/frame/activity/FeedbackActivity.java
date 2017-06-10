@@ -1,10 +1,12 @@
 package com.anyihao.ayb.frame.activity;
 
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 
 import butterknife.BindView;
@@ -18,6 +20,8 @@ public class FeedbackActivity extends ABaseActivity {
     Toolbar toolbar;
     @BindView(R.id.tv_message)
     EditText tvMessage;
+    @BindView(R.id.btn_submit)
+    AppCompatButton btnSubmit;
 
     @Override
     protected int getContentViewId() {
@@ -41,6 +45,13 @@ public class FeedbackActivity extends ABaseActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+            }
+        });
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToastUtils.showToast(FeedbackActivity.this, "请输入反馈内容", R.layout.toast, R.id
+                        .tv_message);
             }
         });
 

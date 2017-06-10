@@ -510,6 +510,8 @@
         </activity>
         <activity android:name=".frame.activity.RentHistoryActivity">
         </activity>
+        <activity android:name=".frame.activity.RadarActivity">
+        </activity>
     </application>
 
 </manifest>

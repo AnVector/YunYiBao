@@ -4,14 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.AppCompatButton;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.anyihao.ayb.R;
-import com.anyihao.ayb.ui.pagetransformer.DepthPageTransformer;
-import com.jaeger.library.StatusBarUtil;
 
 import butterknife.BindView;
 
@@ -19,9 +18,12 @@ import butterknife.BindView;
 public class GuideActivity extends ABaseActivity {
 
     private static final int[] mGuidePics = {R.drawable.guide_pic_1,
-            R.drawable.guide_pic_2, R.drawable.guide_pic_3, 0};
+            R.drawable.guide_pic_2, R.drawable.guide_pic_3};
     @BindView(R.id.guide_viewpager)
     ViewPager mGuideViewpager;
+    @BindView(R.id.btn_go)
+    AppCompatButton btnGo;
+    private int currentIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,14 +50,19 @@ public class GuideActivity extends ABaseActivity {
         mGuideViewpager.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if ((Integer) v.getTag() == 3) {
-//                    Intent intent = new Intent(GuideActivity.this, LoginActivity.class);
+                currentIndex = (Integer) v.getTag();
+                return false;
+            }
+        });
+
+        btnGo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentIndex == 2) {
                     Intent intent = new Intent(GuideActivity.this, MainFragmentActivity.class);
                     startActivity(intent);
                     finish();
-                    return true;
                 }
-                return false;
             }
         });
 
@@ -63,7 +70,6 @@ public class GuideActivity extends ABaseActivity {
 
     private void initViewPager() {
 
-        mGuideViewpager.setPageTransformer(false, new DepthPageTransformer());
         mGuideViewpager.setAdapter(new PagerAdapter() {
             @Override
             public Object instantiateItem(ViewGroup container, int position) {
@@ -90,11 +96,6 @@ public class GuideActivity extends ABaseActivity {
                 return view == object;
             }
         });
-    }
-
-    @Override
-    protected void setStatusBarTheme() {
-        StatusBarUtil.setTransparent(this);
     }
 
     @Override
