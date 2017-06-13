@@ -1,7 +1,6 @@
 package com.anyihao.ayb.frame.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -14,19 +13,15 @@ import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.UTabAdapter;
 import com.anyihao.ayb.frame.fragment.DayFragment;
 import com.anyihao.ayb.frame.fragment.DaysFragment;
-import com.anyihao.ayb.frame.fragment.MeMessageFragment;
 import com.anyihao.ayb.frame.fragment.MonthFragment;
 import com.anyihao.ayb.frame.fragment.PackageFragment;
 import com.anyihao.ayb.frame.fragment.SeasonFragment;
-import com.anyihao.ayb.frame.fragment.SysMessageFragment;
-import com.anyihao.ayb.frame.fragment.YearFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class RechargeActivity extends ABaseActivity {
 
@@ -69,7 +64,6 @@ public class RechargeActivity extends ABaseActivity {
     private void initViewPager() {
         PackageFragment fragment1 = new PackageFragment();
         MonthFragment fragment2 = new MonthFragment();
-//        YearFragment fragment3 = new YearFragment();
         DaysFragment fragment3 = new DaysFragment();
         DayFragment fragment4 = new DayFragment();
         SeasonFragment fragment5 = new SeasonFragment();
@@ -97,6 +91,15 @@ public class RechargeActivity extends ABaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(RechargeActivity.this, PayActivity.class);
                 startActivity(intent);
+//                List<Fragment> fragments = getSupportFragmentManager().getFragments();
+//                Logger.d(fragments.size());
+//                for (Fragment fragment:fragments) {
+//                    Logger.d(fragment.getId());
+//                    if(fragment.isVisible()){
+//                        ToastUtils.showToast(RechargeActivity.this,fragment.getId()+"",R.layout.toast,R.id.tv_message);
+//                    }
+//                }
+
             }
         });
     }

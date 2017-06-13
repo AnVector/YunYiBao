@@ -30,8 +30,8 @@ public class SeasonFragment extends ABaseFragment {
 
     @Override
     protected void initData() {
-        tvPackageDesc.setText("全国流量，即时生效，3月有效");
-        mAdapter = new DataFlowAdapter(getActivity(), R.layout.item_data_flow);
+        tvPackageDesc.setText(mContext.getString(R.string.season_package_desc));
+        mAdapter = new DataFlowAdapter(mContext, R.layout.item_data_flow);
         recyclerview.setAdapter(mAdapter);
         recyclerview.setLayoutManager(new GridLayoutManager(mContext, 3));
         recyclerview.setHasFixedSize(true);

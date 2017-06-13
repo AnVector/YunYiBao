@@ -32,7 +32,7 @@ public class PackageFragment extends ABaseFragment {
 
     @Override
     protected void initData() {
-        tvPackageDesc.setText("全国可用，即时生效，每月1G，共3个月");
+        tvPackageDesc.setText(mContext.getString(R.string.discount_package_desc));
         mAdapter = new DataFlowAdapter(getActivity(), R.layout.item_data_flow);
         recyclerview.setAdapter(mAdapter);
         recyclerview.setLayoutManager(new GridLayoutManager(mContext, 3));

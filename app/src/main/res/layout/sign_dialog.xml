@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="298dp"
+                android:layout_height="300dp">
+
+    <TextView
+        android:id="@+id/tv_sign_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:layout_marginLeft="23dp"
+        android:layout_marginRight="23dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/sign_title"
+        android:textColor="@color/user_account_color"
+        android:textSize="@dimen/font_size_sev"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_got_it"
+        android:layout_width="wrap_content"
+        android:layout_height="49dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@null"
+        android:gravity="center"
+        android:text="@string/got_it"
+        android:textColor="@color/toolbar_title_color"
+        android:textSize="@dimen/font_size_sev"/>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:layout_above="@id/btn_got_it"
+        android:layout_centerHorizontal="true"
+        android:background="@color/line_color"/>
+
+    <TextView
+        android:id="@+id/tv_sign_principle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/line"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="32dp"
+        android:layout_marginLeft="23dp"
+        android:layout_marginRight="23dp"
+        android:gravity="left|center_vertical"
+        android:lineSpacingMultiplier="1.35"
+        android:text="@string/sign_principle"
+        android:textColor="@color/toolbar_register_color"
+        android:textSize="@dimen/font_size_normal"/>
+
+</RelativeLayout>

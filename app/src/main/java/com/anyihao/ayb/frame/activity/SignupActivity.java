@@ -11,9 +11,9 @@ import com.anyihao.ayb.R;
 
 import butterknife.BindView;
 
-public class SignupActivity extends ABaseActivity {
+public class SignUpActivity extends ABaseActivity {
 
-    private static final String TAG = "SignupActivity";
+    private static final String TAG = "SignUpActivity";
 
     @BindView(R.id.input_name)
     EditText etName;
@@ -62,7 +62,7 @@ public class SignupActivity extends ABaseActivity {
 
         btnSignup.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
+        final ProgressDialog progressDialog = new ProgressDialog(SignUpActivity.this,
                 R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Creating Account...");
@@ -134,7 +134,7 @@ public class SignupActivity extends ABaseActivity {
             etEmail.setError(null);
         }
 
-        if (mobile.isEmpty() || mobile.length()!=10) {
+        if (mobile.isEmpty() || mobile.length() != 10) {
             etMobile.setError("Enter Valid Mobile Number");
             valid = false;
         } else {
@@ -148,7 +148,8 @@ public class SignupActivity extends ABaseActivity {
             etPassword.setError(null);
         }
 
-        if (reEnterPassword.isEmpty() || reEnterPassword.length() < 4 || reEnterPassword.length() > 10 || !(reEnterPassword.equals(password))) {
+        if (reEnterPassword.isEmpty() || reEnterPassword.length() < 4 || reEnterPassword.length()
+                > 10 || !(reEnterPassword.equals(password))) {
             etReEnterPassword.setError("Password Do not match");
             valid = false;
         } else {

@@ -30,7 +30,7 @@ public class MonthFragment extends ABaseFragment {
 
     @Override
     protected void initData() {
-        mAdapter = new DataFlowAdapter(getActivity(), R.layout.item_data_flow);
+        mAdapter = new DataFlowAdapter(mContext, R.layout.item_data_flow);
         recyclerview.setAdapter(mAdapter);
         recyclerview.setLayoutManager(new GridLayoutManager(mContext, 3));
         recyclerview.setHasFixedSize(true);

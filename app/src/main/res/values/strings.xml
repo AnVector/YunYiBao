@@ -171,6 +171,10 @@
     <!--recharge page-->
     <string name="package_description">全国可用，即时生效，有效期30天</string>
     <string name="confirm_to_recharge">确认充值</string>
+    <string name="discount_package_desc">全国可用，即时生效，每月1G，共3个月</string>
+    <string name="day_package_desc">全国流量，即时生效，当日有效</string>
+    <string name="days_package_desc">全国流量，即时生效，3天有效</string>
+    <string name="season_package_desc">全国流量，即时生效，3月有效</string>
     <!--bond device list-->
     <string name="device_name">AYM-100201</string>
     <string name="device_on">已开启</string>
@@ -285,6 +289,9 @@
     <string name="deposit_confirm">退押金</string>
     <!--账号解绑确认框-->
     <string name="account_unbunding_hint">是否解除绑定？</string>
+    <string name="sign_title">连续7天签到的奖励</string>
+    <string name="sign_principle">1：连续签到7天，即可额外获得15积分奖励\n2：连续签到记录在第8天开始时将清零重新计算\n3：如果中断签到，连续签到记录也将清零\n4：本活动最终解释权归翰隆所有</string>
+    <string name="got_it">我知道了</string>
 
     <!--rented devices-->
     <string name="rented_devices">我的设备</string>
