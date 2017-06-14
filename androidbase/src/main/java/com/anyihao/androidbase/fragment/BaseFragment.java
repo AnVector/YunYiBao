@@ -5,19 +5,21 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
-import com.zhy.m.permission.MPermissions;
+
+import java.util.List;
+
+import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment implements EasyPermissions.PermissionCallbacks {
 
     protected Context mContext;
     protected View mRootView;
@@ -58,14 +60,18 @@ public abstract class BaseFragment extends Fragment {
         return this.getClass().getSimpleName();
     }
 
-    protected void permissionsRequest(int requestCode, String... permissions) {
+    protected void permissionsRequest(int requestCode, String decription, String... permissions) {
         if (requestCode == -1 || permissions == null || permissions.length == 0 || getActivity()
                 == null)
             return;
-        if (!MPermissions.shouldShowRequestPermissionRationale(getActivity(), permissions[0],
-                requestCode)) {
-            MPermissions.requestPermissions(this, requestCode, permissions);
+        if (EasyPermissions.hasPermissions(getContext(), permissions)) {
+            // Have permission, do the thing!
+        } else {
+            // Request one permission
+            EasyPermissions.requestPermissions(this, decription,
+                    requestCode, permissions);
         }
+
     }
 
     @Override
@@ -83,7 +89,17 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        MPermissions.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+        Logger.d(TAG, "onPermissionsGranted:" + requestCode + ":" + perms.size());
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        Logger.d(TAG, "onPermissionsDenied:" + requestCode + ":" + perms.size());
     }
 }

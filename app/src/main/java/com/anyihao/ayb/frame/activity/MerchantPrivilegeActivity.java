@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.UTabAdapter;
-import com.anyihao.ayb.frame.fragment.MeMessageFragment;
-import com.anyihao.ayb.frame.fragment.SysMessageFragment;
+import com.anyihao.ayb.frame.fragment.NotRentFragment;
+import com.anyihao.ayb.frame.fragment.RentedFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,8 +63,8 @@ public class MerchantPrivilegeActivity extends ABaseActivity {
     }
 
     private void initViewPager() {
-        SysMessageFragment fragment1 = new SysMessageFragment();
-        MeMessageFragment fragment2 = new MeMessageFragment();
+        NotRentFragment fragment1 = new NotRentFragment();
+        RentedFragment fragment2 = new RentedFragment();
         mFragments.add(fragment1);
         mFragments.add(fragment2);
         mTabAdapter = new UTabAdapter(getSupportFragmentManager(), mFragments, mTitles);

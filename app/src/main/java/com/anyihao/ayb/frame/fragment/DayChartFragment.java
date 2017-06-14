@@ -39,6 +39,7 @@ public class DayChartFragment extends ABaseFragment {
         mTf = Typeface.createFromAsset(getContext().getAssets(), "fonts/OpenSans-Regular.ttf");
         chart.getDescription().setEnabled(false);
         chart.setDrawGridBackground(false);
+        chart.setTouchEnabled(false);
 
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -46,6 +47,7 @@ public class DayChartFragment extends ABaseFragment {
         xAxis.setDrawLabels(true);
         xAxis.setDrawGridLines(false);
         xAxis.setLabelCount(12, false);
+        xAxis.setAxisLineColor(Color.parseColor("#F5F5F5"));
 
         YAxis leftAxis = chart.getAxisLeft();
         leftAxis.setTypeface(mTf);
@@ -91,10 +93,11 @@ public class DayChartFragment extends ABaseFragment {
             e.add(new Entry(i, (int) (Math.random() * 40)));
         }
 
-        LineDataSet d = new LineDataSet(e, null);
+        LineDataSet d = new LineDataSet(e,"M/小时");
         d.setLineWidth(1.5f);
         d.setCircleRadius(3.5f);
         d.setDrawValues(true);
+        d.setValueTextColor(Color.parseColor("#000000"));
         d.setColor(Color.parseColor("#A8DEFF"));
         d.setCircleColor(Color.parseColor("#A8DEFF"));
         d.setHighlightEnabled(false);

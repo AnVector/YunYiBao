@@ -45,7 +45,6 @@
     <string name="ok">确定</string>
 
     <!--Toolbar Title-->
-    <string name="yun_bao">安逸宝</string>
     <string name="data_flow_charge">流量充值</string>
     <string name="me">我的</string>
     <string name="message">我的消息</string>
@@ -103,7 +102,6 @@
     <string name="change_phone">修改手机</string>
     <string name="suggestion">意见反馈</string>
     <string name="contact_us">客服热线</string>
-    <string name="about_us">关于安逸宝</string>
     <string name="logout">退出登录</string>
 
     <!--radar-->
@@ -243,7 +241,7 @@
     <string name="invite_code_hint">您的邀请码为：</string>
 
     <!--about us-->
-    <string name="abount_yunyibao">关于云逸宝</string>
+    <string name="about_us">关于云逸宝</string>
     <!--account manage-->
     <string name="account_binding">账号绑定</string>
     <string name="account_management">账号管理</string>
@@ -260,6 +258,7 @@
     <string name="direction_for_use">使用说明</string>
     <string name="unrented_devices">未租设备</string>
     <string name="renting_devices">已租设备</string>
+    <string name="confirm_to_return">确认归还</string>
     <!--add auth device-->
     <string name="add_auth_device">添加授权设备</string>
     <string name="mac_address">Mac地址：</string>
@@ -307,6 +306,22 @@
     <string name="exchange_details">兑换详情</string>
     <!--rent history-->
     <string name="rent_history">租赁记录</string>
+    <!--certification-->
+    <string name="mobile_certification">手机验证</string>
+    <string name="user_certification">实名认证</string>
+    <string name="deposit">缴纳押金</string>
+    <string name="finished_notification">完成</string>
+    <string name="name_input_hint">请输入您的姓名</string>
+    <string name="identification_input_hint">请输入身份证号</string>
+    <string name="authentication">实名认证</string>
+    <!--deposite-->
+    <string name="cash_pledge">押金（可退还）</string>
+    <string name="cash_pledge_hint">首次缴纳押金赠送1G全国流量，7天有效。\n租赁设备不产生费用（不限时长），退还押金需扣除2元手续费</string>
+    <string name="deposit_hint">首次租赁赠送1G流量</string>
+    <!--authentication finished-->
+    <string name="authentication_finished_hint">认证成功，赠您1G流量，7天有效</string>
+    <string name="surf_the_internet">去上网</string>
+    <string name="finished">完成</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">Sign in</string>

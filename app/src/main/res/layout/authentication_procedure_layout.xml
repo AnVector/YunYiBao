@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:gravity="center"
+    android:paddingLeft="28dp"
+    android:paddingRight="28dp"
+    android:paddingTop="10dp">
+
+    <TextView
+        android:id="@+id/tv_step_one"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/ic_step_no"
+        android:gravity="center"
+        android:text="1"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_size_ele"/>
+
+    <TextView
+        android:id="@+id/tv_mobile_cert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv_step_one"
+        android:layout_below="@id/tv_step_one"
+        android:layout_marginLeft="-15dp"
+        android:layout_marginTop="9dp"
+        android:gravity="center"
+        android:text="@string/mobile_certification"
+        android:textColor="@color/toolbar_register_color"
+        android:textSize="@dimen/font_size_small"/>
+
+    <View
+        android:id="@+id/line_one"
+        android:layout_width="42dp"
+        android:layout_height="0.6dp"
+        android:layout_alignTop="@id/tv_step_one"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@id/tv_step_one"
+        android:background="@color/line_color"/>
+
+    <TextView
+        android:id="@+id/tv_step_two"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignTop="@id/tv_step_one"
+        android:layout_toRightOf="@id/line_one"
+        android:background="@drawable/ic_step_no"
+        android:gravity="center"
+        android:text="2"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_size_ele"/>
+
+    <TextView
+        android:id="@+id/tv_user_cert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv_step_two"
+        android:layout_alignTop="@id/tv_mobile_cert"
+        android:layout_below="@id/tv_step_two"
+        android:layout_marginLeft="-15dp"
+        android:gravity="center"
+        android:text="@string/user_certification"
+        android:textColor="@color/toolbar_register_color"
+        android:textSize="@dimen/font_size_small"/>
+
+    <View
+        android:id="@+id/line_two"
+        android:layout_width="42dp"
+        android:layout_height="0.6dp"
+        android:layout_alignTop="@id/line_one"
+        android:layout_toRightOf="@id/tv_step_two"
+        android:background="@color/line_color"/>
+
+    <TextView
+        android:id="@+id/tv_step_three"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignTop="@id/tv_step_one"
+        android:layout_toRightOf="@id/line_two"
+        android:background="@drawable/ic_step_no"
+        android:gravity="center"
+        android:text="3"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_size_ele"/>
+
+    <TextView
+        android:id="@+id/tv_deposite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv_step_three"
+        android:layout_alignTop="@id/tv_mobile_cert"
+        android:layout_below="@id/tv_step_three"
+        android:layout_marginLeft="-15dp"
+        android:gravity="center"
+        android:text="@string/deposit"
+        android:textColor="@color/toolbar_register_color"
+        android:textSize="@dimen/font_size_small"/>
+
+    <View
+        android:id="@+id/line_three"
+        android:layout_width="42dp"
+        android:layout_height="0.6dp"
+        android:layout_alignTop="@id/line_one"
+        android:layout_toRightOf="@id/tv_step_three"
+        android:background="@color/line_color"/>
+
+    <TextView
+        android:id="@+id/tv_step_four"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignTop="@id/tv_step_one"
+        android:layout_toRightOf="@id/line_three"
+        android:background="@drawable/ic_step_no"
+        android:gravity="center"
+        android:text="4"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_size_ele"/>
+
+    <TextView
+        android:id="@+id/tv_finish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv_step_four"
+        android:layout_alignTop="@id/tv_mobile_cert"
+        android:layout_below="@id/tv_step_four"
+        android:gravity="center"
+        android:text="@string/finished_notification"
+        android:textColor="@color/toolbar_register_color"
+        android:textSize="@dimen/font_size_small"/>
+</RelativeLayout>

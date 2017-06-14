@@ -50,6 +50,10 @@ public class MainFragmentActivity extends ABaseActivity {
     private DownloadManager mDownloadManager;
     private RadioButton mCurrent;
 
+
+    private static final int RC_CAMERA_AND_LOCATION = 123;
+    private static final int RC_LOCATION_CONTACTS_PERM = 124;
+
     private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {

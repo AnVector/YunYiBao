@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_certification"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background_color"
+    android:orientation="vertical"
+    tools:context="com.anyihao.ayb.frame.activity.CertificationActivity">
+
+    <include layout="@layout/toolbar_common"/>
+
+    <include layout="@layout/authentication_procedure_layout"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp">
+
+        <com.chaychan.viewlib.PowerfulEditText
+            android:id="@+id/edt_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@null"
+            android:drawableRight="@drawable/edit_text_selector"
+            android:gravity="left|center_vertical"
+            android:hint="@string/name_input_hint"
+            android:maxLines="1"
+            android:textColorHint="@color/light_gray"
+            android:textSize="@dimen/font_size_normal_high"
+            app:funcType="canClear"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.6dp"
+            android:background="@color/line_color"/>
+
+        <com.chaychan.viewlib.PowerfulEditText
+            android:id="@+id/edt_identification_no"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@null"
+            android:drawableRight="@drawable/edit_text_selector"
+            android:gravity="left|center_vertical"
+            android:hint="@string/identification_input_hint"
+            android:maxLines="1"
+            android:textColorHint="@color/light_gray"
+            android:textSize="@dimen/font_size_normal_high"
+            app:funcType="canClear"/>
+    </LinearLayout>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_submit"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/btn_register"
+        android:gravity="center"
+        android:text="@string/authentication"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_size_large"/>
+
+</LinearLayout>

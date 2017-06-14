@@ -1,34 +1,45 @@
 package com.anyihao.ayb.frame.activity;
 
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.anyihao.ayb.R;
-import com.anyihao.ayb.adapter.AboutUsAdapter;
-
-import java.util.Arrays;
-import java.util.List;
 
 import butterknife.BindView;
 
-public class AboutUsActivity extends ABaseActivity {
+public class AuthenticationActivity extends ABaseActivity {
 
     @BindView(R.id.toolbar_title_mid)
     TextView toolbarTitleMid;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.recyclerview)
-    RecyclerView recyclerview;
-    private AboutUsAdapter mAdapter;
-    String[] array = new String[]{"当前版本", "联系电话", "微信公众号", "官方网站"};
-    private List<String> mData = Arrays.asList(array);
+    @BindView(R.id.tv_step_one)
+    TextView tvStepOne;
+    @BindView(R.id.tv_mobile_cert)
+    TextView tvMobileCert;
+    @BindView(R.id.tv_step_two)
+    TextView tvStepTwo;
+    @BindView(R.id.tv_user_cert)
+    TextView tvUserCert;
+    @BindView(R.id.tv_step_three)
+    TextView tvStepThree;
+    @BindView(R.id.tv_deposite)
+    TextView tvDeposite;
+    @BindView(R.id.tv_step_four)
+    TextView tvStepFour;
+    @BindView(R.id.tv_finish)
+    TextView tvFinish;
+    @BindView(R.id.imv_finished)
+    ImageView imvFinished;
+    @BindView(R.id.btn_submit)
+    AppCompatButton btnSubmit;
 
     @Override
     protected int getContentViewId() {
-        return R.layout.activity_about_us;
+        return R.layout.activity_authentication;
     }
 
     @Override
@@ -39,13 +50,8 @@ public class AboutUsActivity extends ABaseActivity {
     @Override
     protected void initData() {
         toolbar.setNavigationIcon(R.drawable.ic_back);
-        toolbarTitleMid.setText(getString(R.string.about_us));
-        mAdapter = new AboutUsAdapter(this, R.layout.item_about_us);
-        recyclerview.setAdapter(mAdapter);
-        recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager
-                .VERTICAL, false));
-        recyclerview.setHasFixedSize(true);
-        mAdapter.add(0, mData.size(), mData);
+        toolbarTitleMid.setText(getString(R.string.finished));
+        tvStepFour.setBackground(getResources().getDrawable(R.drawable.ic_step_yes));
 
     }
 

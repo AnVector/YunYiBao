@@ -25,11 +25,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <!-- 用于写入缓存数据到扩展存储卡 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.READ_LOGS"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
     <uses-permission android:name="com.anyihao.ayb.permission.ACCESS_POLLING_SERVICE"/>
     <!-- JPush Required -->
     <uses-permission android:name="com.anyihao.ayb.permission.JPUSH_MESSAGE"/>
@@ -58,12 +54,6 @@
 
     <!-- Optional for location -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/> <!-- 用于开启 debug 版本的应用在6.0 系统上 层叠窗口权限 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.GET_TASKS"/>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
@@ -513,6 +503,12 @@
         <activity android:name=".frame.activity.RadarActivity">
         </activity>
         <activity android:name=".frame.activity.LineChartActivity">
+        </activity>
+        <activity android:name=".frame.activity.CertificationActivity">
+        </activity>
+        <activity android:name=".frame.activity.DepositActivity">
+        </activity>
+        <activity android:name=".frame.activity.AuthenticationActivity">
         </activity>
     </application>
 

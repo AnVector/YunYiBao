@@ -40,6 +40,7 @@ public class MonthChartFragment extends ABaseFragment {
         mTf = Typeface.createFromAsset(getContext().getAssets(), "fonts/OpenSans-Regular.ttf");
         chart.getDescription().setEnabled(false);
         chart.setDrawGridBackground(false);
+        chart.setTouchEnabled(false);
 
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -47,6 +48,7 @@ public class MonthChartFragment extends ABaseFragment {
         xAxis.setDrawLabels(true);
         xAxis.setDrawGridLines(false);
         xAxis.setLabelCount(15, false);
+        xAxis.setAxisLineColor(Color.parseColor("#F5F5F5"));
 
         YAxis leftAxis = chart.getAxisLeft();
         leftAxis.setTypeface(mTf);
@@ -87,7 +89,7 @@ public class MonthChartFragment extends ABaseFragment {
             e.add(new Entry(i, (int) (Math.random() * 100)));
         }
 
-        LineDataSet d = new LineDataSet(e, null);
+        LineDataSet d = new LineDataSet(e, "M/日");
         d.setLineWidth(1.5f);
         d.setCircleRadius(3.5f);
         d.setDrawValues(true);

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_deposite"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background_color"
+    android:orientation="vertical"
+    tools:context="com.anyihao.ayb.frame.activity.DepositActivity">
+
+    <include layout="@layout/toolbar_common"/>
+
+    <include layout="@layout/authentication_procedure_layout"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:background="@color/white"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp">
+
+        <TextView
+            android:id="@+id/tv_cash_pledge"
+            android:layout_width="wrap_content"
+            android:layout_height="55dp"
+            android:layout_alignParentLeft="true"
+            android:gravity="left|center_vertical"
+            android:text="@string/cash_pledge"
+            android:textColor="@color/user_account_color"
+            android:textSize="@dimen/font_size_normal_high"/>
+
+        <TextView
+            android:id="@+id/tv_money"
+            android:layout_width="wrap_content"
+            android:layout_height="55dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@id/tv_cash_pledge"
+            android:gravity="left|center_vertical"
+            android:text="@string/fee_value"
+            android:textColor="#FF1919"
+            android:textSize="@dimen/font_size_normal_high"/>
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="0.6dp"
+            android:layout_below="@id/tv_cash_pledge"
+            android:background="@color/line_color"/>
+
+        <TextView
+            android:id="@+id/tv_cash_pledge_hint"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_below="@id/line"
+            android:gravity="left|center_vertical"
+            android:maxLines="2"
+            android:text="@string/cash_pledge_hint"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_small"/>
+
+        <TextView
+            android:id="@+id/tv_ali_pay"
+            android:layout_width="wrap_content"
+            android:layout_height="55dp"
+            android:layout_below="@id/tv_cash_pledge_hint"
+            android:layout_centerVertical="true"
+            android:drawableLeft="@drawable/ic_alipay"
+            android:drawablePadding="15dp"
+            android:gravity="left|center_vertical"
+            android:text="@string/pay_by_ali_pay"
+            android:textColor="@color/user_account_color"
+            android:textSize="@dimen/font_size_fif"/>
+
+        <RadioButton
+            android:id="@+id/rbt_alipay"
+            android:layout_width="19dp"
+            android:layout_height="19dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/tv_cash_pledge_hint"
+            android:layout_marginTop="17dp"
+            android:background="@drawable/payment_mode_selector"
+            android:button="@null"
+            android:checked="true"/>
+
+        <View
+            android:id="@+id/divider_line"
+            android:layout_width="match_parent"
+            android:layout_height="0.6dp"
+            android:layout_below="@id/tv_ali_pay"
+            android:background="@color/line_color"/>
+
+        <TextView
+            android:id="@+id/tv_wx_pay"
+            android:layout_width="wrap_content"
+            android:layout_height="55dp"
+            android:layout_below="@id/divider_line"
+            android:layout_centerVertical="true"
+            android:drawableLeft="@drawable/ic_wx_pay"
+            android:drawablePadding="15dp"
+            android:gravity="center"
+            android:text="@string/pay_by_wx"
+            android:textColor="@color/user_account_color"
+            android:textSize="@dimen/font_size_fif"/>
+
+        <RadioButton
+            android:id="@+id/rbt_wx"
+            android:layout_width="19dp"
+            android:layout_height="19dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/divider_line"
+            android:layout_marginTop="17dp"
+            android:background="@drawable/payment_mode_selector"
+            android:button="@null"/>
+    </RelativeLayout>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_submit"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/btn_register"
+        android:gravity="center"
+        android:text="@string/deposit"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_size_large"/>
+</LinearLayout>

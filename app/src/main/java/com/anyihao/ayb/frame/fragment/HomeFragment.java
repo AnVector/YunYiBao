@@ -18,13 +18,12 @@ import android.widget.ViewFlipper;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.MainAdapter;
+import com.anyihao.ayb.frame.activity.CertificationActivity;
 import com.anyihao.ayb.frame.activity.ConnectedDevicesActivity;
 import com.anyihao.ayb.frame.activity.HelpActivity;
 import com.anyihao.ayb.frame.activity.MessageActivity;
-import com.anyihao.ayb.frame.activity.QuestionsActivity;
 import com.anyihao.ayb.frame.activity.RechargeActivity;
 import com.anyihao.ayb.frame.activity.RentedDevicesActivity;
-import com.anyihao.ayb.frame.activity.ScanActivity;
 import com.anyihao.ayb.listener.OnItemClickListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -79,7 +78,7 @@ public class HomeFragment extends ABaseFragment {
         animationDrawable.start();
         toolbar.setBackground(null);
         toolbarTitle.setTextColor(getResources().getColor(R.color.white));
-        toolbarTitle.setText(getString(R.string.yun_bao));
+        toolbarTitle.setText(getString(R.string.app_name));
         toolbarHelp.setText(getString(R.string.help_center));
         toolbar.inflateMenu(R.menu.main_menu);
         mAdapter = new MainAdapter(getContext(), R.layout.item_main);
@@ -129,22 +128,24 @@ public class HomeFragment extends ABaseFragment {
         tvLeasing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IntentIntegrator intentIntegrator = IntentIntegrator
-                        .forSupportFragment(HomeFragment.this).setCaptureActivity
-                                (ScanActivity.class);
-                intentIntegrator
-                        .setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
-                        .setOrientationLocked(false)//扫描方向固定
-                        .setCaptureActivity(ScanActivity.class) //
-                        // 设置自定义的activity是CustomActivity
-                        .initiateScan(); // 初始化扫描
+//                IntentIntegrator intentIntegrator = IntentIntegrator
+//                        .forSupportFragment(HomeFragment.this).setCaptureActivity
+//                                (ScanActivity.class);
+//                intentIntegrator
+//                        .setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
+//                        .setOrientationLocked(false)//扫描方向固定
+//                        .setCaptureActivity(ScanActivity.class) //
+//                        // 设置自定义的activity是CustomActivity
+//                        .initiateScan(); // 初始化扫描
+                Intent intent = new Intent(mContext, CertificationActivity.class);
+                startActivity(intent);
             }
         });
 
         tvMyDevices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), RentedDevicesActivity.class);
+                Intent intent = new Intent(mContext, RentedDevicesActivity.class);
                 startActivity(intent);
             }
         });

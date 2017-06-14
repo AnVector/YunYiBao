@@ -11,12 +11,16 @@ import com.anyihao.androidbase.R;
 import com.anyihao.androidbase.manager.ActivityManager;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
-import com.zhy.m.permission.MPermissions;
+
+import java.util.List;
+
+import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  *
  */
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements EasyPermissions
+        .PermissionCallbacks {
 
     protected static String TAG;
 
@@ -88,19 +92,37 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     }
 
-    protected void permissionsRequest(int requestCode, String... permissions) {
+    protected void permissionsRequest(int requestCode, String description, String... permissions) {
         if (requestCode == -1 || permissions == null || permissions.length == 0)
             return;
-        if (!MPermissions.shouldShowRequestPermissionRationale(this, permissions[0], requestCode)) {
-            MPermissions.requestPermissions(this, requestCode, permissions);
+        if (EasyPermissions.hasPermissions(this, permissions)) {
+            // Already have permission, do the thing
+            // ...
+            Logger.d(TAG, "permissionsRequest: " + permissions.length);
+        } else {
+            // Do not have permissions, request them now
+            EasyPermissions.requestPermissions(this, description,
+                    requestCode, permissions);
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        MPermissions.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+        Logger.d(TAG, "onPermissionsGranted: " + requestCode + ":" + perms.size());
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            Logger.d(TAG, "onPermissionsDenied: " + requestCode + ":" + perms.size());
+        }
     }
 
     @Override

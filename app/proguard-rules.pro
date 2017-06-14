@@ -57,6 +57,11 @@
 # rx.internal.util.atomic.LinkedQueueNode consumerNode;
 #}
 
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclasses
+-verbose
+-ignorewarnings
+
 #okhttputils
 -dontwarn com.zhy.http.**
 -keep class com.zhy.http.**{*;}
@@ -234,10 +239,6 @@ public static final ** CREATOR;
 -dontwarn com.amap.api.mapcore2d.**
 
 #MPermissions
--dontwarn com.zhy.m.**
--keep class com.zhy.m.** {*;}
--keep interface com.zhy.m.** { *; }
--keep class **$$PermissionProxy { *; }
 
 ### JPush
 -dontwarn cn.jpush.**
