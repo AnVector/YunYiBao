@@ -28,6 +28,7 @@
             android:layout_centerInParent="true"
             android:gravity="left|top"
             android:background="@null"
+            android:textCursorDrawable="@drawable/edittext_cursor_color"
             android:hint="@string/feedback_hint"
             android:textSize="@dimen/font_size_thi"/>
     </LinearLayout>

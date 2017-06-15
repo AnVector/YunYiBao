@@ -1,5 +1,6 @@
 package com.anyihao.ayb.frame.activity;
 
+import android.content.Intent;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -61,6 +62,13 @@ public class AuthenticationActivity extends ABaseActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+            }
+        });
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AuthenticationActivity.this, DeviceCodeActivity.class);
+                startActivity(intent);
             }
         });
 

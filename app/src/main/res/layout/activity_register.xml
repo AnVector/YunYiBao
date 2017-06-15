@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_register"
     android:layout_width="match_parent"
@@ -35,19 +36,22 @@
             android:layout_marginLeft="8dp"
             android:background="@color/line_color"/>
 
-        <EditText
+        <com.chaychan.viewlib.PowerfulEditText
             android:id="@+id/input_phone_num"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@null"
+            android:drawableRight="@drawable/edit_text_selector"
             android:gravity="center_vertical"
             android:hint="@string/phone_num_input_hint"
+            android:textColorHint="@color/light_gray"
             android:inputType="phone"
             android:maxLines="1"
             android:paddingLeft="11dp"
             android:paddingRight="11dp"
-            android:textColor="@color/light_gray"
-            android:textSize="@dimen/font_size_thi"/>
+            android:textCursorDrawable="@drawable/edittext_cursor_color"
+            android:textSize="@dimen/font_size_thi"
+            app:funcType="canClear"/>
     </LinearLayout>
 
 

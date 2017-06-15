@@ -23,6 +23,7 @@ import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.LoginResultBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
+import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.logger.Logger;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
@@ -100,8 +101,15 @@ public class LoginActivity extends ABaseActivity {
     }
 
     @Override
+    protected void setStatusBarTheme() {
+        StatusBarUtil.setColor(LoginActivity.this, getResources().getColor(R.color
+                .app_background_color), 0);
+    }
+
+    @Override
     protected void initData() {
         toolbar.setNavigationIcon(R.drawable.ic_back);
+        toolbar.setBackgroundColor(getResources().getColor(R.color.app_background_color));
         titleRight.setText(getString(R.string.register_hint));
         dialog = new ProgressDialog(LoginActivity.this,
                 ProgressDialog.STYLE_SPINNER);

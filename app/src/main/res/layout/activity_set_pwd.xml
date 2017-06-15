@@ -25,8 +25,9 @@
         android:paddingRight="12dp">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="left|center_vertical"
             android:text="@string/identifying_code_text_hint"
             android:textColor="@color/user_account_color"
@@ -34,16 +35,18 @@
 
         <com.chaychan.viewlib.PowerfulEditText
             android:id="@+id/input_verify_code"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
             android:background="@null"
             android:drawableRight="@drawable/edit_text_selector"
             android:gravity="center_vertical"
             android:hint="@string/identifying_code_input_hint"
+            android:inputType="number"
             android:maxLines="1"
-            android:paddingLeft="42dp"
             android:paddingRight="42dp"
             android:textColorHint="@color/light_gray"
+            android:textCursorDrawable="@drawable/edittext_cursor_color"
             android:textSize="@dimen/font_size_thi"
             app:funcType="canClear"/>
 
@@ -54,10 +57,11 @@
             android:background="@color/line_color"/>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_marginLeft="16dp"
-            android:gravity="center"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical"
             android:text="@string/get_verify_code"
             android:textColor="@color/toolbar_title_color"
             android:textSize="@dimen/font_size_normal_high"/>
@@ -88,17 +92,17 @@
 
         <com.chaychan.viewlib.PowerfulEditText
             android:id="@+id/input_set_pwd"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
             android:drawableRight="@drawable/edit_text_selector"
             android:gravity="center_vertical"
-            android:hint="@string/identifying_code_input_hint"
-            android:inputType="phone"
+            android:hint="@string/set_pwd_input_hint"
             android:maxLines="1"
             android:paddingLeft="26dp"
             android:paddingRight="26dp"
             android:textColorHint="@color/light_gray"
+            android:textCursorDrawable="@drawable/edittext_cursor_color"
             android:textSize="@dimen/font_size_thi"
             app:funcType="canClear"/>
     </LinearLayout>
@@ -126,18 +130,21 @@
             android:textColor="@color/user_account_color"
             android:textSize="@dimen/font_size_normal_high"/>
 
-        <EditText
+        <com.chaychan.viewlib.PowerfulEditText
             android:id="@+id/input_confirm_pwd"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
+            android:drawableRight="@drawable/edit_text_selector"
             android:gravity="center_vertical"
             android:hint="@string/confirm_pwd_input_hint"
             android:maxLines="1"
             android:paddingLeft="26dp"
             android:paddingRight="26dp"
-            android:textColor="@color/light_gray"
-            android:textSize="@dimen/font_size_thi"/>
+            android:textColorHint="@color/light_gray"
+            android:textCursorDrawable="@drawable/edittext_cursor_color"
+            android:textSize="@dimen/font_size_thi"
+            app:funcType="canClear"/>
     </LinearLayout>
 
     <View

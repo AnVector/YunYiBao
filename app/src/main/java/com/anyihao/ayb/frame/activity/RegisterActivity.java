@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.anyihao.ayb.R;
+import com.chaychan.viewlib.PowerfulEditText;
 
 import butterknife.BindView;
 
@@ -20,10 +20,10 @@ public class RegisterActivity extends ABaseActivity {
     TextView titleRight;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.input_phone_num)
-    EditText inputPhone;
     @BindView(R.id.btn_next)
     AppCompatButton btnNext;
+    @BindView(R.id.input_phone_num)
+    PowerfulEditText inputPhoneNum;
 
     @Override
     protected int getContentViewId() {
@@ -46,7 +46,7 @@ public class RegisterActivity extends ABaseActivity {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RegisterActivity.this,SetPwdActivity.class);
+                Intent intent = new Intent(RegisterActivity.this, SetPwdActivity.class);
                 startActivity(intent);
             }
         });
@@ -69,4 +69,5 @@ public class RegisterActivity extends ABaseActivity {
     public void onFailure(String error, int page, Integer actionType) {
 
     }
+
 }

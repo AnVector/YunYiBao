@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.MessageAdapter;
-import com.anyihao.ayb.frame.activity.MessageDetailsActivity;
+import com.anyihao.ayb.frame.activity.RedEnvelopeActivity;
 import com.anyihao.ayb.listener.OnItemClickListener;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
@@ -83,7 +83,7 @@ public class BriberyMoneyFragment extends ABaseFragment {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-                Intent intent = new Intent(mContext, MessageDetailsActivity.class);
+                Intent intent = new Intent(mContext, RedEnvelopeActivity.class);
                 startActivity(intent);
             }
 

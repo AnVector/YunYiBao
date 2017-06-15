@@ -54,9 +54,9 @@ public class MessageActivity extends ABaseActivity {
     }
 
     private void initViewPager() {
-        SysMessageFragment fragment1 = new SysMessageFragment();
+        BriberyMoneyFragment fragment1 = new BriberyMoneyFragment();
         MeMessageFragment fragment2 = new MeMessageFragment();
-        BriberyMoneyFragment fragment3 = new BriberyMoneyFragment();
+        SysMessageFragment fragment3 = new SysMessageFragment();
         mFragments.add(fragment1);
         mFragments.add(fragment2);
         mFragments.add(fragment3);

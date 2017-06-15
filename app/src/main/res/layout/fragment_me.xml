@@ -5,6 +5,12 @@
               android:background="@color/app_background_color"
               android:orientation="vertical"
               tools:context="com.anyihao.ayb.frame.fragment.MeFragment">
+
+    <View
+        android:id="@+id/fake_status_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/statusbar_view_height"/>
+
     <include
         layout="@layout/toolbar"/>
 
@@ -12,8 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="85dp"
         android:layout_gravity="center_vertical"
-        android:background="@color/white"
         android:layout_marginTop="10dp"
+        android:background="@color/white"
         android:paddingLeft="15dp"
         android:paddingRight="15dp">
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_bind_device"
     android:layout_width="match_parent"
@@ -8,31 +9,27 @@
     android:background="@color/content_bg_color"
     android:orientation="vertical"
     tools:context="com.anyihao.ayb.frame.activity.BindDeviceActivity">
+
     <include
         layout="@layout/toolbar_common"/>
-    <LinearLayout
+
+    <com.chaychan.viewlib.PowerfulEditText
+        android:id="@+id/input_device_num"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:gravity="center_vertical"
-        android:background="@drawable/edit_text_bg"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp">
-
-        <EditText
-            android:id="@+id/input_device_num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:gravity="center|center_vertical"
-            android:hint="@string/device_bind_input_hint"
-            android:maxLines="1"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:textColor="@color/light_gray"
-            android:textSize="@dimen/font_size_fif"/>
-    </LinearLayout>
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/edit_text_bg"
+        android:drawableRight="@drawable/edit_text_selector"
+        android:gravity="left|center_vertical"
+        android:hint="@string/device_bind_input_hint"
+        android:maxLines="1"
+        android:padding="15dp"
+        android:textColorHint="@color/light_gray"
+        android:textCursorDrawable="@drawable/edittext_cursor_color"
+        android:textSize="@dimen/font_size_fif"
+        app:funcType="canClear"/>
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_confirm"

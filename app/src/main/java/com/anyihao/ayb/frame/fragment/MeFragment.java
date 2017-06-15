@@ -6,16 +6,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.MeAdapter;
 import com.anyihao.ayb.frame.activity.CreditActivity;
@@ -41,6 +38,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.Unbinder;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,6 +55,9 @@ public class MeFragment extends ABaseFragment {
     Toolbar toolbar;
     @BindView(R.id.ic_profile)
     ImageView icProfile;
+    @BindView(R.id.fake_status_bar)
+    View fakeStatusBar;
+    Unbinder unbinder;
     private MeAdapter mAdapter;
     String[] array = new String[]{"我的流量", "流量商城", "流量报表", "充值记录", "邀请好友", "输入邀请码", "系统赠送记录",
             "我的积分", "商家特权", "授权设备管理"};
@@ -74,6 +75,7 @@ public class MeFragment extends ABaseFragment {
 //        if(null!=actionBar){
 //            actionBar.setDisplayHomeAsUpEnabled(true);
 //        }
+        fakeStatusBar.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         toolbar.inflateMenu(R.menu.toolbar_menu);
         toolbarTitle.setText(getString(R.string.me));
         icProfile.setImageResource(R.drawable.user_profile);

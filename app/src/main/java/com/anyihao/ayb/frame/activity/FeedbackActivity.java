@@ -50,7 +50,7 @@ public class FeedbackActivity extends ABaseActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastUtils.showToast(FeedbackActivity.this, "请输入反馈内容", R.layout.toast, R.id
+                ToastUtils.showToast(getApplicationContext(), "请输入反馈内容", R.layout.toast, R.id
                         .tv_message);
             }
         });

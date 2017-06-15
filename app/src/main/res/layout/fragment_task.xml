@@ -5,7 +5,10 @@
               android:background="@color/app_background_color"
               android:orientation="vertical"
               tools:context="com.anyihao.ayb.frame.fragment.DiscoverFragment">
-
+    <View
+        android:id="@+id/fake_status_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/statusbar_view_height"/>
     <include
         layout="@layout/toolbar_common"/>
 

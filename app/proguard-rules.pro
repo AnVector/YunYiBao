@@ -152,7 +152,13 @@ public static java.lang.String TABLENAME;
 -keep class com.alipay.sdk.app.PayTask{ public *;}
 -keep class com.alipay.sdk.app.AuthTask{ public *;}
 -keep class com.alipay.android.phone.** { *; }
+-keep class android.net.SSLCertificateSocketFactory{*;}
+-keep class com.alipay.android.phone.mrpc.core.AndroidHttpClient$1{*;}
+-keep class com.alipay.android.phone.mrpc.core.AndroidHttpClient$2{*;}
+-keep class com.alipay.android.phone.mrpc.core.AndroidHttpClient$2$2{*;}
+-keep class com.alipay.android.phone.mrpc.core.AndroidHttpClient$2$1{*;}
 -dontwarn com.alipay.android.phone.**
+-dontwarn android.net.**
 
 ### UShare
 -dontusemixedcaseclassnames
@@ -238,7 +244,6 @@ public static final ** CREATOR;
 -keep class com.amap.api.mapcore2d.**{ *; }
 -dontwarn com.amap.api.mapcore2d.**
 
-#MPermissions
 
 ### JPush
 -dontwarn cn.jpush.**

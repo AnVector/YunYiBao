@@ -31,9 +31,10 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.1.1'
-    compile 'com.android.support:support-v4:25.1.1'
+    //使用动态依赖关系(例如palette-v7:23.0.+)可能会导致意外的版本更新和回归不兼容的问题，建议明确指定库版本(如palette-v7:24.2.0)
     compile 'com.android.support:design:25.1.1'
+    //Material Design CardView SupportLibrary
+    compile 'com.android.support:cardview-v7:25.1.1'
     //umeng analysis
     compile 'com.umeng.analytics:analytics:latest.integration'
     //Tencent Bugly SDK
@@ -46,8 +47,8 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     testCompile 'junit:junit:4.12'
-    //permission
-    compile 'pub.devrel:easypermissions:0.4.1'
     //StatusBarUtil
     compile 'com.jaeger.statusbaruitl:library:1.4.0'
+    compile project(':easypermissions')
+    compile project(':okhttputils')
 }

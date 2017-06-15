@@ -36,6 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.Unbinder;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -86,6 +87,9 @@ public class TaskFragment extends ABaseFragment {
     AppCompatButton btnSignIn;
     @BindView(R.id.imb_sign)
     ImageButton imbSign;
+    @BindView(R.id.fake_status_bar)
+    View fakeStatusBar;
+    Unbinder unbinder;
     private AdAdapter mAdapter;
     private SignInAdapter signInAdapter;
     String[] weekendArray = new String[]{"1", "2", "3", "4", "5", "6", "7"};
@@ -117,7 +121,7 @@ public class TaskFragment extends ABaseFragment {
                 .HORIZONTAL, false));
         recyclerview.setHasFixedSize(true);
         signInAdapter.add(0, mWeekendData.size(), mWeekendData);
-
+        fakeStatusBar.setBackgroundColor(mContext.getResources().getColor(R.color.white));
     }
 
     @Override

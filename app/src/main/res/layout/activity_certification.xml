@@ -31,6 +31,7 @@
             android:gravity="left|center_vertical"
             android:hint="@string/name_input_hint"
             android:maxLines="1"
+            android:textCursorDrawable="@drawable/edittext_cursor_color"
             android:textColorHint="@color/light_gray"
             android:textSize="@dimen/font_size_normal_high"
             app:funcType="canClear"/>
@@ -49,6 +50,7 @@
             android:gravity="left|center_vertical"
             android:hint="@string/identification_input_hint"
             android:maxLines="1"
+            android:textCursorDrawable="@drawable/edittext_cursor_color"
             android:textColorHint="@color/light_gray"
             android:textSize="@dimen/font_size_normal_high"
             app:funcType="canClear"/>

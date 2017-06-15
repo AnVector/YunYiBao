@@ -15,6 +15,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.TextView;
@@ -46,6 +49,8 @@ import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +64,9 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     Toolbar toolbar;
     @BindView(R.id.map)
     MapView mapView;
+    @BindView(R.id.fake_status_bar)
+    View fakeStatusBar;
+    Unbinder unbinder;
     private OnLocationChangedListener mListener;
     private LocationManager mAMapLocationManager;
     //声明mLocationOption对象
@@ -91,6 +99,7 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     @Override
     protected void initData() {
         titleMid.setText(getString(R.string.service_location));
+        fakeStatusBar.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         if (aMap == null) {
             aMap = mapView.getMap();
             setUpMap();

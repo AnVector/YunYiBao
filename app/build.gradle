@@ -54,16 +54,19 @@ android {
                                 BUGLY_APP_Version  : releaseVName(),
                                 BUGLY_APP_Channel  : name,
                                 BUGLY_APP_IsDebug  : "false"]
+//        jackOptions {
+//            enabled true
+//        }
 //        resConfigs "zh"//设置支持的语言
 //        resValue "string", "build_time", buildTime()
 //        resValue "string", "build_host", hostName()
 //        resValue "string", "build_revision", revision()
     }
 
-//    compileOptions {
-//        sourceCompatibility JavaVersion.VERSION_1_8
-//        targetCompatibility JavaVersion.VERSION_1_8
-//    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
 
     aaptOptions {
         cruncherEnabled = false
@@ -221,23 +224,17 @@ dependencies {
     })
     compile project(':androidbase')
     //okhttp
-    compile project(':okhttputils')
     //socketutils
     compile project(':socketutils')
     //ultimaterecyclerview
     compile project(':ultimaterecyclerview')
-    //友盟推送
-    //使用动态依赖关系(例如palette-v7:23.0.+)可能会导致意外的版本更新和回归不兼容的问题，建议明确指定库版本(如palette-v7:24.2.0)
-    compile 'com.android.support:support-v4:25.1.1'
-    compile 'com.android.support:appcompat-v7:25.1.1'
-    compile 'com.android.support:design:25.1.1'
-    //Material Design CardView SupportLibrary
-    compile 'com.android.support:cardview-v7:25.1.1'
+    //multidex
     compile 'com.android.support:multidex:1.0.1'
     //GreenDao
     compile 'org.greenrobot:greendao:3.2.0'
     //CircleImageView
     compile 'de.hdodenhof:circleimageview:2.1.0'
+    //leakcanary
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     //zxing
@@ -252,10 +249,8 @@ dependencies {
     compile 'com.github.castorflex.smoothprogressbar:library-circular:1.0.1'
     //dialogplus
     compile 'com.orhanobut:dialogplus:1.11@aar'
-//    android-segmented-control
+    //android-segmented-control
     compile 'info.hoang8f:android-segmented:1.0.6'
-//    hellocharts-android
-    compile 'com.github.lecho:hellocharts-android:v1.5.8'
     //MPAndroidCharts
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
 }
