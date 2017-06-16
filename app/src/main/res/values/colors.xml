@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
     <color name="color_0176da">#0176DA</color>
-    <color name="colorAccent">#FF4081</color>
     <color name="white">#FFFFFF</color>
     <color name="deep_dark_gray">#222222</color>
     <color name="dark_yellow">#FFA500</color>
@@ -28,6 +25,17 @@
     <color name="main_advertisement_bg_color">#B9DEF7</color>
     <color name="pay_title_text_color">#666666</color>
     <color name="data_flow_item_price_text_color">#6FC8FF</color>
+    <color name="colorPrimary">#00b4aa</color>
+    <color name="colorPrimaryDark">#00978f</color>
+    <color name="colorAccent">#FF6A6E</color>
+    <color name="color_red">#FF5722</color>
+    <color name="color_orange">#FF9800</color>
+    <color name="color_yellow">#FFC107</color>
+    <color name="color_green">#3FB830</color>
+    <color name="color_blue">#00BAED</color>
+    <color name="color_dark">#263238</color>
+    <color name="color_dark_light">#455A64</color>
+    <color name="color_light">#ECEFF1</color>
 
     <!--progressbar color-->
     <color name="gplus_color_1">#3e802f</color>

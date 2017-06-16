@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_say_hi"
     android:layout_width="match_parent"
@@ -22,15 +23,18 @@
         android:textColor="@color/light_gray"
         android:textSize="@dimen/font_size_small"/>
 
-    <EditText
+    <com.chaychan.viewlib.PowerfulEditText
         android:id="@+id/tv_say_hi_content"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_gravity="center_horizontal"
         android:background="@color/white"
+        android:drawableRight="@drawable/edit_text_selector"
         android:gravity="left|center_vertical"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:textSize="@dimen/font_size_small"/>
+        android:textCursorDrawable="@drawable/edittext_cursor_color"
+        android:textSize="@dimen/font_size_small"
+        app:funcType="canClear"/>
 
 </LinearLayout>

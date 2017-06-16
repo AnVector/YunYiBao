@@ -57,7 +57,6 @@ public class MeFragment extends ABaseFragment {
     ImageView icProfile;
     @BindView(R.id.fake_status_bar)
     View fakeStatusBar;
-    Unbinder unbinder;
     private MeAdapter mAdapter;
     String[] array = new String[]{"我的流量", "流量商城", "流量报表", "充值记录", "邀请好友", "输入邀请码", "系统赠送记录",
             "我的积分", "商家特权", "授权设备管理"};

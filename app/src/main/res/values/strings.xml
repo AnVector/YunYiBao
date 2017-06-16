@@ -329,6 +329,7 @@
     <!--device QR code-->
     <string name="scan_result">扫码结果</string>
     <string name="device_no">设备编号</string>
+    <!--Flow Account-->
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">Sign in</string>

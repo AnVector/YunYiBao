@@ -1,13 +1,14 @@
 package com.anyihao.ayb.frame.activity;
 
+import android.content.Intent;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.anyihao.ayb.R;
+import com.chaychan.viewlib.PowerfulEditText;
 
 import butterknife.BindView;
 
@@ -19,14 +20,14 @@ public class BriberyMoneyActivity extends ABaseActivity {
     TextView toolbarTitleRight;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.tv_user_name)
-    EditText tvUserName;
-    @BindView(R.id.tv_data_amount)
-    EditText tvDataAmount;
-    @BindView(R.id.tv_remark)
-    EditText tvRemark;
     @BindView(R.id.btn_confirm)
     AppCompatButton btnConfirm;
+    @BindView(R.id.tv_user_name)
+    PowerfulEditText tvUserName;
+    @BindView(R.id.tv_data_amount)
+    PowerfulEditText tvDataAmount;
+    @BindView(R.id.tv_remark)
+    PowerfulEditText tvRemark;
 
     @Override
     protected int getContentViewId() {
@@ -66,6 +67,14 @@ public class BriberyMoneyActivity extends ABaseActivity {
             @Override
             public void onClick(View v) {
 
+            }
+        });
+
+        toolbarTitleRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BriberyMoneyActivity.this, RechargeRecordActivity.class);
+                startActivity(intent);
             }
         });
 

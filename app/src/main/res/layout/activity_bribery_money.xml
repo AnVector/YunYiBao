@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_bribery_money"
     android:layout_width="match_parent"
@@ -29,15 +30,18 @@
             android:textColor="@color/user_account_color"
             android:textSize="@dimen/font_size_normal_high"/>
 
-        <EditText
+        <com.chaychan.viewlib.PowerfulEditText
             android:id="@+id/tv_user_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:background="@null"
+            android:drawableRight="@drawable/edit_text_selector"
             android:gravity="center_vertical"
             android:maxLines="1"
-            android:textSize="@dimen/font_size_thi"/>
+            android:textCursorDrawable="@drawable/edittext_cursor_color"
+            android:textSize="@dimen/font_size_thi"
+            app:funcType="canClear"/>
     </LinearLayout>
 
     <View
@@ -63,15 +67,18 @@
             android:textColor="@color/user_account_color"
             android:textSize="@dimen/font_size_normal_high"/>
 
-        <EditText
+        <com.chaychan.viewlib.PowerfulEditText
             android:id="@+id/tv_data_amount"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_gravity="center_vertical"
             android:background="@null"
+            android:drawableRight="@drawable/edit_text_selector"
             android:gravity="center_vertical"
             android:maxLines="1"
-            android:textSize="@dimen/font_size_thi"/>
+            android:textCursorDrawable="@drawable/edittext_cursor_color"
+            android:textSize="@dimen/font_size_thi"
+            app:funcType="canClear"/>
     </LinearLayout>
 
     <View
@@ -81,18 +88,21 @@
         android:background="@color/line_color"/>
 
 
-    <EditText
+    <com.chaychan.viewlib.PowerfulEditText
         android:id="@+id/tv_remark"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_gravity="center_horizontal"
         android:background="@color/white"
+        android:drawableRight="@drawable/edit_text_selector"
         android:gravity="center_vertical"
         android:hint="@string/remark"
         android:maxLines="1"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
-        android:textSize="@dimen/font_size_small"/>
+        android:textCursorDrawable="@drawable/edittext_cursor_color"
+        android:textSize="@dimen/font_size_small"
+        app:funcType="canClear"/>
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_confirm"

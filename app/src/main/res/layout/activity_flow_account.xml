@@ -16,5 +16,85 @@
         android:layout_height="match_parent"
         android:background="@drawable/data_account_bg"
         android:orientation="vertical">
+
+        <com.anyihao.ayb.ui.DashboardView
+            android:id="@+id/dashboard_view"
+            android:layout_width="237dp"
+            android:layout_height="165dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="-22dp">
+        </android.support.v7.widget.RecyclerView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="58dp"
+            android:orientation="horizontal">
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="2"/>
+
+            <TextView
+                android:id="@+id/tv_data_flow_chart"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/data_flow_chart"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_size_small"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp"
+                android:layout_gravity="center_vertical"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="1dp"
+                android:background="@color/white"/>
+
+            <TextView
+                android:id="@+id/tv_data_flow_charge"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/data_flow_charge"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_size_small"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_gravity="center_vertical"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="3dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="3dp"
+                android:background="@color/white"/>
+
+            <TextView
+                android:id="@+id/tv_recharge_record"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/recharge_record"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_size_small"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="2"/>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
