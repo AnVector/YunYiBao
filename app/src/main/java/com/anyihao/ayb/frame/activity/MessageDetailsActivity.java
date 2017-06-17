@@ -2,9 +2,11 @@ package com.anyihao.ayb.frame.activity;
 
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.anyihao.ayb.R;
+import com.jaeger.library.StatusBarUtil;
 
 import butterknife.BindView;
 
@@ -19,6 +21,10 @@ public class MessageDetailsActivity extends ABaseActivity {
     TextView tvMessage;
     @BindView(R.id.tv_date)
     TextView tvDate;
+    @BindView(R.id.iv_user_profile)
+    ImageView ivUserProfile;
+    @BindView(R.id.tv_user_name)
+    TextView tvUserName;
 
     @Override
     protected int getContentViewId() {
@@ -34,6 +40,7 @@ public class MessageDetailsActivity extends ABaseActivity {
     protected void initData() {
 
         toolbar.setNavigationIcon(R.drawable.ic_back);
+        toolbar.setBackgroundColor(getResources().getColor(R.color.app_background_color));
         titleMid.setText(getString(R.string.message_details));
     }
 
@@ -46,6 +53,11 @@ public class MessageDetailsActivity extends ABaseActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void setStatusBarTheme() {
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.app_background_color), 0);
     }
 
     @Override

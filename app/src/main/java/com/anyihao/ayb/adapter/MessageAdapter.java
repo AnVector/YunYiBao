@@ -31,6 +31,7 @@ public class MessageAdapter extends UltimateViewAdapter {
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.mOnItemClickListener = onItemClickListener;
     }
+
     @Override
     public long generateHeaderId(int position) {
         return -1;
@@ -82,7 +83,7 @@ public class MessageAdapter extends UltimateViewAdapter {
                     }
                 });
                 ((MessageViewHolder) holder).tvStatus.setText("已读");
-                ((MessageViewHolder) holder).tvDate.setText("3月25日");
+                ((MessageViewHolder) holder).tvDate.setText("2017-05-08 19:05:32");
                 ((MessageViewHolder) holder).tvContent.setText(content);
             }
         }

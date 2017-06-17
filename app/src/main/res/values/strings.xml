@@ -95,7 +95,8 @@
 
     <!--messages details-->
     <string name="example_text">如果你无法简洁的表达你的想法，那只能说明你还不够了解它。——阿尔伯特 爱因斯坦</string>
-    <string name="example_date">3月25日</string>
+    <string name="example_date">2017&#8211;07&#8211;07 12:16:17</string>
+    <string name="example_user_name">Kaven</string>
 
     <!--settings-->
     <string name="change_pwd">修改密码</string>

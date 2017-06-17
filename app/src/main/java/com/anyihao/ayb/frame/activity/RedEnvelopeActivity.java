@@ -108,7 +108,7 @@ public class RedEnvelopeActivity extends ABaseActivity {
                 .setGravity(Gravity.CENTER)
                 .setOnDismissListener(dismissListener)
                 .setOnCancelListener(cancelListener)
-                .setCancelable(false)
+                .setCancelable(true)
                 .setOnClickListener(clickListener)
                 .setContentWidth(ViewGroup.LayoutParams.WRAP_CONTENT)
                 .setContentBackgroundResource(R.drawable.opened_red_envelope)

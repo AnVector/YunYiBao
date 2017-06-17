@@ -44,7 +44,7 @@
                 android:textSize="@dimen/font_size_normal"/>
 
             <ImageView
-                android:layout_width="182dp"
+                android:layout_width="232dp"
                 android:layout_height="314dp"
                 android:layout_gravity="center_horizontal"
                 android:scaleType="centerCrop"
@@ -69,7 +69,7 @@
                 android:textSize="@dimen/font_size_normal"/>
 
             <ImageView
-                android:layout_width="182dp"
+                android:layout_width="232dp"
                 android:layout_height="314dp"
                 android:layout_gravity="center_horizontal"
                 android:scaleType="centerCrop"
