@@ -1,19 +1,31 @@
 package com.anyihao.ayb.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
 /**
  * author: Administrator
- * date: 2017/3/18 001811:03.
+ * date: 2017/3/9 000915:56.
  * email:looper@126.com
  */
 
-public class LoginBean implements Parcelable {
+public class LoginBean implements Serializable {
+    /**
+     * code : 425
+     * msg : 账号和密码不匹配，请重新输入
+     * uid :
+     * bindStatus :
+     * userType :
+     * avatar :
+     * reqCode :
+     */
 
     private int code;
     private String msg;
     private String uid;
+    private String bindStatus;
+    private String userType;
+    private String avatar;
+    private String reqCode;
 
     public int getCode() {
         return code;
@@ -39,36 +51,35 @@ public class LoginBean implements Parcelable {
         this.uid = uid;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public String getBindStatus() {
+        return bindStatus;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.code);
-        dest.writeString(this.msg);
-        dest.writeString(this.uid);
+    public void setBindStatus(String bindStatus) {
+        this.bindStatus = bindStatus;
     }
 
-    public LoginBean() {
+    public String getUserType() {
+        return userType;
     }
 
-    protected LoginBean(Parcel in) {
-        this.code = in.readInt();
-        this.msg = in.readString();
-        this.uid = in.readString();
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 
-    public static final Creator<LoginBean> CREATOR = new Creator<LoginBean>() {
-        @Override
-        public LoginBean createFromParcel(Parcel source) {
-            return new LoginBean(source);
-        }
+    public String getAvatar() {
+        return avatar;
+    }
 
-        @Override
-        public LoginBean[] newArray(int size) {
-            return new LoginBean[size];
-        }
-    };
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getReqCode() {
+        return reqCode;
+    }
+
+    public void setReqCode(String reqCode) {
+        this.reqCode = reqCode;
+    }
 }

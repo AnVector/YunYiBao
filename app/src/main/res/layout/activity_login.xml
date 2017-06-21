@@ -1,34 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/app_background_color"
-              android:orientation="vertical">
-
-    <include
-        layout="@layout/toolbar_common"/>
-
-    <ImageView
-        android:layout_width="79dp"
-        android:layout_height="79dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher"/>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="45dp"
-        android:layout_marginRight="45dp"
-        android:layout_marginTop="53dp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:background="@color/app_background_color"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/toolbar_common"/>
+
+        <ImageView
+            android:layout_width="79dp"
+            android:layout_height="79dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher"/>
 
         <com.chaychan.viewlib.PowerfulEditText
             android:id="@+id/input_user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="45dp"
+            android:layout_marginRight="45dp"
+            android:layout_marginTop="53dp"
             android:background="@null"
             android:drawableLeft="@drawable/ic_profile"
             android:drawablePadding="29dp"
@@ -39,139 +36,141 @@
             android:textCursorDrawable="@drawable/edittext_cursor_color"
             android:textSize="@dimen/font_size_fif"
             app:funcType="canClear"/>
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="45dp"
-        android:layout_marginRight="45dp"
-        android:layout_marginTop="15dp"
-        android:background="@color/line_color"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="45dp"
-        android:layout_marginRight="45dp"
-        android:layout_marginTop="23dp"
-        android:orientation="horizontal">
-
-        <com.chaychan.viewlib.PowerfulEditText
-            android:id="@+id/input_password"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:background="@null"
-            android:drawableLeft="@drawable/ic_lock"
-            android:drawablePadding="29dp"
-            android:drawableRight="@drawable/edit_text_selector"
-            android:hint="@string/password_hint"
-            android:inputType="textPassword"
-            android:maxLines="1"
-            android:textColor="@color/user_account_color"
-            android:textCursorDrawable="@drawable/edittext_cursor_color"
-            android:textSize="@dimen/font_size_fif"
-            app:funcType="canClear"/>
-
-        <TextView
-            android:id="@+id/retrieve_password"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right|center_vertical"
-            android:text="@string/forget_password"
-            android:textColor="@color/light_gray"
-            android:textSize="@dimen/font_size_small"/>
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="45dp"
-        android:layout_marginRight="45dp"
-        android:layout_marginTop="15dp"
-        android:background="@color/line_color"/>
-
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/btn_login"
-        android:layout_width="match_parent"
-        android:layout_height="49dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="45dp"
-        android:layout_marginRight="45dp"
-        android:layout_marginTop="45dp"
-        android:background="@drawable/btn_login"
-        android:text="@string/login"
-        android:textColor="@color/white"
-        android:textSize="@dimen/font_size_large"
-        android:textStyle="bold"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="45dp"
-        android:layout_marginRight="45dp"
-        android:layout_marginTop="66dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
 
         <View
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_weight="1"
-            android:background="@color/line_color"
-            android:gravity="center_vertical"/>
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="45dp"
+            android:layout_marginRight="45dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/line_color"/>
 
-        <TextView
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_marginLeft="45dp"
+            android:layout_marginRight="45dp"
+            android:layout_marginTop="23dp"
+            android:orientation="horizontal">
+
+            <com.chaychan.viewlib.PowerfulEditText
+                android:id="@+id/input_password"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@null"
+                android:drawableLeft="@drawable/ic_lock"
+                android:drawablePadding="29dp"
+                android:drawableRight="@drawable/edit_text_selector"
+                android:hint="@string/password_hint"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:textColor="@color/user_account_color"
+                android:textCursorDrawable="@drawable/edittext_cursor_color"
+                android:textSize="@dimen/font_size_fif"
+                app:funcType="canClear"/>
+
+            <TextView
+                android:id="@+id/retrieve_password"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:text="@string/forget_password"
+                android:textColor="@color/light_gray"
+                android:textSize="@dimen/font_size_small"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="45dp"
+            android:layout_marginRight="45dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/line_color"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="45dp"
+            android:layout_marginRight="45dp"
+            android:layout_marginTop="45dp"
+            android:background="@drawable/btn_login"
+            android:text="@string/login"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_size_large"
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="45dp"
+            android:layout_marginRight="45dp"
+            android:layout_marginTop="66dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="@color/line_color"
+                android:gravity="center_vertical"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/social_account_login"
+                android:textColor="@color/light_gray"
+                android:textSize="@dimen/font_size_small"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="@color/line_color"
+                android:gravity="center_vertical"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginTop="22dp"
             android:gravity="center"
-            android:text="@string/social_account_login"
-            android:textColor="@color/light_gray"
-            android:textSize="@dimen/font_size_small"/>
+            android:orientation="horizontal">
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1"
-            android:background="@color/line_color"
-            android:gravity="center_vertical"/>
+            <ImageButton
+                android:id="@+id/btn_wx"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:src="@drawable/ic_wx"/>
+
+            <ImageButton
+                android:id="@+id/btn_qq"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:src="@drawable/ic_qq"/>
+
+            <ImageButton
+                android:id="@+id/btn_weibo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:src="@drawable/ic_wb"/>
+        </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginTop="22dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/btn_wx"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@null"
-            android:src="@drawable/ic_wx"/>
-
-        <ImageButton
-            android:id="@+id/btn_qq"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@null"
-            android:src="@drawable/ic_qq"/>
-
-        <ImageButton
-            android:id="@+id/btn_weibo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@null"
-            android:src="@drawable/ic_wb"/>
-    </LinearLayout>
-</LinearLayout>
+    <include layout="@layout/circle_progress_layout"/>
+</merge>

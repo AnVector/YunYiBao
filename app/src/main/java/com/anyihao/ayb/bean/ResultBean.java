@@ -1,16 +1,18 @@
 package com.anyihao.ayb.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
 /**
- * author: Administrator
- * date: 2017/3/18 001811:16.
- * email:looper@126.com
+ * Created by Admin on 2017/6/20.
  */
 
-public class ResultBean implements Parcelable {
+public class ResultBean implements Serializable {
 
+
+    /**
+     * code : 446
+     * msg : 手机号未填写，请填写
+     */
     private int code;
     private String msg;
 
@@ -29,35 +31,4 @@ public class ResultBean implements Parcelable {
     public void setMsg(String msg) {
         this.msg = msg;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.code);
-        dest.writeString(this.msg);
-    }
-
-    public ResultBean() {
-    }
-
-    protected ResultBean(Parcel in) {
-        this.code = in.readInt();
-        this.msg = in.readString();
-    }
-
-    public static final Creator<ResultBean> CREATOR = new Creator<ResultBean>() {
-        @Override
-        public ResultBean createFromParcel(Parcel source) {
-            return new ResultBean(source);
-        }
-
-        @Override
-        public ResultBean[] newArray(int size) {
-            return new ResultBean[size];
-        }
-    };
 }

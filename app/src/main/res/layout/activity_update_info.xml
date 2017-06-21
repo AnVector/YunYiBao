@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:background="@color/content_bg_color"
     android:orientation="vertical"
-    tools:context="com.anyihao.ayb.frame.activity.UpdateSelfDataActivity">
+    tools:context="com.anyihao.ayb.frame.activity.UpdateInfoActivity">
 
     <include
         layout="@layout/toolbar_common"/>
@@ -26,22 +26,22 @@
         android:paddingRight="10dp">
 
         <TextView
-            android:id="@+id/tv_self_info"
+            android:id="@+id/tv_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:textSize="@dimen/font_size_fif"/>
 
         <com.chaychan.viewlib.PowerfulEditText
-            android:id="@+id/input_self_info"
+            android:id="@+id/edt_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
             android:background="@null"
+            android:drawableRight="@drawable/edit_text_selector"
             android:gravity="left|center_vertical"
             android:maxLines="1"
             android:textCursorDrawable="@drawable/edittext_cursor_color"
-            android:drawableRight="@drawable/edit_text_selector"
             android:textSize="@dimen/font_size_thi"
             app:funcType="canClear"/>
     </LinearLayout>

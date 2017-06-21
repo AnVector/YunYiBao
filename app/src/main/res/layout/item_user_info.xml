@@ -39,8 +39,8 @@
                 android:id="@+id/img_profile"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:scaleType="fitXY"
                 android:layout_gravity="center"
+                android:scaleType="fitXY"
                 android:visibility="gone"/>
 
             <TextView
@@ -52,7 +52,6 @@
                 android:textColor="@color/light_gray"
                 android:textSize="@dimen/font_size_small"/>
         </FrameLayout>
-
 
     </RelativeLayout>
 

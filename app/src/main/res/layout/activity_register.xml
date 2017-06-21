@@ -44,11 +44,11 @@
             android:drawableRight="@drawable/edit_text_selector"
             android:gravity="center_vertical"
             android:hint="@string/phone_num_input_hint"
-            android:textColorHint="@color/light_gray"
             android:inputType="phone"
             android:maxLines="1"
             android:paddingLeft="11dp"
             android:paddingRight="11dp"
+            android:textColorHint="@color/light_gray"
             android:textCursorDrawable="@drawable/edittext_cursor_color"
             android:textSize="@dimen/font_size_thi"
             app:funcType="canClear"/>

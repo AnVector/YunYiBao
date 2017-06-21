@@ -1,10 +1,7 @@
 package com.anyihao.ayb.frame.activity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -17,22 +14,27 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.LogUtils;
+import com.anyihao.androidbase.utils.MD5;
+import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
-import com.anyihao.ayb.bean.LoginResultBean;
+import com.anyihao.ayb.bean.LoginBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.jaeger.library.StatusBarUtil;
-import com.orhanobut.logger.Logger;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.utils.SocializeUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Map;
 
 import butterknife.BindView;
+import fr.castorflex.android.circularprogressbar.CircularProgressBar;
+import fr.castorflex.android.circularprogressbar.CircularProgressDrawable;
 
 
 /**
@@ -40,13 +42,7 @@ import butterknife.BindView;
  */
 public class LoginActivity extends ABaseActivity {
 
-    private static final String TAG = LoginActivity.class.getSimpleName();
     private static final int REQUEST_SIGNUP = 1000;
-    private static final int LOGIN_AUTHENTICATION_SUCCESS = 1001;
-    private static final int LOGIN_AUTHENTICATION_FAILURE = 1002;
-
-    private static final int LOGIN_BY_USERNAME = 0;
-    private static final int LONGIN_BY_MOBILE_PHONE = 1;
     @BindView(R.id.input_user_name)
     EditText etUserName;
     @BindView(R.id.input_password)
@@ -59,8 +55,6 @@ public class LoginActivity extends ABaseActivity {
     ImageButton btnQq;
     @BindView(R.id.btn_weibo)
     ImageButton btnWeibo;
-    //    @BindView(R.id.verification_login)
-//    TextView verificationLogin;
     @BindView(R.id.retrieve_password)
     TextView retrievePassword;
     @BindView(R.id.toolbar)
@@ -69,26 +63,10 @@ public class LoginActivity extends ABaseActivity {
     TextView titleMid;
     @BindView(R.id.toolbar_title_right)
     TextView titleRight;
-    private ProgressDialog dialog;
+    @BindView(R.id.progressbar_circular)
+    CircularProgressBar progressbarCircular;
     private String userName;
     private String password;
-    private int accountType = 0;
-
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case LOGIN_AUTHENTICATION_SUCCESS:
-                    break;
-                case LOGIN_AUTHENTICATION_FAILURE:
-                    break;
-                case REQUEST_SIGNUP:
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
 
     @Override
     protected int getContentViewId() {
@@ -111,8 +89,6 @@ public class LoginActivity extends ABaseActivity {
         toolbar.setNavigationIcon(R.drawable.ic_back);
         toolbar.setBackgroundColor(getResources().getColor(R.color.app_background_color));
         titleRight.setText(getString(R.string.register_hint));
-        dialog = new ProgressDialog(LoginActivity.this,
-                ProgressDialog.STYLE_SPINNER);
     }
 
     @Override
@@ -121,18 +97,12 @@ public class LoginActivity extends ABaseActivity {
 
             @Override
             public void onClick(View v) {
-//                login();
-                Intent intent = new Intent(LoginActivity.this, MainFragmentActivity.class);
-                startActivity(intent);
+                userName = etUserName.getText().toString().trim();
+                password = etPassword.getText().toString().trim();
+                login();
             }
         });
 
-//        verificationLogin.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                toggleLoginMode();
-//            }
-//        });
         titleRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,12 +116,6 @@ public class LoginActivity extends ABaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, RetrievePwdActivity.class);
                 startActivity(intent);
-//                finish();
-//                if (accountType == 0) {
-//                    ToastUtils.showLongToast(LoginActivity.this, "找回密码");
-//                } else {
-//                    ToastUtils.showLongToast(LoginActivity.this, "获取验证码");
-//                }
             }
         });
 
@@ -180,93 +144,73 @@ public class LoginActivity extends ABaseActivity {
         });
     }
 
-//    private void toggleLoginMode() {
-//        accountType = (accountType + 1) % 2;
-//        changeTitle();
-//        changeAccountIcon();
-//    }
-//
-//    private void changeTitle() {
-//        if (accountType == 1) {
-//            verificationLogin.setText("账号密码登录");
-//            retrievePassword.setText("获取验证码");
-//            etUserName.setHint("请输入手机号");
-//            etPassword.setHint("请输入验证码");
-//        } else {
-//            verificationLogin.setText("手机动态码登录");
-//            retrievePassword.setText("忘记密码？");
-//            etUserName.setHint("请输入用户名或手机号");
-//            etPassword.setHint("请输入密码");
-//        }
-//    }
-
-//    private void changeAccountIcon() {
-//        Drawable icUsn, icPwd;
-//        Resources res = getResources();
-//        if (accountType == 1) {
-//            icUsn = res.getDrawable(R.drawable.ic_mobile);
-//            icPwd = res.getDrawable(R.drawable.ic_message);
-//        } else {
-//            icUsn = res.getDrawable(R.drawable.ic_profile);
-//            icPwd = res.getDrawable(R.drawable.ic_lock);
-//        }
-//
-//        //调用setCompoundDrawables时，必须调用Drawable.setBounds()方法,否则图片不显示
-//        icUsn.setBounds(0, 0, icUsn.getMinimumWidth(), icUsn.getMinimumHeight());
-//        icPwd.setBounds(0, 0, icPwd.getMinimumWidth(), icPwd.getMinimumHeight());
-//        etUserName.setCompoundDrawables(icUsn, null, null, null); //设置左图标
-//        etPassword.setCompoundDrawables(icPwd, null, null, null); //设置左图标
-//    }
-
     private void login() {
         if (!validate()) {
-            onLoginFailed("用户名或密码不正确");
+            onLoginFailed("请输入用户名或密码");
             return;
         }
         btnLogin.setEnabled(false);
-        dialog.setIndeterminate(true);
-        dialog.setMessage("登录中...");
-        dialog.show();
-        PresenterFactory.getInstance().createPresenter(this).execute(new Task.TaskBuilder()
-                .setTaskType(TaskType.Method.GET)
-                .setUrl(GlobalConsts.USER_LOGIN + "uid=" + userName + "&pwd=" + password)
-                .setPage(1).createTask());
+        JSONObject json = new JSONObject();
+        try {
+            json.put("cmd", "IN");
+            json.put("loginId", userName);
+            json.put("pwd", MD5.string2MD5(password));
+            json.put("appType", "ANDROID");
+            json.put("userType", "SJ");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        progressbarCircular.setVisibility(View.VISIBLE);
+        ((CircularProgressDrawable) progressbarCircular.getIndeterminateDrawable()).start();
+        PresenterFactory.getInstance().createPresenter(this)
+                .execute(new Task.TaskBuilder()
+                        .setTaskType(TaskType.Method.POST)
+                        .setUrl(GlobalConsts.PREFIX_URL + "?cmd=IN" + "&" + "pwd=" +
+                                MD5.string2MD5(password) + "&" + "appType=" + "ANDROID" + "&" +
+                                "userType=" + "SJ" + "&" + "loginId=" + userName)
+                        .setContent(json.toString())
+                        .setPage(1)
+                        .setActionType(0)
+                        .createTask());
     }
 
     public boolean validate() {
         boolean valid = true;
         userName = etUserName.getText().toString().trim();
         password = etPassword.getText().toString().trim();
-        if (StringUtils.isEmpty(userName)) {
-            etUserName.setError("用户名不能为空");
+        if (StringUtils.isEmpty(userName) || StringUtils.isEmpty(password)) {
             valid = false;
-        } else {
-            etUserName.setError(null);
-        }
-
-        if (StringUtils.isEmpty(password) || password.length() < 6) {
-            etPassword.setError("密码长度不能小于6位");
-            valid = false;
-        } else {
-            etPassword.setError(null);
         }
         return valid;
     }
 
-    public void onLoginSuccess() {
-        btnLogin.setEnabled(true);
-        Intent intent = new Intent(LoginActivity.this, MainFragmentActivity.class);
-        startActivity(intent);
-        dialog.dismiss();
-        dialog = null;
-        finish();
-    }
+//    private void updateValues() {
+//        CircularProgressDrawable circularProgressDrawable;
+//        CircularProgressDrawable.Builder b = new CircularProgressDrawable.Builder(this)
+//                .colors(getResources().getIntArray(R.array.yun_colors))
+//                .sweepSpeed(1f)
+//                .rotationSpeed(1f)
+//                .strokeWidth(dpToPx(3))
+//                .style(CircularProgressDrawable.Style.ROUNDED);
+//        if (mCurrentInterpolator != null) {
+//            b.sweepInterpolator(mCurrentInterpolator);
+//        }
+//        progressbarCircular.setIndeterminateDrawable(circularProgressDrawable = b.build());
+//
+//        // /!\ Terrible hack, do not do this at home!
+//        circularProgressDrawable.setBounds(0,
+//                0,
+//                progressbarCircular.getWidth(),
+//                progressbarCircular.getHeight());
+//        progressbarCircular.setVisibility(View.INVISIBLE);
+//        progressbarCircular.setVisibility(View.VISIBLE);
+//    }
 
-    public void onLoginFailed(String reason) {
-        ToastUtils.showShortToast(LoginActivity.this, reason);
-        dialog.dismiss();
-        btnLogin.setEnabled(true);
-    }
+//    public int dpToPx(int dp) {
+//        Resources r = getResources();
+//        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+//                dp, r.getDisplayMetrics());
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -279,27 +223,38 @@ public class LoginActivity extends ABaseActivity {
             }
         }
     }
-//
-//    @Override
-//    public void onBackPressed() {
-//        // Disable going back to the MainActivity
-//        moveTaskToBack(true);
-//    }
+
+    private void onLoginFailed(String message) {
+        ToastUtils.showToast(getApplicationContext(), message, R.layout.toast, R.id.tv_message);
+        btnLogin.setEnabled(true);
+    }
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
-        LoginResultBean bean = GsonUtils.getInstance().transitionToBean(result, LoginResultBean
+        ((CircularProgressDrawable) progressbarCircular.getIndeterminateDrawable()).stop();
+        progressbarCircular.setVisibility(View.GONE);
+        LoginBean bean = GsonUtils.getInstance().transitionToBean(result, LoginBean
                 .class);
-        Logger.e(result);
-        if ("200".equals(bean.getCode())) {
-            onLoginSuccess();
+        if (bean == null)
+            return;
+        if (bean.getCode() == 200) {
+            btnLogin.setEnabled(true);
+            ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast, R.id
+                    .tv_message);
+            PreferencesUtils.putString(getApplicationContext(), "uid", bean.getUid());
+            PreferencesUtils.putString(getApplicationContext(), "userType", bean.getUserType());
+            Intent intent = new Intent(LoginActivity.this, MainFragmentActivity.class);
+            startActivity(intent);
+            finish();
         } else {
-            onLoginFailed(bean.getReason());
+            onLoginFailed(bean.getMsg());
         }
     }
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
+        ((CircularProgressDrawable) progressbarCircular.getIndeterminateDrawable()).stop();
+        progressbarCircular.setVisibility(View.GONE);
         onLoginFailed(error);
     }
 
@@ -318,13 +273,13 @@ public class LoginActivity extends ABaseActivity {
     UMAuthListener authListener = new UMAuthListener() {
         @Override
         public void onStart(SHARE_MEDIA platform) {
-            SocializeUtils.safeShowDialog(dialog);
+//            SocializeUtils.safeShowDialog(dialog);
 //            UmengTool.getSignature(LoginActivity.this);
         }
 
         @Override
         public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
-            SocializeUtils.safeCloseDialog(dialog);
+//            SocializeUtils.safeCloseDialog(dialog);
             Toast.makeText(LoginActivity.this, "成功了", Toast.LENGTH_LONG).show();
             LogUtils.d(TAG, "platform=" + platform);
             LogUtils.d(TAG, "action = " + action);
@@ -336,7 +291,7 @@ public class LoginActivity extends ABaseActivity {
 
         @Override
         public void onError(SHARE_MEDIA platform, int action, Throwable t) {
-            SocializeUtils.safeCloseDialog(dialog);
+//            SocializeUtils.safeCloseDialog(dialog);
             Toast.makeText(LoginActivity.this, "失败：" + t.getMessage(), Toast.LENGTH_LONG).show();
             LogUtils.d(TAG, "platform=" + platform);
             LogUtils.d(TAG, "action = " + action);
@@ -345,7 +300,7 @@ public class LoginActivity extends ABaseActivity {
 
         @Override
         public void onCancel(SHARE_MEDIA platform, int action) {
-            SocializeUtils.safeCloseDialog(dialog);
+//            SocializeUtils.safeCloseDialog(dialog);
             Toast.makeText(LoginActivity.this, "取消了", Toast.LENGTH_LONG).show();
             LogUtils.d(TAG, "platform=" + platform);
             LogUtils.d(TAG, "action = " + action);

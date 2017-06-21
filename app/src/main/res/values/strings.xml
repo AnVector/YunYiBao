@@ -80,6 +80,7 @@
     <string name="confirm_pwd">确认密码：</string>
     <string name="set_pwd_input_hint">6&#8211;16位字母、数字组合</string>
     <string name="confirm_pwd_input_hint">确认新密码</string>
+    <string name="re_get_after_60s">&#160;%1$ds后重新获取</string>
 
     <!--retrieve password-->
     <string name="retrieve_input_hint">请输入手机号</string>

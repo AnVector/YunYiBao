@@ -1,13 +1,26 @@
 package com.anyihao.ayb.frame.activity;
 
+import android.content.Intent;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.mvp.Task;
+import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.GsonUtils;
+import com.anyihao.androidbase.utils.MD5;
+import com.anyihao.androidbase.utils.PwdCheckUtils;
+import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
+import com.anyihao.ayb.bean.ResultBean;
+import com.anyihao.ayb.common.PresenterFactory;
+import com.anyihao.ayb.constant.GlobalConsts;
 import com.chaychan.viewlib.PowerfulEditText;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
 
@@ -24,6 +37,9 @@ public class ResetPwdActivity extends ABaseActivity {
     PowerfulEditText edtNewPwd;
     @BindView(R.id.edt_comfirm_pwd)
     PowerfulEditText edtComfirmPwd;
+    private String phoneNum;
+    private String newPwd;
+    private String confirmPwd;
 
     @Override
     protected int getContentViewId() {
@@ -32,7 +48,10 @@ public class ResetPwdActivity extends ABaseActivity {
 
     @Override
     protected void getExtraParams() {
-
+        Intent intent = getIntent();
+        if (intent == null)
+            return;
+        phoneNum = intent.getStringExtra("phoneNo");
     }
 
     @Override
@@ -46,6 +65,33 @@ public class ResetPwdActivity extends ABaseActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                newPwd = edtNewPwd.getText().toString().trim();
+                confirmPwd = edtComfirmPwd.getText().toString().trim();
+                if (StringUtils.isEmpty(newPwd)) {
+                    ToastUtils.showToast(getApplicationContext(), "请输入新密码", R.layout.toast, R.id
+                            .tv_message);
+                    return;
+                }
+
+                if (newPwd.length() < 6 || newPwd.length() > 16) {
+                    ToastUtils.showToast(getApplicationContext(), "密码长度必须在6-16位之间", R.layout
+                            .toast, R.id
+                            .tv_message);
+                    return;
+                }
+                if (!PwdCheckUtils.containsLetterDigit(newPwd)) {
+                    ToastUtils.showToast(getApplicationContext(), "密码必须同时包含字母和数字", R.layout
+                            .toast, R.id
+                            .tv_message);
+                    return;
+                }
+                if (!newPwd.equals(confirmPwd)) {
+                    ToastUtils.showToast(getApplicationContext(), "两次输入的密码不一致", R.layout.toast, R.id
+                            .tv_message);
+                    return;
+                }
+
+                ModifyPwd();
             }
         });
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -56,13 +102,53 @@ public class ResetPwdActivity extends ABaseActivity {
         });
     }
 
+    private void ModifyPwd() {
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("cmd", "MODIFYPWD");
+            json.put("phoneNumber", phoneNum);
+            json.put("pwd", MD5.string2MD5(newPwd));
+            json.put("ckpwd", MD5.string2MD5(confirmPwd));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        PresenterFactory.getInstance().createPresenter(this)
+                .execute(new Task.TaskBuilder()
+                        .setTaskType(TaskType.Method.POST)
+                        .setUrl(GlobalConsts.PREFIX_URL + "?cmd=MODIFYPWD" + "&" + "phoneNumber=" +
+                                phoneNum + "&" + "pwd=" + MD5.string2MD5(newPwd) + "&" + "ckpwd="
+                                + MD5.string2MD5(confirmPwd))
+                        .setContent(json.toString())
+                        .setPage(1)
+                        .setActionType(0)
+                        .createTask());
+    }
+
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
+
+        if (actionType == 0) {
+            ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean
+                    .class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast,
+                        R.id.tv_message);
+            } else {
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast,
+                        R.id.tv_message);
+            }
+        }
 
     }
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-
+        if (actionType == 0) {
+            ToastUtils.showToast(getApplicationContext(), error, R.layout.toast,
+                    R.id.tv_message);
+        }
     }
 }

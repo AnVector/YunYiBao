@@ -379,7 +379,7 @@
             android:launchMode="singleTop">
         </activity>
         <activity
-            android:name=".frame.activity.UpdateSelfDataActivity"
+            android:name=".frame.activity.UpdateInfoActivity"
             android:launchMode="singleTop">
         </activity>
         <activity

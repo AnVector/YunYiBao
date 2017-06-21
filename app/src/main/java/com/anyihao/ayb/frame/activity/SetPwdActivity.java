@@ -1,14 +1,34 @@
 package com.anyihao.ayb.frame.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.manager.ActivityManager;
+import com.anyihao.androidbase.mvp.Task;
+import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.DeviceUtils;
+import com.anyihao.androidbase.utils.GsonUtils;
+import com.anyihao.androidbase.utils.MD5;
+import com.anyihao.androidbase.utils.PwdCheckUtils;
+import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
+import com.anyihao.ayb.bean.RegisterBean;
+import com.anyihao.ayb.bean.ResultBean;
+import com.anyihao.ayb.common.PresenterFactory;
+import com.anyihao.ayb.constant.GlobalConsts;
 import com.chaychan.viewlib.PowerfulEditText;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
 
@@ -26,6 +46,33 @@ public class SetPwdActivity extends ABaseActivity {
     PowerfulEditText inputVerifyCode;
     @BindView(R.id.input_set_pwd)
     PowerfulEditText inputSetPwd;
+    @BindView(R.id.tv_time_ticker)
+    TextView tvTimeTicker;
+    private static final int TIMER_TICK = 1001;
+    private static final int TIMER_TICK_FINISHED = 1002;
+    private String mTimeHint;
+    private byte mTimeLeft;
+    private CountDownTimer mCountDownTimer;
+    private String phoneNum;
+    private String verifyCode;
+    private String setPwd;
+    private String checkPwd;
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case TIMER_TICK:
+                    handleTimerTick();
+                    break;
+                case TIMER_TICK_FINISHED:
+                    handleTimerTickFinished();
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     @Override
     protected int getContentViewId() {
@@ -34,11 +81,15 @@ public class SetPwdActivity extends ABaseActivity {
 
     @Override
     protected void getExtraParams() {
-
+        Intent intent = getIntent();
+        if (intent == null)
+            return;
+        phoneNum = intent.getStringExtra("phoneNo");
     }
 
     @Override
     protected void initData() {
+        mTimeHint = getResources().getString(R.string.re_get_after_60s);
         toolbar.setNavigationIcon(R.drawable.ic_back);
         titleMid.setText(getString(R.string.set_login_pwd));
 
@@ -49,8 +100,67 @@ public class SetPwdActivity extends ABaseActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SetPwdActivity.this, BindDeviceActivity.class);
-                startActivity(intent);
+                verifyCode = inputVerifyCode.getText().toString().trim();
+                setPwd = inputSetPwd.getText().toString().trim();
+                checkPwd = confirmPwd.getText().toString().trim();
+                if (StringUtils.isEmpty(verifyCode)) {
+                    ToastUtils.showToast(getApplicationContext(), "请输入验证码", R.layout.toast, R.id
+                            .tv_message);
+                    return;
+                }
+                if (verifyCode.length() != 6) {
+                    ToastUtils.showToast(getApplicationContext(), "验证码错误", R.layout.toast, R.id
+                            .tv_message);
+                    return;
+                }
+                if (StringUtils.isEmpty(setPwd)) {
+                    ToastUtils.showToast(getApplicationContext(), "请输入密码", R.layout.toast, R.id
+                            .tv_message);
+                    return;
+                }
+                if (setPwd.length() < 6 || setPwd.length() > 16) {
+                    ToastUtils.showToast(getApplicationContext(), "密码长度必须在6-16位之间", R.layout
+                            .toast, R.id
+                            .tv_message);
+                    return;
+                }
+                if (!PwdCheckUtils.containsLetterDigit(setPwd)) {
+                    ToastUtils.showToast(getApplicationContext(), "密码必须同时包含字母和数字", R.layout
+                            .toast, R.id
+                            .tv_message);
+                    return;
+                }
+                if (!setPwd.equals(checkPwd)) {
+                    ToastUtils.showToast(getApplicationContext(), "两次输入的密码不一致", R.layout.toast, R.id
+                            .tv_message);
+                    return;
+                }
+                checkVerifyCode();
+            }
+        });
+
+        tvTimeTicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tvTimeTicker.setText(String.format(mTimeHint, 60));
+                tvTimeTicker.setEnabled(false);
+                tvTimeTicker.setTextColor(Color.parseColor("#B5B5B5"));
+//                tvTimeTicker.setBackgroundColor(Color.parseColor("#F5F5F9"));
+                getVerifyCode();
+                mCountDownTimer = new CountDownTimer(60 * 1000, 1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        mTimeLeft = (byte) (millisUntilFinished / 1000);
+                        mHandler.sendEmptyMessage(TIMER_TICK);
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        mTimeLeft = 0;
+                        mHandler.sendEmptyMessage(TIMER_TICK_FINISHED);
+                    }
+                };
+                mCountDownTimer.start();
             }
         });
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -62,13 +172,145 @@ public class SetPwdActivity extends ABaseActivity {
 
     }
 
+    private void getVerifyCode() {
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("cmd", "SJH");
+            json.put("phoneNumber", phoneNum);
+            json.put("action", "REGISTER");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        PresenterFactory.getInstance().createPresenter(this)
+                .execute(new Task.TaskBuilder()
+                        .setTaskType(TaskType.Method.POST)
+                        .setUrl(GlobalConsts.PREFIX_URL + "cmd=SJH" + "&" + "phoneNumber=" +
+                                phoneNum + "&" + "action=" + "REGISTER")
+                        .setContent(json.toString())
+                        .setPage(1)
+                        .setActionType(0)
+                        .createTask());
+    }
+
+    private void checkVerifyCode() {
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("cmd", "YZM");
+            json.put("phoneNumber", phoneNum);
+            json.put("identifyingCode", verifyCode);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        PresenterFactory.getInstance().createPresenter(this)
+                .execute(new Task.TaskBuilder()
+                        .setTaskType(TaskType.Method.POST)
+                        .setUrl(GlobalConsts.PREFIX_URL + "cmd=YZM" + "&" + "phoneNumber=" +
+                                phoneNum + "&" + "identifyingCode=" + verifyCode)
+                        .setContent(json.toString())
+                        .setPage(1)
+                        .setActionType(1)
+                        .createTask());
+    }
+
+    private void register() {
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("cmd", "RGT");
+            json.put("phoneNumber", phoneNum);
+            json.put("pwd", MD5.string2MD5(setPwd));
+            json.put("ckpwd", MD5.string2MD5(checkPwd));
+            json.put("addrMAC", DeviceUtils.getMacAddress(getApplicationContext()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        PresenterFactory.getInstance().createPresenter(this)
+                .execute(new Task.TaskBuilder()
+                        .setTaskType(TaskType.Method.POST)
+                        .setUrl(GlobalConsts.PREFIX_URL + "cmd=RGT" + "&" + "phoneNumber=" +
+                                phoneNum + "&" + "pwd=" + MD5.string2MD5(setPwd) + "&" + "ckpwd="
+                                + MD5.string2MD5(checkPwd) + "&" +
+                                "addrMAC=" + DeviceUtils.getMacAddress(getApplicationContext()))
+                        .setContent(json.toString())
+                        .setPage(1)
+                        .setActionType(2)
+                        .createTask());
+    }
+
+
+    private void handleTimerTick() {
+        tvTimeTicker.setText(String.format(mTimeHint, mTimeLeft));
+    }
+
+    private void handleTimerTickFinished() {
+        tvTimeTicker.setText(getString(R.string.get_verify_code));
+        tvTimeTicker.setEnabled(true);
+        tvTimeTicker.setTextColor(Color.parseColor("#2DA8F4"));
+//        tvTimeTicker.setBackground(null);
+    }
+
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
+        if (actionType == 0) {
+            ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean
+                    .class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast,
+                        R.id.tv_message);
+            } else {
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast,
+                        R.id.tv_message);
+            }
+        }
+        if (actionType == 1) {
+            ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean
+                    .class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                register();
+            } else {
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast,
+                        R.id.tv_message);
+            }
+        }
+
+        if (actionType == 2) {
+            RegisterBean bean = GsonUtils.getInstance().transitionToBean(result, RegisterBean
+                    .class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast,
+                        R.id.tv_message);
+                Intent intent = new Intent(SetPwdActivity.this, BindDeviceActivity.class);
+                startActivity(intent);
+                finish();
+                ActivityManager.getInstance().finishActivity(RegisterActivity.class);
+            } else {
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast,
+                        R.id.tv_message);
+            }
+        }
 
     }
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
+        ToastUtils.showToast(getApplicationContext(), error, R.layout.toast,
+                R.id.tv_message);
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mCountDownTimer == null)
+            return;
+        mCountDownTimer.cancel();
     }
 }

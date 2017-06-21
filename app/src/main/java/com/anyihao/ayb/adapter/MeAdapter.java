@@ -10,6 +10,8 @@ import com.anyihao.ayb.R;
 
 public class MeAdapter extends RecyclerViewAdapter<String> {
 
+    private String[] array = new String[]{"我的流量", "流量商城", "流量报表", "充值记录", "邀请好友", "输入邀请码", "系统赠送记录",
+            "我的积分", "商家特权", "授权设备管理"};
 
     public MeAdapter(Context context, int layoutId) {
         super(context, layoutId);
@@ -17,12 +19,13 @@ public class MeAdapter extends RecyclerViewAdapter<String> {
 
     @Override
     public void convert(ViewHolder holder, String s) {
+        String title = array[holder.getLayoutPosition()];
 
-        holder.setText(R.id.title, s);
-        switch (s) {
+        holder.setText(R.id.title, title);
+        switch (title) {
             case "我的流量":
                 holder.setCompoundDrawables(R.id.title, R.drawable.ic_balance, 15);
-                holder.setText(R.id.value, "715.6MB");
+                holder.setText(R.id.value, s);
                 holder.setVisible(R.id.value, true);
                 holder.setVisible(R.id.line, false);
                 holder.setVisible(R.id.space, true);
@@ -51,6 +54,7 @@ public class MeAdapter extends RecyclerViewAdapter<String> {
                 break;
             case "我的积分":
                 holder.setCompoundDrawables(R.id.title, R.drawable.ic_credit, 15);
+                holder.setText(R.id.value, s);
                 holder.setVisible(R.id.line, false);
                 holder.setVisible(R.id.space, true);
                 break;

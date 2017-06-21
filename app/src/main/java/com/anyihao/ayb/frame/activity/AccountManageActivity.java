@@ -4,13 +4,20 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.mvp.Task;
+import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.GsonUtils;
+import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.AccountManageAdapter;
+import com.anyihao.ayb.bean.AccountListInfoBean;
+import com.anyihao.ayb.bean.AccountListInfoBean.DataBean;
+import com.anyihao.ayb.common.PresenterFactory;
+import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.listener.OnItemClickListener;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
@@ -19,8 +26,10 @@ import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -33,8 +42,7 @@ public class AccountManageActivity extends ABaseActivity {
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
     private AccountManageAdapter mAdapter;
-    String[] array = new String[]{"QQ", "微信", "微博"};
-    private List<String> mData = Arrays.asList(array);
+    private List<DataBean> mData = new ArrayList<>();
 
     @Override
     protected int getContentViewId() {
@@ -54,9 +62,22 @@ public class AccountManageActivity extends ABaseActivity {
         recyclerview.setAdapter(mAdapter);
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager
                 .VERTICAL, false));
-        recyclerview.setHasFixedSize(true);
-        mAdapter.add(0, mData.size(), mData);
+        getAccountList();
+    }
 
+    private void getAccountList() {
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "ACCOUNTLIST");
+        params.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
+        PresenterFactory.getInstance().createPresenter(this)
+                .execute(new Task.TaskBuilder()
+                        .setTaskType(TaskType.Method.POST)
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setContent("{}")
+                        .setParams(params)
+                        .setPage(1)
+                        .setActionType(0)
+                        .createTask());
     }
 
     private void showDialog() {
@@ -116,7 +137,9 @@ public class AccountManageActivity extends ABaseActivity {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-                showDialog();
+                if (o instanceof DataBean && ((DataBean) o).getStatus() == 1) {
+                    showDialog();
+                }
             }
 
             @Override
@@ -129,6 +152,18 @@ public class AccountManageActivity extends ABaseActivity {
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
+
+        if (actionType == 0) {
+            AccountListInfoBean beans = GsonUtils.getInstance().transitionToBean(result,
+                    AccountListInfoBean.class);
+            if (beans == null)
+                return;
+            if (beans.getCode() == 200) {
+//                List<DataBean> bean = beans.getData();
+//                mData.addAll(bean);
+                mAdapter.add(0, beans.getData().size(), beans.getData());
+            }
+        }
 
     }
 

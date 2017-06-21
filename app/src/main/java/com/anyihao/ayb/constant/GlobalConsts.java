@@ -29,7 +29,8 @@ public class GlobalConsts {
     /**
      * 工具地址：https://doc.open.alipay.com/docs/doc.htm?treeId=291&articleId=106097&docType=1
      */
-    public static final String RSA_PRIVATE = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALtILnky5MQVw4eMTwkflSMpDdq5q0xs5VIei69ybmBI0wpSFyE28lSW/pP2OmtQ0qKGjCyqZG6aIVNBDOHTjwY4350V8wsfa8j5N/9makF/10eejZpa9zmf6ITRs+fdbGh6Y4Au/cXUXpsJksvryrDtr/HMz3rzeiudHjLTFPRDAgMBAAECgYEAqo8ZK+2qo92CPh8NF6z4oJXR9UGkfKyryDbjVfwsA2ovMLYENI6a8Wi2HsBfAb8QpU1NuZvQbV3XPb//YGbQV/XWz/tJsEMxDiGbW2jD9S9UdwgjJO0878CxYYqj81jC/CYnyD754iSLhuFbJM3FMdsoP/vWUPnJTC1/uBN3YakCQQDn3wTKXfnrQVm74xH60+kdZk4vNS9ywBZSn/lyiMGKa661EyuJQ18WizlVqUmt3a32l9ckIQ5xKmWQbTIzQ/K9AkEAzsVRsvl5g1JBAgXpeCp32mGb47gCqT3991PZhl+2tlj2kcD4tJgJLxiOSPp2lZIvdshhZVGDKOcCrH1e/WZy/wJAUjPMfPnoGjEm4OdVfnkWEegtG6tdUO8sespgIuy8wJgAbg2Hx7fsxA9DmkzT5CHNBLk7+oEFn7UKILO1slsKeQJAfXdADuDQef30UlzyASeL2Gh4JmKmwrlKHMS1bpMvlFBBNcopX7QNhpVY6TGJuVKeGG6YotkmRDCA79eXRx3eUwJBALpnMTcw2aNlWzIww2JHB4aP9WtvhZxxD6LiRE3iV8I0AqspAQc2dAowNm+fqtLU6hKG+Cw8kvC/5DAIpPZI+Xk=";
+    public static final String RSA_PRIVATE =
+            "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALtILnky5MQVw4eMTwkflSMpDdq5q0xs5VIei69ybmBI0wpSFyE28lSW/pP2OmtQ0qKGjCyqZG6aIVNBDOHTjwY4350V8wsfa8j5N/9makF/10eejZpa9zmf6ITRs+fdbGh6Y4Au/cXUXpsJksvryrDtr/HMz3rzeiudHjLTFPRDAgMBAAECgYEAqo8ZK+2qo92CPh8NF6z4oJXR9UGkfKyryDbjVfwsA2ovMLYENI6a8Wi2HsBfAb8QpU1NuZvQbV3XPb//YGbQV/XWz/tJsEMxDiGbW2jD9S9UdwgjJO0878CxYYqj81jC/CYnyD754iSLhuFbJM3FMdsoP/vWUPnJTC1/uBN3YakCQQDn3wTKXfnrQVm74xH60+kdZk4vNS9ywBZSn/lyiMGKa661EyuJQ18WizlVqUmt3a32l9ckIQ5xKmWQbTIzQ/K9AkEAzsVRsvl5g1JBAgXpeCp32mGb47gCqT3991PZhl+2tlj2kcD4tJgJLxiOSPp2lZIvdshhZVGDKOcCrH1e/WZy/wJAUjPMfPnoGjEm4OdVfnkWEegtG6tdUO8sespgIuy8wJgAbg2Hx7fsxA9DmkzT5CHNBLk7+oEFn7UKILO1slsKeQJAfXdADuDQef30UlzyASeL2Gh4JmKmwrlKHMS1bpMvlFBBNcopX7QNhpVY6TGJuVKeGG6YotkmRDCA79eXRx3eUwJBALpnMTcw2aNlWzIww2JHB4aP9WtvhZxxD6LiRE3iV8I0AqspAQc2dAowNm+fqtLU6hKG+Cw8kvC/5DAIpPZI+Xk=";
 
     // 商户PID
     public static final String PARTNER = "2088421685287993";
@@ -38,5 +39,5 @@ public class GlobalConsts {
     // API address
     public static final String USER_LOGIN = "http://192.168.58.21:8080/login?";
     public static final String GET_SERVER_INFO = "http://192.168.58.21:8080/list?";
-    public static final String PREFIX_URL = "http://hardware.aybwifi.com:8099/vrsws/vappws.json";
+    public static final String PREFIX_URL = "http://122.224.91.147:8888/vrsws/vappws.json";
 }

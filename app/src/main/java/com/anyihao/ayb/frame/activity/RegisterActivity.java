@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.chaychan.viewlib.PowerfulEditText;
 
@@ -43,18 +44,25 @@ public class RegisterActivity extends ABaseActivity {
 
     @Override
     protected void initEvent() {
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(RegisterActivity.this, SetPwdActivity.class);
-                startActivity(intent);
-            }
-        });
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+            }
+        });
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String phoneNo = inputPhoneNum.getText().toString().trim();
+                if (phoneNo.length() != 11 || !"1".equals(phoneNo.substring(0, 1))) {
+                    ToastUtils.showToast(getApplicationContext(), "手机号码不正确，请重新输入！", R.layout
+                            .toast, R.id.tv_message);
+                    return;
+                }
+                Intent intent = new Intent(RegisterActivity.this, SetPwdActivity.class);
+                intent.putExtra("phoneNo", phoneNo);
+                startActivity(intent);
             }
         });
 
@@ -69,5 +77,4 @@ public class RegisterActivity extends ABaseActivity {
     public void onFailure(String error, int page, Integer actionType) {
 
     }
-
 }

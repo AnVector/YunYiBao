@@ -9,13 +9,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.manager.ActivityManager;
+import com.anyihao.androidbase.mvp.Task;
+import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.GsonUtils;
+import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.SettingsAdapter;
+import com.anyihao.ayb.bean.ResultBean;
+import com.anyihao.ayb.common.PresenterFactory;
+import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.listener.OnItemClickListener;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -119,14 +129,45 @@ public class SettingsActivity extends ABaseActivity {
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastUtils.showLongToast(SettingsActivity.this, "退出失败，请稍后重试");
+                logOut();
             }
         });
 
     }
 
+    private void logOut() {
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "OUT");
+        params.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
+        PresenterFactory.getInstance().createPresenter(this)
+                .execute(new Task.TaskBuilder()
+                        .setTaskType(TaskType.Method.POST)
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setContent("{}")
+                        .setParams(params)
+                        .setPage(1)
+                        .setActionType(0)
+                        .createTask());
+    }
+
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
+        if (actionType == 0) {
+            ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean.class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast, R.id
+                        .tv_message);
+                PreferencesUtils.putString(getApplicationContext(), "uid", "");
+                PreferencesUtils.putString(getApplicationContext(), "userType", "");
+                ActivityManager.getInstance().finishActivity(MainFragmentActivity.class);
+                Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+
+            }
+        }
 
     }
 

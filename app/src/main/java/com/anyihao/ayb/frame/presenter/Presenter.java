@@ -1,11 +1,11 @@
 package com.anyihao.ayb.frame.presenter;
 
-import com.anyihao.androidbase.utils.LogUtils;
-import com.library.http.okhttp.OkHttpUtils;
-import com.library.http.okhttp.callback.StringCallback;
 import com.anyihao.androidbase.mvp.IView;
 import com.anyihao.androidbase.mvp.PresenterCompat;
 import com.anyihao.androidbase.mvp.Task;
+import com.anyihao.androidbase.utils.LogUtils;
+import com.library.http.okhttp.OkHttpUtils;
+import com.library.http.okhttp.callback.StringCallback;
 
 import okhttp3.Call;
 import okhttp3.MediaType;
@@ -27,10 +27,10 @@ public class Presenter extends PresenterCompat {
         if (isViewDestroyed())
             return;
         OkHttpUtils
-                .postString()
+                .post()
                 .url(task.getUrl())
-                .content(task.getContent())
-                .mediaType(MediaType.parse("application/json; charset=utf-8"))
+                .addHeader("Content-Type", "text/plain")
+                .params(task.getParams())
                 .tag(getView())
                 .build()
                 .execute(new StringCallback() {

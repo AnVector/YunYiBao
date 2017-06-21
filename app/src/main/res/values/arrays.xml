@@ -55,5 +55,9 @@
         <item>@color/gplus_color_3</item>
         <item>@color/gplus_color_4</item>
     </integer-array>
+    <integer-array name="yun_colors">
+        <item>@color/toolbar_title_color</item>
+    </integer-array>
+
 
 </resources>

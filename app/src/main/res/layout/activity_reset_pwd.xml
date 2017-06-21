@@ -45,11 +45,11 @@
             android:drawableRight="@drawable/edit_text_selector"
             android:gravity="left|center_vertical"
             android:hint="@string/new_pwd_hint"
-            android:maxLines="1"
             android:inputType="textPassword"
-            android:textCursorDrawable="@drawable/edittext_cursor_color"
-            android:paddingRight="10dp"
+            android:maxLines="1"
+            android:paddingRight="15dp"
             android:textColorHint="@color/light_gray"
+            android:textCursorDrawable="@drawable/edittext_cursor_color"
             android:textSize="@dimen/font_size_fif"
             app:funcType="canClear"/>
     </LinearLayout>
@@ -86,11 +86,11 @@
             android:drawableRight="@drawable/edit_text_selector"
             android:gravity="left|center_vertical"
             android:hint="@string/new_pwd_hint"
-            android:maxLines="1"
             android:inputType="textPassword"
-            android:textCursorDrawable="@drawable/edittext_cursor_color"
-            android:paddingRight="10dp"
+            android:maxLines="1"
+            android:paddingRight="15dp"
             android:textColorHint="@color/light_gray"
+            android:textCursorDrawable="@drawable/edittext_cursor_color"
             android:textSize="@dimen/font_size_fif"
             app:funcType="canClear"/>
     </LinearLayout>

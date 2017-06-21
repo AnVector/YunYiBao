@@ -14,11 +14,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.mvp.Task;
+import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.GsonUtils;
+import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
-import com.anyihao.ayb.adapter.PersonalInfoAdapter;
+import com.anyihao.ayb.adapter.UserInfoAdapter;
 import com.anyihao.ayb.bean.ProvinceBean;
+import com.anyihao.ayb.bean.ResultBean;
+import com.anyihao.ayb.bean.UserInfoBean;
+import com.anyihao.ayb.common.PresenterFactory;
+import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.listener.OnItemClickListener;
 import com.bigkoo.pickerview.OptionsPickerView;
+import com.bigkoo.pickerview.TimePickerView;
 import com.google.gson.Gson;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
@@ -28,13 +38,22 @@ import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -46,20 +65,22 @@ public class MeActivity extends ABaseActivity {
     Toolbar toolbar;
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
-    private PersonalInfoAdapter mAdapter;
-    String[] array = new String[]{"头像", "昵称", "我的二维码", "性别", "生日", "手机号码", "邮箱", "地区", "押金退款"};
-    private List<String> mData = Arrays.asList(array);
-
+    private UserInfoAdapter mAdapter;
+    private List<String> mData = new LinkedList<>();
     private ArrayList<ProvinceBean> options1Items = new ArrayList<>();
     private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
     private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
-
     private Thread thread;
     private static final int MSG_LOAD_DATA = 0x0001;
     private static final int MSG_LOAD_SUCCESS = 0x0002;
     private static final int MSG_LOAD_FAILED = 0x0003;
-
     private boolean isLoaded = false;
+    private String uid;
+    private String userType;
+    private TextView tvValue;
+    private String mArea;
+    private String mDate;
+    private TimePickerView pvDate;
 
 
     @Override
@@ -69,7 +90,11 @@ public class MeActivity extends ABaseActivity {
 
     @Override
     protected void getExtraParams() {
-
+        Intent intent = getIntent();
+        if (intent == null)
+            return;
+        uid = intent.getStringExtra("uid");
+        userType = intent.getStringExtra("userType");
     }
 
     private Handler mHandler = new Handler() {
@@ -101,15 +126,45 @@ public class MeActivity extends ABaseActivity {
 
     @Override
     protected void initData() {
+        getUserInfo();
         mHandler.sendEmptyMessage(MSG_LOAD_DATA);
         toolbar.setNavigationIcon(R.drawable.ic_back);
         titleMid.setText(getString(R.string.about_me));
-        mAdapter = new PersonalInfoAdapter(this, R.layout.item_personal_info);
+        mAdapter = new UserInfoAdapter(this, R.layout.item_user_info);
         recyclerview.setAdapter(mAdapter);
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager
                 .VERTICAL, false));
-        recyclerview.setHasFixedSize(true);
-        mAdapter.add(0, mData.size(), mData);
+        initTimePicker();
+    }
+
+    private void initTimePicker() {
+        //控制时间范围(如果不设置范围，则使用默认时间1900-2100年，此段代码可注释)
+        //因为系统Calendar的月份是从0-11的,所以如果是调用Calendar的set方法来设置时间,月份的范围也要是从0-11
+        Calendar selectedDate = Calendar.getInstance();
+        Calendar startDate = Calendar.getInstance();
+        startDate.set(2017, 1, 1);
+
+        Calendar endDate = Calendar.getInstance();
+        endDate.set(2050, 1, 1);
+        //时间选择器
+        pvDate = new TimePickerView.Builder(this, new TimePickerView.OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {//选中事件回调
+                // 这里回调过来的v,就是show()方法里面所添加的 View 参数，如果show的时候没有添加参数，v则为null
+                DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+                mDate = fmt.format(date);
+                updateInfo(2, mDate);
+            }
+        })
+                .setType(TimePickerView.Type.YEAR_MONTH_DAY)
+                .setLabel("", "", "", "", "", "") //设置空字符串以隐藏单位提示   hide label
+                .setDividerColor(R.color.line_color)
+                .setCancelText("取消")
+                .setSubmitText("确定")
+                .setContentSize(16)
+                .setDate(selectedDate)
+                .setRangDate(startDate, endDate)
+                .build();
     }
 
     @Override
@@ -124,14 +179,20 @@ public class MeActivity extends ABaseActivity {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-                Intent intent = new Intent(MeActivity.this, UpdateSelfDataActivity.class);
-                if (o instanceof String) {
-                    switch (o.toString()) {
+                if (view.getTag() instanceof String) {
+                    switch (view.getTag().toString()) {
                         case "地区":
+                            tvValue = (TextView) view.findViewById(R.id.value);
                             if (isLoaded) {
-                                showPickerView(view.findViewById(R.id.value));
+                                showPickerView(tvValue);
                             } else {
                                 mHandler.sendEmptyMessage(MSG_LOAD_DATA);
+                            }
+                            break;
+                        case "生日":
+                            tvValue = (TextView) view.findViewById(R.id.value);
+                            if (pvDate != null) {
+                                pvDate.show(tvValue);
                             }
                             break;
                         case "我的二维码":
@@ -141,8 +202,11 @@ public class MeActivity extends ABaseActivity {
                             showConfirmDialog();
                             break;
                         default:
-                            intent.putExtra(UpdateSelfDataActivity.INFORMATION_KEY, o.toString());
-                            intent.putExtra(UpdateSelfDataActivity.INFORMATION_VALUE, o.toString());
+                            Intent intent = new Intent(MeActivity.this, UpdateInfoActivity
+                                    .class);
+                            intent.putExtra(UpdateInfoActivity.INFORMATION_KEY, view.getTag()
+                                    .toString());
+                            intent.putExtra(UpdateInfoActivity.INFORMATION_VALUE, o.toString());
                             startActivity(intent);
                             break;
                     }
@@ -155,6 +219,64 @@ public class MeActivity extends ABaseActivity {
             }
         });
 
+    }
+
+    private void getUserInfo() {
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("cmd", "PERSON");
+            json.put("uid", uid);
+            json.put("userType", userType);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        PresenterFactory.getInstance().createPresenter(this)
+                .execute(new Task.TaskBuilder()
+                        .setTaskType(TaskType.Method.POST)
+                        .setUrl(GlobalConsts.PREFIX_URL + "?cmd=PERSON" + "&" + "uid=" +
+                                uid + "&" + "userType=" + userType)
+                        .setContent(json.toString())
+                        .setPage(1)
+                        .setActionType(0)
+                        .createTask());
+    }
+
+    private void updateInfo(int actionType, String info) {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("cmd", "PERSONSAVE");
+            json.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
+            json.put("userType", PreferencesUtils.getString(getApplicationContext(), "userType",
+                    ""));
+            if (actionType == 1) {
+                json.put("area", info);
+            } else {
+                json.put("birthday", info);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "PERSONSAVE");
+        params.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
+        params.put("userType", PreferencesUtils.getString(getApplicationContext(), "userType",
+                ""));
+        if (actionType == 1) {
+            params.put("area", info);
+        } else {
+            params.put("birthday", info);
+        }
+        PresenterFactory.getInstance().createPresenter(this)
+                .execute(new Task.TaskBuilder()
+                        .setTaskType(TaskType.Method.POST)
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setContent(json.toString())
+                        .setParams(params)
+                        .setPage(1)
+                        .setActionType(actionType)
+                        .createTask());
     }
 
     private void initCity() {//解析数据
@@ -224,15 +346,10 @@ public class MeActivity extends ABaseActivity {
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 //返回的分别是三个级别的选中位置
-                String tx = options1Items.get(options1).getPickerViewText() + " " +
+                mArea = options1Items.get(options1).getPickerViewText() + " " +
                         options2Items.get(options1).get(options2) + " " +
                         options3Items.get(options1).get(options2).get(options3);
-                if (v == null)
-                    return;
-                if (v instanceof TextView) {
-                    ((TextView) v).setText(tx);
-                }
-
+                updateInfo(1, mArea);
             }
         })
 
@@ -364,11 +481,48 @@ public class MeActivity extends ABaseActivity {
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
+        if (actionType == 0) {
+            UserInfoBean bean = GsonUtils.getInstance().transitionToBean(result, UserInfoBean
+                    .class);
+            if (bean == null) {
+                ToastUtils.showToast(getApplicationContext(), "暂无数据", R.layout.toast, R.id
+                        .tv_message);
+                return;
+            }
+            if (bean.getCode() == 200) {
+                mData.add(bean.getAvatar());
+                mData.add(bean.getNickname());
+                mData.add("QRCODE");
+                mData.add(bean.getSex());
+                mData.add(bean.getBirthday());
+                mData.add(bean.getPhoneNumber());
+                mData.add(bean.getEmail());
+                mData.add(bean.getArea());
+                mData.add(bean.getDeposit());
+                mAdapter.add(0, mData.size(), mData);
+            } else {
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast, R.id
+                        .tv_message);
+            }
+        } else {
+            ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean.class);
+            if (bean == null)
+                return;
+            ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast, R.id
+                    .tv_message);
+            if (bean.getCode() == 200 && tvValue != null) {
+                String val = (actionType == 1 ? mArea : mDate);
+                tvValue.setText(val);
+            }
+
+        }
+
 
     }
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-
+        ToastUtils.showToast(getApplicationContext(), error, R.layout.toast, R.id
+                .tv_message);
     }
 }

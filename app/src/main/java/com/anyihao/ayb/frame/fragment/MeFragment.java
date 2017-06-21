@@ -13,8 +13,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.mvp.Task;
+import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.GsonUtils;
+import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.MeAdapter;
+import com.anyihao.ayb.bean.UserLevelBean;
+import com.anyihao.ayb.common.PresenterFactory;
+import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.frame.activity.CreditActivity;
 import com.anyihao.ayb.frame.activity.DeviceManageActivity;
 import com.anyihao.ayb.frame.activity.FlowAccountActivity;
@@ -34,11 +41,12 @@ import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.Unbinder;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,9 +66,11 @@ public class MeFragment extends ABaseFragment {
     @BindView(R.id.fake_status_bar)
     View fakeStatusBar;
     private MeAdapter mAdapter;
-    String[] array = new String[]{"我的流量", "流量商城", "流量报表", "充值记录", "邀请好友", "输入邀请码", "系统赠送记录",
-            "我的积分", "商家特权", "授权设备管理"};
-    private List<String> mData = Arrays.asList(array);
+
+    private List<String> mData = new LinkedList<>();
+    private String uid;
+    private String userType;
+    private String nickName;
 
     @Override
     protected int getContentViewId() {
@@ -74,6 +84,9 @@ public class MeFragment extends ABaseFragment {
 //        if(null!=actionBar){
 //            actionBar.setDisplayHomeAsUpEnabled(true);
 //        }
+        uid = PreferencesUtils.getString(mContext, "uid", "");
+        userType = PreferencesUtils.getString(mContext, "userType", "");
+        getUserInfo();
         fakeStatusBar.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         toolbar.inflateMenu(R.menu.toolbar_menu);
         toolbarTitle.setText(getString(R.string.me));
@@ -82,9 +95,22 @@ public class MeFragment extends ABaseFragment {
         mRecyclerview.setAdapter(mAdapter);
         mRecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager
                 .VERTICAL, false));
-        mRecyclerview.setHasFixedSize(true);
-        mAdapter.add(0, mData.size(), mData);
-        tvGreeting.setText("小明，你好");
+    }
+
+
+    private void getUserInfo() {
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "MINE");
+        params.put("uid", uid);
+        params.put("userType", userType);
+        PresenterFactory.getInstance().createPresenter(this)
+                .execute(new Task.TaskBuilder()
+                        .setTaskType(TaskType.Method.POST)
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setParams(params)
+                        .setPage(1)
+                        .setActionType(0)
+                        .createTask());
     }
 
     @Override
@@ -160,6 +186,8 @@ public class MeFragment extends ABaseFragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), MeActivity.class);
+                intent.putExtra("uid", uid);
+                intent.putExtra("userType", userType);
                 startActivity(intent);
             }
         });
@@ -212,6 +240,24 @@ public class MeFragment extends ABaseFragment {
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
+        if (actionType == 0) {
+            UserLevelBean bean = GsonUtils.getInstance().transitionToBean(result, UserLevelBean
+                    .class);
+            if (bean == null)
+                return;
+            nickName = bean.getNickname();
+            mData.add(bean.getFlow());
+            mData.add("shop");
+            mData.add("chart");
+            mData.add("history");
+            mData.add("friends");
+            mData.add("code");
+            mData.add(bean.getLevel());
+            mData.add("privilege");
+            mData.add("management");
+            mAdapter.add(0, mData.size(), mData);
+            tvGreeting.setText(nickName + "，你好");
+        }
 
     }
 

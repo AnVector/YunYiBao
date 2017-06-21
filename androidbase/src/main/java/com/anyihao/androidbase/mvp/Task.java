@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import com.anyihao.androidbase.utils.StringUtils;
 
 import java.io.File;
+import java.io.Serializable;
+import java.util.Map;
 
 /**
  * author: Administrator
@@ -13,12 +15,14 @@ import java.io.File;
  * email:looper@126.com
  */
 
-public class Task {
+public class Task implements Serializable {
 
     @NonNull
     private String taskType;//任务类型：网络请求或本地数据库操作
     private String url;//网络请求用到的url
     private String content;//post请求用到的参数
+    @Nullable
+    private Map<String, String> params;//表单参数提交
     private int page;//分页请求，用于回调判断
     @NonNull
     private Object actionType;//操作类型，用于区分网络请求的哪个接口或本地操作的哪次操作
@@ -33,6 +37,17 @@ public class Task {
         this.page = page;
         this.file = file;
         this.actionType = actionType;
+    }
+
+    private Task(@NonNull String taskType, String url, String content, int page, File file,
+                 @NonNull Object actionType, @Nullable Map<String, String> params) {
+        this.taskType = taskType;
+        this.url = url;
+        this.content = content;
+        this.page = page;
+        this.file = file;
+        this.actionType = actionType;
+        this.params = params;
     }
 
     private Task(@NonNull String taskType, String url, int page, @NonNull Object actionType) {
@@ -55,6 +70,19 @@ public class Task {
         this.content = content;
         this.page = page;
         this.actionType = actionType;
+    }
+
+    private Task(@NonNull String taskType, String url, String content, int page, @NonNull Object
+            actionType, @Nullable Map<String, String> params) {
+        if (StringUtils.isEmpty(url)) {
+            throw new UnsupportedOperationException("u must transmit a valid url");
+        }
+        this.taskType = taskType;
+        this.url = url;
+        this.content = content;
+        this.page = page;
+        this.actionType = actionType;
+        this.params = params;
     }
 
     private Task(@NonNull String taskType, String url, File file, int page, @NonNull Object
@@ -95,6 +123,11 @@ public class Task {
         return actionType;
     }
 
+    @Nullable
+    public Map<String, String> getParams() {
+        return params;
+    }
+
     @Override
     public String toString() {
         return "taskType=" + taskType + ";url=" + url + ";content=" + content + ";page=" + page +
@@ -113,6 +146,8 @@ public class Task {
         private File file = null;
         @NonNull
         private Object actionType;
+        @Nullable
+        private Map<String, String> params;
 
         public TaskBuilder setUrl(@Nullable String url) {
             this.url = url;
@@ -144,13 +179,18 @@ public class Task {
             return this;
         }
 
+        public TaskBuilder setParams(@Nullable Map<String, String> params) {
+            this.params = params;
+            return this;
+        }
+
 
         public Task createTask() {
             switch (taskType) {
                 case TaskType.Method.GET:
                     return new Task(taskType, url, page, actionType);
                 case TaskType.Method.POST:
-                    return new Task(taskType, url, content, page, actionType);
+                    return new Task(taskType, url, content, page, actionType, params);
                 case TaskType.Method.HEAD:
                     break;
                 case TaskType.Method.DELETE:
