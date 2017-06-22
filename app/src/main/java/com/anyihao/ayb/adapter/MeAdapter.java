@@ -19,7 +19,7 @@ public class MeAdapter extends RecyclerViewAdapter<String> {
 
     @Override
     public void convert(ViewHolder holder, String s) {
-        String title = array[holder.getLayoutPosition()];
+        String title = array[holder.getLayoutPosition() % array.length];
 
         holder.setText(R.id.title, title);
         switch (title) {
@@ -55,6 +55,7 @@ public class MeAdapter extends RecyclerViewAdapter<String> {
             case "我的积分":
                 holder.setCompoundDrawables(R.id.title, R.drawable.ic_credit, 15);
                 holder.setText(R.id.value, s);
+                holder.setVisible(R.id.value, true);
                 holder.setVisible(R.id.line, false);
                 holder.setVisible(R.id.space, true);
                 break;

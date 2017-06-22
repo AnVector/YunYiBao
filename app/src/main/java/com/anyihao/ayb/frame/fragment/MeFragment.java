@@ -252,7 +252,8 @@ public class MeFragment extends ABaseFragment {
             mData.add("history");
             mData.add("friends");
             mData.add("code");
-            mData.add(bean.getLevel());
+            mData.add("system");
+            mData.add(bean.getIntegral());
             mData.add("privilege");
             mData.add("management");
             mAdapter.add(0, mData.size(), mData);

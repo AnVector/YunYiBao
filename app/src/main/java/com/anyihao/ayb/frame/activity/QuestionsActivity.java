@@ -4,13 +4,25 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.mvp.Task;
+import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.GsonUtils;
+import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.QuestionsAdapter;
+import com.anyihao.ayb.bean.QuestionListBean;
+import com.anyihao.ayb.bean.QuestionListBean.DataBean;
+import com.anyihao.ayb.common.PresenterFactory;
+import com.anyihao.ayb.constant.GlobalConsts;
+import com.anyihao.ayb.listener.OnItemClickListener;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -25,8 +37,7 @@ public class QuestionsActivity extends ABaseActivity {
     RecyclerView recyclerview;
     private QuestionsAdapter mAdapter;
 
-    String[] array = new String[]{"怎么修改设备信息", "怎么修改密码", "怎么修改手机", "怎么常见问题", "怎么意见反馈"};
-    private List<String> mData = Arrays.asList(array);
+    private List<DataBean> mData = new ArrayList<>();
 
     @Override
     protected int getContentViewId() {
@@ -46,8 +57,7 @@ public class QuestionsActivity extends ABaseActivity {
         recyclerview.setAdapter(mAdapter);
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager
                 .VERTICAL, false));
-        recyclerview.setHasFixedSize(true);
-        mAdapter.add(0, mData.size(), mData);
+        getQuestions();
     }
 
     @Override
@@ -58,16 +68,55 @@ public class QuestionsActivity extends ABaseActivity {
                 onBackPressed();
             }
         });
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(ViewGroup parent, View view, Object o, int position) {
+
+            }
+
+            @Override
+            public boolean onItemLongClick(ViewGroup parent, View view, Object o, int position) {
+                return false;
+            }
+        });
+
+    }
+
+    private void getQuestions() {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "HELP");
+        PresenterFactory.getInstance().createPresenter(this)
+                .execute(new Task.TaskBuilder()
+                        .setTaskType(TaskType.Method.POST)
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setParams(params)
+                        .setPage(1)
+                        .setActionType(0)
+                        .createTask());
 
     }
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
+        if (actionType == 0) {
+            QuestionListBean bean = GsonUtils.getInstance().transitionToBean(result,
+                    QuestionListBean.class);
+            if (bean == null)
+                return;
+            ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast, R.id
+                    .tv_message);
+            if (bean.getCode() == 200) {
+                mData.addAll(bean.getData());
+                mAdapter.add(0, mData.size(), mData);
+            }
+        }
 
     }
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-
+        ToastUtils.showToast(getApplicationContext(), error, R.layout.toast, R.id
+                .tv_message);
     }
 }

@@ -16,12 +16,12 @@ public class LocationListener implements AMapLocationListener {
         if (aMapLocation != null) {
             if (aMapLocation.getErrorCode() == 0) {
             //可在其中解析amapLocation获取相应内容。
-                Logger.e(aMapLocation.getCity());
+//                Logger.e(aMapLocation.getCity());
             }else {
                 //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
-                Logger.e("AmapError","location Error, ErrCode:"
-                        + aMapLocation.getErrorCode() + ", errInfo:"
-                        + aMapLocation.getErrorInfo());
+//                Logger.e("AmapError","location Error, ErrCode:"
+//                        + aMapLocation.getErrorCode() + ", errInfo:"
+//                        + aMapLocation.getErrorInfo());
             }
         }
     }

@@ -6,8 +6,19 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.mvp.Task;
+import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.AppUtils;
+import com.anyihao.androidbase.utils.GsonUtils;
+import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
+import com.anyihao.ayb.bean.ResultBean;
+import com.anyihao.ayb.common.PresenterFactory;
+import com.anyihao.ayb.constant.GlobalConsts;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -50,20 +61,54 @@ public class FeedbackActivity extends ABaseActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastUtils.showToast(getApplicationContext(), "请输入反馈内容", R.layout.toast, R.id
-                        .tv_message);
+                String content = tvMessage.getText().toString().trim();
+                if (StringUtils.isEmpty(content)) {
+                    ToastUtils.showToast(getApplicationContext(), "请输入反馈内容", R.layout.toast, R.id
+                            .tv_message);
+                    return;
+                }
+                feedback(content);
+
             }
         });
 
     }
 
+    private void feedback(String content) {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "FBK");
+        params.put("content", content);
+        params.put("ver", AppUtils.getAppVersionName(getApplicationContext()));
+        PresenterFactory.getInstance().createPresenter(this)
+                .execute(new Task.TaskBuilder()
+                        .setTaskType(TaskType.Method.POST)
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setParams(params)
+                        .setPage(1)
+                        .setActionType(0)
+                        .createTask());
+
+    }
+
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
+        if (actionType == 0) {
+            ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean.class);
+            if (bean == null)
+                return;
+            ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast, R.id
+                    .tv_message);
+            if (bean.getCode() == 200) {
+                finish();
+            }
+        }
 
     }
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-
+        ToastUtils.showToast(getApplicationContext(), error, R.layout.toast, R.id
+                .tv_message);
     }
 }
