@@ -158,8 +158,9 @@
 
     <!--pay page-->
     <string name="order_details">订单详情</string>
-    <string name="pay_amount">支付金额：</string>
-    <string name="valid_period">有效期限：</string>
+    <string name="pay_amount">支付金额：%1$s</string>
+    <string name="charge_amount">充值流量：%1$s</string>
+    <string name="valid_period">有效期限：%1$s</string>
     <string name="pay_mode">支付方式</string>
     <string name="pay_by_ali_pay">支付宝支付</string>
     <string name="pay_by_wx">微信支付</string>

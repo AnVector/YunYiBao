@@ -1,18 +1,31 @@
 package com.anyihao.ayb.frame.fragment;
 
 
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.mvp.Task;
+import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.GsonUtils;
+import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.DataFlowAdapter;
+import com.anyihao.ayb.bean.PackageListBean;
+import com.anyihao.ayb.bean.PackageListBean.DataBean;
+import com.anyihao.ayb.common.PresenterFactory;
+import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.listener.OnItemClickListener;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -24,21 +37,42 @@ public class PackageFragment extends ABaseFragment {
     @BindView(R.id.tv_package_desc)
     TextView tvPackageDesc;
     private DataFlowAdapter mAdapter;
-    private String[] array = new String[]{"3G", "12G", "24G", "36G", "60G"};
-    private String[] price = new String[]{"6元","39元","72元","108元","168元"};
-    private String[] desArray = new String[]{"1G","1G","2G","3G","5G"};
-    private List<String> mData = Arrays.asList(array);
-    private View mCurrent;
+    private List<DataBean> mData = new LinkedList<>();
+    private String flowType;
+    private String money;
+    private String amount;
+    private String expires;
 
     @Override
     protected void initData() {
-        tvPackageDesc.setText(mContext.getString(R.string.discount_package_desc));
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            flowType = bundle.getString("flowType");
+            getPackageInfo();
+        }
+
         mAdapter = new DataFlowAdapter(getActivity(), R.layout.item_data_flow);
         recyclerview.setAdapter(mAdapter);
         recyclerview.setLayoutManager(new GridLayoutManager(mContext, 3));
-        recyclerview.setHasFixedSize(true);
-        mAdapter.setPrice(price);
-        mAdapter.add(0, mData.size(), mData);
+    }
+
+    private void getPackageInfo() {
+        if (StringUtils.isEmpty(flowType))
+            return;
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "PAYINFO");
+        params.put("uid", PreferencesUtils.getString(mContext.getApplicationContext(), "uid", ""));
+        params.put("flowType", flowType);
+        params.put("userType", PreferencesUtils.getString(mContext.getApplicationContext(),
+                "userType", ""));
+        PresenterFactory.getInstance().createPresenter(this)
+                .execute(new Task.TaskBuilder()
+                        .setTaskType(TaskType.Method.POST)
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setParams(params)
+                        .setPage(1)
+                        .setActionType(0)
+                        .createTask());
 
     }
 
@@ -48,19 +82,11 @@ public class PackageFragment extends ABaseFragment {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-                if(mCurrent!=null){
-                    mCurrent.setBackgroundResource(R.drawable.data_flow_item_normal_bg);
-                    ((TextView)mCurrent.findViewById(R.id.tv_price)).setTextColor(getResources().getColor(R.color.data_flow_item_price_text_color));
-                    ((TextView)mCurrent.findViewById(R.id.tv_data_amount)).setTextColor(getResources().getColor(R.color.toolbar_title_color));
-                }
-                    view.setBackgroundResource(R.drawable.data_flow_item_focus_bg);
-                ((TextView)view.findViewById(R.id.tv_price)).setTextColor(getResources().getColor(R.color.white));
-                ((TextView)view.findViewById(R.id.tv_data_amount)).setTextColor(getResources().getColor(R.color.white));
-                mCurrent = view;
-                if(position == 0){
-                    tvPackageDesc.setText("全国流量，即时生效，每月"+desArray[position]+"，共3个月");
-                }else {
-                    tvPackageDesc.setText("全国流量，即时生效，每月"+desArray[position]+"，共12个月");
+                if (o instanceof DataBean) {
+                    expires = ((DataBean) o).getPkgDesc();
+                    amount = ((DataBean) o).getFlow();
+                    money = ((DataBean) o).getPrice();
+                    tvPackageDesc.setText(expires);
                 }
             }
 
@@ -72,6 +98,18 @@ public class PackageFragment extends ABaseFragment {
 
     }
 
+    public String getMoney() {
+        return money;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public String getExpires() {
+        return expires;
+    }
+
     @Override
     protected int getContentViewId() {
         return R.layout.fragment_package;
@@ -79,11 +117,36 @@ public class PackageFragment extends ABaseFragment {
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
+        if (actionType == 0) {
+            PackageListBean bean = GsonUtils.getInstance().transitionToBean(result,
+                    PackageListBean.class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                mData.clear();
+                List<DataBean> beans = bean.getData();
+                if (beans != null && !beans.isEmpty()) {
+                    money = beans.get(0).getPrice();
+                    amount = beans.get(0).getFlow();
+                    expires = beans.get(0).getPkgDesc();
+                    tvPackageDesc.setText(expires);
+                    mData.addAll(beans);
+                    mAdapter.add(0, mData.size(), mData);
+                }
+
+            } else {
+                ToastUtils.showToast(mContext.getApplicationContext(), bean.getMsg(), R.layout
+                        .toast, R.id.tv_message);
+            }
+        }
 
     }
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-
+        if (actionType == 0) {
+            ToastUtils.showToast(mContext.getApplicationContext(), error, R.layout
+                    .toast, R.id.tv_message);
+        }
     }
 }

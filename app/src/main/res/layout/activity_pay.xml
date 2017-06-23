@@ -42,12 +42,33 @@
         android:background="@color/line_color"/>
 
     <TextView
-        android:id="@+id/tv_validity"
+        android:id="@+id/tv_amount"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_gravity="left|center_horizontal"
         android:background="@color/white"
         android:gravity="left|center_vertical"
+        android:paddingLeft="15dp"
+        android:text="@string/charge_amount"
+        android:textColor="@color/user_account_color"
+        android:textSize="@dimen/font_size_fif"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:layout_marginLeft="15dp"
+        android:background="@color/line_color"/>
+
+    <TextView
+        android:id="@+id/tv_validity"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_gravity="left|center_horizontal"
+        android:background="@color/white"
+        android:ellipsize="marquee"
+        android:gravity="left|center_vertical"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:maxLines="1"
         android:paddingLeft="15dp"
         android:text="@string/valid_period"
         android:textColor="@color/user_account_color"

@@ -128,9 +128,9 @@ public class MeFragment extends ABaseFragment {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-                if (o instanceof String) {
+                if (view.getTag() instanceof String) {
                     Intent intent;
-                    switch (o.toString()) {
+                    switch (view.getTag().toString()) {
                         case "我的流量":
                             intent = new Intent(getActivity(), FlowAccountActivity.class);
                             startActivity(intent);

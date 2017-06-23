@@ -1,6 +1,7 @@
 package com.anyihao.ayb.frame.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -11,11 +12,7 @@ import android.widget.TextView;
 
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.UTabAdapter;
-import com.anyihao.ayb.frame.fragment.DayFragment;
-import com.anyihao.ayb.frame.fragment.DaysFragment;
-import com.anyihao.ayb.frame.fragment.MonthFragment;
 import com.anyihao.ayb.frame.fragment.PackageFragment;
-import com.anyihao.ayb.frame.fragment.SeasonFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,10 +34,11 @@ public class RechargeActivity extends ABaseActivity {
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
     @BindView(R.id.viewpager)
-    ViewPager viewpager;
+    ViewPager mViewpager;
     private UTabAdapter mTabAdapter;
     private List<Fragment> mFragments = new ArrayList<>();
-    private String[] mTitleArray = new String[]{"超值包", "月包", "3天包","日包","季包"};
+    private String[] mTitleArray = new String[]{"超值包", "月包", "3天包", "日包", "季包"};
+    private String[] mFlowTypes = new String[]{"VIP", "MONTH", "THREE", "DAY", "SEASON"};
     private List<String> mTitles = Arrays.asList(mTitleArray);
 
     @Override
@@ -58,23 +56,21 @@ public class RechargeActivity extends ABaseActivity {
         initViewPager();
         toolbar.setNavigationIcon(R.drawable.ic_back);
         titleMid.setText(getString(R.string.data_flow_charge));
-        tabLayout.setupWithViewPager(viewpager);
+        tabLayout.setupWithViewPager(mViewpager);
     }
 
     private void initViewPager() {
-        PackageFragment fragment1 = new PackageFragment();
-        MonthFragment fragment2 = new MonthFragment();
-        DaysFragment fragment3 = new DaysFragment();
-        DayFragment fragment4 = new DayFragment();
-        SeasonFragment fragment5 = new SeasonFragment();
-        mFragments.add(fragment1);
-        mFragments.add(fragment2);
-        mFragments.add(fragment3);
-        mFragments.add(fragment4);
-        mFragments.add(fragment5);
+        PackageFragment fragment;
+        for (int i = 0; i < 5; ++i) {
+            fragment = new PackageFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("flowType", mFlowTypes[i]);
+            fragment.setArguments(bundle);
+            mFragments.add(fragment);
+        }
         mTabAdapter = new UTabAdapter(getSupportFragmentManager(), mFragments, mTitles);
-        viewpager.setAdapter(mTabAdapter);
-        viewpager.setCurrentItem(0, true);
+        mViewpager.setAdapter(mTabAdapter);
+        mViewpager.setCurrentItem(0, true);
     }
 
     @Override
@@ -89,17 +85,15 @@ public class RechargeActivity extends ABaseActivity {
         btnConfirmToRecharge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RechargeActivity.this, PayActivity.class);
-                startActivity(intent);
-//                List<Fragment> fragments = getSupportFragmentManager().getFragments();
-//                Logger.d(fragments.size());
-//                for (Fragment fragment:fragments) {
-//                    Logger.d(fragment.getId());
-//                    if(fragment.isVisible()){
-//                        ToastUtils.showToast(RechargeActivity.this,fragment.getId()+"",R.layout.toast,R.id.tv_message);
-//                    }
-//                }
-
+                PackageFragment fragment = (PackageFragment) mFragments.get(mViewpager
+                        .getCurrentItem());
+                if (fragment.isVisible() && !fragment.isDetached()) {
+                    Intent intent = new Intent(RechargeActivity.this, PayActivity.class);
+                    intent.putExtra("money", fragment.getMoney());
+                    intent.putExtra("amount", fragment.getAmount());
+                    intent.putExtra("expires", fragment.getExpires());
+                    startActivity(intent);
+                }
             }
         });
     }

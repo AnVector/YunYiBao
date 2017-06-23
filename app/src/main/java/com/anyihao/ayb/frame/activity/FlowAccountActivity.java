@@ -7,13 +7,22 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.mvp.Task;
+import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.GsonUtils;
+import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.DataFlowAssortAdapter;
+import com.anyihao.ayb.bean.FlowAccountBean;
+import com.anyihao.ayb.common.PresenterFactory;
+import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.ui.DashboardView;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -35,8 +44,7 @@ public class FlowAccountActivity extends ABaseActivity {
     @BindView(R.id.tv_recharge_record)
     TextView tvRechargeRecord;
     private DataFlowAssortAdapter mAdapter;
-    String[] array = new String[]{"初始赠送剩余流量43.36%", "购买会员剩余流量25.45%", "任务赠送剩余流量43.60%"};
-    private List<String> mData = Arrays.asList(array);
+    private List<String> mData = new LinkedList<>();
 
     @Override
     protected int getContentViewId() {
@@ -52,14 +60,26 @@ public class FlowAccountActivity extends ABaseActivity {
     protected void initData() {
         toolbar.setNavigationIcon(R.drawable.ic_back);
         titleMid.setText(getString(R.string.my_balance));
-        dashboardView.setCreditValueWithAnim(new Random().nextInt(100 - 35) + 35);
         mAdapter = new DataFlowAssortAdapter(this, R.layout.item_data_assortment);
         recyclerview.setAdapter(mAdapter);
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager
                 .VERTICAL, false));
-        recyclerview.setHasFixedSize(true);
-        mAdapter.add(0, mData.size(), mData);
+        getFlowAccount();
+    }
 
+
+    private void getFlowAccount() {
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "FLOW");
+        params.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
+        PresenterFactory.getInstance().createPresenter(this)
+                .execute(new Task.TaskBuilder()
+                        .setTaskType(TaskType.Method.POST)
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setParams(params)
+                        .setPage(1)
+                        .setActionType(0)
+                        .createTask());
     }
 
     @Override
@@ -98,11 +118,32 @@ public class FlowAccountActivity extends ABaseActivity {
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
+        if (actionType == 0) {
+            FlowAccountBean bean = GsonUtils.getInstance().transitionToBean(result,
+                    FlowAccountBean.class);
+            if (bean == null)
+                return;
+            ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast, R.id
+                    .tv_message);
 
+            if (bean.getCode() == 200) {
+                mData.add((float) (bean.getInitFlow() - bean.getInitUseFlow()) / (float) bean
+                        .getInitFlow() + "%");
+                mData.add((float) (bean.getBuyFlow() - bean.getBuyUseFlow()) / (float) bean
+                        .getBuyFlow() + "%");
+                mData.add((float) (bean.getTaskFlow() - bean.getTaskUseFlow()) / (float) bean
+                        .getTaskFlow() + "%");
+                dashboardView.setCreditValueWithAnim(bean.getTotalFlow() - bean.getTotalUseFlow()
+                        , bean.getTotalFlow() + "", (bean.getTotalFlow() - bean
+                                .getTotalUseFlow()) + "");
+                mAdapter.add(0, mData.size(), mData);
+            }
+        }
     }
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-
+        ToastUtils.showToast(getApplicationContext(), error, R.layout.toast, R.id
+                .tv_message);
     }
 }

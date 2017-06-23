@@ -20,8 +20,8 @@ public class MeAdapter extends RecyclerViewAdapter<String> {
     @Override
     public void convert(ViewHolder holder, String s) {
         String title = array[holder.getLayoutPosition() % array.length];
-
         holder.setText(R.id.title, title);
+        holder.getConvertView().setTag(title);
         switch (title) {
             case "我的流量":
                 holder.setCompoundDrawables(R.id.title, R.drawable.ic_balance, 15);

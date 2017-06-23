@@ -1,5 +1,6 @@
 package com.anyihao.ayb.frame.activity;
 
+import android.content.Intent;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -32,8 +33,13 @@ public class PayActivity extends ABaseActivity {
     RadioButton rbtWx;
     @BindView(R.id.btn_confirm_to_pay)
     AppCompatButton btnConfirmToPay;
+    @BindView(R.id.tv_amount)
+    TextView tvAmount;
     private IWXAPI wxApi;
     private boolean isWxPaySupported;
+    private String money;
+    private String amount;
+    private String expires;
 
     @Override
     protected int getContentViewId() {
@@ -42,6 +48,12 @@ public class PayActivity extends ABaseActivity {
 
     @Override
     protected void getExtraParams() {
+        Intent intent = getIntent();
+        if (intent == null)
+            return;
+        money = intent.getStringExtra("money");
+        amount = intent.getStringExtra("amount");
+        expires = intent.getStringExtra("expires");
 
     }
 
@@ -50,6 +62,9 @@ public class PayActivity extends ABaseActivity {
 
         toolbar.setNavigationIcon(R.drawable.ic_back);
         titleMid.setText(getString(R.string.pay));
+        tvPayAmount.setText(String.format(tvPayAmount.getText().toString(), money));
+        tvAmount.setText(String.format(tvAmount.getText().toString(), amount));
+        tvValidity.setText(String.format(tvValidity.getText().toString(), expires));
 
         wxApi = WXAPIFactory.createWXAPI(this, GlobalConsts.WX_APP_ID);
         isWxPaySupported = wxApi.getWXAppSupportAPI() >= Build.PAY_SUPPORTED_SDK_INT;

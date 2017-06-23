@@ -10,6 +10,8 @@ import com.anyihao.ayb.R;
 
 public class DataFlowAssortAdapter extends RecyclerViewAdapter<String> {
 
+    String[] array = new String[]{"初始赠送剩余流量", "购买会员剩余流量", "任务赠送剩余流量"};
+
 
     public DataFlowAssortAdapter(Context context, int layoutId) {
         super(context, layoutId);
@@ -17,15 +19,15 @@ public class DataFlowAssortAdapter extends RecyclerViewAdapter<String> {
 
     @Override
     public void convert(ViewHolder holder, String s) {
-        holder.setText(R.id.tv_description, s);
-        switch (s) {
-            case "初始赠送剩余流量43.36%":
+        holder.setText(R.id.tv_description, array[holder.getLayoutPosition()] + s);
+        switch (holder.getLayoutPosition()) {
+            case 0:
                 holder.setBackgroundRes(R.id.flow_data_view, R.drawable.data_flow_bg1);
                 break;
-            case "购买会员剩余流量25.45%":
+            case 1:
                 holder.setBackgroundRes(R.id.flow_data_view, R.drawable.data_flow_bg2);
                 break;
-            case "任务赠送剩余流量43.60%":
+            case 2:
                 holder.setBackgroundRes(R.id.flow_data_view, R.drawable.data_flow_bg3);
                 break;
             default:

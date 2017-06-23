@@ -57,6 +57,9 @@ public class DashboardView extends View {
     private String[] mTexts;
     private int mBackgroundColor;
     private int[] mBgColors;
+
+    private String mTotalFlow = "0";
+    private String mAvailableFlow = "0";
     /**
      * 由于真实的芝麻信用界面信用值不是线性排布，所以播放动画时若以信用值为参考，则会出现忽慢忽快
      * 的情况（开始以为是卡顿）。因此，先计算出最终到达角度，以扫过的角度为线性参考，动画就流畅了
@@ -92,9 +95,6 @@ public class DashboardView extends View {
         mRectFTextArc = new RectF();
         mPath = new Path();
         mRectText = new Rect();
-
-//        mTexts = new String[]{"350", "较差", "550", "中等", "600", "良好", "650", "优秀", "700", "极好",
-//                "950"};
         mTexts = new String[]{"0", "10", "20", "30", "40", "50", "60", "70", "80", "90",
                 "100"};
         mBgColors = new int[]{ContextCompat.getColor(getContext(), android.R.color.transparent),
@@ -308,14 +308,14 @@ public class DashboardView extends View {
          */
         mPaint.setAlpha(255);
         mPaint.setTextSize(sp2px(15));
-        canvas.drawText(calculateCreditDescription(), mCenterX, mCenterY + dp2px(55), mPaint);
+        canvas.drawText("可用：" + mAvailableFlow + "M", mCenterX, mCenterY + dp2px(55), mPaint);
 
         /**
          * 画评估时间
          */
         mPaint.setAlpha(160);
         mPaint.setTextSize(sp2px(12));
-        canvas.drawText(getFormatTimeStr(), mCenterX, mCenterY + dp2px(70), mPaint);
+        canvas.drawText("总：" + mTotalFlow + "M", mCenterX, mCenterY + dp2px(70), mPaint);
     }
 
     private int dp2px(int dp) {
@@ -415,7 +415,7 @@ public class DashboardView extends View {
 //        } else {
 //            return 2 * degreePerSection / 200 * (value - 350);
 //        }
-        return degreePerSection*value/10;
+        return degreePerSection * value / 10;
     }
 
     /**
@@ -433,9 +433,6 @@ public class DashboardView extends View {
 //        }
 //        return "信用较差";
 //    }
-    private String calculateCreditDescription() {
-        return "可用：19.76G";
-    }
 
 //    private SimpleDateFormat mDateFormat;
 
@@ -445,11 +442,6 @@ public class DashboardView extends View {
 //        }
 //        return String.format("评估时间:%s", mDateFormat.format(new Date()));
 //    }
-
-    private String getFormatTimeStr() {
-        return "总：142.71G";
-    }
-
     public int getCreditValue() {
         return mCreditValue;
     }
@@ -474,12 +466,14 @@ public class DashboardView extends View {
      *
      * @param creditValue 信用值
      */
-    public void setCreditValueWithAnim(int creditValue) {
+    public void setCreditValueWithAnim(int creditValue, String totalFlow, String availableFlow) {
         if (creditValue < mMin || creditValue > mMax || !isAnimFinish) {
             return;
         }
 
         mSolidCreditValue = creditValue;
+        mTotalFlow = totalFlow;
+        mAvailableFlow = availableFlow;
 
         ValueAnimator creditValueAnimator = ValueAnimator.ofInt(350, mSolidCreditValue);
         creditValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

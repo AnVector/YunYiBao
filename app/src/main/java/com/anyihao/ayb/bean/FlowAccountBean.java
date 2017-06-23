@@ -1,15 +1,26 @@
 package com.anyihao.ayb.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
 /**
- * author: Administrator
- * date: 2017/3/18 001811:53.
- * email:looper@126.com
+ * Created by Admin on 2017/6/23.
  */
 
-public class DataFlowBean implements Parcelable {
+public class FlowAccountBean implements Serializable {
+
+
+    /**
+     * code : 200
+     * msg : 查询成功
+     * totalFlow : 0
+     * totalUseFlow : 0
+     * initFlow : 0
+     * initUseFlow : 0
+     * buyFlow : 0
+     * buyUseFlow : 0
+     * taskFlow : 0
+     * taskUseFlow : 0
+     */
 
     private int code;
     private String msg;
@@ -101,51 +112,4 @@ public class DataFlowBean implements Parcelable {
     public void setTaskUseFlow(int taskUseFlow) {
         this.taskUseFlow = taskUseFlow;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.code);
-        dest.writeString(this.msg);
-        dest.writeInt(this.totalFlow);
-        dest.writeInt(this.totalUseFlow);
-        dest.writeInt(this.initFlow);
-        dest.writeInt(this.initUseFlow);
-        dest.writeInt(this.buyFlow);
-        dest.writeInt(this.buyUseFlow);
-        dest.writeInt(this.taskFlow);
-        dest.writeInt(this.taskUseFlow);
-    }
-
-    public DataFlowBean() {
-    }
-
-    protected DataFlowBean(Parcel in) {
-        this.code = in.readInt();
-        this.msg = in.readString();
-        this.totalFlow = in.readInt();
-        this.totalUseFlow = in.readInt();
-        this.initFlow = in.readInt();
-        this.initUseFlow = in.readInt();
-        this.buyFlow = in.readInt();
-        this.buyUseFlow = in.readInt();
-        this.taskFlow = in.readInt();
-        this.taskUseFlow = in.readInt();
-    }
-
-    public static final Creator<DataFlowBean> CREATOR = new Creator<DataFlowBean>() {
-        @Override
-        public DataFlowBean createFromParcel(Parcel source) {
-            return new DataFlowBean(source);
-        }
-
-        @Override
-        public DataFlowBean[] newArray(int size) {
-            return new DataFlowBean[size];
-        }
-    };
 }
