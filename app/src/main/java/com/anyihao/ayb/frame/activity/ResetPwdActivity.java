@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.manager.ActivityManager;
 import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
@@ -19,8 +20,8 @@ import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.chaychan.viewlib.PowerfulEditText;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -103,23 +104,16 @@ public class ResetPwdActivity extends ABaseActivity {
     }
 
     private void ModifyPwd() {
-
-        JSONObject json = new JSONObject();
-        try {
-            json.put("cmd", "MODIFYPWD");
-            json.put("phoneNumber", phoneNum);
-            json.put("pwd", MD5.string2MD5(newPwd));
-            json.put("ckpwd", MD5.string2MD5(confirmPwd));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "MODIFYPWD");
+        params.put("phoneNumber", phoneNum);
+        params.put("pwd", MD5.string2MD5(newPwd));
+        params.put("ckpwd", MD5.string2MD5(confirmPwd));
         PresenterFactory.getInstance().createPresenter(this)
                 .execute(new Task.TaskBuilder()
                         .setTaskType(TaskType.Method.POST)
-                        .setUrl(GlobalConsts.PREFIX_URL + "?cmd=MODIFYPWD" + "&" + "phoneNumber=" +
-                                phoneNum + "&" + "pwd=" + MD5.string2MD5(newPwd) + "&" + "ckpwd="
-                                + MD5.string2MD5(confirmPwd))
-                        .setContent(json.toString())
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setParams(params)
                         .setPage(1)
                         .setActionType(0)
                         .createTask());
@@ -136,6 +130,8 @@ public class ResetPwdActivity extends ABaseActivity {
             if (bean.getCode() == 200) {
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast,
                         R.id.tv_message);
+                ActivityManager.getInstance().finishActivity(GetVerifyCodeActivity.class);
+                finish();
             } else {
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast,
                         R.id.tv_message);

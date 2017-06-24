@@ -2,6 +2,7 @@ package com.anyihao.ayb.frame.fragment;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.widget.TextView;
 
 import com.anyihao.ayb.R;
@@ -21,8 +22,7 @@ import butterknife.BindView;
  * Created by Admin on 2017/4/17.
  */
 
-public class MonthChartFragment extends ABaseFragment {
-
+public class ChartFragment extends ABaseFragment {
 
     @BindView(R.id.tv_data_amount)
     TextView tvDataAmount;
@@ -33,10 +33,22 @@ public class MonthChartFragment extends ABaseFragment {
     @BindView(R.id.chart)
     LineChart chart;
     private Typeface mTf;
-
+    private String cmd;
+    private String date;
 
     @Override
     protected void initData() {
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            cmd = bundle.getString("cmd");
+            date = bundle.getString("date");
+        }
+
+        initChart();
+    }
+
+    private void initChart() {
+
         mTf = Typeface.createFromAsset(getContext().getAssets(), "fonts/OpenSans-Regular.ttf");
         chart.getDescription().setEnabled(false);
         chart.setDrawGridBackground(false);
@@ -47,7 +59,11 @@ public class MonthChartFragment extends ABaseFragment {
         xAxis.setTypeface(mTf);
         xAxis.setDrawLabels(true);
         xAxis.setDrawGridLines(false);
-        xAxis.setLabelCount(15, false);
+        if ("DAYFLOW".equals(cmd)) {
+            xAxis.setLabelCount(12, false);
+        } else {
+            xAxis.setLabelCount(15, false);
+        }
         xAxis.setAxisLineColor(Color.parseColor("#F5F5F5"));
 
         YAxis leftAxis = chart.getAxisLeft();
@@ -64,7 +80,12 @@ public class MonthChartFragment extends ABaseFragment {
         rightAxis.setDrawLabels(false);
 
         // set data
-        chart.setData(generateDataLine());
+        if ("DAYFLOW".equals(cmd)) {
+            chart.setData(generateDayLine());
+
+        } else {
+            chart.setData(generateMonthLine());
+        }
         // do not forget to refresh the chart
         // holder.chart.invalidate();
         chart.animateX(750);
@@ -73,7 +94,11 @@ public class MonthChartFragment extends ABaseFragment {
     @Override
     protected void initEvent() {
 
+    }
 
+    @Override
+    protected int getContentViewId() {
+        return R.layout.fragment_chart;
     }
 
     /**
@@ -81,7 +106,33 @@ public class MonthChartFragment extends ABaseFragment {
      *
      * @return
      */
-    private LineData generateDataLine() {
+    private LineData generateDayLine() {
+
+        ArrayList<Entry> e = new ArrayList<Entry>();
+
+        for (int i = 0; i < 24; i++) {
+            e.add(new Entry(i, (int) (Math.random() * 40)));
+        }
+
+        LineDataSet d = new LineDataSet(e, "M/小时");
+        d.setLineWidth(1.5f);
+        d.setCircleRadius(3.5f);
+        d.setDrawValues(true);
+        d.setValueTextColor(Color.parseColor("#000000"));
+        d.setColor(Color.parseColor("#A8DEFF"));
+        d.setCircleColor(Color.parseColor("#A8DEFF"));
+        d.setHighlightEnabled(false);
+        ArrayList<ILineDataSet> sets = new ArrayList<>();
+        sets.add(d);
+        return new LineData(sets);
+    }
+
+    /**
+     * generates a random ChartData object with just one DataSet
+     *
+     * @return
+     */
+    private LineData generateMonthLine() {
 
         ArrayList<Entry> e = new ArrayList<Entry>();
 
@@ -101,10 +152,6 @@ public class MonthChartFragment extends ABaseFragment {
         return new LineData(sets);
     }
 
-    @Override
-    protected int getContentViewId() {
-        return R.layout.fragment_month_chart;
-    }
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {

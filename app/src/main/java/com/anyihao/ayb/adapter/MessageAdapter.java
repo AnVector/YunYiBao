@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.anyihao.ayb.R;
+import com.anyihao.ayb.bean.MessageBean.DataBean;
 import com.anyihao.ayb.listener.OnItemClickListener;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
@@ -21,10 +22,10 @@ import java.util.List;
 
 public class MessageAdapter extends UltimateViewAdapter {
 
-    private List<String> mData;
+    private List<DataBean> mData;
     private OnItemClickListener mOnItemClickListener;
 
-    public MessageAdapter(List<String> mData) {
+    public MessageAdapter(List<DataBean> mData) {
         this.mData = mData;
     }
 
@@ -70,7 +71,7 @@ public class MessageAdapter extends UltimateViewAdapter {
         if (holder instanceof MessageViewHolder) {
             if (position < getItemCount() && (customHeaderView != null ? position <= mData.size() :
                     position < mData.size()) && (customHeaderView != null ? position > 0 : true)) {
-                String content = mData.get(customHeaderView != null ?
+                DataBean content = mData.get(customHeaderView != null ?
                         position - 1 : position);
                 if (content == null) return;
                 final int index = position;
@@ -84,7 +85,7 @@ public class MessageAdapter extends UltimateViewAdapter {
                 });
                 ((MessageViewHolder) holder).tvStatus.setText("已读");
                 ((MessageViewHolder) holder).tvDate.setText("2017-05-08 19:05:32");
-                ((MessageViewHolder) holder).tvContent.setText(content);
+                ((MessageViewHolder) holder).tvContent.setText(content.getMessage());
             }
         }
     }
@@ -140,7 +141,7 @@ public class MessageAdapter extends UltimateViewAdapter {
         if (customHeaderView != null)
             position--;
         if (position >= 0 && position < mData.size()) {
-            return mData.get(position);
+            return mData.get(position).getMessage();
         }
         return null;
     }

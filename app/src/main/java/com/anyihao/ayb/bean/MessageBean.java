@@ -1,9 +1,6 @@
 package com.anyihao.ayb.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -12,7 +9,7 @@ import java.util.List;
  * email:looper@126.com
  */
 
-public class MessageBean implements Parcelable {
+public class MessageBean implements Serializable {
 
     private int code;
     private String msg;
@@ -42,43 +39,46 @@ public class MessageBean implements Parcelable {
         this.data = data;
     }
 
-    public static class DataBean{
-        private String msgType;
-        private String msgID;
-        private String msgTitle;
-        private String msgContent;
+    public static class DataBean implements Serializable {
+        private int keyId;
+        private String sendName;
+        private String sendAvatar;
+        private String message;
+        private int status;
         private String crtTm;
+        private int flow;
+        private String effecTm;
 
-        public String getMsgType() {
-            return msgType;
+        public String getSendName() {
+            return sendName;
         }
 
-        public void setMsgType(String msgType) {
-            this.msgType = msgType;
+        public void setSendName(String sendName) {
+            this.sendName = sendName;
         }
 
-        public String getMsgID() {
-            return msgID;
+        public String getSendAvatar() {
+            return sendAvatar;
         }
 
-        public void setMsgID(String msgID) {
-            this.msgID = msgID;
+        public void setSendAvatar(String sendAvatar) {
+            this.sendAvatar = sendAvatar;
         }
 
-        public String getMsgTitle() {
-            return msgTitle;
+        public String getMessage() {
+            return message;
         }
 
-        public void setMsgTitle(String msgTitle) {
-            this.msgTitle = msgTitle;
+        public void setMessage(String message) {
+            this.message = message;
         }
 
-        public String getMsgContent() {
-            return msgContent;
+        public int getStatus() {
+            return status;
         }
 
-        public void setMsgContent(String msgContent) {
-            this.msgContent = msgContent;
+        public void setStatus(int status) {
+            this.status = status;
         }
 
         public String getCrtTm() {
@@ -88,39 +88,29 @@ public class MessageBean implements Parcelable {
         public void setCrtTm(String crtTm) {
             this.crtTm = crtTm;
         }
-    }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.code);
-        dest.writeString(this.msg);
-        dest.writeList(this.data);
-    }
-
-    public MessageBean() {
-    }
-
-    protected MessageBean(Parcel in) {
-        this.code = in.readInt();
-        this.msg = in.readString();
-        this.data = new ArrayList<DataBean>();
-        in.readList(this.data, DataBean.class.getClassLoader());
-    }
-
-    public static final Creator<MessageBean> CREATOR = new Creator<MessageBean>() {
-        @Override
-        public MessageBean createFromParcel(Parcel source) {
-            return new MessageBean(source);
+        public int getKeyId() {
+            return keyId;
         }
 
-        @Override
-        public MessageBean[] newArray(int size) {
-            return new MessageBean[size];
+        public void setKeyId(int keyId) {
+            this.keyId = keyId;
         }
-    };
+
+        public int getFlow() {
+            return flow;
+        }
+
+        public void setFlow(int flow) {
+            this.flow = flow;
+        }
+
+        public String getEffecTm() {
+            return effecTm;
+        }
+
+        public void setEffecTm(String effecTm) {
+            this.effecTm = effecTm;
+        }
+    }
 }

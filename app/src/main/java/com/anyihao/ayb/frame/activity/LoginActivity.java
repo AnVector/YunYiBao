@@ -27,9 +27,7 @@ import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -114,7 +112,7 @@ public class LoginActivity extends ABaseActivity {
         retrievePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RetrievePwdActivity.class);
+                Intent intent = new Intent(LoginActivity.this, GetVerifyCodeActivity.class);
                 startActivity(intent);
             }
         });
@@ -150,25 +148,19 @@ public class LoginActivity extends ABaseActivity {
             return;
         }
         btnLogin.setEnabled(false);
-        JSONObject json = new JSONObject();
-        try {
-            json.put("cmd", "IN");
-            json.put("loginId", userName);
-            json.put("pwd", MD5.string2MD5(password));
-            json.put("appType", "ANDROID");
-            json.put("userType", "SJ");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "IN");
+        params.put("loginId", userName);
+        params.put("pwd", MD5.string2MD5(password));
+        params.put("appType", "ANDROID");
+        params.put("userType", "SJ");
         progressbarCircular.setVisibility(View.VISIBLE);
         ((CircularProgressDrawable) progressbarCircular.getIndeterminateDrawable()).start();
         PresenterFactory.getInstance().createPresenter(this)
                 .execute(new Task.TaskBuilder()
                         .setTaskType(TaskType.Method.POST)
-                        .setUrl(GlobalConsts.PREFIX_URL + "?cmd=IN" + "&" + "pwd=" +
-                                MD5.string2MD5(password) + "&" + "appType=" + "ANDROID" + "&" +
-                                "userType=" + "SJ" + "&" + "loginId=" + userName)
-                        .setContent(json.toString())
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setParams(params)
                         .setPage(1)
                         .setActionType(0)
                         .createTask());

@@ -1,5 +1,6 @@
 package com.anyihao.ayb.frame.activity;
 
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -9,9 +10,7 @@ import android.widget.TextView;
 
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.UTabAdapter;
-import com.anyihao.ayb.frame.fragment.BriberyMoneyFragment;
-import com.anyihao.ayb.frame.fragment.MeMessageFragment;
-import com.anyihao.ayb.frame.fragment.SysMessageFragment;
+import com.anyihao.ayb.frame.fragment.MessageFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,6 +32,7 @@ public class MessageActivity extends ABaseActivity {
     private UTabAdapter mTabAdapter;
     private List<Fragment> mFragments = new ArrayList<>();
     private String[] mTitleArray = new String[]{"红包消息", "个人消息", "系统消息"};
+    private String[] mMessageArray = new String[]{"REDPACKAGE", "PERSON", "SYSTEM"};
     private List<String> mTitles = Arrays.asList(mTitleArray);
 
     @Override
@@ -54,12 +54,16 @@ public class MessageActivity extends ABaseActivity {
     }
 
     private void initViewPager() {
-        BriberyMoneyFragment fragment1 = new BriberyMoneyFragment();
-        MeMessageFragment fragment2 = new MeMessageFragment();
-        SysMessageFragment fragment3 = new SysMessageFragment();
-        mFragments.add(fragment1);
-        mFragments.add(fragment2);
-        mFragments.add(fragment3);
+        MessageFragment fragment;
+        Bundle bundle;
+        for (int i = 0; i < 3; ++i) {
+            fragment = new MessageFragment();
+            bundle = new Bundle();
+            bundle.putString("type", mMessageArray[i]);
+            fragment.setArguments(bundle);
+            mFragments.add(fragment);
+        }
+
         mTabAdapter = new UTabAdapter(getSupportFragmentManager(), mFragments, mTitles);
         viewpager.setAdapter(mTabAdapter);
         viewpager.setCurrentItem(0, true);

@@ -100,7 +100,7 @@ public class RentedFragment extends ABaseFragment {
 
     @Override
     protected int getContentViewId() {
-        return R.layout.fragment_sys_message;
+        return R.layout.fragment_message;
     }
 
     @Override

@@ -17,6 +17,7 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.MeAdapter;
 import com.anyihao.ayb.bean.UserLevelBean;
@@ -70,7 +71,6 @@ public class MeFragment extends ABaseFragment {
     private List<String> mData = new LinkedList<>();
     private String uid;
     private String userType;
-    private String nickName;
 
     @Override
     protected int getContentViewId() {
@@ -185,7 +185,7 @@ public class MeFragment extends ABaseFragment {
         tvGreeting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MeActivity.class);
+                Intent intent = new Intent(mContext, MeActivity.class);
                 intent.putExtra("uid", uid);
                 intent.putExtra("userType", userType);
                 startActivity(intent);
@@ -245,25 +245,30 @@ public class MeFragment extends ABaseFragment {
                     .class);
             if (bean == null)
                 return;
-            nickName = bean.getNickname();
-            mData.add(bean.getFlow());
-            mData.add("shop");
-            mData.add("chart");
-            mData.add("history");
-            mData.add("friends");
-            mData.add("code");
-            mData.add("system");
-            mData.add(bean.getIntegral());
-            mData.add("privilege");
-            mData.add("management");
-            mAdapter.add(0, mData.size(), mData);
-            tvGreeting.setText(nickName + "，你好");
+            if (bean.getCode() == 200) {
+                mData.clear();
+                mData.add(bean.getFlow());
+                mData.add("shop");
+                mData.add("chart");
+                mData.add("history");
+                mData.add("friends");
+                mData.add("code");
+                mData.add("system");
+                mData.add(bean.getIntegral());
+                mData.add("privilege");
+                mData.add("management");
+                mAdapter.add(0, mData.size(), mData);
+                tvGreeting.setText(String.format(mContext.getResources().getString(R.string
+                        .say_hello), bean.getNickname()));
+            }
         }
 
     }
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
+        ToastUtils.showToast(mContext.getApplicationContext(), error, R.layout.toast, R.id
+                .tv_message);
 
     }
 }

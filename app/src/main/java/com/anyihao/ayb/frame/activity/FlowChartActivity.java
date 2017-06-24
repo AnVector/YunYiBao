@@ -1,5 +1,6 @@
 package com.anyihao.ayb.frame.activity;
 
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -10,8 +11,7 @@ import android.widget.TextView;
 
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.UTabAdapter;
-import com.anyihao.ayb.frame.fragment.DayChartFragment;
-import com.anyihao.ayb.frame.fragment.MonthChartFragment;
+import com.anyihao.ayb.frame.fragment.ChartFragment;
 import com.bigkoo.pickerview.TimePickerView;
 
 import java.util.ArrayList;
@@ -37,6 +37,8 @@ public class FlowChartActivity extends ABaseActivity {
     private UTabAdapter mTabAdapter;
     private List<Fragment> mFragments = new ArrayList<>();
     private String[] mTitleArray = new String[]{"日报表", "月报表"};
+    private String[] cmdArray = new String[]{"DAYFLOW", "MONTHFLOW"};
+    private String[] dateArray = new String[]{"day", "month"};
     private List<String> mTitles = Arrays.asList(mTitleArray);
 
     @Override
@@ -60,10 +62,16 @@ public class FlowChartActivity extends ABaseActivity {
     }
 
     private void initViewPager() {
-        DayChartFragment fragment1 = new DayChartFragment();
-        MonthChartFragment fragment2 = new MonthChartFragment();
-        mFragments.add(fragment1);
-        mFragments.add(fragment2);
+        ChartFragment fragment;
+        Bundle bundle;
+        for (int i = 0; i < 2; i++) {
+            fragment = new ChartFragment();
+            bundle = new Bundle();
+            bundle.putString("cmd", cmdArray[i]);
+            bundle.putString("date", dateArray[i]);
+            fragment.setArguments(bundle);
+            mFragments.add(fragment);
+        }
         mTabAdapter = new UTabAdapter(getSupportFragmentManager(), mFragments, mTitles);
         viewpager.setAdapter(mTabAdapter);
         viewpager.setCurrentItem(0, true);
@@ -95,10 +103,10 @@ public class FlowChartActivity extends ABaseActivity {
         //因为系统Calendar的月份是从0-11的,所以如果是调用Calendar的set方法来设置时间,月份的范围也要是从0-11
         Calendar selectedDate = Calendar.getInstance();
         Calendar startDate = Calendar.getInstance();
-        startDate.set(2017,1,1);
+        startDate.set(2017, 1, 1);
 
         Calendar endDate = Calendar.getInstance();
-        endDate.set(2050,1,1);
+        endDate.set(2050, 1, 1);
         //时间选择器
         pvDay = new TimePickerView.Builder(this, new TimePickerView.OnTimeSelectListener() {
             @Override
@@ -113,7 +121,7 @@ public class FlowChartActivity extends ABaseActivity {
                 .setSubmitText("确定")
                 .setContentSize(16)
                 .setDate(selectedDate)
-                .setRangDate(startDate,endDate)
+                .setRangDate(startDate, endDate)
                 .build();
         pvHour = new TimePickerView.Builder(this, new TimePickerView.OnTimeSelectListener() {
             @Override
@@ -128,7 +136,7 @@ public class FlowChartActivity extends ABaseActivity {
                 .setSubmitText("确定")
                 .setContentSize(16)
                 .setDate(selectedDate)
-                .setRangDate(startDate,endDate)
+                .setRangDate(startDate, endDate)
                 .build();
     }
 

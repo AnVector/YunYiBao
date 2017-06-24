@@ -38,8 +38,6 @@ import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -56,6 +54,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
+import fr.castorflex.android.circularprogressbar.CircularProgressBar;
+import fr.castorflex.android.circularprogressbar.CircularProgressDrawable;
 
 public class MeActivity extends ABaseActivity {
 
@@ -65,6 +65,8 @@ public class MeActivity extends ABaseActivity {
     Toolbar toolbar;
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
+    @BindView(R.id.progressbar_circular)
+    CircularProgressBar progressbarCircular;
     private UserInfoAdapter mAdapter;
     private List<String> mData = new LinkedList<>();
     private ArrayList<ProvinceBean> options1Items = new ArrayList<>();
@@ -80,6 +82,7 @@ public class MeActivity extends ABaseActivity {
     private TextView tvValue;
     private String mArea;
     private String mDate;
+    private String mPhoneNum;
     private TimePickerView pvDate;
 
 
@@ -201,6 +204,14 @@ public class MeActivity extends ABaseActivity {
                         case "押金退款":
                             showConfirmDialog();
                             break;
+                        case "手机号码":
+                            Intent intent1 = new Intent(MeActivity.this, GetVerifyCodeActivity
+                                    .class);
+                            intent1.putExtra("title", "验证原手机");
+                            intent1.putExtra("action", "ORIGINAL");
+                            intent1.putExtra("phoneNum", mPhoneNum);
+                            startActivity(intent1);
+                            break;
                         default:
                             Intent intent = new Intent(MeActivity.this, UpdateInfoActivity
                                     .class);
@@ -222,42 +233,23 @@ public class MeActivity extends ABaseActivity {
     }
 
     private void getUserInfo() {
-
-        JSONObject json = new JSONObject();
-        try {
-            json.put("cmd", "PERSON");
-            json.put("uid", uid);
-            json.put("userType", userType);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        progressbarCircular.setVisibility(View.VISIBLE);
+        ((CircularProgressDrawable) progressbarCircular.getIndeterminateDrawable()).start();
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "PERSON");
+        params.put("uid", uid);
+        params.put("userType", userType);
         PresenterFactory.getInstance().createPresenter(this)
                 .execute(new Task.TaskBuilder()
                         .setTaskType(TaskType.Method.POST)
-                        .setUrl(GlobalConsts.PREFIX_URL + "?cmd=PERSON" + "&" + "uid=" +
-                                uid + "&" + "userType=" + userType)
-                        .setContent(json.toString())
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setParams(params)
                         .setPage(1)
                         .setActionType(0)
                         .createTask());
     }
 
     private void updateInfo(int actionType, String info) {
-        JSONObject json = new JSONObject();
-        try {
-            json.put("cmd", "PERSONSAVE");
-            json.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
-            json.put("userType", PreferencesUtils.getString(getApplicationContext(), "userType",
-                    ""));
-            if (actionType == 1) {
-                json.put("area", info);
-            } else {
-                json.put("birthday", info);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
         Map<String, String> params = new HashMap<>();
         params.put("cmd", "PERSONSAVE");
         params.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
@@ -272,7 +264,6 @@ public class MeActivity extends ABaseActivity {
                 .execute(new Task.TaskBuilder()
                         .setTaskType(TaskType.Method.POST)
                         .setUrl(GlobalConsts.PREFIX_URL)
-                        .setContent(json.toString())
                         .setParams(params)
                         .setPage(1)
                         .setActionType(actionType)
@@ -481,6 +472,8 @@ public class MeActivity extends ABaseActivity {
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
+        ((CircularProgressDrawable) progressbarCircular.getIndeterminateDrawable()).stop();
+        progressbarCircular.setVisibility(View.GONE);
         if (actionType == 0) {
             UserInfoBean bean = GsonUtils.getInstance().transitionToBean(result, UserInfoBean
                     .class);
@@ -490,12 +483,13 @@ public class MeActivity extends ABaseActivity {
                 return;
             }
             if (bean.getCode() == 200) {
+                mPhoneNum = bean.getPhoneNumber();
                 mData.add(bean.getAvatar());
                 mData.add(bean.getNickname());
                 mData.add("QRCODE");
                 mData.add(bean.getSex());
                 mData.add(bean.getBirthday());
-                mData.add(bean.getPhoneNumber());
+                mData.add(mPhoneNum);
                 mData.add(bean.getEmail());
                 mData.add(bean.getArea());
                 mData.add(bean.getDeposit());
@@ -522,6 +516,8 @@ public class MeActivity extends ABaseActivity {
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
+        ((CircularProgressDrawable) progressbarCircular.getIndeterminateDrawable()).stop();
+        progressbarCircular.setVisibility(View.GONE);
         ToastUtils.showToast(getApplicationContext(), error, R.layout.toast, R.id
                 .tv_message);
     }

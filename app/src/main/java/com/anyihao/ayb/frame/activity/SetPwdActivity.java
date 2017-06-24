@@ -27,8 +27,8 @@ import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.chaychan.viewlib.PowerfulEditText;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -173,42 +173,30 @@ public class SetPwdActivity extends ABaseActivity {
     }
 
     private void getVerifyCode() {
-
-        JSONObject json = new JSONObject();
-        try {
-            json.put("cmd", "SJH");
-            json.put("phoneNumber", phoneNum);
-            json.put("action", "REGISTER");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "SJH");
+        params.put("phoneNumber", phoneNum);
+        params.put("action", "REGISTER");
         PresenterFactory.getInstance().createPresenter(this)
                 .execute(new Task.TaskBuilder()
                         .setTaskType(TaskType.Method.POST)
-                        .setUrl(GlobalConsts.PREFIX_URL + "cmd=SJH" + "&" + "phoneNumber=" +
-                                phoneNum + "&" + "action=" + "REGISTER")
-                        .setContent(json.toString())
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setParams(params)
                         .setPage(1)
                         .setActionType(0)
                         .createTask());
     }
 
     private void checkVerifyCode() {
-
-        JSONObject json = new JSONObject();
-        try {
-            json.put("cmd", "YZM");
-            json.put("phoneNumber", phoneNum);
-            json.put("identifyingCode", verifyCode);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "YZM");
+        params.put("phoneNumber", phoneNum);
+        params.put("identifyingCode", verifyCode);
         PresenterFactory.getInstance().createPresenter(this)
                 .execute(new Task.TaskBuilder()
                         .setTaskType(TaskType.Method.POST)
-                        .setUrl(GlobalConsts.PREFIX_URL + "cmd=YZM" + "&" + "phoneNumber=" +
-                                phoneNum + "&" + "identifyingCode=" + verifyCode)
-                        .setContent(json.toString())
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setParams(params)
                         .setPage(1)
                         .setActionType(1)
                         .createTask());
@@ -216,24 +204,18 @@ public class SetPwdActivity extends ABaseActivity {
 
     private void register() {
 
-        JSONObject json = new JSONObject();
-        try {
-            json.put("cmd", "RGT");
-            json.put("phoneNumber", phoneNum);
-            json.put("pwd", MD5.string2MD5(setPwd));
-            json.put("ckpwd", MD5.string2MD5(checkPwd));
-            json.put("addrMAC", DeviceUtils.getMacAddress(getApplicationContext()));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "RGT");
+        params.put("phoneNumber", phoneNum);
+        params.put("pwd", MD5.string2MD5(setPwd));
+        params.put("ckpwd", MD5.string2MD5(checkPwd));
+        params.put("addrMAC", DeviceUtils.getMacAddress(getApplicationContext()));
+
         PresenterFactory.getInstance().createPresenter(this)
                 .execute(new Task.TaskBuilder()
                         .setTaskType(TaskType.Method.POST)
-                        .setUrl(GlobalConsts.PREFIX_URL + "cmd=RGT" + "&" + "phoneNumber=" +
-                                phoneNum + "&" + "pwd=" + MD5.string2MD5(setPwd) + "&" + "ckpwd="
-                                + MD5.string2MD5(checkPwd) + "&" +
-                                "addrMAC=" + DeviceUtils.getMacAddress(getApplicationContext()))
-                        .setContent(json.toString())
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setParams(params)
                         .setPage(1)
                         .setActionType(2)
                         .createTask());

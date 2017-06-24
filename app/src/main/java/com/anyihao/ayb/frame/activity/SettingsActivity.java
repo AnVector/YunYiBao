@@ -94,16 +94,11 @@ public class SettingsActivity extends ABaseActivity {
                             startActivity(intent);
                             break;
                         case "修改密码":
-                            intent = new Intent(SettingsActivity.this, RetrievePwdActivity
+                            intent = new Intent(SettingsActivity.this, GetVerifyCodeActivity
                                     .class);
-                            intent.putExtra(RetrievePwdActivity.REQUEST_TYPE, RetrievePwdActivity
-                                    .VERIFY_ORIGINAL_PHONE);
-                            startActivity(intent);
-                            break;
-                        case "修改手机":
-                            intent = new Intent(SettingsActivity.this, RetrievePwdActivity.class);
-                            intent.putExtra(RetrievePwdActivity.REQUEST_TYPE, RetrievePwdActivity
-                                    .VERIFY_ORIGINAL_PHONE);
+                            intent.putExtra("title", "修改密码");
+                            intent.putExtra("action", "MODIFYPWD");
+                            intent.putExtra("phoneNum", "");
                             startActivity(intent);
                             break;
                         case "账号管理":

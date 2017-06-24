@@ -21,12 +21,12 @@ import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.chaychan.viewlib.PowerfulEditText;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 
-public class RetrievePwdActivity extends ABaseActivity {
+public class GetVerifyCodeActivity extends ABaseActivity {
 
 
     @BindView(R.id.toolbar_title_mid)
@@ -35,16 +35,14 @@ public class RetrievePwdActivity extends ABaseActivity {
     Toolbar toolbar;
     @BindView(R.id.btn_next)
     AppCompatButton btnNext;
-    public static final int RETRIEVE_ORIGINAL_PASSWORD = 0;
-    public static final int VERIFY_ORIGINAL_PHONE = 1;
-    public static String REQUEST_TYPE = "type";
     @BindView(R.id.edt_phone_num)
     PowerfulEditText edtPhoneNum;
     @BindView(R.id.input_verify_code)
     PowerfulEditText inputVerifyCode;
     @BindView(R.id.tv_time_ticker)
     TextView tvTimeTicker;
-    private int type;
+    private String title;
+    private String action;
     private static final int TIMER_TICK = 1001;
     private static final int TIMER_TICK_FINISHED = 1002;
     private String mTimeHint;
@@ -79,17 +77,18 @@ public class RetrievePwdActivity extends ABaseActivity {
         Intent intent = getIntent();
         if (intent == null)
             return;
-        type = intent.getIntExtra(REQUEST_TYPE, 0);
+        title = intent.getStringExtra("title");
+        action = intent.getStringExtra("action");
+        phoneNum = intent.getStringExtra("phoneNum");
     }
 
     @Override
     protected void initData() {
         mTimeHint = getResources().getString(R.string.re_get_after_60s);
         toolbar.setNavigationIcon(R.drawable.ic_back);
-        if (type == 0) {
-            titleMid.setText(getString(R.string.retrieve_pwd));
-        } else {
-            titleMid.setText(getString(R.string.verify_original_phone));
+        titleMid.setText(title);
+        if (action.equals("REBIND")) {
+            btnNext.setText(getString(R.string.submit));
         }
     }
 
@@ -159,42 +158,30 @@ public class RetrievePwdActivity extends ABaseActivity {
     }
 
     private void getVerifyCode() {
-
-        JSONObject json = new JSONObject();
-        try {
-            json.put("cmd", "SJH");
-            json.put("phoneNumber", phoneNum);
-            json.put("action", "FORGETPWD");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "SJH");
+        params.put("phoneNumber", phoneNum);
+        params.put("action", action);
         PresenterFactory.getInstance().createPresenter(this)
                 .execute(new Task.TaskBuilder()
                         .setTaskType(TaskType.Method.POST)
-                        .setUrl(GlobalConsts.PREFIX_URL + "?cmd=SJH" + "&" + "phoneNumber=" +
-                                phoneNum + "&" + "action=" + "FORGETPWD")
-                        .setContent(json.toString())
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setParams(params)
                         .setPage(1)
                         .setActionType(0)
                         .createTask());
     }
 
     private void checkVerifyCode() {
-
-        JSONObject json = new JSONObject();
-        try {
-            json.put("cmd", "YZM");
-            json.put("phoneNumber", phoneNum);
-            json.put("identifyingCode", verifyCode);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "YZM");
+        params.put("phoneNumber", phoneNum);
+        params.put("identifyingCode", verifyCode);
         PresenterFactory.getInstance().createPresenter(this)
                 .execute(new Task.TaskBuilder()
                         .setTaskType(TaskType.Method.POST)
-                        .setUrl(GlobalConsts.PREFIX_URL + "?cmd=YZM" + "&" + "phoneNumber=" +
-                                phoneNum + "&" + "identifyingCode=" + verifyCode)
-                        .setContent(json.toString())
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setParams(params)
                         .setPage(1)
                         .setActionType(1)
                         .createTask());
@@ -228,9 +215,31 @@ public class RetrievePwdActivity extends ABaseActivity {
         }
         if (actionType == 1) {
             if (bean.getCode() == 200) {
-                Intent intent = new Intent(RetrievePwdActivity.this, ResetPwdActivity.class);
-                intent.putExtra("phoneNo", phoneNum);
-                startActivity(intent);
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast,
+                        R.id.tv_message);
+                Intent intent;
+                switch (action) {
+                    case "ORIGINAL":
+                        intent = new Intent(GetVerifyCodeActivity.this, GetVerifyCodeActivity
+                                .class);
+                        intent.putExtra("action", "REBIND");
+                        intent.putExtra("title", "设置新手机");
+                        intent.putExtra("phoneNum", "");
+                        startActivity(intent);
+                        break;
+                    case "MODIFYPWD":
+                        intent = new Intent(GetVerifyCodeActivity.this, ResetPwdActivity
+                                .class);
+                        intent.putExtra("phoneNo", phoneNum);
+                        startActivity(intent);
+                        break;
+                    case "REBIND":
+                        finish();
+                        break;
+                    default:
+                        break;
+                }
+
             } else {
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast,
                         R.id.tv_message);

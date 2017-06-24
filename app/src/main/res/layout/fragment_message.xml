@@ -2,7 +2,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="com.anyihao.ayb.frame.fragment.MeMessageFragment">
+             tools:context="com.anyihao.ayb.frame.fragment.MessageFragment">
 
     <com.marshalchen.ultimaterecyclerview.UltimateRecyclerView
         android:id="@+id/ultimate_recycler_view"
