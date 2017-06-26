@@ -15,9 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.TextView;
@@ -39,17 +37,24 @@ import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.MyLocationStyle;
+import com.anyihao.androidbase.mvp.Task;
+import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
+import com.anyihao.ayb.bean.MerchantListBean;
+import com.anyihao.ayb.common.PresenterFactory;
+import com.anyihao.ayb.constant.GlobalConsts;
 import com.orhanobut.logger.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
@@ -121,6 +126,7 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         myLocationStyle.strokeColor(android.R.color.transparent);
         aMap.setMyLocationStyle(myLocationStyle);
         initLocation();
+        getMerchantList();
 
     }
 
@@ -297,6 +303,19 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
+        if (actionType == 0) {
+            MerchantListBean bean = GsonUtils.getInstance().transitionToBean(result,
+                    MerchantListBean.class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                ToastUtils.showToast(mContext.getApplicationContext(), "附近商家信息获取成功", R.layout
+                        .toast, R.id.tv_message);
+            } else {
+                ToastUtils.showToast(mContext.getApplicationContext(), "附近商家信息获取失败", R.layout
+                        .toast, R.id.tv_message);
+            }
+        }
 
     }
 
@@ -475,5 +494,18 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         builder.setCancelable(false);
 
         builder.show();
+    }
+
+
+    private void getMerchantList() {
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "MERCHANTLIST");
+        PresenterFactory.getInstance().createPresenter(this).execute(new Task.TaskBuilder().
+                setPage(1)
+                .setActionType(0)
+                .setUrl(GlobalConsts.PREFIX_URL)
+                .setParams(params)
+                .setTaskType(TaskType.Method.POST)
+                .createTask());
     }
 }

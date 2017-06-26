@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.anyihao.androidbase.manager.ActivityManager;
 import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
@@ -42,6 +41,9 @@ public class SettingsActivity extends ABaseActivity {
     private SettingsAdapter mAdapter;
     String[] array = new String[]{"修改密码", "常见问题", "意见反馈", "押金说明", "账号管理", "关于云逸宝"};
     private List<String> mData = Arrays.asList(array);
+    private boolean isLogin;
+    public static int RESULT_SETTINGS_CODE = 0x00002;
+    public static final int REQUEST_LOGIN_CODE = 0x00005;
 
     @Override
     protected int getContentViewId() {
@@ -50,11 +52,17 @@ public class SettingsActivity extends ABaseActivity {
 
     @Override
     protected void getExtraParams() {
-
+        Intent intent = getIntent();
+        if (intent == null)
+            return;
+        isLogin = intent.getBooleanExtra("isLogin", false);
     }
 
     @Override
     protected void initData() {
+        if (!isLogin) {
+            btnLogout.setText(getString(R.string.not_login));
+        }
         toolbar.setNavigationIcon(R.drawable.ic_back);
         titleMid.setText(getString(R.string.settings));
         mAdapter = new SettingsAdapter(this, R.layout.item_settings);
@@ -85,25 +93,33 @@ public class SettingsActivity extends ABaseActivity {
                             startActivity(intent);
                             break;
                         case "意见反馈":
-                            intent = new Intent(SettingsActivity.this, FeedbackActivity.class);
-                            startActivity(intent);
-                            break;
-                        case "修改设备信息":
-                            intent = new Intent(SettingsActivity.this, ModifyDeviceInfoActivity
-                                    .class);
-                            startActivity(intent);
+                            if (!isLogin) {
+                                startActivityForLogin();
+                            } else {
+                                intent = new Intent(SettingsActivity.this, FeedbackActivity.class);
+                                startActivity(intent);
+                            }
                             break;
                         case "修改密码":
-                            intent = new Intent(SettingsActivity.this, GetVerifyCodeActivity
-                                    .class);
-                            intent.putExtra("title", "修改密码");
-                            intent.putExtra("action", "MODIFYPWD");
-                            intent.putExtra("phoneNum", "");
-                            startActivity(intent);
+                            if (!isLogin) {
+                                startActivityForLogin();
+                            } else {
+                                intent = new Intent(SettingsActivity.this, GetVerifyCodeActivity
+                                        .class);
+                                intent.putExtra("title", "修改密码");
+                                intent.putExtra("action", "MODIFYPWD");
+                                intent.putExtra("phoneNum", "");
+                                startActivity(intent);
+                            }
                             break;
                         case "账号管理":
-                            intent = new Intent(SettingsActivity.this, AccountManageActivity.class);
-                            startActivity(intent);
+                            if (!isLogin) {
+                                startActivityForLogin();
+                            } else {
+                                intent = new Intent(SettingsActivity.this, AccountManageActivity
+                                        .class);
+                                startActivity(intent);
+                            }
                             break;
                         case "关于云逸宝":
                             intent = new Intent(SettingsActivity.this, AboutUsActivity.class);
@@ -124,10 +140,31 @@ public class SettingsActivity extends ABaseActivity {
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (!isLogin) {
+                    ToastUtils.showToast(getApplicationContext(), "您还未登录，请先登录", R.layout.toast, R
+                            .id.tv_message);
+                    return;
+                }
                 logOut();
+
             }
         });
 
+    }
+
+    private void startActivityForLogin() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivityForResult(intent, REQUEST_LOGIN_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_LOGIN_CODE && requestCode == LoginActivity.RESULT_LOGIN_CODE) {
+            isLogin = true;
+            btnLogout.setText(getString(R.string.logout));
+        }
     }
 
     private void logOut() {
@@ -138,7 +175,6 @@ public class SettingsActivity extends ABaseActivity {
                 .execute(new Task.TaskBuilder()
                         .setTaskType(TaskType.Method.POST)
                         .setUrl(GlobalConsts.PREFIX_URL)
-                        .setContent("{}")
                         .setParams(params)
                         .setPage(1)
                         .setActionType(0)
@@ -156,18 +192,21 @@ public class SettingsActivity extends ABaseActivity {
                         .tv_message);
                 PreferencesUtils.putString(getApplicationContext(), "uid", "");
                 PreferencesUtils.putString(getApplicationContext(), "userType", "");
-                ActivityManager.getInstance().finishActivity(MainFragmentActivity.class);
-                Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
-                startActivity(intent);
+                PreferencesUtils.putBoolean(getApplicationContext(), "isLogin", false);
+                Intent intent = new Intent();
+                intent.putExtra("uid", PreferencesUtils.getString(getApplicationContext(), "uid",
+                        ""));
+                intent.putExtra("userType", PreferencesUtils.getString(getApplicationContext(),
+                        "userType", ""));
+                setResult(RESULT_SETTINGS_CODE, intent);
                 finish();
-
             }
         }
-
     }
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-
+        ToastUtils.showToast(getApplicationContext(), error, R.layout.toast, R.id
+                .tv_message);
     }
 }

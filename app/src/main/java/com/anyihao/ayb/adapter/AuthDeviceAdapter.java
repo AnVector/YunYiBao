@@ -3,12 +3,13 @@ package com.anyihao.ayb.adapter;
 import android.content.Context;
 
 import com.anyihao.ayb.R;
+import com.anyihao.ayb.bean.AuthorizedDeviceListBean.DataBean;
 
 /**
  * Created by Admin on 2017/4/7.
  */
 
-public class AuthDeviceAdapter extends RecyclerViewAdapter<String> {
+public class AuthDeviceAdapter extends RecyclerViewAdapter<DataBean> {
 
 
     public AuthDeviceAdapter(Context context, int layoutId) {
@@ -16,9 +17,8 @@ public class AuthDeviceAdapter extends RecyclerViewAdapter<String> {
     }
 
     @Override
-    public void convert(ViewHolder holder, String s) {
-
-        holder.setText(R.id.tv_device, s);
+    public void convert(ViewHolder holder, DataBean dataBean) {
+        holder.setText(R.id.tv_device, dataBean.getMac());
         if (holder.getLayoutPosition() == mDatas.size() - 1) {
             holder.setVisible(R.id.line, false);
         }

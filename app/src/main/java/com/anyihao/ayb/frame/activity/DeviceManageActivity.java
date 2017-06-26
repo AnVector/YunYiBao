@@ -6,15 +6,24 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.mvp.Task;
+import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.GsonUtils;
+import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.AuthDeviceAdapter;
-import com.anyihao.ayb.adapter.CreditAdapter;
+import com.anyihao.ayb.bean.AuthorizedDeviceListBean;
+import com.anyihao.ayb.bean.AuthorizedDeviceListBean.DataBean;
+import com.anyihao.ayb.common.PresenterFactory;
+import com.anyihao.ayb.constant.GlobalConsts;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -29,9 +38,8 @@ public class DeviceManageActivity extends ABaseActivity {
     @BindView(R.id.btn_add_auth_device)
     AppCompatButton btnAddAuthDevice;
     private AuthDeviceAdapter mAdapter;
-    String[] array = new String[]{"0a:ee:32:44:23:55", "0a:ee:32:44:23:55", "0a:ee:32:44:23:55",
-            "0a:ee:32:44:23:55"};
-    private List<String> mData = Arrays.asList(array);
+    private List<DataBean> mData = new ArrayList<>();
+    public static final int REQUEST_ADD_AUTH_DEVICE_CODE = 0X00006;
 
     @Override
     protected int getContentViewId() {
@@ -51,8 +59,7 @@ public class DeviceManageActivity extends ABaseActivity {
         recyclerview.setAdapter(mAdapter);
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager
                 .VERTICAL, false));
-        recyclerview.setHasFixedSize(true);
-        mAdapter.add(0, mData.size(), mData);
+        getAuthorizedDevices();
     }
 
     @Override
@@ -67,19 +74,63 @@ public class DeviceManageActivity extends ABaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DeviceManageActivity.this, AddAuthDeviceActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_ADD_AUTH_DEVICE_CODE);
             }
         });
 
     }
 
+    private void getAuthorizedDevices() {
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "AUTHORIZELIST");
+        params.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
+
+        PresenterFactory.getInstance().createPresenter(this).execute(new Task.TaskBuilder()
+                .setTaskType(TaskType.Method.POST)
+                .setParams(params)
+                .setPage(1)
+                .setActionType(0)
+                .setUrl(GlobalConsts.PREFIX_URL)
+                .createTask());
+    }
+
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
 
+        if (actionType == 0) {
+            AuthorizedDeviceListBean bean = GsonUtils.getInstance().transitionToBean(result,
+                    AuthorizedDeviceListBean.class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                List<DataBean> beans = bean.getData();
+                if (beans.size() > 0) {
+                    mData.clear();
+                    mData.addAll(beans);
+                    mAdapter.add(0, mData.size(), mData);
+                } else {
+                    ToastUtils.showToast(getApplicationContext(), "暂无绑定设备", R.layout.toast, R.id
+                            .tv_message);
+                }
+            } else {
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast, R.id
+                        .tv_message);
+            }
+        }
     }
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_ADD_AUTH_DEVICE_CODE && resultCode == AddAuthDeviceActivity
+                .RESULT_ADD_AUTH_DEVICE_CODE) {
+            getAuthorizedDevices();
+        }
     }
 }

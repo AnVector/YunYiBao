@@ -26,6 +26,7 @@ public class UserLevelBean implements Serializable {
     private String level;
     private String integral;
     private String flow;
+    private String Identity;
 
     public int getCode() {
         return code;
@@ -81,5 +82,13 @@ public class UserLevelBean implements Serializable {
 
     public void setFlow(String flow) {
         this.flow = flow;
+    }
+
+    public String getIdentity() {
+        return Identity;
+    }
+
+    public void setIdentity(String identity) {
+        Identity = identity;
     }
 }

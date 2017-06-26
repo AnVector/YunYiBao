@@ -2,8 +2,10 @@ package com.anyihao.ayb.frame.activity;
 
 import android.app.DownloadManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
@@ -49,10 +51,7 @@ public class MainFragmentActivity extends ABaseActivity {
     private UFragmentPagerAdapter uFragmentPagerAdapter;
     private DownloadManager mDownloadManager;
     private RadioButton mCurrent;
-
-
-    private static final int RC_CAMERA_AND_LOCATION = 123;
-    private static final int RC_LOCATION_CONTACTS_PERM = 124;
+    private boolean isLogin;
 
     private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -75,6 +74,10 @@ public class MainFragmentActivity extends ABaseActivity {
 
     @Override
     protected void getExtraParams() {
+        Intent intent = getIntent();
+        if (intent == null)
+            return;
+        isLogin = intent.getBooleanExtra("isLogin", false);
 
     }
 
@@ -89,10 +92,16 @@ public class MainFragmentActivity extends ABaseActivity {
     }
 
     private void initViewPager() {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isLogin", isLogin);
         HomeFragment homeFragment = new HomeFragment();
+        homeFragment.setArguments(bundle);
         DiscoverFragment discoverFragment = new DiscoverFragment();
+        discoverFragment.setArguments(bundle);
         TaskFragment taskFragment = new TaskFragment();
+        taskFragment.setArguments(bundle);
         MeFragment meFragment = new MeFragment();
+        meFragment.setArguments(bundle);
         mFragmentList.add(homeFragment);
         mFragmentList.add(discoverFragment);
         mFragmentList.add(taskFragment);

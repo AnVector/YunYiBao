@@ -43,8 +43,6 @@ public class MessageFragment extends ABaseFragment {
     private MessageAdapter mAdapter;
     protected LinearLayoutManager layoutManager;
     private ItemTouchHelper mItemTouchHelper;
-    private String[] array = new String[]{"已读消息", "未读消息", "已读消息", "已读消息", "未读消息", "已读消息", "未读消息",
-            "已读消息"};
     private List<DataBean> mData = new ArrayList<>();
     private String type;
     private int page = 1;

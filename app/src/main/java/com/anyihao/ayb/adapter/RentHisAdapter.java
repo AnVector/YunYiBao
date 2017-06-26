@@ -3,12 +3,13 @@ package com.anyihao.ayb.adapter;
 import android.content.Context;
 
 import com.anyihao.ayb.R;
+import com.anyihao.ayb.bean.RentHistoryListBean.DataBean;
 
 /**
  * Created by Admin on 2017/4/7.
  */
 
-public class RentHisAdapter extends RecyclerViewAdapter<String> {
+public class RentHisAdapter extends RecyclerViewAdapter<DataBean> {
 
 
     public RentHisAdapter(Context context, int layoutId) {
@@ -16,9 +17,10 @@ public class RentHisAdapter extends RecyclerViewAdapter<String> {
     }
 
     @Override
-    public void convert(ViewHolder holder, String s) {
-
-        holder.setText(R.id.tv_device_num, s);
-        holder.setText(R.id.tv_duration, "2017-05-05至2017-06-05");
+    public void convert(ViewHolder holder, DataBean dataBean) {
+        if(dataBean == null)
+            return;
+        holder.setText(R.id.tv_device_num, dataBean.getVid());
+        holder.setText(R.id.tv_duration, dataBean.getStartTm() + "至" + dataBean.getEndTm());
     }
 }

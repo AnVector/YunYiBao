@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
@@ -15,6 +16,7 @@
         layout="@layout/toolbar"/>
 
     <RelativeLayout
+        android:id="@+id/rl_profile"
         android:layout_width="match_parent"
         android:layout_height="85dp"
         android:layout_gravity="center_vertical"
@@ -23,11 +25,13 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ic_profile"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            app:civ_border_color="#FFFFFF"
+            app:civ_border_width="1dp"/>
 
         <TextView
             android:id="@+id/greeting"
@@ -48,6 +52,15 @@
             android:gravity="right|center_vertical"
             android:text="@string/about_me"
             android:textSize="@dimen/font_size_thi"/>
+
+        <ImageButton
+            android:id="@+id/btn_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:src="@drawable/ic_right"/>
     </RelativeLayout>
 
     <View

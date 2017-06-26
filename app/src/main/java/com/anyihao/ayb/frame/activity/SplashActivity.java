@@ -27,6 +27,7 @@ public class SplashActivity extends ABaseActivity {
     private String mTimeHint;
     private byte mTimeLeft;
     private CountDownTimer mCountDownTimer;
+    private boolean isLogin;
 //    private ComponentName mDefault;
 //    private ComponentName mNewCN;
 //    private PackageManager mPackageManager;
@@ -100,6 +101,7 @@ public class SplashActivity extends ABaseActivity {
     @Override
     protected void initData() {
         mTimeHint = getResources().getString(R.string.timer_seconds);
+        isLogin = PreferencesUtils.getBoolean(getApplicationContext(), "isLogin", false);
         mCountDownTimer = new CountDownTimer(4000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -128,7 +130,8 @@ public class SplashActivity extends ABaseActivity {
     }
 
     private void handleGoHome() {
-        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+        Intent intent = new Intent(SplashActivity.this, MainFragmentActivity.class);
+        intent.putExtra("isLogin", isLogin);
         startActivity(intent);
         finish();
     }
@@ -136,6 +139,7 @@ public class SplashActivity extends ABaseActivity {
     private void handleGoGuide() {
 //        Intent intent = new Intent(SplashActivity.this, MainFragmentActivity.class);
         Intent intent = new Intent(SplashActivity.this, GuideActivity.class);
+        intent.putExtra("isLogin", isLogin);
         startActivity(intent);
         finish();
     }

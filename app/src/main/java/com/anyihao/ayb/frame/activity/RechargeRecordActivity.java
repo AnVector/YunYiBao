@@ -8,13 +8,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.mvp.Task;
+import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.GsonUtils;
+import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.RechargeRecordAdapter;
+import com.anyihao.ayb.bean.RechargeRecordBean;
+import com.anyihao.ayb.bean.RechargeRecordBean.DataBean;
+import com.anyihao.ayb.common.PresenterFactory;
+import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.listener.OnItemClickListener;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -26,12 +37,15 @@ public class RechargeRecordActivity extends ABaseActivity {
     Toolbar toolbar;
     @BindView(R.id.ultimate_recycler_view)
     UltimateRecyclerView recyclerView;
+    private static final int PAGE_SIZE = 10;
     private RechargeRecordAdapter mAdapter;
     protected LinearLayoutManager layoutManager;
-//    private ItemTouchHelper mItemTouchHelper;
-    private String[] array = new String[]{"13:45", "18:00", "12:00", "08:00", "11:37", "02:16", "15:21",
+    //    private ItemTouchHelper mItemTouchHelper;
+    private String[] array = new String[]{"13:45", "18:00", "12:00", "08:00", "11:37", "02:16",
+            "15:21",
             "14:43"};
     private List<String> mData = Arrays.asList(array);
+    private int page = 1;
 
     @Override
     protected int getContentViewId() {
@@ -102,7 +116,8 @@ public class RechargeRecordActivity extends ABaseActivity {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-                Intent intent = new Intent(RechargeRecordActivity.this, RechargeRecordDetailsActivity.class);
+                Intent intent = new Intent(RechargeRecordActivity.this,
+                        RechargeRecordDetailsActivity.class);
                 startActivity(intent);
             }
 
@@ -115,8 +130,40 @@ public class RechargeRecordActivity extends ABaseActivity {
 
     }
 
+    private void getRechargeRecord() {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "PAYLIST");
+        params.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
+        params.put("page", page + "");
+        params.put("pagesize", PAGE_SIZE + "");
+        params.put("flowType", "TOPUP");
+
+        PresenterFactory.getInstance().createPresenter(this).execute(new Task.TaskBuilder()
+                .setTaskType(TaskType.Method.POST)
+                .setParams(params)
+                .setPage(1)
+                .setActionType(0)
+                .setUrl(GlobalConsts.PREFIX_URL)
+                .createTask());
+    }
+
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
+        if (actionType == 0) {
+            RechargeRecordBean bean = GsonUtils.getInstance().transitionToBean(result,
+                    RechargeRecordBean.class);
+            if (bean == null)
+                return;
+            ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast, R.id
+                    .tv_message);
+            if (bean.getCode() == 200) {
+                List<DataBean> beans = bean.getData();
+                if (beans.size() > 0) {
+                    
+                }
+            }
+        }
 
     }
 

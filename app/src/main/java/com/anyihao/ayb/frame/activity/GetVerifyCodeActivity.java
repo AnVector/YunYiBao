@@ -45,6 +45,8 @@ public class GetVerifyCodeActivity extends ABaseActivity {
     private String action;
     private static final int TIMER_TICK = 1001;
     private static final int TIMER_TICK_FINISHED = 1002;
+    private static final int REQUEST_CODE = 1003;
+    private static final int RESULT_CODE = 1004;
     private String mTimeHint;
     private byte mTimeLeft;
     private CountDownTimer mCountDownTimer;
@@ -215,8 +217,6 @@ public class GetVerifyCodeActivity extends ABaseActivity {
         }
         if (actionType == 1) {
             if (bean.getCode() == 200) {
-                ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast,
-                        R.id.tv_message);
                 Intent intent;
                 switch (action) {
                     case "ORIGINAL":
@@ -225,7 +225,7 @@ public class GetVerifyCodeActivity extends ABaseActivity {
                         intent.putExtra("action", "REBIND");
                         intent.putExtra("title", "设置新手机");
                         intent.putExtra("phoneNum", "");
-                        startActivity(intent);
+                        startActivityForResult(intent, REQUEST_CODE);
                         break;
                     case "MODIFYPWD":
                         intent = new Intent(GetVerifyCodeActivity.this, ResetPwdActivity
@@ -234,7 +234,12 @@ public class GetVerifyCodeActivity extends ABaseActivity {
                         startActivity(intent);
                         break;
                     case "REBIND":
-                        finish();
+                        ToastUtils.showToast(getApplicationContext(), "新手机号绑定成功", R.layout.toast,
+                                R.id.tv_message);
+                        intent = new Intent();
+                        intent.putExtra("result", 1);
+                        setResult(RESULT_CODE, intent);
+                        this.finish();
                         break;
                     default:
                         break;
@@ -246,6 +251,19 @@ public class GetVerifyCodeActivity extends ABaseActivity {
             }
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_CODE) {
+            if (data == null)
+                return;
+            int result = data.getIntExtra("result", 0);
+            if (result == 1) {
+                this.finish();
+            }
+        }
     }
 
     @Override

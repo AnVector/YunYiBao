@@ -10,7 +10,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.anyihao.androidbase.mvp.Task;
@@ -28,6 +28,7 @@ import com.anyihao.ayb.frame.activity.DeviceManageActivity;
 import com.anyihao.ayb.frame.activity.FlowAccountActivity;
 import com.anyihao.ayb.frame.activity.FlowChartActivity;
 import com.anyihao.ayb.frame.activity.InviteFriendsActivity;
+import com.anyihao.ayb.frame.activity.LoginActivity;
 import com.anyihao.ayb.frame.activity.MeActivity;
 import com.anyihao.ayb.frame.activity.MerchantPrivilegeActivity;
 import com.anyihao.ayb.frame.activity.RechargeActivity;
@@ -48,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,11 +64,16 @@ public class MeFragment extends ABaseFragment {
     TextView toolbarTitle;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.ic_profile)
-    ImageView icProfile;
     @BindView(R.id.fake_status_bar)
     View fakeStatusBar;
+    @BindView(R.id.rl_profile)
+    RelativeLayout rlProfile;
+    @BindView(R.id.ic_profile)
+    CircleImageView icProfile;
     private MeAdapter mAdapter;
+    private static int REQUEST_SETTINGS_CODE = 0x00001;
+    private static int REQUEST_LOGIN_CODE = 0x00003;
+    private boolean isLogin = false;
 
     private List<String> mData = new LinkedList<>();
     private String uid;
@@ -91,10 +98,10 @@ public class MeFragment extends ABaseFragment {
         toolbar.inflateMenu(R.menu.toolbar_menu);
         toolbarTitle.setText(getString(R.string.me));
         icProfile.setImageResource(R.drawable.user_profile);
-        mAdapter = new MeAdapter(getContext(), R.layout.item_me);
-        mRecyclerview.setAdapter(mAdapter);
         mRecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager
                 .VERTICAL, false));
+        mAdapter = new MeAdapter(getContext(), R.layout.item_me);
+        mRecyclerview.setAdapter(mAdapter);
     }
 
 
@@ -119,8 +126,9 @@ public class MeFragment extends ABaseFragment {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Intent intent = new Intent(getActivity(), SettingsActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(mContext, SettingsActivity.class);
+                intent.putExtra("isLogin", isLogin);
+                startActivityForResult(intent, REQUEST_SETTINGS_CODE);
                 return true;
             }
         });
@@ -129,6 +137,10 @@ public class MeFragment extends ABaseFragment {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
                 if (view.getTag() instanceof String) {
+                    if (!isLogin) {
+                        startActivityForLogin();
+                        return;
+                    }
                     Intent intent;
                     switch (view.getTag().toString()) {
                         case "我的流量":
@@ -182,15 +194,44 @@ public class MeFragment extends ABaseFragment {
             }
         });
 
-        tvGreeting.setOnClickListener(new View.OnClickListener() {
+        rlProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, MeActivity.class);
-                intent.putExtra("uid", uid);
-                intent.putExtra("userType", userType);
-                startActivity(intent);
+                if (isLogin) {
+                    Intent intent = new Intent(mContext, MeActivity.class);
+                    intent.putExtra("uid", uid);
+                    intent.putExtra("userType", userType);
+                    startActivity(intent);
+                } else {
+                    startActivityForLogin();
+                }
+
             }
         });
+    }
+
+    private void startActivityForLogin() {
+        Intent intent = new Intent(mContext, LoginActivity.class);
+        startActivityForResult(intent, REQUEST_LOGIN_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_SETTINGS_CODE && resultCode == SettingsActivity
+                .RESULT_SETTINGS_CODE) {
+            isLogin = false;
+            uid = data.getStringExtra("uid");
+            userType = data.getStringExtra("userType");
+            getUserInfo();
+        }
+
+        if (requestCode == REQUEST_LOGIN_CODE && resultCode == LoginActivity.RESULT_LOGIN_CODE) {
+            isLogin = true;
+            uid = data.getStringExtra("uid");
+            userType = data.getStringExtra("userType");
+            getUserInfo();
+        }
     }
 
     private void showDialog() {
@@ -245,30 +286,34 @@ public class MeFragment extends ABaseFragment {
                     .class);
             if (bean == null)
                 return;
+            mAdapter.remove(0, mData.size());
+            mData.clear();
+            mData.add(bean.getFlow());
+            mData.add("shop");
+            mData.add("chart");
+            mData.add("history");
+            mData.add("friends");
+            mData.add("code");
+            mData.add("system");
+            mData.add(bean.getIntegral());
+            mData.add("privilege");
+            mData.add("management");
+            mAdapter.add(0, mData.size(), mData);
             if (bean.getCode() == 200) {
-                mData.clear();
-                mData.add(bean.getFlow());
-                mData.add("shop");
-                mData.add("chart");
-                mData.add("history");
-                mData.add("friends");
-                mData.add("code");
-                mData.add("system");
-                mData.add(bean.getIntegral());
-                mData.add("privilege");
-                mData.add("management");
-                mAdapter.add(0, mData.size(), mData);
+                isLogin = true;
                 tvGreeting.setText(String.format(mContext.getResources().getString(R.string
                         .say_hello), bean.getNickname()));
             }
+            if (bean.getCode() == 437) {
+                isLogin = false;
+                tvGreeting.setText("未登录");
+            }
         }
-
     }
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
         ToastUtils.showToast(mContext.getApplicationContext(), error, R.layout.toast, R.id
                 .tv_message);
-
     }
 }

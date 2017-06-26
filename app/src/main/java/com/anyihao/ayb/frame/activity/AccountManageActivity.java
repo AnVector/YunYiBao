@@ -73,7 +73,6 @@ public class AccountManageActivity extends ABaseActivity {
                 .execute(new Task.TaskBuilder()
                         .setTaskType(TaskType.Method.POST)
                         .setUrl(GlobalConsts.PREFIX_URL)
-                        .setContent("{}")
                         .setParams(params)
                         .setPage(1)
                         .setActionType(0)

@@ -41,6 +41,7 @@ import fr.castorflex.android.circularprogressbar.CircularProgressDrawable;
 public class LoginActivity extends ABaseActivity {
 
     private static final int REQUEST_SIGNUP = 1000;
+    public static int RESULT_LOGIN_CODE = 0x00004;
     @BindView(R.id.input_user_name)
     EditText etUserName;
     @BindView(R.id.input_password)
@@ -98,6 +99,13 @@ public class LoginActivity extends ABaseActivity {
                 userName = etUserName.getText().toString().trim();
                 password = etPassword.getText().toString().trim();
                 login();
+            }
+        });
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
 
@@ -235,8 +243,11 @@ public class LoginActivity extends ABaseActivity {
                     .tv_message);
             PreferencesUtils.putString(getApplicationContext(), "uid", bean.getUid());
             PreferencesUtils.putString(getApplicationContext(), "userType", bean.getUserType());
-            Intent intent = new Intent(LoginActivity.this, MainFragmentActivity.class);
-            startActivity(intent);
+            PreferencesUtils.putBoolean(getApplicationContext(), "isLogin", true);
+            Intent intent = new Intent();
+            intent.putExtra("uid", bean.getUid());
+            intent.putExtra("userType", bean.getUserType());
+            setResult(RESULT_LOGIN_CODE, intent);
             finish();
         } else {
             onLoginFailed(bean.getMsg());
