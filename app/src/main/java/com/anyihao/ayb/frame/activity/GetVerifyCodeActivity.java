@@ -87,7 +87,10 @@ public class GetVerifyCodeActivity extends ABaseActivity {
     @Override
     protected void initData() {
         mTimeHint = getResources().getString(R.string.re_get_after_60s);
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         titleMid.setText(title);
         if (action.equals("REBIND")) {
             btnNext.setText(getString(R.string.submit));

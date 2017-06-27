@@ -51,7 +51,10 @@ public class RentHistoryActivity extends ABaseActivity {
 
     @Override
     protected void initData() {
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         toolbarTitleMid.setText(getString(R.string.rented_history));
         mAdapter = new RentHisAdapter(this, R.layout.item_rent_history);
         recyclerview.setAdapter(mAdapter);

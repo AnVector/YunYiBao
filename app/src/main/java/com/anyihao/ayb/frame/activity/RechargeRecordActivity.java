@@ -22,7 +22,7 @@ import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.listener.OnItemClickListener;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +44,7 @@ public class RechargeRecordActivity extends ABaseActivity {
     private String[] array = new String[]{"13:45", "18:00", "12:00", "08:00", "11:37", "02:16",
             "15:21",
             "14:43"};
-    private List<String> mData = Arrays.asList(array);
+    private List<DataBean> mData = new ArrayList<>();
     private int page = 1;
 
     @Override
@@ -59,10 +59,13 @@ public class RechargeRecordActivity extends ABaseActivity {
 
     @Override
     protected void initData() {
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         titleMid.setText(getString(R.string.recharge_record));
         recyclerView.setHasFixedSize(false);
-        mAdapter = new RechargeRecordAdapter(mData);
+        mAdapter = new RechargeRecordAdapter(mData, R.layout.item_recharge_record);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         mAdapter.setEmptyViewPolicy(UltimateRecyclerView.EMPTY_SHOW_LOADMORE_ONLY);
@@ -160,7 +163,7 @@ public class RechargeRecordActivity extends ABaseActivity {
             if (bean.getCode() == 200) {
                 List<DataBean> beans = bean.getData();
                 if (beans.size() > 0) {
-                    
+
                 }
             }
         }

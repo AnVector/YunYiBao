@@ -58,6 +58,10 @@ public class FlowChartActivity extends ABaseActivity {
         tabLayout.setupWithViewPager(viewpager);
         toolbar.inflateMenu(R.menu.flow_chart_toolbar_menu);
         toolbar.setNavigationIcon(R.drawable.ic_back);
+//        setSupportActionBar(toolbar);
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        }
         toolbarTitle.setText(getString(R.string.data_flow_chart));
     }
 

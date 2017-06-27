@@ -35,7 +35,10 @@ public class BindDeviceActivity extends ABaseActivity {
 
     @Override
     protected void initData() {
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         titleMid.setText(getString(R.string.bind_device));
     }
 

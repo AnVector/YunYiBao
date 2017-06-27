@@ -131,7 +131,10 @@ public class MeActivity extends ABaseActivity {
     protected void initData() {
         getUserInfo();
         mHandler.sendEmptyMessage(MSG_LOAD_DATA);
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         titleMid.setText(getString(R.string.about_me));
         mAdapter = new UserInfoAdapter(this, R.layout.item_user_info);
         recyclerview.setAdapter(mAdapter);

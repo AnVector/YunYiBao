@@ -62,7 +62,10 @@ public class DepositActivity extends ABaseActivity {
 
     @Override
     protected void initData() {
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         toolbarTitleMid.setText(getString(R.string.deposit));
         tvStepThree.setBackground(getResources().getDrawable(R.drawable.ic_step_yes));
 

@@ -56,6 +56,10 @@ public class CreditActivity extends ABaseActivity {
 //        }
         toolbar.setNavigationIcon(R.drawable.ic_back_white);
         toolbar.setBackground(null);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         toolbarTitle.setTextColor(getResources().getColor(R.color.white));
         toolbarTitle.setText(getString(R.string.my_points));
         mAdapter = new CreditAdapter(this, R.layout.item_credit);

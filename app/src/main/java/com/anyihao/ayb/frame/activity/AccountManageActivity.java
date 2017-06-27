@@ -56,7 +56,10 @@ public class AccountManageActivity extends ABaseActivity {
 
     @Override
     protected void initData() {
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         toolbarTitleMid.setText(getString(R.string.account_management));
         mAdapter = new AccountManageAdapter(this, R.layout.item_about_us);
         recyclerview.setAdapter(mAdapter);

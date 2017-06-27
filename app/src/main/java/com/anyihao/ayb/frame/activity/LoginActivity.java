@@ -85,7 +85,10 @@ public class LoginActivity extends ABaseActivity {
 
     @Override
     protected void initData() {
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         toolbar.setBackgroundColor(getResources().getColor(R.color.app_background_color));
         titleRight.setText(getString(R.string.register_hint));
     }

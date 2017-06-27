@@ -43,7 +43,10 @@ public class RechargeRecordDetailsActivity extends ABaseActivity {
 
     @Override
     protected void initData() {
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         titleMid.setText(getString(R.string.recharge_record_details));
         mAdapter = new RechargeRecordDetailsAdapter(this, R.layout.item_recharge_record_details);
         recyclerview.setAdapter(mAdapter);

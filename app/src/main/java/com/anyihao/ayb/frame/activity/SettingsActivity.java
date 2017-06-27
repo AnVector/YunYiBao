@@ -63,7 +63,10 @@ public class SettingsActivity extends ABaseActivity {
         if (!isLogin) {
             btnLogout.setText(getString(R.string.not_login));
         }
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         titleMid.setText(getString(R.string.settings));
         mAdapter = new SettingsAdapter(this, R.layout.item_settings);
         recyclerview.setAdapter(mAdapter);

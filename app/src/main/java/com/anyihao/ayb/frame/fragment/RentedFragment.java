@@ -37,7 +37,7 @@ public class RentedFragment extends ABaseFragment {
     protected void initData() {
 
         recyclerView.setHasFixedSize(false);
-        mAdapter = new RentedAdapter(mData);
+        mAdapter = new RentedAdapter(mData, R.layout.item_rented_device);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         mAdapter.setEmptyViewPolicy(UltimateRecyclerView.EMPTY_SHOW_LOADMORE_ONLY);

@@ -55,7 +55,10 @@ public class MerchantPrivilegeActivity extends ABaseActivity {
     @Override
     protected void initData() {
         initViewPager();
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         toolbarTitleMid.setText(getString(R.string.merchat_privilege));
         toolbarTitleRight.setText(getString(R.string.direction_for_use));
         toolbarTitleRight.setTextColor(getResources().getColor(R.color.light_gray));

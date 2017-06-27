@@ -39,8 +39,11 @@ public class MessageDetailsActivity extends ABaseActivity {
     @Override
     protected void initData() {
 
-        toolbar.setNavigationIcon(R.drawable.ic_back);
         toolbar.setBackgroundColor(getResources().getColor(R.color.app_background_color));
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         titleMid.setText(getString(R.string.message_details));
     }
 

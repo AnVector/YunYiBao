@@ -10,7 +10,7 @@ import com.anyihao.ayb.R;
 
 public class DataFlowAssortAdapter extends RecyclerViewAdapter<String> {
 
-    String[] array = new String[]{"初始赠送剩余流量", "购买会员剩余流量", "任务赠送剩余流量"};
+    private String[] array = new String[]{"初始赠送剩余流量", "购买会员剩余流量", "任务赠送剩余流量"};
 
 
     public DataFlowAssortAdapter(Context context, int layoutId) {

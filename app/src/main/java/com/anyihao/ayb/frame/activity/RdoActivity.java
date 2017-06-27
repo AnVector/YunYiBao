@@ -83,7 +83,10 @@ public class RdoActivity extends ABaseActivity {
         initOptionPicker();
         initServiceOptionPicker();
         toolbarTitle.setText(getString(R.string.search));
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         Calendar selectedDate = Calendar.getInstance();//系统当前时间
         btnStartTime.setText(getTime(selectedDate.getTime()));
         btnEndTime.setText(getTime(selectedDate.getTime()));

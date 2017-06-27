@@ -46,6 +46,10 @@ public class ScanActivity extends ABaseActivity implements DecoratedBarcodeView.
     @Override
     protected void initData() {
         toolbar.setNavigationIcon(R.drawable.ic_back_white);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         toolbarTitleMid.setText(getString(R.string.QR_code));
         toolbarTitleMid.setTextColor(Color.parseColor("#FFFFFF"));
         toolbar.setBackgroundColor(Color.parseColor("#000000"));

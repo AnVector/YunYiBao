@@ -58,7 +58,10 @@ public class FlowAccountActivity extends ABaseActivity {
 
     @Override
     protected void initData() {
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         titleMid.setText(getString(R.string.my_balance));
         mAdapter = new DataFlowAssortAdapter(this, R.layout.item_data_assortment);
         recyclerview.setAdapter(mAdapter);

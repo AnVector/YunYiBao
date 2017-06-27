@@ -38,7 +38,10 @@ public class AboutUsActivity extends ABaseActivity {
 
     @Override
     protected void initData() {
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         toolbarTitleMid.setText(getString(R.string.about_us));
         mAdapter = new AboutUsAdapter(this, R.layout.item_about_us);
         recyclerview.setAdapter(mAdapter);

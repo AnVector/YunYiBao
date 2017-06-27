@@ -42,7 +42,10 @@ public class SystemRecordActivity extends ABaseActivity {
 
     @Override
     protected void initData() {
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         toolbarTitleMid.setText(getString(R.string.system_gift_record));
         mAdapter = new SystemRecordAdapter(this, R.layout.item_system_record);
         recyclerview.setAdapter(mAdapter);

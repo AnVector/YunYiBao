@@ -34,7 +34,10 @@ public class DeviceCodeActivity extends ABaseActivity {
     protected void initData() {
         setTextFont(tvDeviceNumHint);
         tvDeviceNum.setText("IEBox10000");
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         toolbarTitleMid.setText(getString(R.string.scan_result));
     }
 

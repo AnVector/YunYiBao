@@ -68,7 +68,10 @@ public class RechargeActivity extends ABaseActivity {
     @Override
     protected void initData() {
         initViewPager();
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         titleMid.setText(getString(R.string.data_flow_charge));
         tabLayout.setupWithViewPager(mViewpager);
         getUserInfo();

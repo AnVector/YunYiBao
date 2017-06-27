@@ -60,7 +60,10 @@ public class PayActivity extends ABaseActivity {
     @Override
     protected void initData() {
 
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         titleMid.setText(getString(R.string.pay));
         tvPayAmount.setText(String.format(tvPayAmount.getText().toString(), money));
         tvAmount.setText(String.format(tvAmount.getText().toString(), amount));

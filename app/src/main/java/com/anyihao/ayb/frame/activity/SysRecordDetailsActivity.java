@@ -32,7 +32,10 @@ public class SysRecordDetailsActivity extends ABaseActivity {
     @Override
     protected void initData() {
 
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         toolbarTitleMid.setText(getString(R.string.record_details));
 
 

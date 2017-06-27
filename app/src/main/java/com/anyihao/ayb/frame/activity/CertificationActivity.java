@@ -66,7 +66,10 @@ public class CertificationActivity extends ABaseActivity {
      */
     @Override
     protected void initData() {
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         toolbarTitleMid.setText(getString(R.string.authentication));
         tvStepTwo.setBackground(getResources().getDrawable(R.drawable.ic_step_yes));
     }

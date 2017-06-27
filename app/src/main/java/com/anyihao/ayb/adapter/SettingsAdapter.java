@@ -19,15 +19,9 @@ public class SettingsAdapter extends RecyclerViewAdapter<String> {
     public void convert(ViewHolder holder, String s) {
         holder.setText(R.id.title, s);
 
-        switch (s) {
-            case "意见反馈":
-            case "关于云逸宝":
-                holder.setVisible(R.id.space, true);
-                holder.setVisible(R.id.line, false);
-                break;
-            default:
-                break;
+        if ("意见反馈".equals(s) || "关于云逸宝".equals(s)) {
+            holder.setVisible(R.id.space, true);
+            holder.setVisible(R.id.line, false);
         }
-
     }
 }

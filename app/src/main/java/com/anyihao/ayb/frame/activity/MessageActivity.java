@@ -49,7 +49,10 @@ public class MessageActivity extends ABaseActivity {
     protected void initData() {
         initViewPager();
         tabLayout.setupWithViewPager(viewpager);
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         titleMid.setText(getString(R.string.message));
     }
 

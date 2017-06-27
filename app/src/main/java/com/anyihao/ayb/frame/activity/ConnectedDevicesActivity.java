@@ -78,6 +78,10 @@ public class ConnectedDevicesActivity extends ABaseActivity {
     protected void initData() {
         initBottomDialog();
         toolbar.setNavigationIcon(R.drawable.ic_back_white);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         toolbar.setBackground(null);
         toolbarTitle.setText(getString(R.string.connected_devices));
         toolbarTitle.setTextColor(getResources().getColor(R.color.white));
@@ -87,7 +91,7 @@ public class ConnectedDevicesActivity extends ABaseActivity {
         line.setVisibility(View.GONE);
 
         recyclerView.setHasFixedSize(false);
-        mAdapter = new ConnectedDeviceAdapter(mData);
+        mAdapter = new ConnectedDeviceAdapter(mData, R.layout.item_connected_device_list);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         mAdapter.setEmptyViewPolicy(UltimateRecyclerView.EMPTY_SHOW_LOADMORE_ONLY);

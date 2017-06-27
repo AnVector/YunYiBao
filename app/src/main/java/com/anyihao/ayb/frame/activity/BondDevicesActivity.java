@@ -46,10 +46,13 @@ public class BondDevicesActivity extends ABaseActivity {
 
     @Override
     protected void initData() {
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         titleMid.setText(getString(R.string.device_list));
         recyclerView.setHasFixedSize(false);
-        mAdapter = new BondDeviceAdapter(mData);
+        mAdapter = new BondDeviceAdapter(mData, R.layout.item_bond_device_list);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         mAdapter.setEmptyViewPolicy(UltimateRecyclerView.EMPTY_SHOW_LOADMORE_ONLY);

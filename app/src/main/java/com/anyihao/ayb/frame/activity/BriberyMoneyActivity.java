@@ -41,7 +41,10 @@ public class BriberyMoneyActivity extends ABaseActivity {
 
     @Override
     protected void initData() {
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         toolbarTitleMid.setText(getString(R.string.gift_data));
         toolbarTitleRight.setText(getString(R.string.gift_history));
         toolbarTitleRight.setTextColor(getResources().getColor(R.color.light_gray));

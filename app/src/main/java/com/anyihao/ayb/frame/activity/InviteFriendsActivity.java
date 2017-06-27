@@ -51,7 +51,10 @@ public class InviteFriendsActivity extends ABaseActivity {
         setTextFont(inviteCodeHint);
         setTextFont(inviteCodeTv);
         toolbar.setNavigationIcon(R.drawable.ic_back_white);
-//        setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         titleMid.setText(getString(R.string.invite_friends));
     }
 

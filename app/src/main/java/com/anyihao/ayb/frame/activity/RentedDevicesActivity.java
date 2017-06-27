@@ -50,7 +50,10 @@ public class RentedDevicesActivity extends ABaseActivity {
 
     @Override
     protected void initData() {
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         toolbarTitleMid.setText(getString(R.string.rented_devices));
         toolbarTitleRight.setText(getString(R.string.rented_history));
         mAdapter = new RentedDeviceAdapter(this, R.layout.item_rented_devices);

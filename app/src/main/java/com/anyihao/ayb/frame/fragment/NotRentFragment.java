@@ -26,7 +26,7 @@ import butterknife.BindView;
 public class NotRentFragment extends ABaseFragment {
 
     @BindView(R.id.ultimate_recycler_view)
-    UltimateRecyclerView recyclerView;
+    UltimateRecyclerView ultimateRecyclerView;
     private NotRentAdapter mAdapter;
     protected LinearLayoutManager layoutManager;
     private ItemTouchHelper mItemTouchHelper;
@@ -36,17 +36,17 @@ public class NotRentFragment extends ABaseFragment {
     @Override
     protected void initData() {
 
-        recyclerView.setHasFixedSize(false);
-        mAdapter = new NotRentAdapter(mData);
+        ultimateRecyclerView.setHasFixedSize(false);
+        mAdapter = new NotRentAdapter(mData, R.layout.item_not_rent_device);
         layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
+        ultimateRecyclerView.setLayoutManager(layoutManager);
         mAdapter.setEmptyViewPolicy(UltimateRecyclerView.EMPTY_SHOW_LOADMORE_ONLY);
 //        StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration
 //                (informationAdapter);
 //        ultimateRecyclerView.addItemDecoration(headersDecor);
         //bug 设置加载更多动画会使添加的数据延迟显示
 //        recyclerView.setLoadMoreView(R.layout.custom_bottom_progressbar);
-        recyclerView.setEmptyView(R.layout.empty_view_no_message, UltimateRecyclerView
+        ultimateRecyclerView.setEmptyView(R.layout.empty_view_no_message, UltimateRecyclerView
                 .EMPTY_CLEAR_ALL);
 //        recyclerView.setParallaxHeader(getLayoutInflater().inflate(R.layout
 //                .parallax_recyclerview_header, recyclerView.mRecyclerView, false));
@@ -54,16 +54,16 @@ public class NotRentFragment extends ABaseFragment {
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback
                 (mAdapter);
         mItemTouchHelper = new ItemTouchHelper(callback);
-        mItemTouchHelper.attachToRecyclerView(recyclerView.mRecyclerView);
-//        recyclerView.reenableLoadmore();
-        recyclerView.setAdapter(mAdapter);
+        mItemTouchHelper.attachToRecyclerView(ultimateRecyclerView.mRecyclerView);
+        ultimateRecyclerView.reenableLoadmore();
+        ultimateRecyclerView.setAdapter(mAdapter);
 
     }
 
     @Override
     protected void initEvent() {
 
-        recyclerView.setOnParallaxScroll(new UltimateRecyclerView.OnParallaxScroll() {
+        ultimateRecyclerView.setOnParallaxScroll(new UltimateRecyclerView.OnParallaxScroll() {
             @Override
             public void onParallaxScroll(float percentage, float offset, View parallax) {
             }
@@ -75,13 +75,15 @@ public class NotRentFragment extends ABaseFragment {
                 mItemTouchHelper.startDrag(viewHolder);
             }
         });
-        recyclerView.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener
+        ultimateRecyclerView.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener
                 () {
             @Override
             public void onRefresh() {
 
             }
         });
+
+
 
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override

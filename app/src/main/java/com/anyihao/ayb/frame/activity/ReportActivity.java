@@ -103,7 +103,10 @@ public class ReportActivity extends ABaseActivity {
     protected void initData() {
 
         toolbarTitle.setText(customer + service + "报表");
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         updateValues();
         recyclerView.setHasFixedSize(false);
         mAdapter = new RdoCashRatioAdapter(data);

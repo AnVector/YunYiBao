@@ -33,7 +33,10 @@ public class SayHiActivity extends ABaseActivity {
 
     @Override
     protected void initData() {
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         toolbarTitleMid.setText(getString(R.string.say_hi));
         toolbarTitleRight.setText(getString(R.string.send_hi));
         toolbarTitleRight.setTextColor(getResources().getColor(R.color.light_gray));
