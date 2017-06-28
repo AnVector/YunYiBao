@@ -205,6 +205,11 @@ public class MeActivity extends ABaseActivity {
                             showCodeDialog();
                             break;
                         case "押金退款":
+                            if ("未缴纳".equals(o.toString())) {
+                                ToastUtils.showToast(getApplicationContext(), o.toString(), R
+                                        .layout.toast, R.id.tv_message);
+                                return;
+                            }
                             showConfirmDialog();
                             break;
                         case "手机号码":

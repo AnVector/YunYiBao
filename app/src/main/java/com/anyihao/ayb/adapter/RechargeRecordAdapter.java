@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.anyihao.ayb.R;
-import com.anyihao.ayb.bean.RechargeRecordBean.DataBean;
+import com.anyihao.ayb.bean.RechargeRecordListBean.DataBean;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
 
 import java.util.List;
@@ -45,23 +45,25 @@ public class RechargeRecordAdapter extends UAdapter<DataBean> {
 
         super.onBindViewHolder(holder, position);
         if (bp && holder instanceof RechargeRecordViewHolder) {
-            DataBean content = mData.get(index);
+            DataBean content = mData.get((hasHeaderView() ? position - 1 : position));
             if (content == null) return;
-            if (position % 2 == 0) {
+            if ("WXPAY".equals(content.getTopupType())) {
                 ((RechargeRecordViewHolder) holder).tvMonth.setText("本月");
                 ((RechargeRecordViewHolder) holder).tvMonth.setVisibility(View.VISIBLE);
                 ((RechargeRecordViewHolder) holder).line.setVisibility(View.GONE);
-                ((RechargeRecordViewHolder) holder).tvDescription.setText("微信充值成功100M流量");
+                ((RechargeRecordViewHolder) holder).tvDescription.setText("微信充值成功" + content
+                        .getFlow() + "流量");
                 ((RechargeRecordViewHolder) holder).imgPayIcon.setImageResource(R.drawable
                         .ic_recharge_record_wxpay);
             } else {
-                ((RechargeRecordViewHolder) holder).tvDescription.setText("支付宝充值成功100M流量");
+                ((RechargeRecordViewHolder) holder).tvDescription.setText("支付宝充值成功" + content
+                        .getFlow() + "流量");
                 ((RechargeRecordViewHolder) holder).imgPayIcon.setImageResource(R.drawable
                         .ic_recharge_record_alipay);
             }
-            ((RechargeRecordViewHolder) holder).tvWeekday.setText("星期一");
+            ((RechargeRecordViewHolder) holder).tvWeekday.setText(content.getPkgInfo());
             ((RechargeRecordViewHolder) holder).tvTime.setText(content.getCrtTm());
-            ((RechargeRecordViewHolder) holder).tvPrice.setText("-4元");
+            ((RechargeRecordViewHolder) holder).tvPrice.setText(content.getAmount());
 
         }
     }

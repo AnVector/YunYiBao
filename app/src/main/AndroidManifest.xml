@@ -358,8 +358,7 @@
             android:name=".frame.activity.SetPwdActivity"
             android:launchMode="singleTop">
         </activity>
-        <activity
-            android:name=".frame.activity.GetVerifyCodeActivity">
+        <activity android:name=".frame.activity.GetVerifyCodeActivity">
         </activity>
         <activity
             android:name=".frame.activity.ResetPwdActivity"
@@ -528,6 +527,8 @@
         <activity
             android:name=".frame.activity.DeviceCodeActivity"
             android:launchMode="singleTop">
+        </activity>
+        <activity android:name=".frame.activity.QuestionDetailsActivity">
         </activity>
     </application>
 

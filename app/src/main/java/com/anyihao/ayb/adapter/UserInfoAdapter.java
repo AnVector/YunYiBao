@@ -31,6 +31,7 @@ public class UserInfoAdapter extends RecyclerViewAdapter<String> {
             holder.setVisible(R.id.img_profile, true);
         } else if ("押金退款".equals(key)) {
             holder.setVisible(R.id.line, false);
+            holder.setText(R.id.value, s);
         } else {
             holder.setText(R.id.value, s);
         }
@@ -39,7 +40,5 @@ public class UserInfoAdapter extends RecyclerViewAdapter<String> {
             holder.setVisible(R.id.space, true);
             holder.setVisible(R.id.line, false);
         }
-
-
     }
 }

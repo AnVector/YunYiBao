@@ -104,6 +104,7 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     @Override
     protected void initData() {
         titleMid.setText(getString(R.string.service_location));
+        toolbar.setNavigationIcon(null);
         fakeStatusBar.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         if (aMap == null) {
             aMap = mapView.getMap();

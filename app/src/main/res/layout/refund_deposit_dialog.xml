@@ -35,7 +35,7 @@
             android:layout_weight="1"
             android:background="@null"
             android:text="@string/deposit_confirm"
-            android:textColor="@color/toolbar_title_color"
+            android:textColor="@color/pay_title_text_color"
             android:textSize="@dimen/font_size_sev"/>
 
         <View
@@ -50,7 +50,7 @@
             android:layout_weight="1"
             android:background="@null"
             android:text="@string/deposit_cancel"
-            android:textColor="@color/pay_title_text_color"
+            android:textColor="@color/toolbar_title_color"
             />
     </LinearLayout>
 

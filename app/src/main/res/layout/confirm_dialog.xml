@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="298dp"
-    android:layout_height="195dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_gravity="center_horizontal"
     android:gravity="center"
     android:orientation="vertical">
@@ -11,16 +11,17 @@
         android:id="@+id/dia_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="75dp"
+        android:layout_marginTop="45dp"
         android:gravity="center"
-        android:text="@string/account_unbunding_hint"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:textColor="@color/pay_title_text_color"
         android:textSize="@dimen/font_size_sev"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.6dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="40dp"
         android:background="@color/line_color"/>
 
     <LinearLayout
@@ -32,9 +33,10 @@
             android:id="@+id/btn_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:background="@null"
-            android:text="@string/cancel"
+            android:gravity="center"
             android:textColor="@color/pay_title_text_color"
             android:textSize="@dimen/font_size_sev"/>
 
@@ -47,10 +49,12 @@
             android:id="@+id/btn_ok"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:background="@null"
-            android:text="@string/ok"
+            android:gravity="center"
             android:textColor="@color/toolbar_title_color"
+            android:textSize="@dimen/font_size_sev"
             />
     </LinearLayout>
 

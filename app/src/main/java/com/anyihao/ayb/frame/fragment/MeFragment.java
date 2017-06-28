@@ -313,7 +313,27 @@ public class MeFragment extends ABaseFragment {
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-        ToastUtils.showToast(mContext.getApplicationContext(), error, R.layout.toast, R.id
-                .tv_message);
+
+        if (error.contains("ConectException")) {
+            mAdapter.remove(0, mData.size());
+            mData.clear();
+            mData.add("");
+            mData.add("shop");
+            mData.add("chart");
+            mData.add("history");
+            mData.add("friends");
+            mData.add("code");
+            mData.add("system");
+            mData.add("");
+            mData.add("privilege");
+            mData.add("management");
+            mAdapter.add(0, mData.size(), mData);
+            isLogin = false;
+            tvGreeting.setText("未登录");
+            ToastUtils.showToast(mContext.getApplicationContext(), "网络连接失败，请检查网络设置", R.layout
+                    .toast, R.id
+                    .tv_message);
+        }
+
     }
 }

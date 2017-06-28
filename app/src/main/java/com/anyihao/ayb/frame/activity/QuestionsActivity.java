@@ -1,5 +1,6 @@
 package com.anyihao.ayb.frame.activity;
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -74,7 +75,12 @@ public class QuestionsActivity extends ABaseActivity {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-
+                if (o instanceof DataBean) {
+                    Intent intent = new Intent(QuestionsActivity.this, QuestionDetailsActivity
+                            .class);
+                    intent.putExtra("details", (DataBean) o);
+                    startActivity(intent);
+                }
             }
 
             @Override

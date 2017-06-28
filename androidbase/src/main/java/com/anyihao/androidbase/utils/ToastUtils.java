@@ -10,6 +10,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anyihao.androidbase.R;
+
 /**
  * <pre>
  *     author: Blankj
@@ -310,6 +312,31 @@ public class ToastUtils {
         View toastRoot = LayoutInflater.from(context).inflate(layoutId, null);
         //初始化布局控件
         TextView mTextView = (TextView) toastRoot.findViewById(textId);
+        if (mTextView == null)
+            return;
+        //为控件设置属性
+        mTextView.setText(message);
+        //Toast的初始化
+        if (sToast == null) {
+            sToast = new Toast(context);
+
+        }
+        //获取屏幕高度
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        int height = wm.getDefaultDisplay().getHeight();
+        //Toast的Y坐标是屏幕高度的1/3，不会出现不适配的问题
+        sToast.setGravity(Gravity.BOTTOM, 0, height / 10);
+        sToast.setDuration(Toast.LENGTH_SHORT);
+        sToast.setView(toastRoot);
+        sToast.show();
+    }
+
+
+    public static void showToast(Context context, String message) {
+        //加载Toast布局
+        View toastRoot = LayoutInflater.from(context).inflate(R.layout.toast, null);
+        //初始化布局控件
+        TextView mTextView = (TextView) toastRoot.findViewById(R.id.tv_message);
         if (mTextView == null)
             return;
         //为控件设置属性

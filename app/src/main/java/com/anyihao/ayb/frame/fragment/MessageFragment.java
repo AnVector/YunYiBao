@@ -1,13 +1,17 @@
 package com.anyihao.ayb.frame.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
@@ -19,12 +23,16 @@ import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.MessageAdapter;
 import com.anyihao.ayb.bean.MessageBean;
 import com.anyihao.ayb.bean.MessageBean.DataBean;
+import com.anyihao.ayb.bean.ResultBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
+import com.anyihao.ayb.frame.activity.MessageDetailsActivity;
+import com.anyihao.ayb.frame.activity.RedEnvelopeActivity;
 import com.anyihao.ayb.listener.OnItemClickListener;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 import com.marshalchen.ultimaterecyclerview.itemTouchHelper.SimpleItemTouchHelperCallback;
+import com.marshalchen.ultimaterecyclerview.ui.emptyview.emptyViewOnShownListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,15 +68,28 @@ public class MessageFragment extends ABaseFragment {
         mAdapter = new MessageAdapter(mData, R.layout.item_message);
         layoutManager = new LinearLayoutManager(getContext());
         ultimateRecyclerView.setLayoutManager(layoutManager);
-        mAdapter.setEmptyViewPolicy(UltimateRecyclerView.EMPTY_CLEAR_ALL);
 //        StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration
 //                (informationAdapter);
 //        ultimateRecyclerView.addItemDecoration(headersDecor);
         //bug 设置加载更多动画会使添加的数据延迟显示
-        ultimateRecyclerView.setDefaultSwipeToRefreshColorScheme(R.array.gplus_colors);
         ultimateRecyclerView.setLoadMoreView(R.layout.custom_bottom_progressbar);
-        ultimateRecyclerView.setEmptyView(R.layout.empty_view_no_message, UltimateRecyclerView
-                .EMPTY_CLEAR_ALL);
+        ultimateRecyclerView.setEmptyView(R.layout.empty_view, UltimateRecyclerView
+                .EMPTY_CLEAR_ALL, new emptyViewOnShownListener() {
+            @Override
+            public void onEmptyViewShow(View mView) {
+                if (mView == null)
+                    return;
+                ImageView imvError = (ImageView) mView.findViewById(R.id.ic_error);
+                if (imvError == null)
+                    return;
+                imvError.setImageDrawable(getResources().getDrawable(R.drawable
+                        .ic_no_message));
+                TextView tvHint = (TextView) mView.findViewById(R.id.tv_hint);
+                if (tvHint == null)
+                    return;
+                tvHint.setText("暂无消息");
+            }
+        });
 //        recyclerView.setParallaxHeader(getLayoutInflater().inflate(R.layout
 //                .parallax_recyclerview_header, recyclerView.mRecyclerView, false));
 //        recyclerView.setRecylerViewBackgroundColor(Color.parseColor("#ffffff"));
@@ -116,14 +137,26 @@ public class MessageFragment extends ABaseFragment {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-//                Intent intent = new Intent(mContext, RedEnvelopeActivity.class);
-//                startActivity(intent);
+
+                Intent intent = new Intent();
+                if (o instanceof DataBean) {
+                    DataBean bean = (DataBean) o;
+                    if ("PERSON".equals(type) || "SYSTEM".equals(type)) {
+                        intent.setClass(mContext, MessageDetailsActivity.class);
+                        intent.putExtra("details", bean);
+                        flagMessage(bean.getKeyId());
+                    } else {
+                        intent.setClass(mContext, RedEnvelopeActivity.class);
+                    }
+                    startActivity(intent);
+                }
+
+
             }
 
             @Override
             public boolean onItemLongClick(ViewGroup parent, View view, Object o, int position) {
-//                Intent intent = new Intent(mContext, MessageDetailsActivity.class);
-//                startActivity(intent);
+
                 return false;
             }
         });
@@ -149,6 +182,12 @@ public class MessageFragment extends ABaseFragment {
         }
     }
 
+    private void onLoadNoData() {
+        ToastUtils.showToast(mContext.getApplicationContext(), "暂无消息", R.layout
+                .toast, R.id.tv_message);
+        ultimateRecyclerView.showEmptyView();
+    }
+
     private void getMessage() {
         if (StringUtils.isEmpty(type)) {
             return;
@@ -169,6 +208,26 @@ public class MessageFragment extends ABaseFragment {
                 .createTask());
     }
 
+    private void flagMessage(int keyId) {
+
+        if (StringUtils.isEmpty(type)) {
+            return;
+        }
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "MSGRESULT");
+        params.put("uid", PreferencesUtils.getString(mContext.getApplicationContext(), "uid", ""));
+        params.put("type", type);
+        params.put("keyId", keyId + "");
+
+        PresenterFactory.getInstance().createPresenter(this).execute(new Task.TaskBuilder()
+                .setParams(params)
+                .setTaskType(TaskType.Method.POST)
+                .setUrl(GlobalConsts.PREFIX_URL)
+                .setPage(100)
+                .setActionType(1)
+                .createTask());
+    }
+
     @Override
     protected int getContentViewId() {
         return R.layout.fragment_message;
@@ -177,30 +236,42 @@ public class MessageFragment extends ABaseFragment {
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
 
-        MessageBean bean = GsonUtils.getInstance().transitionToBean(result, MessageBean.class);
-        if (bean == null)
-            return;
-        if (bean.getCode() == 200) {
-            List<DataBean> beans = bean.getData();
-            if (beans.size() > 0) {
-                mItems = beans;
-                if (isRefresh) {
-                    onFireRefresh();
+        if (actionType == 0) {
+            MessageBean bean = GsonUtils.getInstance().transitionToBean(result, MessageBean.class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                List<DataBean> beans = bean.getData();
+                if (beans.size() > 0) {
+                    mItems = beans;
+                    if (isRefresh) {
+                        onFireRefresh();
+                    } else {
+                        onLoadMore();
+                    }
                 } else {
-                    onLoadMore();
-                }
-            } else {
-                if (page == 1) {
-                    ToastUtils.showToast(mContext.getApplicationContext(), "暂无消息", R.layout
-                            .toast, R.id.tv_message);
-                }
+                    if (page == 1) {
+                        onLoadNoData();
+                    }
 
+                }
             }
         }
+
+        if (actionType == 1) {
+            ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean.class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                Log.d(TAG, "消息标记为已读成功");
+            }
+        }
+
     }
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-
+        ToastUtils.showToast(mContext.getApplicationContext(), error, R.layout
+                .toast, R.id.tv_message);
     }
 }

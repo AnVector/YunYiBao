@@ -28,7 +28,6 @@
             android:layout_gravity="left|center_vertical"
             android:layout_weight="1"
             android:gravity="left|center_vertical"
-            android:text="@string/recharge_nick_name"
             android:textSize="@dimen/font_size_fif"/>
 
         <TextView
@@ -38,7 +37,6 @@
             android:layout_gravity="right|center_vertical"
             android:layout_weight="1"
             android:gravity="right|center_vertical"
-            android:text="@string/data_available"
             android:textColor="@color/light_gray"
             android:textSize="@dimen/font_size_small"/>
     </LinearLayout>

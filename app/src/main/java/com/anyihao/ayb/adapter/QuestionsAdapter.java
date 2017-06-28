@@ -19,7 +19,6 @@ public class QuestionsAdapter extends RecyclerViewAdapter<DataBean> {
     @Override
     public void convert(ViewHolder holder, DataBean dataBean) {
         holder.setText(R.id.title, dataBean.getQuestion());
-        holder.getConvertView().setTag(dataBean.getAnswer());
         if (holder.getPosition() == getItemCount() - 1) {
             holder.setVisible(R.id.line, false);
         }

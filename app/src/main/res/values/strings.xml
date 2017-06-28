@@ -96,9 +96,6 @@
     <string name="bind_device">绑定设备</string>
 
     <!--messages details-->
-    <string name="example_text">如果你无法简洁的表达你的想法，那只能说明你还不够了解它。——阿尔伯特 爱因斯坦</string>
-    <string name="example_date">2017&#8211;07&#8211;07 12:16:17</string>
-    <string name="example_user_name">Kaven</string>
 
     <!--settings-->
     <string name="change_pwd">修改密码</string>
@@ -123,6 +120,9 @@
     <string name="save">保存</string>
 
     <!--modify device info-->
+
+    <!--question details-->
+    <string name="question_details">常见问题</string>
 
     <!--feedback-->
     <string name="feedback_hint">请详细描述您的问题或建议，我们将及时解决</string>
@@ -151,7 +151,10 @@
     <string name="leasing_equipment">租赁设备</string>
     <string name="my_devices">我的设备</string>
     <string name="advertisement">流量大减价，一律两元！一律两元！</string>
-
+    <string name="no_authenticate_device_hint">您没有授权任何设备，请先授权设备再连接</string>
+    <string name="refuse_to_auth">拒绝</string>
+    <string name="agree_to_auth">授权</string>
+    <string name="copy_password">复制密码</string>
     <!--empty view-->
     <string name="no_network">亲，网络不给力啊&#8230;</string>
     <string name="no_message">暂无消息哦&#8230;</string>

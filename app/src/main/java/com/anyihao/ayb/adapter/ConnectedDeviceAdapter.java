@@ -35,7 +35,7 @@ public class ConnectedDeviceAdapter extends UAdapter<String> {
 
         super.onBindViewHolder(holder, position);
         if (bp && holder instanceof ConnectedDeviceListViewHolder) {
-            String content = mData.get(index);
+            String content = mData.get((hasHeaderView() ? position - 1 : position));
             if (content == null) return;
             ((ConnectedDeviceListViewHolder) holder).tvUserName.setText(content);
             if (position % 2 == 0) {

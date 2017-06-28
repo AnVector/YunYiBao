@@ -27,25 +27,25 @@ public class NotRentAdapter extends UAdapter<String> {
     public UltimateRecyclerviewViewHolder onCreateViewHolder(ViewGroup parent) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(layoutId, parent, false);
-        return new RentViewHolder(v);
+        return new NotRentViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         super.onBindViewHolder(holder, position);
-        if (bp && holder instanceof RentViewHolder) {
-            String content = mData.get(index);
+        if (bp && holder instanceof NotRentViewHolder) {
+            String content = mData.get((hasHeaderView() ? position - 1 : position));
             if (content == null) return;
-            ((RentViewHolder) holder).tvDevice.setText(content);
+            ((NotRentViewHolder) holder).tvDevice.setText(content);
         }
     }
 
-    private class RentViewHolder extends UltimateRecyclerviewViewHolder {
+    private class NotRentViewHolder extends UltimateRecyclerviewViewHolder {
 
         public TextView tvDevice;
 
-        public RentViewHolder(View itemView) {
+        public NotRentViewHolder(View itemView) {
             super(itemView);
             tvDevice = (TextView) itemView.findViewById(R.id.tv_device);
         }

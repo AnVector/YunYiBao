@@ -101,6 +101,7 @@ public class TaskFragment extends ABaseFragment {
 
     @Override
     protected void initData() {
+        toolbar.setNavigationIcon(null);
         titleMid.setText(getString(R.string.task));
         SpannableString spannableString = new SpannableString("我的积分：999分");
         RelativeSizeSpan sizeSpan = new RelativeSizeSpan(1.285f);

@@ -39,7 +39,7 @@ public class MessageAdapter extends UAdapter<DataBean> {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
         if (bp && holder instanceof MessageViewHolder) {
-            DataBean content = mData.get(index);
+            DataBean content = mData.get((hasHeaderView() ? position - 1 : position));
             if (content == null) return;
             ((MessageViewHolder) holder).tvStatus.setText(content.getSendName());
             ((MessageViewHolder) holder).tvDate.setText(content.getCrtTm());

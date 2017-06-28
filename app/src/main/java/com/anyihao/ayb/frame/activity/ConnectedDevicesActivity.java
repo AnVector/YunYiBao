@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.anyihao.androidbase.utils.DensityUtil;
+import com.anyihao.androidbase.utils.DensityUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.ConnectedDeviceAdapter;
 import com.anyihao.ayb.listener.OnItemClickListener;
@@ -100,7 +100,7 @@ public class ConnectedDevicesActivity extends ABaseActivity {
 //        ultimateRecyclerView.addItemDecoration(headersDecor);
         //bug 设置加载更多动画会使添加的数据延迟显示
 //        recyclerView.setLoadMoreView(R.layout.custom_bottom_progressbar);
-        recyclerView.setEmptyView(R.layout.empty_view_no_message, UltimateRecyclerView
+        recyclerView.setEmptyView(R.layout.empty_view, UltimateRecyclerView
                 .EMPTY_CLEAR_ALL);
 //        recyclerView.setParallaxHeader(getLayoutInflater().inflate(R.layout
 //                .parallax_recyclerview_header, recyclerView.mRecyclerView, false));
@@ -186,9 +186,9 @@ public class ConnectedDevicesActivity extends ABaseActivity {
         bottomDialog.setContentView(dialogContentView);
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) dialogContentView
                 .getLayoutParams();
-        params.width = getResources().getDisplayMetrics().widthPixels - DensityUtil.dp2px(this,
+        params.width = getResources().getDisplayMetrics().widthPixels - DensityUtils.dp2px(this,
                 16f);
-        params.bottomMargin = DensityUtil.dp2px(this, 8f);
+        params.bottomMargin = DensityUtils.dp2px(this, 8f);
         dialogContentView.setLayoutParams(params);
         if (bottomDialog.getWindow() != null) {
             bottomDialog.getWindow().setGravity(Gravity.BOTTOM);

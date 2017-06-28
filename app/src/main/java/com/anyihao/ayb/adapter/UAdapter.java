@@ -21,7 +21,6 @@ public class UAdapter<T> extends UltimateViewAdapter {
     protected int layoutId = -1;
     protected int headerId = -1;
     protected boolean bp;
-    protected int index;
     private OnItemClickListener mOnItemClickListener;
 
 
@@ -73,29 +72,34 @@ public class UAdapter<T> extends UltimateViewAdapter {
 
     @Override
     public long generateHeaderId(int position) {
-        return 0;
+        return -1;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
 
         if (holder == null)
             return;
-        index = (hasHeaderView() ? position - 1 : position);
-        if (!hasHeaderView()) {
-            bp = position < getAdapterItemCount();
+        //变量index设置为final的原因，可将变量index设为全局变量作为对比
+        final int index = (hasHeaderView() ? position - 1 : position);
+        if (hasHeaderView()) {
+            bp = position <= getAdapterItemCount() && position > 0 && position < getItemCount();
         } else {
-            bp = position <= getAdapterItemCount() && position > 0;
+            bp = position < getItemCount() && position < getAdapterItemCount();
         }
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mOnItemClickListener != null) {
-                    mOnItemClickListener.onItemClick((ViewGroup) v.getParent(), v, mData.get
-                            (index), index);
+
+        if (bp) {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mOnItemClickListener != null) {
+                        mOnItemClickListener.onItemClick((ViewGroup) v.getParent(), v, mData.get
+                                (index), index);
+                    }
                 }
-            }
-        });
+            });
+        }
+
     }
 
     @Override

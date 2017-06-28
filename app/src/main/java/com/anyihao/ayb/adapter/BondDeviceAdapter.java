@@ -39,7 +39,7 @@ public class BondDeviceAdapter extends UAdapter<String> {
 //        ((InformationViewHolder)holder).tvId.setText(position);
         super.onBindViewHolder(holder, position);
         if (bp && holder instanceof BondDeviceListViewHolder) {
-            String content = mData.get(index);
+            String content = mData.get((hasHeaderView() ? position - 1 : position));
             if (content == null) return;
             ((BondDeviceListViewHolder) holder).tvDevice.setText(content);
             if (position % 2 == 0) {

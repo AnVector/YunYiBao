@@ -118,7 +118,7 @@ public class ReportActivity extends ABaseActivity {
         recyclerView.addItemDecoration(headersDecor);
         //bug 设置加载更多动画会使添加的数据延迟显示
 //        recyclerView.setLoadMoreView(R.layout.custom_bottom_progressbar);
-//        recyclerView.setEmptyView(R.layout.empty_view_no_message, UltimateRecyclerView
+//        recyclerView.setEmptyView(R.layout.empty_view, UltimateRecyclerView
 //                .EMPTY_CLEAR_ALL);
 //        recyclerView.hideEmptyView();
         recyclerView.setParallaxHeader(getLayoutInflater().inflate(R.layout

@@ -30,7 +30,8 @@ public class NotRentFragment extends ABaseFragment {
     private NotRentAdapter mAdapter;
     protected LinearLayoutManager layoutManager;
     private ItemTouchHelper mItemTouchHelper;
-    private String[] array = new String[]{"设备编号：AYB-10086", "设备编号：AYB-10086", "设备编号：AYB-10086", "设备编号：AYB-10086", "设备编号：AYB-10086", "设备编号：AYB-10086", "设备编号：AYB-10086"};
+    private String[] array = new String[]{"设备编号：AYB-10086", "设备编号：AYB-10086", "设备编号：AYB-10086",
+            "设备编号：AYB-10086", "设备编号：AYB-10086", "设备编号：AYB-10086", "设备编号：AYB-10086"};
     private List<String> mData = Arrays.asList(array);
 
     @Override
@@ -38,15 +39,15 @@ public class NotRentFragment extends ABaseFragment {
 
         ultimateRecyclerView.setHasFixedSize(false);
         mAdapter = new NotRentAdapter(mData, R.layout.item_not_rent_device);
-        layoutManager = new LinearLayoutManager(getContext());
+        layoutManager = new LinearLayoutManager(mContext);
         ultimateRecyclerView.setLayoutManager(layoutManager);
         mAdapter.setEmptyViewPolicy(UltimateRecyclerView.EMPTY_SHOW_LOADMORE_ONLY);
 //        StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration
 //                (informationAdapter);
 //        ultimateRecyclerView.addItemDecoration(headersDecor);
         //bug 设置加载更多动画会使添加的数据延迟显示
-//        recyclerView.setLoadMoreView(R.layout.custom_bottom_progressbar);
-        ultimateRecyclerView.setEmptyView(R.layout.empty_view_no_message, UltimateRecyclerView
+//        ultimateRecyclerView.setLoadMoreView(R.layout.custom_bottom_progressbar);
+        ultimateRecyclerView.setEmptyView(R.layout.empty_view, UltimateRecyclerView
                 .EMPTY_CLEAR_ALL);
 //        recyclerView.setParallaxHeader(getLayoutInflater().inflate(R.layout
 //                .parallax_recyclerview_header, recyclerView.mRecyclerView, false));
@@ -55,9 +56,8 @@ public class NotRentFragment extends ABaseFragment {
                 (mAdapter);
         mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(ultimateRecyclerView.mRecyclerView);
-        ultimateRecyclerView.reenableLoadmore();
+//        ultimateRecyclerView.reenableLoadmore();
         ultimateRecyclerView.setAdapter(mAdapter);
-
     }
 
     @Override
@@ -83,6 +83,12 @@ public class NotRentFragment extends ABaseFragment {
             }
         });
 
+        ultimateRecyclerView.setOnLoadMoreListener(new UltimateRecyclerView.OnLoadMoreListener() {
+            @Override
+            public void loadMore(int itemsCount, int maxLastVisiblePosition) {
+
+            }
+        });
 
 
         mAdapter.setOnItemClickListener(new OnItemClickListener() {

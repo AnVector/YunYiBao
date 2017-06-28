@@ -1,11 +1,13 @@
 package com.anyihao.ayb.frame.activity;
 
+import android.content.Intent;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.anyihao.ayb.R;
+import com.anyihao.ayb.bean.MessageBean.DataBean;
 import com.jaeger.library.StatusBarUtil;
 
 import butterknife.BindView;
@@ -25,6 +27,7 @@ public class MessageDetailsActivity extends ABaseActivity {
     ImageView ivUserProfile;
     @BindView(R.id.tv_user_name)
     TextView tvUserName;
+    private DataBean messageBean;
 
     @Override
     protected int getContentViewId() {
@@ -33,11 +36,21 @@ public class MessageDetailsActivity extends ABaseActivity {
 
     @Override
     protected void getExtraParams() {
-
+        Intent intent = getIntent();
+        if (intent == null)
+            return;
+        messageBean = (DataBean) intent.getSerializableExtra("details");
     }
 
     @Override
     protected void initData() {
+
+        if (messageBean != null) {
+            tvUserName.setText(messageBean.getSendName());
+//            ivUserProfile.setImageDrawable();
+            tvMessage.setText(messageBean.getMessage());
+            tvDate.setText(messageBean.getCrtTm());
+        }
 
         toolbar.setBackgroundColor(getResources().getColor(R.color.app_background_color));
         setSupportActionBar(toolbar);

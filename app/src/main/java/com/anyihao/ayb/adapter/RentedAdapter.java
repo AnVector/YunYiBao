@@ -38,7 +38,7 @@ public class RentedAdapter extends UAdapter<String> {
 //        ((InformationViewHolder)holder).tvId.setText(position);
         super.onBindViewHolder(holder, position);
         if (holder instanceof RentedViewHolder) {
-            String content = mData.get(index);
+            String content = mData.get((hasHeaderView() ? position - 1 : position));
             if (content == null) return;
             ((RentedViewHolder) holder).tvDevice.setText(content);
             ((RentedViewHolder) holder).tvUser.setText("用户：打快板的妹妹");

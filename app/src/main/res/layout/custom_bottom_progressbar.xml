@@ -7,7 +7,8 @@
         android:id="@+id/bottom_progress_bar"
         android:layout_width="15dp"
         android:layout_height="15dp"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:indeterminateDrawable="@drawable/load_more_progressbar"/>
 
     <TextView
         android:layout_width="match_parent"
