@@ -7,9 +7,20 @@ import android.os.Message;
 import android.view.View;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.mvp.Task;
+import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.DeviceUtils;
+import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.ayb.R;
+import com.anyihao.ayb.bean.ResultBean;
+import com.anyihao.ayb.common.PresenterFactory;
+import com.anyihao.ayb.constant.GlobalConsts;
 import com.jaeger.library.StatusBarUtil;
+import com.orhanobut.logger.Logger;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -27,7 +38,6 @@ public class SplashActivity extends ABaseActivity {
     private String mTimeHint;
     private byte mTimeLeft;
     private CountDownTimer mCountDownTimer;
-    private boolean isLogin;
 //    private ComponentName mDefault;
 //    private ComponentName mNewCN;
 //    private PackageManager mPackageManager;
@@ -101,7 +111,10 @@ public class SplashActivity extends ABaseActivity {
     @Override
     protected void initData() {
         mTimeHint = getResources().getString(R.string.timer_seconds);
-        isLogin = PreferencesUtils.getBoolean(getApplicationContext(), "isLogin", false);
+        boolean isLogin = PreferencesUtils.getBoolean(getApplicationContext(), "isLogin", false);
+        if (isLogin) {
+            addAuthorizedDevice();
+        }
         mCountDownTimer = new CountDownTimer(4000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -129,9 +142,25 @@ public class SplashActivity extends ABaseActivity {
         });
     }
 
+    private void addAuthorizedDevice() {
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "AUTHORIZEADD");
+        params.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
+        params.put("mac", DeviceUtils.getMacAddress(this));
+        params.put("remarks", "POHONE");
+        params.put("addStatus", "1");
+
+        PresenterFactory.getInstance().createPresenter(this).execute(new Task.TaskBuilder()
+                .setTaskType(TaskType.Method.POST)
+                .setParams(params)
+                .setPage(1)
+                .setActionType(0)
+                .setUrl(GlobalConsts.PREFIX_URL)
+                .createTask());
+    }
+
     private void handleGoHome() {
         Intent intent = new Intent(SplashActivity.this, MainFragmentActivity.class);
-        intent.putExtra("isLogin", isLogin);
         startActivity(intent);
         finish();
     }
@@ -139,7 +168,6 @@ public class SplashActivity extends ABaseActivity {
     private void handleGoGuide() {
 //        Intent intent = new Intent(SplashActivity.this, MainFragmentActivity.class);
         Intent intent = new Intent(SplashActivity.this, GuideActivity.class);
-        intent.putExtra("isLogin", isLogin);
         startActivity(intent);
         finish();
     }
@@ -165,7 +193,15 @@ public class SplashActivity extends ABaseActivity {
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
-
+        if (actionType == 1) {
+            ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean.class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+//                ToastUtils.showToast(getApplicationContext(), "授权成功");
+                Logger.d("授权成功");
+            }
+        }
     }
 
     @Override

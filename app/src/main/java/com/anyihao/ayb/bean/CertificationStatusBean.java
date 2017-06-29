@@ -10,7 +10,7 @@ public class CertificationStatusBean implements Serializable {
 
     private int code;
     private String msg;
-    private String infoStatus;
+    private int infoStatus;
 
     public String getMsg() {
         return msg;
@@ -28,11 +28,11 @@ public class CertificationStatusBean implements Serializable {
         this.code = code;
     }
 
-    public String getInfoStatus() {
+    public int getInfoStatus() {
         return infoStatus;
     }
 
-    public void setInfoStatus(String infoStatus) {
+    public void setInfoStatus(int infoStatus) {
         this.infoStatus = infoStatus;
     }
 }

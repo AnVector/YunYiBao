@@ -20,9 +20,5 @@ public class WifiAdapter extends RecyclerViewAdapter<String> {
 
         holder.setText(R.id.title, s);
         holder.setCompoundDrawables(R.id.title, R.drawable.ic_wifi_left, 20);
-
-        if (holder.getLayoutPosition() == mDatas.size() - 1) {
-            holder.setVisible(R.id.line, false);
-        }
     }
 }

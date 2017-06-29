@@ -271,7 +271,9 @@ public class MessageFragment extends ABaseFragment {
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-        ToastUtils.showToast(mContext.getApplicationContext(), error, R.layout
-                .toast, R.id.tv_message);
+        if (error.contains("ConnectException")) {
+            ToastUtils.showToast(mContext.getApplicationContext(), "网络连接失败，请检查网络设置");
+            ultimateRecyclerView.showEmptyView();
+        }
     }
 }

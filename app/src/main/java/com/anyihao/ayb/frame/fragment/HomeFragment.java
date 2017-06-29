@@ -3,7 +3,6 @@ package com.anyihao.ayb.frame.fragment;
 
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -90,7 +89,8 @@ public class HomeFragment extends ABaseFragment {
     private static int REQUEST_LOGIN_CODE = 0x00003;
     private WifiAdapter mAdapter;
     private String mPassword;
-    private String mProgress;
+    private int mProgress;
+    private String mAlias;
     String[] advertisement = new String[]{"流量大减价，一律两元！一律两元！", "流量大减价，一律两元！一律两元！"};
     String[] array = new String[]{"CYBWF_898602B11116C0069502", "CYBWF_898602B11116C0069503",
             "CYBWF_898602B11116C0069504", "CYBWF_898602B11116C0069505",
@@ -101,7 +101,10 @@ public class HomeFragment extends ABaseFragment {
             "CYBWF_898602B11116C0069514", "CYBWF_898602B11116C0069515",
             "CYBWF_898602B11116C0069516", "CYBWF_898602B11116C0069517",
             "CYBWF_898602B11116C0069518", "CYBWF_898602B11116C0069519",
-            "CYBWF_898602B11116C0069520", "CYBWF_898602B11116C0069521"};
+            "CYBWF_898602B11116C0069520", "CYBWF_898602B11116C0069521",
+            "CYBWF_898602B11116C0068625", "CYBWF_898602B11116C0068626",
+            "CYBWF_898602B11116C0068627", "CYBWF_898602B11116C0068628",
+            "CYBWF_898602B11116C0068629", ""};
     private List<String> mData = Arrays.asList(array);
     private AnimationDrawable animationDrawable;
     private boolean isLogin;
@@ -119,7 +122,6 @@ public class HomeFragment extends ABaseFragment {
         recyclerview.setAdapter(mAdapter);
         recyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager
                 .VERTICAL, false));
-        recyclerview.setHasFixedSize(true);
         mAdapter.add(0, mData.size(), mData);
 
         for (int i = 0; i < advertisement.length; i++) {
@@ -128,10 +130,7 @@ public class HomeFragment extends ABaseFragment {
             tv_content.setText(advertisement[i]);
             flipper.addView(ll_content);
         }
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            isLogin = bundle.getBoolean("isLogin", false);
-        }
+        isLogin = PreferencesUtils.getBoolean(mContext.getApplicationContext(), "isLogin", false);
 
         if (isLogin) {
             getUserCertStatus();
@@ -180,15 +179,15 @@ public class HomeFragment extends ABaseFragment {
                 }
                 Intent intent = new Intent();
                 switch (mProgress) {
-                    case "2":
+                    case 2:
                         intent.setClass(mContext, CertificationActivity.class);
                         startActivity(intent);
                         break;
-                    case "3":
+                    case 3:
                         intent.setClass(mContext, DepositActivity.class);
                         startActivity(intent);
                         break;
-                    case "4":
+                    case 4:
                         IntentIntegrator intentIntegrator = IntentIntegrator
                                 .forSupportFragment(HomeFragment.this).setCaptureActivity
                                         (ScanActivity.class);
@@ -208,6 +207,10 @@ public class HomeFragment extends ABaseFragment {
         tvMyDevices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!isLogin) {
+                    startActivityForLogin();
+                    return;
+                }
                 Intent intent = new Intent(mContext, RentedDevicesActivity.class);
                 startActivity(intent);
             }
@@ -233,7 +236,8 @@ public class HomeFragment extends ABaseFragment {
                     return;
                 }
                 if (o instanceof String) {
-                    getSsidPwd(o.toString());
+                    mAlias = o.toString();
+                    getSsidPwd(mAlias);
                 }
             }
 
@@ -316,7 +320,7 @@ public class HomeFragment extends ABaseFragment {
             TextView tvPassword = (TextView) holder.getInflatedView().findViewById(R.id
                     .tv_password);
             tvCopy.setText(getString(R.string.copy_password));
-            tvPassword.setText(mPassword);
+            tvPassword.setText("密码获取成功，选择相应的WIFI热点名称，点击进入" + mAlias + "，长按密码框，粘贴密码即可上网");
         } else {
             TextView tvTitle = (TextView) holder.getInflatedView().findViewById(R.id.dia_title);
             Button btnLeft = (Button) holder.getInflatedView().findViewById(R.id.btn_cancel);
@@ -341,6 +345,7 @@ public class HomeFragment extends ABaseFragment {
                     case R.id.btn_copy:
                         ClipboardUtils.copyText(mContext, mPassword);
                         ToastUtils.showToast(mContext.getApplicationContext(), "密码复制成功");
+                        dialog.dismiss();
                         break;
                     default:
                         break;
@@ -428,10 +433,12 @@ public class HomeFragment extends ABaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_LOGIN_CODE && resultCode == LoginActivity
-                .RESULT_LOGIN_CODE) {
-            isLogin = true;
-            getUserCertStatus();
+        if (requestCode == REQUEST_LOGIN_CODE) {
+            isLogin = PreferencesUtils.getBoolean(mContext.getApplicationContext(), "isLogin",
+                    false);
+            if (isLogin) {
+                getUserCertStatus();
+            }
         }
         IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode,
                 data);

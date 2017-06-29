@@ -304,19 +304,17 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
-        if (actionType == 0) {
-            MerchantListBean bean = GsonUtils.getInstance().transitionToBean(result,
-                    MerchantListBean.class);
-            if (bean == null)
-                return;
-            if (bean.getCode() == 200) {
-                ToastUtils.showToast(mContext.getApplicationContext(), "附近商家信息获取成功", R.layout
-                        .toast, R.id.tv_message);
-            } else {
-                ToastUtils.showToast(mContext.getApplicationContext(), "附近商家信息获取失败", R.layout
-                        .toast, R.id.tv_message);
-            }
-        }
+//        if (actionType == 0) {
+//            MerchantListBean bean = GsonUtils.getInstance().transitionToBean(result,
+//                    MerchantListBean.class);
+//            if (bean == null)
+//                return;
+//            if (bean.getCode() == 200) {
+//                ToastUtils.showToast(mContext.getApplicationContext(), "附近商家信息获取成功");
+//            } else {
+//                ToastUtils.showToast(mContext.getApplicationContext(), "附近商家信息获取失败");
+//            }
+//        }
 
     }
 
@@ -330,7 +328,7 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         if (aMap != null) {
             jumpPoint(marker);
         }
-        ToastUtils.showLongToast(getActivity(), "您点击了Marker");
+        ToastUtils.showToast(mContext, "您点击了Marker");
         return true;
     }
 

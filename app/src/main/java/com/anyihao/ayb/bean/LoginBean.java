@@ -22,7 +22,7 @@ public class LoginBean implements Serializable {
     private int code;
     private String msg;
     private String uid;
-    private String bindStatus;
+    private int bindStatus;
     private String userType;
     private String avatar;
     private String reqCode;
@@ -51,14 +51,6 @@ public class LoginBean implements Serializable {
         this.uid = uid;
     }
 
-    public String getBindStatus() {
-        return bindStatus;
-    }
-
-    public void setBindStatus(String bindStatus) {
-        this.bindStatus = bindStatus;
-    }
-
     public String getUserType() {
         return userType;
     }
@@ -82,4 +74,13 @@ public class LoginBean implements Serializable {
     public void setReqCode(String reqCode) {
         this.reqCode = reqCode;
     }
+
+    public int getBindStatus() {
+        return bindStatus;
+    }
+
+    public void setBindStatus(int bindStatus) {
+        this.bindStatus = bindStatus;
+    }
+
 }

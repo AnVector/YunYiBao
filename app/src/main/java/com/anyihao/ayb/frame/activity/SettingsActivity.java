@@ -17,6 +17,7 @@ import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.SettingsAdapter;
 import com.anyihao.ayb.bean.ResultBean;
+import com.anyihao.ayb.bean.UserLevelBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.listener.OnItemClickListener;
@@ -42,7 +43,6 @@ public class SettingsActivity extends ABaseActivity {
     String[] array = new String[]{"修改密码", "常见问题", "意见反馈", "押金说明", "账号管理", "关于云逸宝"};
     private List<String> mData = Arrays.asList(array);
     private boolean isLogin;
-    public static int RESULT_SETTINGS_CODE = 0x00002;
     public static final int REQUEST_LOGIN_CODE = 0x00005;
 
     @Override
@@ -161,12 +161,26 @@ public class SettingsActivity extends ABaseActivity {
         startActivityForResult(intent, REQUEST_LOGIN_CODE);
     }
 
+    private void getUserInfo() {
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "MINE");
+        params.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
+        params.put("userType", PreferencesUtils.getString(getApplicationContext(), "userType", ""));
+        PresenterFactory.getInstance().createPresenter(this)
+                .execute(new Task.TaskBuilder()
+                        .setTaskType(TaskType.Method.POST)
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setParams(params)
+                        .setPage(1)
+                        .setActionType(1)
+                        .createTask());
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_LOGIN_CODE && requestCode == LoginActivity.RESULT_LOGIN_CODE) {
-            isLogin = true;
-            btnLogout.setText(getString(R.string.logout));
+        if (requestCode == REQUEST_LOGIN_CODE) {
+            getUserInfo();
         }
     }
 
@@ -196,20 +210,27 @@ public class SettingsActivity extends ABaseActivity {
                 PreferencesUtils.putString(getApplicationContext(), "uid", "");
                 PreferencesUtils.putString(getApplicationContext(), "userType", "");
                 PreferencesUtils.putBoolean(getApplicationContext(), "isLogin", false);
-                Intent intent = new Intent();
-                intent.putExtra("uid", PreferencesUtils.getString(getApplicationContext(), "uid",
-                        ""));
-                intent.putExtra("userType", PreferencesUtils.getString(getApplicationContext(),
-                        "userType", ""));
-                setResult(RESULT_SETTINGS_CODE, intent);
                 finish();
+            }
+        }
+
+        if (actionType == 1) {
+            UserLevelBean bean = GsonUtils.getInstance().transitionToBean(result, UserLevelBean
+                    .class);
+            if (bean == null)
+                return;
+
+            if (bean.getCode() == 200) {
+                isLogin = true;
+                btnLogout.setText("退出登录");
             }
         }
     }
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-        ToastUtils.showToast(getApplicationContext(), error, R.layout.toast, R.id
-                .tv_message);
+        if (error.contains("ConnectException")) {
+            ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
+        }
     }
 }

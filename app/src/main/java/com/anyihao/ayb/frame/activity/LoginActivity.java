@@ -8,10 +8,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.AppUtils;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.LogUtils;
 import com.anyihao.androidbase.utils.MD5;
@@ -40,8 +40,7 @@ import fr.castorflex.android.circularprogressbar.CircularProgressDrawable;
  */
 public class LoginActivity extends ABaseActivity {
 
-    private static final int REQUEST_SIGNUP = 1000;
-    public static int RESULT_LOGIN_CODE = 0x00004;
+    private static final int REQUEST_CODE = 0x0001;
     @BindView(R.id.input_user_name)
     EditText etUserName;
     @BindView(R.id.input_password)
@@ -66,6 +65,8 @@ public class LoginActivity extends ABaseActivity {
     CircularProgressBar progressbarCircular;
     private String userName;
     private String password;
+    private String loginId;
+    private String userType;
 
     @Override
     protected int getContentViewId() {
@@ -101,7 +102,7 @@ public class LoginActivity extends ABaseActivity {
             public void onClick(View v) {
                 userName = etUserName.getText().toString().trim();
                 password = etPassword.getText().toString().trim();
-                login();
+                loginByMobile();
             }
         });
 
@@ -153,7 +154,7 @@ public class LoginActivity extends ABaseActivity {
         });
     }
 
-    private void login() {
+    private void loginByMobile() {
         if (!validate()) {
             onLoginFailed("请输入用户名或密码");
             return;
@@ -165,6 +166,30 @@ public class LoginActivity extends ABaseActivity {
         params.put("pwd", MD5.string2MD5(password));
         params.put("appType", "ANDROID");
         params.put("userType", "SJ");
+        params.put("ver", AppUtils.getAppVersionName(this));
+        progressbarCircular.setVisibility(View.VISIBLE);
+        ((CircularProgressDrawable) progressbarCircular.getIndeterminateDrawable()).start();
+        PresenterFactory.getInstance().createPresenter(this)
+                .execute(new Task.TaskBuilder()
+                        .setTaskType(TaskType.Method.POST)
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setParams(params)
+                        .setPage(1)
+                        .setActionType(0)
+                        .createTask());
+    }
+
+    private void loginByThirdAccount(String loginId, String userType, String nickname, String
+            avatar, String sex) {
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "IN");
+        params.put("loginId", loginId);
+        params.put("appType", "ANDROID");
+        params.put("userType", userType);
+        params.put("nickname", nickname);
+        params.put("avatar", avatar);
+        params.put("sex", sex);
+        params.put("ver", AppUtils.getAppVersionName(this));
         progressbarCircular.setVisibility(View.VISIBLE);
         ((CircularProgressDrawable) progressbarCircular.getIndeterminateDrawable()).start();
         PresenterFactory.getInstance().createPresenter(this)
@@ -218,17 +243,20 @@ public class LoginActivity extends ABaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_SIGNUP) {
-            if (resultCode == RESULT_OK) {
-                // TODO: Implement successful signup logic here
-                // By default we just finish the Activity and log them in automatically
-                this.finish();
+
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode == GetVerifyCodeActivity.RESULT_BIND_NEW_CODE) {
+                finish();
             }
         }
     }
 
     private void onLoginFailed(String message) {
-        ToastUtils.showToast(getApplicationContext(), message, R.layout.toast, R.id.tv_message);
+        if (message.contains("ConnectException")) {
+            ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
+        } else {
+            ToastUtils.showToast(getApplicationContext(), message);
+        }
         btnLogin.setEnabled(true);
     }
 
@@ -241,17 +269,22 @@ public class LoginActivity extends ABaseActivity {
         if (bean == null)
             return;
         if (bean.getCode() == 200) {
-            btnLogin.setEnabled(true);
-            ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast, R.id
-                    .tv_message);
-            PreferencesUtils.putString(getApplicationContext(), "uid", bean.getUid());
-            PreferencesUtils.putString(getApplicationContext(), "userType", bean.getUserType());
-            PreferencesUtils.putBoolean(getApplicationContext(), "isLogin", true);
-            Intent intent = new Intent();
-            intent.putExtra("uid", bean.getUid());
-            intent.putExtra("userType", bean.getUserType());
-            setResult(RESULT_LOGIN_CODE, intent);
-            finish();
+            if (bean.getBindStatus() == 1) {
+                btnLogin.setEnabled(true);
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg());
+                PreferencesUtils.putString(getApplicationContext(), "uid", bean.getUid());
+                PreferencesUtils.putString(getApplicationContext(), "userType", bean.getUserType());
+                PreferencesUtils.putBoolean(getApplicationContext(), "isLogin", true);
+                finish();
+            } else {
+                Intent intent = new Intent(LoginActivity.this, GetVerifyCodeActivity.class);
+                intent.putExtra("action", "BIND");
+                intent.putExtra("title", "绑定手机");
+                intent.putExtra("appId", loginId);
+                intent.putExtra("userType", userType);
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+
         } else {
             onLoginFailed(bean.getMsg());
         }
@@ -286,30 +319,57 @@ public class LoginActivity extends ABaseActivity {
         @Override
         public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
 //            SocializeUtils.safeCloseDialog(dialog);
-            Toast.makeText(LoginActivity.this, "成功了", Toast.LENGTH_LONG).show();
-            LogUtils.d(TAG, "platform=" + platform);
-            LogUtils.d(TAG, "action = " + action);
-            for (Map.Entry<String, String> entry : data.entrySet()) {
-                LogUtils.d(TAG, "Key = " + entry.getKey() + ", Value = " + entry.getValue());
-
+            String nickname = "";
+            String avatar = "";
+            String sex = "";
+            LogUtils.e(TAG, "platform=" + platform);
+            LogUtils.e(TAG, "action = " + action);
+            switch (platform) {
+                case QQ:
+                case WEIXIN:
+                    userType = platform.toString();
+                    loginId = data.get("uid");
+                    nickname = data.get("screen_name");
+                    avatar = data.get("iconurl");
+                    sex = data.get("gender");
+                    if (platform == SHARE_MEDIA.WEIXIN)
+                        userType = "WX";
+                    for (Map.Entry<String, String> entry : data.entrySet()) {
+                        LogUtils.e(TAG, "Key = " + entry.getKey() + ", Value = " + entry
+                                .getValue());
+                    }
+                    break;
+                case SINA:
+                    userType = "WB";
+                    loginId = data.get("uid");
+                    avatar = data.get("iconurl");
+                    nickname = data.get("name");
+                    sex = data.get("gender");
+                    for (Map.Entry<String, String> entry : data.entrySet()) {
+                        LogUtils.e(TAG, "Key = " + entry.getKey() + ", Value = " + entry
+                                .getValue());
+                    }
+                    break;
+                default:
+                    break;
             }
+            loginByThirdAccount(loginId, userType, nickname, avatar, sex);
+
         }
 
         @Override
         public void onError(SHARE_MEDIA platform, int action, Throwable t) {
 //            SocializeUtils.safeCloseDialog(dialog);
-            Toast.makeText(LoginActivity.this, "失败：" + t.getMessage(), Toast.LENGTH_LONG).show();
-            LogUtils.d(TAG, "platform=" + platform);
-            LogUtils.d(TAG, "action = " + action);
-            LogUtils.d(TAG, "error = " + t.getMessage());
+            LogUtils.e(TAG, "platform=" + platform);
+            LogUtils.e(TAG, "action = " + action);
+            LogUtils.e(TAG, "error = " + t.getMessage());
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform, int action) {
 //            SocializeUtils.safeCloseDialog(dialog);
-            Toast.makeText(LoginActivity.this, "取消了", Toast.LENGTH_LONG).show();
-            LogUtils.d(TAG, "platform=" + platform);
-            LogUtils.d(TAG, "action = " + action);
+            LogUtils.e(TAG, "platform=" + platform);
+            LogUtils.e(TAG, "action = " + action);
         }
     };
 }

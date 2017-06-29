@@ -2,7 +2,6 @@ package com.anyihao.ayb.frame.activity;
 
 import android.app.DownloadManager;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +15,7 @@ import android.view.View;
 import android.widget.RadioButton;
 
 import com.anyihao.androidbase.manager.ActivityManager;
+import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.UFragmentPagerAdapter;
@@ -51,7 +51,6 @@ public class MainFragmentActivity extends ABaseActivity {
     private UFragmentPagerAdapter uFragmentPagerAdapter;
     private DownloadManager mDownloadManager;
     private RadioButton mCurrent;
-    private boolean isLogin;
 
     private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -74,10 +73,6 @@ public class MainFragmentActivity extends ABaseActivity {
 
     @Override
     protected void getExtraParams() {
-        Intent intent = getIntent();
-        if (intent == null)
-            return;
-        isLogin = intent.getBooleanExtra("isLogin", false);
 
     }
 
@@ -89,19 +84,14 @@ public class MainFragmentActivity extends ABaseActivity {
                     ".com/data/wisegame/55dc62995fe9ba82/jinritoutiao_448.apk";
             downloadApkFile(downloadUrl);
         }
+
     }
 
     private void initViewPager() {
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("isLogin", isLogin);
         HomeFragment homeFragment = new HomeFragment();
-        homeFragment.setArguments(bundle);
         DiscoverFragment discoverFragment = new DiscoverFragment();
-        discoverFragment.setArguments(bundle);
         TaskFragment taskFragment = new TaskFragment();
-        taskFragment.setArguments(bundle);
         MeFragment meFragment = new MeFragment();
-        meFragment.setArguments(bundle);
         mFragmentList.add(homeFragment);
         mFragmentList.add(discoverFragment);
         mFragmentList.add(taskFragment);

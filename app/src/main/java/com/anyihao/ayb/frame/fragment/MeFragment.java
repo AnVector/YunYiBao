@@ -43,6 +43,7 @@ import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -74,10 +75,11 @@ public class MeFragment extends ABaseFragment {
     private static int REQUEST_SETTINGS_CODE = 0x00001;
     private static int REQUEST_LOGIN_CODE = 0x00003;
     private boolean isLogin = false;
-
     private List<String> mData = new LinkedList<>();
-    private String uid;
-    private String userType;
+    private String[] mItemArray = new String[]{"", "shop", "chart", "history", "friends", "code",
+            "system", "", "privilege", "management"};
+    private List<String> mItems = Arrays.asList(mItemArray);
+    private boolean showNetworkErr;
 
     @Override
     protected int getContentViewId() {
@@ -91,8 +93,7 @@ public class MeFragment extends ABaseFragment {
 //        if(null!=actionBar){
 //            actionBar.setDisplayHomeAsUpEnabled(true);
 //        }
-        uid = PreferencesUtils.getString(mContext, "uid", "");
-        userType = PreferencesUtils.getString(mContext, "userType", "");
+        mData.addAll(mItems);
         getUserInfo();
         fakeStatusBar.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         toolbar.inflateMenu(R.menu.toolbar_menu);
@@ -102,14 +103,15 @@ public class MeFragment extends ABaseFragment {
                 .VERTICAL, false));
         mAdapter = new MeAdapter(getContext(), R.layout.item_me);
         mRecyclerview.setAdapter(mAdapter);
+        mAdapter.add(0, mData.size(), mData);
     }
 
 
     private void getUserInfo() {
         Map<String, String> params = new HashMap<>();
         params.put("cmd", "MINE");
-        params.put("uid", uid);
-        params.put("userType", userType);
+        params.put("uid", PreferencesUtils.getString(mContext, "uid", ""));
+        params.put("userType", PreferencesUtils.getString(mContext, "userType", ""));
         PresenterFactory.getInstance().createPresenter(this)
                 .execute(new Task.TaskBuilder()
                         .setTaskType(TaskType.Method.POST)
@@ -199,8 +201,9 @@ public class MeFragment extends ABaseFragment {
             public void onClick(View v) {
                 if (isLogin) {
                     Intent intent = new Intent(mContext, MeActivity.class);
-                    intent.putExtra("uid", uid);
-                    intent.putExtra("userType", userType);
+                    intent.putExtra("uid", PreferencesUtils.getString(mContext, "uid", ""));
+                    intent.putExtra("userType", PreferencesUtils.getString(mContext, "userType",
+                            ""));
                     startActivity(intent);
                 } else {
                     startActivityForLogin();
@@ -218,18 +221,7 @@ public class MeFragment extends ABaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_SETTINGS_CODE && resultCode == SettingsActivity
-                .RESULT_SETTINGS_CODE) {
-            isLogin = false;
-            uid = data.getStringExtra("uid");
-            userType = data.getStringExtra("userType");
-            getUserInfo();
-        }
-
-        if (requestCode == REQUEST_LOGIN_CODE && resultCode == LoginActivity.RESULT_LOGIN_CODE) {
-            isLogin = true;
-            uid = data.getStringExtra("uid");
-            userType = data.getStringExtra("userType");
+        if (requestCode == REQUEST_SETTINGS_CODE || requestCode == REQUEST_LOGIN_CODE) {
             getUserInfo();
         }
     }
@@ -314,25 +306,12 @@ public class MeFragment extends ABaseFragment {
     @Override
     public void onFailure(String error, int page, Integer actionType) {
 
-        if (error.contains("ConectException")) {
-            mAdapter.remove(0, mData.size());
-            mData.clear();
-            mData.add("");
-            mData.add("shop");
-            mData.add("chart");
-            mData.add("history");
-            mData.add("friends");
-            mData.add("code");
-            mData.add("system");
-            mData.add("");
-            mData.add("privilege");
-            mData.add("management");
-            mAdapter.add(0, mData.size(), mData);
-            isLogin = false;
-            tvGreeting.setText("未登录");
-            ToastUtils.showToast(mContext.getApplicationContext(), "网络连接失败，请检查网络设置", R.layout
-                    .toast, R.id
-                    .tv_message);
+        if (error.contains("ConnectException") && !showNetworkErr) {
+            if (tvGreeting != null) {
+                tvGreeting.setText("未登录");
+            }
+            showNetworkErr = true;
+            ToastUtils.showToast(mContext.getApplicationContext(), "网络连接失败，请检查网络设置");
         }
 
     }

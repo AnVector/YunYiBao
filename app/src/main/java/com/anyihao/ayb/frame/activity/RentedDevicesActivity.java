@@ -134,7 +134,8 @@ public class RentedDevicesActivity extends ABaseActivity {
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-        ToastUtils.showToast(getApplicationContext(), error, R.layout.toast, R.id
-                .tv_message);
+        if (error.contains("ConnectException")) {
+            ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
+        }
     }
 }

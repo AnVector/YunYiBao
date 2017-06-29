@@ -187,6 +187,8 @@ public class MeActivity extends ABaseActivity {
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
                 if (view.getTag() instanceof String) {
                     switch (view.getTag().toString()) {
+                        case "头像":
+                            break;
                         case "地区":
                             tvValue = (TextView) view.findViewById(R.id.value);
                             if (isLoaded) {
@@ -206,8 +208,7 @@ public class MeActivity extends ABaseActivity {
                             break;
                         case "押金退款":
                             if ("未缴纳".equals(o.toString())) {
-                                ToastUtils.showToast(getApplicationContext(), o.toString(), R
-                                        .layout.toast, R.id.tv_message);
+                                ToastUtils.showToast(getApplicationContext(), "暂未" + o.toString());
                                 return;
                             }
                             showConfirmDialog();

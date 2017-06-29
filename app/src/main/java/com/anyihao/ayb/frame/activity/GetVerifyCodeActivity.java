@@ -13,9 +13,11 @@ import android.widget.TextView;
 import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
+import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
+import com.anyihao.ayb.bean.LoginBean;
 import com.anyihao.ayb.bean.ResultBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
@@ -47,11 +49,14 @@ public class GetVerifyCodeActivity extends ABaseActivity {
     private static final int TIMER_TICK_FINISHED = 1002;
     private static final int REQUEST_CODE = 1003;
     private static final int RESULT_CODE = 1004;
+    public static final int RESULT_BIND_NEW_CODE = 1005;
     private String mTimeHint;
     private byte mTimeLeft;
     private CountDownTimer mCountDownTimer;
     private String phoneNum;
     private String verifyCode;
+    private String appId;
+    private String userType;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -82,6 +87,8 @@ public class GetVerifyCodeActivity extends ABaseActivity {
         title = intent.getStringExtra("title");
         action = intent.getStringExtra("action");
         phoneNum = intent.getStringExtra("phoneNum");
+        appId = intent.getStringExtra("appId");
+        userType = intent.getStringExtra("userType");
     }
 
     @Override
@@ -92,8 +99,12 @@ public class GetVerifyCodeActivity extends ABaseActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         titleMid.setText(title);
-        if (action.equals("REBIND")) {
+        if ("REBIND".equals(action)) {
             btnNext.setText(getString(R.string.submit));
+        }
+
+        if ("BIND".equals(action)) {
+            btnNext.setText(getString(R.string.bind_the_phone));
         }
     }
 
@@ -133,9 +144,9 @@ public class GetVerifyCodeActivity extends ABaseActivity {
                     return;
                 }
                 tvTimeTicker.setText(String.format(mTimeHint, 60));
+                tvTimeTicker.setTextSize(14f);
                 tvTimeTicker.setEnabled(false);
                 tvTimeTicker.setTextColor(Color.parseColor("#B5B5B5"));
-//                tvTimeTicker.setBackgroundColor(Color.parseColor("#F5F5F9"));
                 getVerifyCode();
                 mCountDownTimer = new CountDownTimer(60 * 1000, 1000) {
                     @Override
@@ -177,6 +188,24 @@ public class GetVerifyCodeActivity extends ABaseActivity {
                         .createTask());
     }
 
+    private void bindMobile() {
+        if (StringUtils.isEmpty(appId) || StringUtils.isEmpty(userType))
+            return;
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "PHONEBIND");
+        params.put("phoneNumber", phoneNum);
+        params.put("appId", appId);
+        params.put("userType", userType);
+        PresenterFactory.getInstance().createPresenter(this)
+                .execute(new Task.TaskBuilder()
+                        .setTaskType(TaskType.Method.POST)
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setParams(params)
+                        .setPage(1)
+                        .setActionType(2)
+                        .createTask());
+    }
+
     private void checkVerifyCode() {
         Map<String, String> params = new HashMap<>();
         params.put("cmd", "YZM");
@@ -198,6 +227,7 @@ public class GetVerifyCodeActivity extends ABaseActivity {
 
     private void handleTimerTickFinished() {
         tvTimeTicker.setText(getString(R.string.get_verify_code));
+        tvTimeTicker.setTextSize(16f);
         tvTimeTicker.setEnabled(true);
         tvTimeTicker.setTextColor(Color.parseColor("#2DA8F4"));
 //        tvTimeTicker.setBackground(null);
@@ -205,11 +235,11 @@ public class GetVerifyCodeActivity extends ABaseActivity {
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
-        ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean
-                .class);
-        if (bean == null)
-            return;
         if (actionType == 0) {
+            ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean
+                    .class);
+            if (bean == null)
+                return;
             if (bean.getCode() == 200) {
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast,
                         R.id.tv_message);
@@ -219,6 +249,10 @@ public class GetVerifyCodeActivity extends ABaseActivity {
             }
         }
         if (actionType == 1) {
+            ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean
+                    .class);
+            if (bean == null)
+                return;
             if (bean.getCode() == 200) {
                 Intent intent;
                 switch (action) {
@@ -242,16 +276,37 @@ public class GetVerifyCodeActivity extends ABaseActivity {
                         intent = new Intent();
                         intent.putExtra("result", 1);
                         setResult(RESULT_CODE, intent);
-                        this.finish();
+                        finish();
                         break;
+                    case "BIND":
+                        bindMobile();
                     default:
                         break;
                 }
 
             } else {
-                ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast,
-                        R.id.tv_message);
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg());
             }
+        }
+
+        if (actionType == 2) {
+            LoginBean bean = GsonUtils.getInstance().transitionToBean(result, LoginBean.class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                ToastUtils.showToast(getApplicationContext(), "手机号绑定成功");
+                PreferencesUtils.putString(getApplicationContext(), "uid", bean.getUid());
+                PreferencesUtils.putString(getApplicationContext(), "userType", bean.getUserType());
+                PreferencesUtils.putBoolean(getApplicationContext(), "isLogin", true);
+                Intent intent = new Intent(GetVerifyCodeActivity.this, MainFragmentActivity.class);
+                startActivity(intent);
+                Intent resultIntent = new Intent();
+                setResult(RESULT_BIND_NEW_CODE, resultIntent);
+                finish();
+            } else {
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg());
+            }
+
         }
 
     }

@@ -89,6 +89,7 @@
     <!--reset password-->
     <string name="new_pwd_hint">新密码，6&#8211;16位字母、数字组合</string>
     <string name="submit">确认提交</string>
+    <string name="bind_the_phone">绑定手机</string>
 
     <!--bind device-->
     <string name="device_bind_input_hint">请输入设备编号</string>
@@ -268,7 +269,7 @@
     <!--add auth device-->
     <string name="add_auth_device">添加授权设备</string>
     <string name="mac_address">Mac地址：</string>
-    <string name="mac_address_hint">请输入要授权的设备的Mac地址</string>
+    <string name="mac_address_hint">请输入要授权设备的Mac地址</string>
     <string name="mobile">手机</string>
     <string name="pad">Pad</string>
     <string name="computer">电脑</string>
