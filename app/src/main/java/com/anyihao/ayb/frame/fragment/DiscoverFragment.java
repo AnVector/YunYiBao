@@ -171,7 +171,7 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
                             "" + aMapLocation.getCity() + "" + aMapLocation.getProvince() + "" +
                             aMapLocation.getDistrict() + "" + aMapLocation.getStreet() + "" +
                             aMapLocation.getStreetNum());
-                    ToastUtils.showLongToast(getContext(), buffer.toString());
+//                    ToastUtils.showLongToast(mContext, buffer.toString());
                     isFirstLoc = false;
                 }
 
@@ -273,7 +273,7 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         aMap.setOnMapClickListener(new AMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                ToastUtils.showLongToast(getActivity(), "lat:" + latLng.latitude + "lng:" +
+                ToastUtils.showLongToast(mContext, "lat:" + latLng.latitude + "lng:" +
                         latLng.longitude);
             }
         });

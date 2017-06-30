@@ -17,6 +17,7 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.MeAdapter;
@@ -93,6 +94,7 @@ public class MeFragment extends ABaseFragment {
 //        if(null!=actionBar){
 //            actionBar.setDisplayHomeAsUpEnabled(true);
 //        }
+        mData.clear();
         mData.addAll(mItems);
         getUserInfo();
         fakeStatusBar.setBackgroundColor(mContext.getResources().getColor(R.color.white));
@@ -106,6 +108,14 @@ public class MeFragment extends ABaseFragment {
         mAdapter.add(0, mData.size(), mData);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isLogin == PreferencesUtils.getBoolean(mContext.getApplicationContext(),
+                "isLogin", false))
+            return;
+        getUserInfo();
+    }
 
     private void getUserInfo() {
         Map<String, String> params = new HashMap<>();
@@ -222,6 +232,9 @@ public class MeFragment extends ABaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_SETTINGS_CODE || requestCode == REQUEST_LOGIN_CODE) {
+            if (isLogin == PreferencesUtils.getBoolean(mContext.getApplicationContext(),
+                    "isLogin", false))
+                return;
             getUserInfo();
         }
     }
@@ -305,11 +318,9 @@ public class MeFragment extends ABaseFragment {
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-
+        if (StringUtils.isEmpty(error))
+            return;
         if (error.contains("ConnectException") && !showNetworkErr) {
-            if (tvGreeting != null) {
-                tvGreeting.setText("未登录");
-            }
             showNetworkErr = true;
             ToastUtils.showToast(mContext.getApplicationContext(), "网络连接失败，请检查网络设置");
         }

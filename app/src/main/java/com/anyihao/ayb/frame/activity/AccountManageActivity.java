@@ -16,6 +16,7 @@ import com.anyihao.androidbase.utils.DensityUtils;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.LogUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.AccountManageAdapter;
@@ -256,7 +257,8 @@ public class AccountManageActivity extends ABaseActivity {
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-
+        if (StringUtils.isEmpty(error))
+            return;
         if (error.contains("ConnectException")) {
             ToastUtils.showToast(this, "网络连接失败，请检查网络设置");
         }

@@ -268,11 +268,10 @@ public class GetVerifyCodeActivity extends ABaseActivity {
                         intent = new Intent(GetVerifyCodeActivity.this, ResetPwdActivity
                                 .class);
                         intent.putExtra("phoneNo", phoneNum);
-                        startActivity(intent);
+                        startActivityForResult(intent, REQUEST_CODE);
                         break;
                     case "REBIND":
-                        ToastUtils.showToast(getApplicationContext(), "新手机号绑定成功", R.layout.toast,
-                                R.id.tv_message);
+                        ToastUtils.showToast(getApplicationContext(), "新手机号绑定成功");
                         intent = new Intent();
                         intent.putExtra("result", 1);
                         setResult(RESULT_CODE, intent);
@@ -314,13 +313,20 @@ public class GetVerifyCodeActivity extends ABaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_CODE) {
-            if (data == null)
-                return;
-            int result = data.getIntExtra("result", 0);
-            if (result == 1) {
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode == RESULT_CODE) {
+                if (data == null)
+                    return;
+                int result = data.getIntExtra("result", 0);
+                if (result == 1) {
+                    this.finish();
+                }
+            }
+
+            if (resultCode == ResetPwdActivity.RESULT_RESET_PWD_SUCCESS_CODE) {
                 this.finish();
             }
+
         }
     }
 

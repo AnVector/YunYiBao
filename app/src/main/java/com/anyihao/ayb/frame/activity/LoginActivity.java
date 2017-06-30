@@ -125,6 +125,9 @@ public class LoginActivity extends ABaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, GetVerifyCodeActivity.class);
+                intent.putExtra("title", "找回密码");
+                intent.putExtra("action", "MODIFYPWD");
+                intent.putExtra("phoneNum", "");
                 startActivity(intent);
             }
         });

@@ -104,7 +104,12 @@ public class HomeFragment extends ABaseFragment {
             "CYBWF_898602B11116C0069520", "CYBWF_898602B11116C0069521",
             "CYBWF_898602B11116C0068625", "CYBWF_898602B11116C0068626",
             "CYBWF_898602B11116C0068627", "CYBWF_898602B11116C0068628",
-            "CYBWF_898602B11116C0068629", ""};
+            "CYBWF_898602B11116C0068629", "CYBWF_898602B11116C0068685",
+            "CYBWF_898602B11116C0068694", "CYBWF_898602B11116C0068656",
+            "CYBWF_898602B11116C0068635", "CYBWF_898602B11116C0068606",
+            "CYBWF_898602B11116C0068583", "CYBWF_898602B11116C0068551",
+            "CYBWF_898602B11116C0068641", "CYBWF_898602B11116C0068593",
+            "CYBWF_898602B11116C0068654", "CYBWF_898602B11116C0068692", ""};
     private List<String> mData = Arrays.asList(array);
     private AnimationDrawable animationDrawable;
     private boolean isLogin;
@@ -118,14 +123,14 @@ public class HomeFragment extends ABaseFragment {
         toolbarTitle.setText(getString(R.string.app_name));
         toolbarHelp.setText(getString(R.string.help_center));
         toolbar.inflateMenu(R.menu.main_menu);
-        mAdapter = new WifiAdapter(getContext(), R.layout.item_main);
+        mAdapter = new WifiAdapter(mContext, R.layout.item_main);
         recyclerview.setAdapter(mAdapter);
-        recyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager
+        recyclerview.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager
                 .VERTICAL, false));
         mAdapter.add(0, mData.size(), mData);
 
         for (int i = 0; i < advertisement.length; i++) {
-            View ll_content = View.inflate(getActivity(), R.layout.item_flipper, null);
+            View ll_content = View.inflate(mContext, R.layout.item_flipper, null);
             TextView tv_content = (TextView) ll_content.findViewById(R.id.tv_content);
             tv_content.setText(advertisement[i]);
             flipper.addView(ll_content);
@@ -144,6 +149,8 @@ public class HomeFragment extends ABaseFragment {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                isLogin = PreferencesUtils.getBoolean(mContext.getApplicationContext(),
+                        "isLogin", false);
                 if (!isLogin) {
                     startActivityForLogin();
                     return true;
@@ -173,6 +180,8 @@ public class HomeFragment extends ABaseFragment {
         tvLeasing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isLogin = PreferencesUtils.getBoolean(mContext.getApplicationContext(),
+                        "isLogin", false);
                 if (!isLogin) {
                     startActivityForLogin();
                     return;
@@ -207,6 +216,8 @@ public class HomeFragment extends ABaseFragment {
         tvMyDevices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isLogin = PreferencesUtils.getBoolean(mContext.getApplicationContext(),
+                        "isLogin", false);
                 if (!isLogin) {
                     startActivityForLogin();
                     return;
@@ -219,6 +230,8 @@ public class HomeFragment extends ABaseFragment {
         tvShop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isLogin = PreferencesUtils.getBoolean(mContext.getApplicationContext(),
+                        "isLogin", false);
                 if (!isLogin) {
                     startActivityForLogin();
                     return;
@@ -231,6 +244,8 @@ public class HomeFragment extends ABaseFragment {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
+                isLogin = PreferencesUtils.getBoolean(mContext.getApplicationContext(),
+                        "isLogin", false);
                 if (!isLogin) {
                     startActivityForLogin();
                     return;

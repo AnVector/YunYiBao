@@ -14,6 +14,7 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.UTabAdapter;
@@ -151,12 +152,14 @@ public class RechargeActivity extends ABaseActivity {
                         .toast, R.id.tv_message);
             }
         }
-
     }
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-        ToastUtils.showToast(getApplicationContext(), error, R.layout
-                .toast, R.id.tv_message);
+        if (StringUtils.isEmpty(error))
+            return;
+        if (error.contains("ConnectException")) {
+            ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
+        }
     }
 }

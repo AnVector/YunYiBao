@@ -23,6 +23,11 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
+            <View
+                android:id="@+id/fake_status_bar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/statusbar_view_height"/>
+
             <include layout="@layout/toolbar"/>
 
             <LinearLayout

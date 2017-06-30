@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.anyihao.androidbase.manager.ActivityManager;
 import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.DeviceUtils;
@@ -50,6 +49,7 @@ public class SetPwdActivity extends ABaseActivity {
     TextView tvTimeTicker;
     private static final int TIMER_TICK = 1001;
     private static final int TIMER_TICK_FINISHED = 1002;
+    public static final int RESULT_SET_PWD_SUCCESS_CODE = 1003;
     private String mTimeHint;
     private byte mTimeLeft;
     private CountDownTimer mCountDownTimer;
@@ -146,6 +146,7 @@ public class SetPwdActivity extends ABaseActivity {
             @Override
             public void onClick(View v) {
                 tvTimeTicker.setText(String.format(mTimeHint, 60));
+                tvTimeTicker.setTextSize(14f);
                 tvTimeTicker.setEnabled(false);
                 tvTimeTicker.setTextColor(Color.parseColor("#B5B5B5"));
 //                tvTimeTicker.setBackgroundColor(Color.parseColor("#F5F5F9"));
@@ -231,6 +232,7 @@ public class SetPwdActivity extends ABaseActivity {
 
     private void handleTimerTickFinished() {
         tvTimeTicker.setText(getString(R.string.get_verify_code));
+        tvTimeTicker.setTextSize(16f);
         tvTimeTicker.setEnabled(true);
         tvTimeTicker.setTextColor(Color.parseColor("#2DA8F4"));
 //        tvTimeTicker.setBackground(null);
@@ -270,15 +272,12 @@ public class SetPwdActivity extends ABaseActivity {
             if (bean == null)
                 return;
             if (bean.getCode() == 200) {
-                ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast,
-                        R.id.tv_message);
-                Intent intent = new Intent(SetPwdActivity.this, BindDeviceActivity.class);
-                startActivity(intent);
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg());
+                Intent intent = new Intent();
+                setResult(RESULT_SET_PWD_SUCCESS_CODE, intent);
                 finish();
-                ActivityManager.getInstance().finishActivity(RegisterActivity.class);
             } else {
-                ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast,
-                        R.id.tv_message);
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg());
             }
         }
 
@@ -286,8 +285,11 @@ public class SetPwdActivity extends ABaseActivity {
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-        ToastUtils.showToast(getApplicationContext(), error, R.layout.toast,
-                R.id.tv_message);
+        if (StringUtils.isEmpty(error))
+            return;
+        if (error.contains("ConnectException")) {
+            ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
+        }
 
     }
 

@@ -6,7 +6,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
-import com.anyihao.androidbase.manager.ActivityManager;
 import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
@@ -41,6 +40,7 @@ public class ResetPwdActivity extends ABaseActivity {
     private String phoneNum;
     private String newPwd;
     private String confirmPwd;
+    public static final int RESULT_RESET_PWD_SUCCESS_CODE = 0x0001;
 
     @Override
     protected int getContentViewId() {
@@ -131,13 +131,12 @@ public class ResetPwdActivity extends ABaseActivity {
             if (bean == null)
                 return;
             if (bean.getCode() == 200) {
-                ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast,
-                        R.id.tv_message);
-                ActivityManager.getInstance().finishActivity(GetVerifyCodeActivity.class);
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg());
+                Intent intent = new Intent();
+                setResult(RESULT_RESET_PWD_SUCCESS_CODE, intent);
                 finish();
             } else {
-                ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast,
-                        R.id.tv_message);
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg());
             }
         }
 

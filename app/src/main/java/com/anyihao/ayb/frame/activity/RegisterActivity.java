@@ -26,6 +26,7 @@ public class RegisterActivity extends ABaseActivity {
     AppCompatButton btnNext;
     @BindView(R.id.input_phone_num)
     PowerfulEditText inputPhoneNum;
+    private static final int REQUEST_SET_PWD_CODE = 0x0001;
 
     @Override
     protected int getContentViewId() {
@@ -71,15 +72,26 @@ public class RegisterActivity extends ABaseActivity {
                 }
                 Intent intent = new Intent(RegisterActivity.this, SetPwdActivity.class);
                 intent.putExtra("phoneNo", phoneNo);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_SET_PWD_CODE);
             }
         });
 
     }
 
+
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_SET_PWD_CODE) {
+            if (resultCode == SetPwdActivity.RESULT_SET_PWD_SUCCESS_CODE) {
+                this.finish();
+            }
+        }
     }
 
     @Override

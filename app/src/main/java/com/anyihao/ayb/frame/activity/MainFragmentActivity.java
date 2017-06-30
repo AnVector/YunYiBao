@@ -4,7 +4,6 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.widget.RadioButton;
 
 import com.anyihao.androidbase.manager.ActivityManager;
-import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.UFragmentPagerAdapter;
@@ -100,6 +98,7 @@ public class MainFragmentActivity extends ABaseActivity {
                 mFragmentList);
         mViewPager.setAdapter(uFragmentPagerAdapter);
         mViewPager.setCurrentItem(0, true);
+        mViewPager.setOffscreenPageLimit(4);
         mCurrent = mRadioButtonDevice;
         changeIcon(mRadioButtonDevice, R.drawable.device_focused);
     }
@@ -264,8 +263,7 @@ public class MainFragmentActivity extends ABaseActivity {
     private void onAppExit() {
         if (!isExit) {
             isExit = true;
-            ToastUtils.showToast(getApplicationContext(), "再按一次退出程序", R.layout.toast, R.id
-                    .tv_message);
+            ToastUtils.showToast(getApplicationContext(), "再按一次退出程序");
             mHandler.sendEmptyMessageDelayed(0, 2000);
         } else {
             ActivityManager.getInstance().finishAllActivity();

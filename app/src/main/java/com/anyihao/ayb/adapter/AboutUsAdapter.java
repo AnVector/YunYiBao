@@ -20,7 +20,7 @@ public class AboutUsAdapter extends RecyclerViewAdapter<String> {
         holder.setText(R.id.title, s);
         switch (s) {
             case "当前版本":
-                holder.setText(R.id.value, "V1.1.1");
+                holder.setText(R.id.value, "V2.0.0");
                 break;
             case "客服电话":
                 holder.setText(R.id.value, "0571-7598279");

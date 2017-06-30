@@ -15,6 +15,7 @@
         android:gravity="center"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
+        android:lineSpacingMultiplier="1.2"
         android:textColor="@color/pay_title_text_color"
         android:textSize="@dimen/font_size_sev"/>
 

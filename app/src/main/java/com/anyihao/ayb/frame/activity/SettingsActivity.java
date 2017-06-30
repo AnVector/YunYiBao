@@ -205,8 +205,7 @@ public class SettingsActivity extends ABaseActivity {
             if (bean == null)
                 return;
             if (bean.getCode() == 200) {
-                ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast, R.id
-                        .tv_message);
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg());
                 PreferencesUtils.putString(getApplicationContext(), "uid", "");
                 PreferencesUtils.putString(getApplicationContext(), "userType", "");
                 PreferencesUtils.putBoolean(getApplicationContext(), "isLogin", false);

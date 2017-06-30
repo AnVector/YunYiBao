@@ -39,6 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="24dp"
+            android:text="@string/not_login"
             android:layout_toRightOf="@id/ic_profile"
             android:gravity="right|center_vertical"
             android:textSize="@dimen/font_size_sev"/>
