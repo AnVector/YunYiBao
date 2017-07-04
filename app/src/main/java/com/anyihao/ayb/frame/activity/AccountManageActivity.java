@@ -1,5 +1,6 @@
 package com.anyihao.ayb.frame.activity;
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -160,6 +161,8 @@ public class AccountManageActivity extends ABaseActivity {
                 .setOnDismissListener(dismissListener)
                 .setOnCancelListener(cancelListener)
                 .setCancelable(true)
+                .setInAnimation(R.anim.fade_in_center)
+                .setOutAnimation(R.anim.fade_out_center)
                 .setOnClickListener(clickListener)
                 .setContentWidth(DensityUtils.dp2px(this, 298f))
                 .setContentHeight(DensityUtils.dp2px(this, 195f))
@@ -279,11 +282,12 @@ public class AccountManageActivity extends ABaseActivity {
                         .getValue());
             }
             String type = "";
-            String appId = "";
+            String appId;
             appId = data.get("uid");
             switch (platform) {
                 case QQ:
                     type = "QQ";
+                    break;
                 case WEIXIN:
                     type = "WX";
                     break;
@@ -311,4 +315,9 @@ public class AccountManageActivity extends ABaseActivity {
             LogUtils.e(TAG, "action = " + action);
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
 }

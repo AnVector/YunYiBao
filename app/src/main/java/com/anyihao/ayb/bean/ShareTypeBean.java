@@ -1,7 +1,6 @@
 package com.anyihao.ayb.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
 /**
  * author: Administrator
@@ -9,12 +8,15 @@ import android.os.Parcelable;
  * email:looper@126.com
  */
 
-public class ShareTypeBean implements Parcelable {
+public class ShareTypeBean implements Serializable {
 
     private int code;
     private String msg;
-    private String imgUrl;
-    private String content;
+    private String shareTitle;
+    private String shareContent;
+    private String shareUrl;
+    private String shareImg;
+    private String shareId;
 
     public int getCode() {
         return code;
@@ -32,54 +34,43 @@ public class ShareTypeBean implements Parcelable {
         this.msg = msg;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
+    public String getShareTitle() {
+        return shareTitle;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setShareTitle(String shareTitle) {
+        this.shareTitle = shareTitle;
     }
 
-    public String getContent() {
-        return content;
+    public String getShareContent() {
+        return shareContent;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setShareContent(String shareContent) {
+        this.shareContent = shareContent;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public String getShareUrl() {
+        return shareUrl;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.code);
-        dest.writeString(this.msg);
-        dest.writeString(this.imgUrl);
-        dest.writeString(this.content);
+    public void setShareUrl(String shareUrl) {
+        this.shareUrl = shareUrl;
     }
 
-    public ShareTypeBean() {
+    public String getShareImg() {
+        return shareImg;
     }
 
-    protected ShareTypeBean(Parcel in) {
-        this.code = in.readInt();
-        this.msg = in.readString();
-        this.imgUrl = in.readString();
-        this.content = in.readString();
+    public void setShareImg(String shareImg) {
+        this.shareImg = shareImg;
     }
 
-    public static final Creator<ShareTypeBean> CREATOR = new Creator<ShareTypeBean>() {
-        @Override
-        public ShareTypeBean createFromParcel(Parcel source) {
-            return new ShareTypeBean(source);
-        }
+    public String getShareId() {
+        return shareId;
+    }
 
-        @Override
-        public ShareTypeBean[] newArray(int size) {
-            return new ShareTypeBean[size];
-        }
-    };
+    public void setShareId(String shareId) {
+        this.shareId = shareId;
+    }
 }

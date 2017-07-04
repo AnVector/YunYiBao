@@ -58,7 +58,6 @@ public class ConnectedDevicesActivity extends ABaseActivity {
             "Tonny", "Emmy", "Jimy",
             "Bill"};
     private Dialog bottomDialog;
-    private View dialogContentView;
     private TextView tvSayHi;
     private TextView tvBriberyMoney;
     private TextView tvCancel;
@@ -179,7 +178,8 @@ public class ConnectedDevicesActivity extends ABaseActivity {
 
     private void initBottomDialog() {
         bottomDialog = new Dialog(this, R.style.BottomDialog);
-        dialogContentView = LayoutInflater.from(this).inflate(R.layout.dialog_content_circle, null);
+        View dialogContentView = LayoutInflater.from(this).inflate(R.layout
+                .dialog_content_circle, null);
         tvSayHi = (TextView) dialogContentView.findViewById(R.id.tv_say_hi);
         tvBriberyMoney = (TextView) dialogContentView.findViewById(R.id.tv_bribery_money);
         tvCancel = (TextView) dialogContentView.findViewById(R.id.tv_cancle);

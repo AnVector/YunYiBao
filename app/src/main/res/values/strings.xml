@@ -44,6 +44,8 @@
     <string name="exchange_flow">兑换流量</string>
     <string name="exchange_flow_hint">请输入邀请码/兑换码</string>
     <string name="ok">确定</string>
+    <string name="male">男</string>
+    <string name="female">女</string>
 
     <!--Toolbar Title-->
     <string name="data_flow_charge">流量充值</string>
@@ -156,6 +158,7 @@
     <string name="refuse_to_auth">拒绝</string>
     <string name="agree_to_auth">授权</string>
     <string name="copy_password">复制密码</string>
+    <string name="surplus_amount">剩余：715.6MB</string>
     <!--empty view-->
     <string name="no_network">亲，网络不给力啊&#8230;</string>
     <string name="no_message">暂无消息哦&#8230;</string>
@@ -217,8 +220,8 @@
 
     <!--invite friends-->
     <string name="share_to">分享到</string>
-    <string name="share_account">您已成功邀请12人</string>
-    <string name="remind_words">邀请成功即送100积分，上不封顶哦！</string>
+    <string name="share_account">您已成功邀请%1$s人</string>
+    <string name="remind_words">邀请成功即送%1$s积分，上不封顶哦！</string>
 
     <!--my credit-->
     <string name="my_points">我的积分</string>
@@ -302,6 +305,7 @@
     <string name="sign_title">连续7天签到的奖励</string>
     <string name="sign_principle">1：连续签到7天，即可额外获得15积分奖励\n2：连续签到记录在第8天开始时将清零重新计算\n3：如果中断签到，连续签到记录也将清零\n4：本活动最终解释权归翰隆所有</string>
     <string name="got_it">我知道了</string>
+    <string name="mac_address_release_hint">是否解除授权？</string>
 
     <!--rented devices-->
     <string name="rented_devices">我的设备</string>

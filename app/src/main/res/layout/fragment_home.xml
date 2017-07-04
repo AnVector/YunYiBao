@@ -35,7 +35,6 @@
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="19dp"
                 android:background="@drawable/ic_circle"
                 android:orientation="vertical">
 
@@ -76,14 +75,14 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="18dp"
                 android:gravity="center"
-                android:text="剩余：715.6MB"
+                android:text="@string/surplus_amount"
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_size_fif"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="48dp">
+                android:layout_marginTop="42dp">
 
                 <TextView
                     android:id="@+id/tv_leasing"
@@ -96,8 +95,8 @@
                     android:textSize="@dimen/font_size_normal"/>
 
                 <View
-                    android:layout_width="1dp"
-                    android:layout_height="20dp"
+                    android:layout_width="0.8dp"
+                    android:layout_height="16dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="25dp"
                     android:layout_toRightOf="@id/tv_leasing"
@@ -114,8 +113,8 @@
                     android:textSize="@dimen/font_size_normal"/>
 
                 <View
-                    android:layout_width="1dp"
-                    android:layout_height="20dp"
+                    android:layout_width="0.8dp"
+                    android:layout_height="16dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="25dp"
                     android:layout_toRightOf="@id/tv_my_devices"
@@ -136,24 +135,25 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="32dp"
+            android:layout_height="37dp"
             android:background="@color/main_advertisement_bg_color"
             android:orientation="horizontal"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp">
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp">
 
             <ImageView
                 android:id="@+id/iv_bell"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_gravity="center_vertical"
                 android:scaleType="fitXY"
                 android:src="@drawable/alarming"/>
 
             <ViewFlipper
                 android:id="@+id/flipper"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
                 android:autoStart="true"
                 android:flipInterval="3000"
                 android:inAnimation="@anim/push_up_in"

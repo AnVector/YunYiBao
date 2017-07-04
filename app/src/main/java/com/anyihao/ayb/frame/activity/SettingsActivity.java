@@ -13,6 +13,7 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.SettingsAdapter;
@@ -40,7 +41,7 @@ public class SettingsActivity extends ABaseActivity {
     @BindView(R.id.btn_logout)
     AppCompatButton btnLogout;
     private SettingsAdapter mAdapter;
-    String[] array = new String[]{"修改密码", "常见问题", "意见反馈", "押金说明", "账号管理", "关于云逸宝"};
+    String[] array = new String[]{"修改密码", "常见问题", "意见反馈", "账号管理", "关于云逸宝"};
     private List<String> mData = Arrays.asList(array);
     private boolean isLogin;
     public static final int REQUEST_LOGIN_CODE = 0x00005;
@@ -228,6 +229,8 @@ public class SettingsActivity extends ABaseActivity {
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
+        if(StringUtils.isEmpty(error))
+            return;
         if (error.contains("ConnectException")) {
             ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
         }

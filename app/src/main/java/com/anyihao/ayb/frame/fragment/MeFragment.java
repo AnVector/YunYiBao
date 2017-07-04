@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +16,14 @@ import android.widget.TextView;
 
 import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.DensityUtils;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.MeAdapter;
+import com.anyihao.ayb.bean.ResultBean;
 import com.anyihao.ayb.bean.UserLevelBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
@@ -37,6 +40,8 @@ import com.anyihao.ayb.frame.activity.RechargeRecordActivity;
 import com.anyihao.ayb.frame.activity.SettingsActivity;
 import com.anyihao.ayb.frame.activity.SystemRecordActivity;
 import com.anyihao.ayb.listener.OnItemClickListener;
+import com.bumptech.glide.Glide;
+import com.chaychan.viewlib.PowerfulEditText;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
 import com.orhanobut.dialogplus.OnCancelListener;
@@ -81,6 +86,7 @@ public class MeFragment extends ABaseFragment {
             "system", "", "privilege", "management"};
     private List<String> mItems = Arrays.asList(mItemArray);
     private boolean showNetworkErr;
+    private String mIntegral;
 
     @Override
     protected int getContentViewId() {
@@ -100,7 +106,6 @@ public class MeFragment extends ABaseFragment {
         fakeStatusBar.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         toolbar.inflateMenu(R.menu.toolbar_menu);
         toolbarTitle.setText(getString(R.string.me));
-        icProfile.setImageResource(R.drawable.user_profile);
         mRecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager
                 .VERTICAL, false));
         mAdapter = new MeAdapter(getContext(), R.layout.item_me);
@@ -129,6 +134,21 @@ public class MeFragment extends ABaseFragment {
                         .setParams(params)
                         .setPage(1)
                         .setActionType(0)
+                        .createTask());
+    }
+
+    private void pointsRedeem(String reqCode) {
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "REQCODE");
+        params.put("uid", PreferencesUtils.getString(mContext, "uid", ""));
+        params.put("reqCode", reqCode);
+        PresenterFactory.getInstance().createPresenter(this)
+                .execute(new Task.TaskBuilder()
+                        .setTaskType(TaskType.Method.POST)
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setParams(params)
+                        .setPage(1)
+                        .setActionType(1)
                         .createTask());
     }
 
@@ -184,6 +204,7 @@ public class MeFragment extends ABaseFragment {
                             break;
                         case "我的积分":
                             intent = new Intent(getActivity(), CreditActivity.class);
+                            intent.putExtra("integral", mIntegral);
                             startActivity(intent);
                             break;
                         case "商家特权":
@@ -240,7 +261,10 @@ public class MeFragment extends ABaseFragment {
     }
 
     private void showDialog() {
-        Holder holder = new ViewHolder(R.layout.me_dialog_content);
+        Holder holder = new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout
+                .me_dialog_content, null));
+        final PowerfulEditText powerfulEditText = (PowerfulEditText) holder.getInflatedView()
+                .findViewById(R.id.edt_exchange_code);
         OnClickListener clickListener = new OnClickListener() {
             @Override
             public void onClick(DialogPlus dialog, View view) {
@@ -249,7 +273,17 @@ public class MeFragment extends ABaseFragment {
                         dialog.dismiss();
                         break;
                     case R.id.btn_ok:
-                        dialog.dismiss();
+                        if (powerfulEditText != null) {
+                            String code = powerfulEditText.getText().toString().trim();
+                            if (StringUtils.isEmpty(code)) {
+                                ToastUtils.showToast(mContext.getApplicationContext(),
+                                        "请输入邀请码或兑换码");
+                            } else {
+                                pointsRedeem(code);
+                                dialog.dismiss();
+                            }
+                        }
+
                         break;
                     default:
                         break;
@@ -278,7 +312,8 @@ public class MeFragment extends ABaseFragment {
                 .setOnCancelListener(cancelListener)
                 .setCancelable(true)
                 .setOnClickListener(clickListener)
-                .setContentWidth(ViewGroup.LayoutParams.WRAP_CONTENT)
+                .setContentHeight(DensityUtils.dp2px(mContext, 195))
+                .setContentWidth(DensityUtils.dp2px(mContext, 298))
                 .setContentBackgroundResource(R.drawable.dialog_bg)
                 .create();
         dialog.show();
@@ -306,13 +341,24 @@ public class MeFragment extends ABaseFragment {
             mAdapter.add(0, mData.size(), mData);
             if (bean.getCode() == 200) {
                 isLogin = true;
+                mIntegral = bean.getIntegral();
                 tvGreeting.setText(String.format(mContext.getResources().getString(R.string
                         .say_hello), bean.getNickname()));
+                Glide.with(this).load(bean.getAvatar()).placeholder(R.drawable.user_profile)
+                        .crossFade().into
+                        (icProfile);
             }
             if (bean.getCode() == 437) {
                 isLogin = false;
                 tvGreeting.setText("未登录");
             }
+        }
+
+        if (actionType == 1) {
+            ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean.class);
+            if (bean == null)
+                return;
+            ToastUtils.showToast(mContext.getApplicationContext(), bean.getMsg());
         }
     }
 

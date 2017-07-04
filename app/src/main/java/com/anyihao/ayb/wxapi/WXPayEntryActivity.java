@@ -3,7 +3,6 @@ package com.anyihao.ayb.wxapi;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import com.anyihao.androidbase.utils.LogUtils;
 import com.anyihao.ayb.constant.GlobalConsts;
@@ -42,12 +41,12 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
 
     @Override
     public void onReq(BaseReq baseReq) {
-        LogUtils.d(TAG, "onPayStart, openId = " + baseReq.openId);
+        LogUtils.e(TAG, "onPayStart, openId = " + baseReq.openId);
     }
 
     @Override
     public void onResp(BaseResp baseResp) {
-        LogUtils.d(TAG, "onPayFinish, errCode = " + baseResp.errCode);
+        LogUtils.e(TAG, "onPayFinish, errCode = " + baseResp.errCode);
         finish();
     }
 }

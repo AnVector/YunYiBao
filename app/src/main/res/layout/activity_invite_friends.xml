@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="225dp"
+        android:layout_marginTop="230dp"
         android:gravity="center"
         android:rotation="-5"
         android:text="@string/remind_words"
@@ -45,14 +45,13 @@
             android:textSize="20sp"/>
 
         <TextView
-            android:id="@+id/invite_code_tv"
+            android:id="@+id/tv_invite_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="14dp"
             android:gravity="center"
             android:maxLines="1"
-            android:text="1234985"
             android:textColor="@color/white"
             android:textSize="24sp"/>
     </LinearLayout>
@@ -98,20 +97,19 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/share_count_tv"
+            android:id="@+id/tv_share_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/share_to_ll"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="11dp"
-            android:text="@string/share_account"
             android:textColor="@color/white"
             android:textSize="@dimen/font_size_small"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/share_count_tv"
+            android:layout_below="@id/tv_share_count"
             android:layout_marginTop="37dp"
             android:orientation="horizontal"
             android:paddingLeft="20dp"

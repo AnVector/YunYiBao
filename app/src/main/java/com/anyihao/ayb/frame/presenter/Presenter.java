@@ -6,6 +6,9 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.utils.LogUtils;
 import com.library.http.okhttp.OkHttpUtils;
 import com.library.http.okhttp.callback.StringCallback;
+import com.orhanobut.logger.Logger;
+
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.MediaType;
@@ -26,6 +29,10 @@ public class Presenter extends PresenterCompat {
     protected void post(final Task task) {
         if (isViewDestroyed())
             return;
+        Map<String, String> params = task.getParams();
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            Logger.e(entry.getKey() + "," + entry.getValue());
+        }
         OkHttpUtils
                 .post()
                 .url(task.getUrl())
@@ -36,7 +43,7 @@ public class Presenter extends PresenterCompat {
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, final Exception e, int id) {
-                        LogUtils.d(e.toString());
+                        LogUtils.e(e.toString());
                         if (mHandler != null && getView() != null) {
                             mHandler.post(new Runnable() {
                                 @Override

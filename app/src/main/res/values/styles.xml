@@ -45,6 +45,18 @@
         <item name="android:textSize">@dimen/font_size_ele</item>
     </style>
 
+    <!--添加授权设备 RadioButton Style-->
+    <style name="add_auth_radio_button_style">
+        <item name="android:layout_width">65dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:button">@null</item>
+        <item name="android:background">@drawable/auth_edit_text_bg_selector</item>
+        <item name="android:textColor">@drawable/auth_text_bg_selector</item>
+        <item name="android:textSize">@dimen/font_size_normal_high</item>
+    </style>
+
     <!--安逸宝Notification TextView Style-->
     <style name="notification_tv_style">
         <item name="android:layout_width">0dp</item>

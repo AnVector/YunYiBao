@@ -1,12 +1,18 @@
 package com.anyihao.ayb.frame.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.TextView;
 
@@ -123,15 +129,31 @@ public class RechargeActivity extends ABaseActivity {
             public void onClick(View v) {
                 PackageFragment fragment = (PackageFragment) mFragments.get(mViewpager
                         .getCurrentItem());
+                if (fragment == null)
+                    return;
                 if (fragment.isVisible() && !fragment.isDetached()) {
                     Intent intent = new Intent(RechargeActivity.this, PayActivity.class);
                     intent.putExtra("money", fragment.getMoney());
                     intent.putExtra("amount", fragment.getAmount());
                     intent.putExtra("expires", fragment.getExpires());
+                    intent.putExtra("packageID", fragment.getPackageID());
                     startActivity(intent);
                 }
             }
         });
+    }
+
+    private void setAmountTextStyle(TextView v, String t) {
+        if (v == null || StringUtils.isEmpty(t))
+            return;
+        SpannableString spannableString = new SpannableString(t);
+        ForegroundColorSpan colorSpan = new ForegroundColorSpan(Color.parseColor("#2DA8F4"));
+        StyleSpan styleSpan = new StyleSpan(Typeface.BOLD);
+        spannableString.setSpan(colorSpan, 7, spannableString.length(), Spanned
+                .SPAN_INCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(styleSpan, 7, spannableString.length(), Spanned
+                .SPAN_INCLUSIVE_EXCLUSIVE);
+        v.setText(spannableString);
     }
 
     @Override
@@ -146,10 +168,10 @@ public class RechargeActivity extends ABaseActivity {
                         .recharge_nick_name), bean.getNickname()));
                 tvFlow.setText(String.format(getResources().getString(R.string
                         .data_available), bean.getTotalUseFlow()));
+                setAmountTextStyle(tvFlow, tvFlow.getText().toString().trim());
 
             } else {
-                ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout
-                        .toast, R.id.tv_message);
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg());
             }
         }
     }

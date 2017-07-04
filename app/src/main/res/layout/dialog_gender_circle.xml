@@ -11,31 +11,14 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:maxLines="2"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:text="@string/menu_hint"
-            android:textColor="@color/light_gray"
-            android:textSize="@dimen/font_size_thi"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.6dp"
-            android:background="@color/line_color"/>
-
-        <TextView
-            android:id="@+id/tv_say_hi"
+            android:id="@+id/tv_male"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="?android:attr/selectableItemBackground"
             android:clickable="true"
             android:gravity="center"
-            android:text="@string/say_hi"
-            android:textColor="@color/toolbar_title_color"
+            android:text="@string/male"
+            android:textColor="#61abfc"
             android:textSize="@dimen/font_size_sev"/>
 
         <View
@@ -44,14 +27,14 @@
             android:background="@color/line_color"/>
 
         <TextView
-            android:id="@+id/tv_bribery_money"
+            android:id="@+id/tv_female"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="?android:attr/selectableItemBackground"
             android:clickable="true"
             android:gravity="center"
-            android:text="@string/bribery_money"
-            android:textColor="@color/payment_fee_text_color"
+            android:text="@string/female"
+            android:textColor="#61abfc"
             android:textSize="@dimen/font_size_sev"/>
     </LinearLayout>
 
@@ -70,9 +53,8 @@
             android:clickable="true"
             android:gravity="center"
             android:text="@string/cancel"
-            android:textColor="@color/user_account_color"
+            android:textColor="#61abfc"
             android:textSize="@dimen/font_size_sev"/>
     </LinearLayout>
-
 
 </LinearLayout>

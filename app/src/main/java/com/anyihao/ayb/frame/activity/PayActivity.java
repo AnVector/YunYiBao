@@ -7,13 +7,23 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.mvp.Task;
+import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.GsonUtils;
+import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
+import com.anyihao.ayb.bean.WxOrderInfoBean;
+import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.tencent.mm.opensdk.constants.Build;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -40,6 +50,8 @@ public class PayActivity extends ABaseActivity {
     private String money;
     private String amount;
     private String expires;
+    private String packageID;
+    private String topupType = "ALIPAY";
 
     @Override
     protected int getContentViewId() {
@@ -54,7 +66,7 @@ public class PayActivity extends ABaseActivity {
         money = intent.getStringExtra("money");
         amount = intent.getStringExtra("amount");
         expires = intent.getStringExtra("expires");
-
+        packageID = intent.getStringExtra("packageID");
     }
 
     @Override
@@ -70,6 +82,7 @@ public class PayActivity extends ABaseActivity {
         tvValidity.setText(String.format(tvValidity.getText().toString(), expires));
 
         wxApi = WXAPIFactory.createWXAPI(this, GlobalConsts.WX_APP_ID);
+        wxApi.registerApp(GlobalConsts.WX_APP_ID);
         isWxPaySupported = wxApi.getWXAppSupportAPI() >= Build.PAY_SUPPORTED_SDK_INT;
     }
 
@@ -88,6 +101,7 @@ public class PayActivity extends ABaseActivity {
             public void onClick(View v) {
                 rbtWx.setChecked(false);
                 rbtAlipay.setChecked(true);
+                topupType = "ALIPAY";
             }
         });
 
@@ -96,35 +110,72 @@ public class PayActivity extends ABaseActivity {
             public void onClick(View v) {
                 rbtWx.setChecked(true);
                 rbtAlipay.setChecked(false);
+                topupType = "WXPAY";
             }
         });
 
         btnConfirmToPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isWxPaySupported) {
-                    ToastUtils.showLongToast(PayActivity.this, "获取订单中...");
-                    PayReq request = new PayReq();
-                    request.appId = GlobalConsts.WX_APP_ID;
-                    request.partnerId = "1400678202";
-                    request.prepayId = "wx20170325141040aef727979f0063920600";
-                    request.packageValue = "Sign=WXPay";
-                    request.nonceStr = "K9SDVAEFZ26TQE6AV3H2LOH9LXZ5WYAZ";
-                    request.timeStamp = "1490422239";
-                    request.sign = "1779AB4E59398A8CAE06DE6EA59243AA";
-                    wxApi.sendReq(request);
-                }
+                getOrderInfo();
             }
         });
     }
 
+
+    private void payByWx(String appId, String partnerId, String prepayId, String packageValue,
+                         String nonceStr, String timeStamp, String sign) {
+        if (isWxPaySupported) {
+            ToastUtils.showLongToast(PayActivity.this, "获取订单中...");
+            PayReq request = new PayReq();
+            request.appId = appId;
+            request.partnerId = partnerId;
+            request.prepayId = prepayId;
+            request.packageValue = packageValue;
+            request.nonceStr = nonceStr;
+            request.timeStamp = timeStamp;
+            request.sign = sign;
+            wxApi.sendReq(request);
+        }
+    }
+
+    private void getOrderInfo() {
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "PAY");
+        params.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
+        params.put("topupType", topupType);
+        params.put("keyPackageID", packageID);
+        PresenterFactory.getInstance().createPresenter(this)
+                .execute(new Task.TaskBuilder()
+                        .setTaskType(TaskType.Method.POST)
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setParams(params)
+                        .setPage(1)
+                        .setActionType(1)
+                        .createTask());
+    }
+
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
+        if (actionType == 1) {
+            WxOrderInfoBean bean = GsonUtils.getInstance().transitionToBean(result,
+                    WxOrderInfoBean.class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                payByWx(bean.getAppId(), bean.getPartnerId(), bean.getPrepayId(), bean
+                        .getPackege(), bean.getNonceStr(), bean.getTimestamp(), bean.getSign());
+            }
 
+        }
     }
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-
+        if (StringUtils.isEmpty(error))
+            return;
+        if (error.contains("ConnectException")) {
+            ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
+        }
     }
 }

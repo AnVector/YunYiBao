@@ -15,6 +15,7 @@
         android:textColor="@color/user_account_color"
         android:textSize="@dimen/font_size_normal_high"/>
     <Button
+        android:id="@+id/tv_release_auth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#FF1919"

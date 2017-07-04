@@ -1,5 +1,6 @@
 package com.anyihao.ayb.frame.activity;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -10,12 +11,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.DensityUtils;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
@@ -29,6 +32,7 @@ import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.listener.OnItemClickListener;
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.bigkoo.pickerview.TimePickerView;
+import com.bigkoo.pickerview.lib.WheelView;
 import com.google.gson.Gson;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
@@ -82,9 +86,14 @@ public class MeActivity extends ABaseActivity {
     private TextView tvValue;
     private String mArea;
     private String mDate;
+    private String mGender;
     private String mPhoneNum;
     private TimePickerView pvDate;
-
+    private Dialog bottomDialog;
+    private View dialogContentView;
+    private TextView tvMale;
+    private TextView tvFemale;
+    private TextView tvCancel;
 
     @Override
     protected int getContentViewId() {
@@ -141,6 +150,7 @@ public class MeActivity extends ABaseActivity {
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager
                 .VERTICAL, false));
         initTimePicker();
+        initBottomDialog();
     }
 
     private void initTimePicker() {
@@ -164,7 +174,10 @@ public class MeActivity extends ABaseActivity {
         })
                 .setType(TimePickerView.Type.YEAR_MONTH_DAY)
                 .setLabel("", "", "", "", "", "") //设置空字符串以隐藏单位提示   hide label
-                .setDividerColor(R.color.line_color)
+                .setDividerColor(Color.parseColor("#C8C8C8"))
+                .setDividerType(WheelView.DividerType.WRAP)
+                .setTextColorCenter(Color.parseColor("#333333"))
+                .setLineSpacingMultiplier(1.2f)
                 .setCancelText("取消")
                 .setSubmitText("确定")
                 .setContentSize(16)
@@ -208,7 +221,7 @@ public class MeActivity extends ABaseActivity {
                             break;
                         case "押金退款":
                             if ("未缴纳".equals(o.toString())) {
-                                ToastUtils.showToast(getApplicationContext(), "暂未" + o.toString());
+                                ToastUtils.showToast(getApplicationContext(), o.toString());
                                 return;
                             }
                             showConfirmDialog();
@@ -220,6 +233,11 @@ public class MeActivity extends ABaseActivity {
                             intent1.putExtra("action", "ORIGINAL");
                             intent1.putExtra("phoneNum", mPhoneNum);
                             startActivity(intent1);
+                            break;
+                        case "性别":
+                            if (bottomDialog != null) {
+                                bottomDialog.show();
+                            }
                             break;
                         default:
                             Intent intent = new Intent(MeActivity.this, UpdateInfoActivity
@@ -236,6 +254,37 @@ public class MeActivity extends ABaseActivity {
             @Override
             public boolean onItemLongClick(ViewGroup parent, View view, Object o, int position) {
                 return false;
+            }
+        });
+
+        tvMale.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateInfo(3, "男");
+                mGender = "男";
+                if (bottomDialog != null) {
+                    bottomDialog.dismiss();
+                }
+            }
+        });
+
+        tvFemale.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateInfo(3, "女");
+                mGender = "女";
+                if (bottomDialog != null) {
+                    bottomDialog.dismiss();
+                }
+            }
+        });
+
+        tvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bottomDialog != null) {
+                    bottomDialog.dismiss();
+                }
             }
         });
 
@@ -266,8 +315,10 @@ public class MeActivity extends ABaseActivity {
                 ""));
         if (actionType == 1) {
             params.put("area", info);
-        } else {
+        } else if (actionType == 2) {
             params.put("birthday", info);
+        } else {
+            params.put("sex", info);
         }
         PresenterFactory.getInstance().createPresenter(this)
                 .execute(new Task.TaskBuilder()
@@ -353,9 +404,11 @@ public class MeActivity extends ABaseActivity {
             }
         })
 
-                .setDividerColor(R.color.line_color)
-                .setTextColorCenter(Color.BLACK) //设置选中项文字颜色
+                .setDividerColor(Color.parseColor("#C8C8C8"))
+                .setDividerType(WheelView.DividerType.WRAP)
+                .setTextColorCenter(Color.parseColor("#333333")) //设置选中项文字颜色
                 .setContentTextSize(16)
+                .setLineSpacingMultiplier(2.0f)
                 .setSubmitText("确定")
                 .setCancelText("取消")
                 .build();
@@ -479,6 +532,26 @@ public class MeActivity extends ABaseActivity {
         dialog.show();
     }
 
+
+    private void initBottomDialog() {
+        bottomDialog = new Dialog(this, R.style.BottomDialog);
+        dialogContentView = LayoutInflater.from(this).inflate(R.layout.dialog_gender_circle, null);
+        tvMale = (TextView) dialogContentView.findViewById(R.id.tv_male);
+        tvFemale = (TextView) dialogContentView.findViewById(R.id.tv_female);
+        tvCancel = (TextView) dialogContentView.findViewById(R.id.tv_cancle);
+        bottomDialog.setContentView(dialogContentView);
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) dialogContentView
+                .getLayoutParams();
+        params.width = getResources().getDisplayMetrics().widthPixels - DensityUtils.dp2px(this,
+                16f);
+        params.bottomMargin = DensityUtils.dp2px(this, 8f);
+        dialogContentView.setLayoutParams(params);
+        if (bottomDialog.getWindow() != null) {
+            bottomDialog.getWindow().setGravity(Gravity.BOTTOM);
+            bottomDialog.getWindow().setWindowAnimations(R.style.BottomDialog_Animation);
+        }
+    }
+
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
         ((CircularProgressDrawable) progressbarCircular.getIndeterminateDrawable()).stop();
@@ -511,11 +584,18 @@ public class MeActivity extends ABaseActivity {
             ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean.class);
             if (bean == null)
                 return;
-            ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast, R.id
-                    .tv_message);
-            if (bean.getCode() == 200 && tvValue != null) {
-                String val = (actionType == 1 ? mArea : mDate);
-                tvValue.setText(val);
+            ToastUtils.showToast(getApplicationContext(), bean.getMsg());
+            if (bean.getCode() == 200) {
+                if (tvValue == null)
+                    return;
+                if (actionType == 1) {
+                    tvValue.setText(mArea);
+                } else if (actionType == 2) {
+                    tvValue.setText(mDate);
+                } else {
+                    tvValue.setText(mGender);
+                }
+
             }
 
         }
@@ -527,7 +607,6 @@ public class MeActivity extends ABaseActivity {
     public void onFailure(String error, int page, Integer actionType) {
         ((CircularProgressDrawable) progressbarCircular.getIndeterminateDrawable()).stop();
         progressbarCircular.setVisibility(View.GONE);
-        ToastUtils.showToast(getApplicationContext(), error, R.layout.toast, R.id
-                .tv_message);
+        ToastUtils.showToast(getApplicationContext(), error);
     }
 }

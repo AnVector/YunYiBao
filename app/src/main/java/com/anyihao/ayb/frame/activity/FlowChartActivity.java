@@ -1,5 +1,6 @@
 package com.anyihao.ayb.frame.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.UTabAdapter;
 import com.anyihao.ayb.frame.fragment.ChartFragment;
 import com.bigkoo.pickerview.TimePickerView;
+import com.bigkoo.pickerview.lib.WheelView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -120,7 +122,10 @@ public class FlowChartActivity extends ABaseActivity {
         })
                 .setType(TimePickerView.Type.YEAR_MONTH_DAY)
                 .setLabel("", "", "", "", "", "") //设置空字符串以隐藏单位提示   hide label
-                .setDividerColor(R.color.line_color)
+                .setDividerColor(Color.parseColor("#C8C8C8"))
+                .setDividerType(WheelView.DividerType.WRAP)
+                .setTextColorCenter(Color.parseColor("#333333"))
+                .setLineSpacingMultiplier(1.2f)
                 .setCancelText("取消")
                 .setSubmitText("确定")
                 .setContentSize(16)
@@ -135,7 +140,10 @@ public class FlowChartActivity extends ABaseActivity {
         })
                 .setType(TimePickerView.Type.YEAR_MONTH_DAY_HOUR_MIN)
                 .setLabel("", "", "", "", "", "") //设置空字符串以隐藏单位提示   hide label
-                .setDividerColor(R.color.line_color)
+                .setDividerColor(Color.parseColor("#C8C8C8"))
+                .setDividerType(WheelView.DividerType.WRAP)
+                .setTextColorCenter(Color.parseColor("#333333"))
+                .setLineSpacingMultiplier(1.2f)
                 .setCancelText("取消")
                 .setSubmitText("确定")
                 .setContentSize(16)

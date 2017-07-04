@@ -42,6 +42,7 @@ public class PackageFragment extends ABaseFragment {
     private String money;
     private String amount;
     private String expires;
+    private String packageID;
 
     @Override
     protected void initData() {
@@ -86,6 +87,7 @@ public class PackageFragment extends ABaseFragment {
                     expires = ((DataBean) o).getPkgDesc();
                     amount = ((DataBean) o).getFlow();
                     money = ((DataBean) o).getPrice();
+                    packageID = ((DataBean) o).getPackageID();
                     tvPackageDesc.setText(expires);
                 }
             }
@@ -108,6 +110,10 @@ public class PackageFragment extends ABaseFragment {
 
     public String getExpires() {
         return expires;
+    }
+
+    public String getPackageID() {
+        return packageID;
     }
 
     @Override

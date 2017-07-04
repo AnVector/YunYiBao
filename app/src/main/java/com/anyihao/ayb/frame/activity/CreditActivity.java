@@ -1,5 +1,6 @@
 package com.anyihao.ayb.frame.activity;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,13 +9,25 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.mvp.Task;
+import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.GsonUtils;
+import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.CreditAdapter;
+import com.anyihao.ayb.bean.CreditBean;
+import com.anyihao.ayb.bean.CreditBean.DataBean;
+import com.anyihao.ayb.common.PresenterFactory;
+import com.anyihao.ayb.constant.GlobalConsts;
 import com.chaychan.viewlib.NumberRunningTextView;
 import com.jaeger.library.StatusBarUtil;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -31,8 +44,11 @@ public class CreditActivity extends ABaseActivity {
     @BindView(R.id.ll_header)
     LinearLayout llHeader;
     private CreditAdapter mAdapter;
-    String[] array = new String[]{"购买流量", "兑换流量", "购买会员流量", "下载王者荣耀"};
-    private List<String> mData = Arrays.asList(array);
+    private List<DataBean> mData = new ArrayList<>();
+    private String mCredit;
+
+    private int page = 1;
+    private static final int PAGE_SIZE = 10;
 
     @Override
     protected int getContentViewId() {
@@ -41,7 +57,13 @@ public class CreditActivity extends ABaseActivity {
 
     @Override
     protected void getExtraParams() {
-
+        Intent intent = getIntent();
+        if (intent == null)
+            return;
+        mCredit = intent.getStringExtra("integral");
+        if (!StringUtils.isEmpty(mCredit)) {
+            mCredit = mCredit.replace(" 积分", "");
+        }
     }
 
     @Override
@@ -49,11 +71,11 @@ public class CreditActivity extends ABaseActivity {
         Typeface fontFace = Typeface.createFromAsset(getAssets(),
                 "fonts/W13.TTF");
         tvPoints.setTypeface(fontFace);
-        tvPoints.setContent("24523");
-//        setSupportActionBar(toolbar);
-//        if (getSupportActionBar() != null) {
-//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        }
+        tvPoints.setContent(mCredit);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         toolbar.setNavigationIcon(R.drawable.ic_back_white);
         toolbar.setBackground(null);
         setSupportActionBar(toolbar);
@@ -66,8 +88,7 @@ public class CreditActivity extends ABaseActivity {
         recyclerview.setAdapter(mAdapter);
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager
                 .VERTICAL, false));
-        recyclerview.setHasFixedSize(true);
-        mAdapter.add(0, mData.size(), mData);
+        getCredits();
     }
 
     @Override
@@ -82,6 +103,22 @@ public class CreditActivity extends ABaseActivity {
 
     }
 
+    private void getCredits() {
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "MYSCORES");
+        params.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
+        params.put("page", page + "");
+        params.put("pagesize", PAGE_SIZE + "");
+        PresenterFactory.getInstance().createPresenter(this)
+                .execute(new Task.TaskBuilder()
+                        .setTaskType(TaskType.Method.POST)
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setParams(params)
+                        .setPage(1)
+                        .setActionType(0)
+                        .createTask());
+    }
+
     @Override
     protected void setStatusBarTheme() {
         StatusBarUtil.setTranslucentForImageView(this, 0, llHeader);
@@ -89,11 +126,32 @@ public class CreditActivity extends ABaseActivity {
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
+        if (actionType == 0) {
+            CreditBean bean = GsonUtils.getInstance().transitionToBean(result, CreditBean.class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                if (bean.getData().size() > 0) {
+                    mAdapter.remove(0, mData.size());
+                    mData.clear();
+                    mData.addAll(bean.getData());
+                    mAdapter.add(0, mData.size(), mData);
+                } else {
+                    ToastUtils.showToast(getApplicationContext(), "暂无积分赠送记录");
+                }
+            }
+
+        }
 
     }
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
+        if (StringUtils.isEmpty(error))
+            return;
+        if (error.contains("ConnectException")) {
+            ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
+        }
 
     }
 }

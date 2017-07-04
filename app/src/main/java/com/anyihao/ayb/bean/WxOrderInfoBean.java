@@ -1,7 +1,6 @@
 package com.anyihao.ayb.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
 /**
  * author: Administrator
@@ -9,7 +8,7 @@ import android.os.Parcelable;
  * email:looper@126.com
  */
 
-public class WxOrderInfoBean implements Parcelable {
+public class WxOrderInfoBean implements Serializable {
 
     private int code;
     private String msg;
@@ -101,51 +100,4 @@ public class WxOrderInfoBean implements Parcelable {
     public void setSign(String sign) {
         this.sign = sign;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.code);
-        dest.writeString(this.msg);
-        dest.writeString(this.appId);
-        dest.writeString(this.partnerId);
-        dest.writeString(this.prepayId);
-        dest.writeString(this.orderId);
-        dest.writeString(this.packege);
-        dest.writeString(this.nonceStr);
-        dest.writeString(this.timestamp);
-        dest.writeString(this.sign);
-    }
-
-    public WxOrderInfoBean() {
-    }
-
-    protected WxOrderInfoBean(Parcel in) {
-        this.code = in.readInt();
-        this.msg = in.readString();
-        this.appId = in.readString();
-        this.partnerId = in.readString();
-        this.prepayId = in.readString();
-        this.orderId = in.readString();
-        this.packege = in.readString();
-        this.nonceStr = in.readString();
-        this.timestamp = in.readString();
-        this.sign = in.readString();
-    }
-
-    public static final Creator<WxOrderInfoBean> CREATOR = new Creator<WxOrderInfoBean>() {
-        @Override
-        public WxOrderInfoBean createFromParcel(Parcel source) {
-            return new WxOrderInfoBean(source);
-        }
-
-        @Override
-        public WxOrderInfoBean[] newArray(int size) {
-            return new WxOrderInfoBean[size];
-        }
-    };
 }

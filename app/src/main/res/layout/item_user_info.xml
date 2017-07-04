@@ -36,9 +36,17 @@
             android:layout_toLeftOf="@id/btn_more">
 
             <ImageView
-                android:id="@+id/img_profile"
+                android:id="@+id/img_code"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:scaleType="fitXY"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/img_profile"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:scaleType="fitXY"
                 android:visibility="gone"/>

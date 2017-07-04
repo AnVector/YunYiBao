@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -32,7 +31,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:scaleType="fitXY"
             android:src="@drawable/ic_connected_device"/>
 
@@ -55,11 +54,7 @@
         <com.marshalchen.ultimaterecyclerview.UltimateRecyclerView
             android:id="@+id/ultimate_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            app:recyclerviewClipToPadding="true"
-            app:recyclerviewDefaultSwipeColor="@array/google_colors"
-            app:recyclerviewFloatingActionView="@layout/floating_view"
-            app:recyclerviewScrollbars="vertical"/>
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </FrameLayout>

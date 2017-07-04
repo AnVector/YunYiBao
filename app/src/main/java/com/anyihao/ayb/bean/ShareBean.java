@@ -1,7 +1,6 @@
 package com.anyihao.ayb.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
 /**
  * author: Administrator
@@ -9,14 +8,15 @@ import android.os.Parcelable;
  * email:looper@126.com
  */
 
-public class ShareBean implements Parcelable {
+public class ShareBean implements Serializable {
 
     private int code;
     private String msg;
-    private String shareTitle;
-    private String shareUrl;
-    private String shareImg;
-    private String shareId;
+    private int keyId;
+    private String imgUrl;
+    private int integral;
+    private String reqCode;
+    private String number;
 
     public int getCode() {
         return code;
@@ -34,74 +34,43 @@ public class ShareBean implements Parcelable {
         this.msg = msg;
     }
 
-    public String getShareTitle() {
-        return shareTitle;
+    public int getKeyId() {
+        return keyId;
     }
 
-    public void setShareTitle(String shareTitle) {
-        this.shareTitle = shareTitle;
+    public void setKeyId(int keyId) {
+        this.keyId = keyId;
     }
 
-    public String getShareUrl() {
-        return shareUrl;
+    public String getImgUrl() {
+        return imgUrl;
     }
 
-    public void setShareUrl(String shareUrl) {
-        this.shareUrl = shareUrl;
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
-    public String getShareImg() {
-        return shareImg;
+    public int getIntegral() {
+        return integral;
     }
 
-    public void setShareImg(String shareImg) {
-        this.shareImg = shareImg;
+    public void setIntegral(int integral) {
+        this.integral = integral;
     }
 
-    public String getShareId() {
-        return shareId;
+    public String getReqCode() {
+        return reqCode;
     }
 
-    public void setShareId(String shareId) {
-        this.shareId = shareId;
+    public void setReqCode(String reqCode) {
+        this.reqCode = reqCode;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public String getNumber() {
+        return number;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.code);
-        dest.writeString(this.msg);
-        dest.writeString(this.shareTitle);
-        dest.writeString(this.shareUrl);
-        dest.writeString(this.shareImg);
-        dest.writeString(this.shareId);
+    public void setNumber(String number) {
+        this.number = number;
     }
-
-    public ShareBean() {
-    }
-
-    protected ShareBean(Parcel in) {
-        this.code = in.readInt();
-        this.msg = in.readString();
-        this.shareTitle = in.readString();
-        this.shareUrl = in.readString();
-        this.shareImg = in.readString();
-        this.shareId = in.readString();
-    }
-
-    public static final Creator<ShareBean> CREATOR = new Creator<ShareBean>() {
-        @Override
-        public ShareBean createFromParcel(Parcel source) {
-            return new ShareBean(source);
-        }
-
-        @Override
-        public ShareBean[] newArray(int size) {
-            return new ShareBean[size];
-        }
-    };
 }

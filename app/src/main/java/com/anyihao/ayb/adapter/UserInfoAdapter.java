@@ -24,18 +24,19 @@ public class UserInfoAdapter extends RecyclerViewAdapter<String> {
         holder.setText(R.id.title, key);
         if ("头像".equals(key)) {
             holder.setVisible(R.id.value, false);
-            holder.setImageResource(R.id.img_profile, R.drawable.user_profile);
             holder.setVisible(R.id.img_profile, true);
+            holder.setVisible(R.id.img_code, false);
+            holder.displayImage(R.id.img_profile, s, R.drawable.user_profile);
         } else if ("我的二维码".equals(key)) {
-            holder.setImageResource(R.id.img_profile, R.drawable.ic_qr_code);
-            holder.setVisible(R.id.img_profile, true);
+            holder.setImageResource(R.id.img_code, R.drawable.ic_qr_code);
+            holder.setVisible(R.id.img_code, true);
+            holder.setVisible(R.id.img_profile, false);
         } else if ("押金退款".equals(key)) {
             holder.setVisible(R.id.line, false);
             holder.setText(R.id.value, s);
         } else {
             holder.setText(R.id.value, s);
         }
-
         if ("生日".equals(key)) {
             holder.setVisible(R.id.space, true);
             holder.setVisible(R.id.line, false);

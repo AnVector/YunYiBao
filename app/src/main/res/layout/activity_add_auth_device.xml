@@ -58,54 +58,36 @@
         android:textColor="@color/light_gray"
         android:textSize="@dimen/font_size_small"/>
 
-    <LinearLayout
+    <RadioGroup
+        android:id="@+id/rg_device_type"
         android:layout_width="match_parent"
         android:layout_height="34dp"
         android:layout_marginTop="34dp"
         android:gravity="left|center_vertical"
         android:orientation="horizontal"
-        android:paddingLeft="28dp"
-        android:paddingRight="28dp">
+        android:paddingLeft="26dp"
+        android:paddingRight="26dp">
 
-        <TextView
-            android:layout_width="65dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/auth_edit_text_bg"
-            android:gravity="center"
-            android:text="@string/mobile"
-            android:textColor="@color/pay_title_text_color"
-            android:textSize="@dimen/font_size_normal_high"/>
+        <RadioButton
+            android:id="@+id/rbt_phone"
+            style="@style/add_auth_radio_button_style"
+            android:text="@string/mobile"/>
 
-        <TextView
-            android:layout_width="65dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="15dp"
-            android:background="@drawable/auth_edit_text_bg"
-            android:gravity="center"
-            android:text="@string/pad"
-            android:textColor="@color/pay_title_text_color"
-            android:textSize="@dimen/font_size_normal_high"/>
+        <RadioButton
+            android:id="@+id/rbt_pad"
+            style="@style/add_auth_radio_button_style"
+            android:text="@string/pad"/>
 
-        <TextView
-            android:layout_width="65dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
-            android:background="@drawable/auth_edit_text_bg"
-            android:gravity="center"
-            android:text="@string/computer"
-            android:textColor="@color/pay_title_text_color"
-            android:textSize="@dimen/font_size_normal_high"/>
+        <RadioButton
+            android:id="@+id/rbt_pc"
+            style="@style/add_auth_radio_button_style"
+            android:text="@string/computer"/>
 
-        <TextView
-            android:layout_width="65dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="15dp"
-            android:background="@drawable/auth_edit_text_bg"
-            android:gravity="center"
-            android:text="@string/others"
-            android:textColor="@color/pay_title_text_color"
-            android:textSize="@dimen/font_size_normal_high"/>
-    </LinearLayout>
+        <RadioButton
+            android:id="@+id/rbt_other"
+            style="@style/add_auth_radio_button_style"
+            android:text="@string/others"/>
+    </RadioGroup>
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_add_auth_device"
