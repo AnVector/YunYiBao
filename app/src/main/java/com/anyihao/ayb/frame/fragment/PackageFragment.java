@@ -51,7 +51,6 @@ public class PackageFragment extends ABaseFragment {
             flowType = bundle.getString("flowType");
             getPackageInfo();
         }
-
         mAdapter = new DataFlowAdapter(getActivity(), R.layout.item_data_flow);
         recyclerview.setAdapter(mAdapter);
         recyclerview.setLayoutManager(new GridLayoutManager(mContext, 3));
@@ -129,20 +128,21 @@ public class PackageFragment extends ABaseFragment {
             if (bean == null)
                 return;
             if (bean.getCode() == 200) {
+                mAdapter.remove(0, mData.size());
                 mData.clear();
                 List<DataBean> beans = bean.getData();
                 if (beans != null && !beans.isEmpty()) {
                     money = beans.get(0).getPrice();
                     amount = beans.get(0).getFlow();
                     expires = beans.get(0).getPkgDesc();
+                    packageID = beans.get(0).getPackageID();
                     tvPackageDesc.setText(expires);
                     mData.addAll(beans);
                     mAdapter.add(0, mData.size(), mData);
                 }
 
             } else {
-                ToastUtils.showToast(mContext.getApplicationContext(), bean.getMsg(), R.layout
-                        .toast, R.id.tv_message);
+                ToastUtils.showToast(mContext.getApplicationContext(), bean.getMsg());
             }
         }
 
@@ -150,9 +150,12 @@ public class PackageFragment extends ABaseFragment {
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-        if (actionType == 0) {
-            ToastUtils.showToast(mContext.getApplicationContext(), error, R.layout
-                    .toast, R.id.tv_message);
+        if (StringUtils.isEmpty(error))
+            return;
+        if (error.contains("ConnectException")) {
+            ToastUtils.showToast(mContext.getApplicationContext(), "网络连接失败，请检查网络设置");
+        } else {
+            ToastUtils.showToast(mContext.getApplicationContext(), error);
         }
     }
 }

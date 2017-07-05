@@ -42,7 +42,9 @@ public class RechargeRecordListBean implements Serializable {
         private String topupType;
         private String pkgType;
         private String pkgInfo;
-        private int flow;
+        private String flow;
+        private String crtTm;
+        private String status;
 
         public String getIdxOrderID() {
             return idxOrderID;
@@ -84,14 +86,6 @@ public class RechargeRecordListBean implements Serializable {
             this.pkgInfo = pkgInfo;
         }
 
-        public int getFlow() {
-            return flow;
-        }
-
-        public void setFlow(int flow) {
-            this.flow = flow;
-        }
-
         public String getCrtTm() {
             return crtTm;
         }
@@ -108,7 +102,12 @@ public class RechargeRecordListBean implements Serializable {
             this.status = status;
         }
 
-        private String crtTm;
-        private String status;
+        public String getFlow() {
+            return flow;
+        }
+
+        public void setFlow(String flow) {
+            this.flow = flow;
+        }
     }
 }

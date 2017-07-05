@@ -64,9 +64,9 @@ public class CustomViewfinderView extends ViewfinderView {
         // Draw the exterior (i.e. outside the framing rect) darkened
         paint.setColor(resultBitmap != null ? resultColor : maskColor);
         canvas.drawRect(0, 0, width, frame.top, paint);
-        canvas.drawRect(0, frame.top, frame.left, frame.bottom + 1, paint);
-        canvas.drawRect(frame.right + 1, frame.top, width, frame.bottom + 1, paint);
-        canvas.drawRect(0, frame.bottom + 1, width, height, paint);
+        canvas.drawRect(0, frame.top, frame.left, frame.bottom + 0.5f, paint);
+        canvas.drawRect(frame.right + 0.5f, frame.top, width, frame.bottom + 0.5f, paint);
+        canvas.drawRect(0, frame.bottom + 0.5f, width, height, paint);
 
         if (resultBitmap != null) {
             // Draw the opaque result bitmap over the scanning rectangle
@@ -80,15 +80,15 @@ public class CustomViewfinderView extends ViewfinderView {
             if (laserLinePosition > frame.height()) {
                 laserLinePosition = 0;
             }
-            linearGradient = new LinearGradient(frame.left + 1, frame.top + laserLinePosition,
-                    frame.right - 1, frame.top + 10 + laserLinePosition, colors, position, Shader
-                    .TileMode.CLAMP);
+//            linearGradient = new LinearGradient(frame.left + 1, frame.top + laserLinePosition,
+//                    frame.right - 1, frame.top + 10 + laserLinePosition, colors, position, Shader
+//                    .TileMode.CLAMP);
             // Draw a red "laser scanner" line through the middle to show decoding is active
 
-            //  paint.setColor(laserColor);
-            paint.setShader(linearGradient);
+            paint.setColor(Color.parseColor("#2DA8F4"));
+//            paint.setShader(linearGradient);
             //绘制扫描线
-            canvas.drawRect(frame.left + 1, frame.top + laserLinePosition, frame.right - 1, frame
+            canvas.drawRect(frame.left + 0.6f, frame.top + laserLinePosition, frame.right - 0.6f, frame
                     .top + 10 + laserLinePosition, paint);
             paint.setShader(null);
             float scaleX = frame.width() / (float) previewFrame.width();

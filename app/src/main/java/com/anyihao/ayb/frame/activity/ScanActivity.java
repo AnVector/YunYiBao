@@ -22,12 +22,12 @@ import butterknife.BindView;
  */
 
 public class ScanActivity extends ABaseActivity implements DecoratedBarcodeView.TorchListener {
-    @BindView(R.id.dbv_custom)
-    DecoratedBarcodeView mDBV;
     @BindView(R.id.toolbar_title_mid)
     TextView toolbarTitleMid;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.zxing_barcode_scanner)
+    DecoratedBarcodeView barcodeScanner;
     // 实现相关接口
     // 添加一个按钮用来控制闪光灯，同时添加两个按钮表示其他功能，先用Toast表示
     private CaptureManager captureManager;
@@ -63,9 +63,9 @@ public class ScanActivity extends ABaseActivity implements DecoratedBarcodeView.
 //            @Override
 //            public void onClick(View v) {
 //                if (isLightOn) {
-//                    mDBV.setTorchOff();
+//                    barcodeScanner.setTorchOff();
 //                } else {
-//                    mDBV.setTorchOn();
+//                    barcodeScanner.setTorchOn();
 //                }
 //            }
 //        });
@@ -80,14 +80,14 @@ public class ScanActivity extends ABaseActivity implements DecoratedBarcodeView.
     @Override
     protected void saveInstanceState(Bundle savedInstanceState) {
         super.saveInstanceState(savedInstanceState);
-        captureManager = new CaptureManager(this, mDBV);
+        captureManager = new CaptureManager(this, barcodeScanner);
         captureManager.initializeFromIntent(getIntent(), savedInstanceState);
         captureManager.decode();
     }
 
     @Override
     protected void initEvent() {
-        mDBV.setTorchListener(this);
+        barcodeScanner.setTorchListener(this);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,7 +132,7 @@ public class ScanActivity extends ABaseActivity implements DecoratedBarcodeView.
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return mDBV.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+        return barcodeScanner.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
     }
 
     // torch 手电筒
@@ -153,5 +153,4 @@ public class ScanActivity extends ABaseActivity implements DecoratedBarcodeView.
         return getApplicationContext().getPackageManager()
                 .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
     }
-
 }

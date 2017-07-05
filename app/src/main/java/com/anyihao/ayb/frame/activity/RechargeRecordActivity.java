@@ -15,6 +15,7 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.RechargeRecordAdapter;
@@ -45,7 +46,7 @@ public class RechargeRecordActivity extends ABaseActivity {
     UltimateRecyclerView recyclerView;
     private static final int PAGE_SIZE = 10;
     private RechargeRecordAdapter mAdapter;
-    protected LinearLayoutManager layoutManager;
+    private LinearLayoutManager layoutManager;
     private ItemTouchHelper mItemTouchHelper;
     private List<DataBean> mData = new ArrayList<>();
     private List<DataBean> mItems;
@@ -150,9 +151,13 @@ public class RechargeRecordActivity extends ABaseActivity {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-                Intent intent = new Intent(RechargeRecordActivity.this,
-                        RechargeRecordDetailsActivity.class);
-                startActivity(intent);
+                if (o instanceof DataBean) {
+                    Intent intent = new Intent(RechargeRecordActivity.this,
+                            RechargeRecordDetailsActivity
+                            .class);
+                    intent.putExtra("idxOrderID", ((DataBean) o).getIdxOrderID());
+                    startActivity(intent);
+                }
             }
 
             @Override
@@ -211,8 +216,7 @@ public class RechargeRecordActivity extends ABaseActivity {
             if (bean.getCode() == 200) {
                 List<DataBean> beans = bean.getData();
                 if (beans.size() > 0) {
-                    ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast,
-                            R.id.tv_message);
+                    ToastUtils.showToast(getApplicationContext(), bean.getMsg());
                     mItems = beans;
                     if (isRefresh) {
                         onFireRefresh();
@@ -221,8 +225,7 @@ public class RechargeRecordActivity extends ABaseActivity {
                     }
                 } else {
                     if (page == 1) {
-                        ToastUtils.showToast(getApplicationContext(), "暂无充值记录", R.layout
-                                .toast, R.id.tv_message);
+                        ToastUtils.showToast(getApplicationContext(), "暂无充值记录");
                     }
 
                 }
@@ -233,7 +236,12 @@ public class RechargeRecordActivity extends ABaseActivity {
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-        ToastUtils.showToast(getApplicationContext(), error, R.layout.toast, R.id
-                .tv_message);
+        if (StringUtils.isEmpty(error))
+            return;
+        if (error.contains("ConnectException")) {
+            ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
+        } else {
+            ToastUtils.showToast(getApplicationContext(), error);
+        }
     }
 }

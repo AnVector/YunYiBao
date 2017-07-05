@@ -1,20 +1,39 @@
 package com.anyihao.ayb.frame.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.mvp.Task;
+import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.GsonUtils;
+import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
-import com.anyihao.ayb.adapter.SettingsAdapter;
 import com.anyihao.ayb.adapter.SystemRecordAdapter;
+import com.anyihao.ayb.bean.RechargeRecordListBean;
+import com.anyihao.ayb.bean.RechargeRecordListBean.DataBean;
+import com.anyihao.ayb.common.PresenterFactory;
+import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.listener.OnItemClickListener;
+import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
+import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
+import com.marshalchen.ultimaterecyclerview.itemTouchHelper.SimpleItemTouchHelperCallback;
+import com.marshalchen.ultimaterecyclerview.ui.emptyview.emptyViewOnShownListener;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -24,11 +43,16 @@ public class SystemRecordActivity extends ABaseActivity {
     TextView toolbarTitleMid;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.recyclerview)
-    RecyclerView recyclerview;
+    @BindView(R.id.ultimate_recycler_view)
+    UltimateRecyclerView recyclerView;
+    private static final int PAGE_SIZE = 10;
     private SystemRecordAdapter mAdapter;
-    String[] array = new String[]{"首次注册", "首次购买流量", "首次租赁", "邀请好友入驻"};
-    private List<String> mData = Arrays.asList(array);
+    private List<DataBean> mData = new ArrayList<>();
+    private LinearLayoutManager layoutManager;
+    private ItemTouchHelper mItemTouchHelper;
+    private List<DataBean> mItems;
+    private int page = 1;
+    private boolean isRefresh;
 
     @Override
     protected int getContentViewId() {
@@ -47,12 +71,42 @@ public class SystemRecordActivity extends ABaseActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         toolbarTitleMid.setText(getString(R.string.system_gift_record));
-        mAdapter = new SystemRecordAdapter(this, R.layout.item_system_record);
-        recyclerview.setAdapter(mAdapter);
-        recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager
-                .VERTICAL, false));
-        recyclerview.setHasFixedSize(true);
-        mAdapter.add(0, mData.size(), mData);
+        recyclerView.setHasFixedSize(false);
+        mAdapter = new SystemRecordAdapter(mData, R.layout.item_system_record);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+//        StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration
+//                (informationAdapter);
+//        ultimateRecyclerView.addItemDecoration(headersDecor);
+        //bug 设置加载更多动画会使添加的数据延迟显示
+//        recyclerView.setLoadMoreView(R.layout.custom_bottom_progressbar);
+        recyclerView.setEmptyView(R.layout.empty_view, UltimateRecyclerView
+                .EMPTY_CLEAR_ALL, new emptyViewOnShownListener() {
+            @Override
+            public void onEmptyViewShow(View mView) {
+                if (mView == null)
+                    return;
+                ImageView imvError = (ImageView) mView.findViewById(R.id.ic_error);
+                if (imvError == null)
+                    return;
+                imvError.setImageDrawable(getResources().getDrawable(R.drawable
+                        .ic_no_recharge_record));
+                TextView tvHint = (TextView) mView.findViewById(R.id.tv_hint);
+                if (tvHint == null)
+                    return;
+                tvHint.setText("暂无赠送记录");
+            }
+        });
+//        recyclerView.setParallaxHeader(getLayoutInflater().inflate(R.layout
+//                .parallax_recyclerview_header, recyclerView.mRecyclerView, false));
+        recyclerView.setRecylerViewBackgroundColor(Color.parseColor("#ffffff"));
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback
+                (mAdapter);
+        mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(recyclerView.mRecyclerView);
+        recyclerView.reenableLoadmore();
+        recyclerView.setAdapter(mAdapter);
+        getSystemRecord();
 
     }
 
@@ -66,12 +120,46 @@ public class SystemRecordActivity extends ABaseActivity {
             }
         });
 
+        recyclerView.setOnParallaxScroll(new UltimateRecyclerView.OnParallaxScroll() {
+            @Override
+            public void onParallaxScroll(float percentage, float offset, View parallax) {
+            }
+        });
+        mAdapter.setOnDragStartListener(new UltimateViewAdapter.OnStartDragListener() {
+
+            @Override
+            public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+                mItemTouchHelper.startDrag(viewHolder);
+            }
+        });
+        recyclerView.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener
+                () {
+            @Override
+            public void onRefresh() {
+                page = 1;
+                isRefresh = true;
+                getSystemRecord();
+            }
+        });
+
+        recyclerView.setOnLoadMoreListener(new UltimateRecyclerView.OnLoadMoreListener() {
+            @Override
+            public void loadMore(int itemsCount, int maxLastVisiblePosition) {
+                ++page;
+                isRefresh = false;
+                getSystemRecord();
+            }
+        });
+
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-                Intent intent = new Intent(SystemRecordActivity.this, SysRecordDetailsActivity
-                        .class);
-                startActivity(intent);
+                if (o instanceof DataBean) {
+                    Intent intent = new Intent(SystemRecordActivity.this, SysRecordDetailsActivity
+                            .class);
+                    intent.putExtra("idxOrderID", ((DataBean) o).getIdxOrderID());
+                    startActivity(intent);
+                }
             }
 
             @Override
@@ -82,13 +170,78 @@ public class SystemRecordActivity extends ABaseActivity {
 
     }
 
+    private void onFireRefresh() {
+        mAdapter.removeAllInternal(mData);
+        mAdapter.insert(mItems);
+        recyclerView.setRefreshing(false);
+        //   ultimateRecyclerView.scrollBy(0, -50);
+        layoutManager.scrollToPosition(0);
+//        recyclerView.scrollVerticallyTo(0);
+        //ultimateRecyclerView.setAdapter(simpleRecyclerViewAdapter);
+        //simpleRecyclerViewAdapter.notifyDataSetChanged();
+//        ultimateRecyclerView.disableLoadmore();
+    }
+
+    private void onLoadMore() {
+        mAdapter.insert(mItems);
+        if (mItems.size() < PAGE_SIZE) {
+            recyclerView.disableLoadmore();
+        }
+    }
+
+    private void getSystemRecord() {
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "PAYLIST");
+        params.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
+        params.put("page", page + "");
+        params.put("pagesize", PAGE_SIZE + "");
+        params.put("flowType", "SYSTEM");
+
+        PresenterFactory.getInstance().createPresenter(this)
+                .execute(new Task.TaskBuilder()
+                        .setTaskType(TaskType.Method.POST)
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setParams(params)
+                        .setPage(1)
+                        .setActionType(0)
+                        .createTask());
+    }
+
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
+        if (actionType == 0) {
+            RechargeRecordListBean bean = GsonUtils.getInstance().transitionToBean(result,
+                    RechargeRecordListBean.class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                List<DataBean> beans = bean.getData();
+                if (beans.size() > 0) {
+                    ToastUtils.showToast(getApplicationContext(), bean.getMsg());
+                    mItems = beans;
+                    if (isRefresh) {
+                        onFireRefresh();
+                    } else {
+                        onLoadMore();
+                    }
+                } else {
+                    if (page == 1) {
+                        ToastUtils.showToast(getApplicationContext(), "暂无充值记录");
+                    }
 
+                }
+            }
+        }
     }
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-
+        if (StringUtils.isEmpty(error))
+            return;
+        if (error.contains("ConnectException")) {
+            ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
+        } else {
+            ToastUtils.showToast(getApplicationContext(), error);
+        }
     }
 }

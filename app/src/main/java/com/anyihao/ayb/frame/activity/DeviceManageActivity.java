@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -59,7 +60,7 @@ public class DeviceManageActivity extends ABaseActivity {
     @BindView(R.id.toolbar_title_right)
     TextView toolbarTitleRight;
     @BindView(R.id.rl_empty)
-    RelativeLayout rlEmpty;
+    LinearLayout rlEmpty;
     private AuthDeviceAdapter mAdapter;
     private List<DataBean> mData = new ArrayList<>();
     public static final int REQUEST_ADD_AUTH_DEVICE_CODE = 0X00006;

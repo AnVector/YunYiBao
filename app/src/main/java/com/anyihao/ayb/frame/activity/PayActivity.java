@@ -1,8 +1,12 @@
 package com.anyihao.ayb.frame.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -77,11 +81,17 @@ public class PayActivity extends ABaseActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         titleMid.setText(getString(R.string.pay));
-        tvPayAmount.setText(String.format(tvPayAmount.getText().toString(), money));
+        SpannableString spannableString = new SpannableString(String.format(tvPayAmount.getText()
+                .toString(), money));
+        ForegroundColorSpan colorSpan = new ForegroundColorSpan(Color.parseColor("#ff1919"));
+        spannableString.setSpan(colorSpan, 5, spannableString.length(), Spanned
+                .SPAN_INCLUSIVE_EXCLUSIVE);
+        tvPayAmount.setText(spannableString);
         tvAmount.setText(String.format(tvAmount.getText().toString(), amount));
-        tvValidity.setText(String.format(tvValidity.getText().toString(), expires));
+        tvValidity.setText(String.format(tvValidity.getText().toString(), expires.replace
+                ("全国流量，即时生效，", "")));
 
-        wxApi = WXAPIFactory.createWXAPI(this, GlobalConsts.WX_APP_ID);
+        wxApi = WXAPIFactory.createWXAPI(this, null);
         wxApi.registerApp(GlobalConsts.WX_APP_ID);
         isWxPaySupported = wxApi.getWXAppSupportAPI() >= Build.PAY_SUPPORTED_SDK_INT;
     }
@@ -126,7 +136,7 @@ public class PayActivity extends ABaseActivity {
     private void payByWx(String appId, String partnerId, String prepayId, String packageValue,
                          String nonceStr, String timeStamp, String sign) {
         if (isWxPaySupported) {
-            ToastUtils.showLongToast(PayActivity.this, "获取订单中...");
+            ToastUtils.showLongToastSafe(PayActivity.this, "订单获取中...");
             PayReq request = new PayReq();
             request.appId = appId;
             request.partnerId = partnerId;
@@ -176,6 +186,8 @@ public class PayActivity extends ABaseActivity {
             return;
         if (error.contains("ConnectException")) {
             ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
+        } else {
+            ToastUtils.showToast(getApplicationContext(), error);
         }
     }
 }

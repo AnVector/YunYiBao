@@ -10,8 +10,12 @@ import com.anyihao.ayb.R;
 
 public class MeAdapter extends RecyclerViewAdapter<String> {
 
-    private String[] array = new String[]{"我的流量", "流量商城", "流量报表", "充值记录", "邀请好友", "输入邀请码", "系统赠送记录",
+    private String[] array1 = new String[]{"我的流量", "流量商城", "流量报表", "充值记录", "邀请好友", "输入邀请码",
+            "系统赠送记录",
             "我的积分", "商家特权", "授权设备管理"};
+    private String[] array2 = new String[]{"我的流量", "流量商城", "流量报表", "充值记录", "邀请好友", "输入邀请码",
+            "系统赠送记录",
+            "我的积分", "授权设备管理"};
 
     public MeAdapter(Context context, int layoutId) {
         super(context, layoutId);
@@ -19,7 +23,13 @@ public class MeAdapter extends RecyclerViewAdapter<String> {
 
     @Override
     public void convert(ViewHolder holder, String s) {
-        String title = array[holder.getLayoutPosition() % array.length];
+        String title;
+        if (getItemCount() == 10) {
+            title = array1[holder.getLayoutPosition() % array1.length];
+        } else {
+            title = array2[holder.getLayoutPosition() % array2.length];
+        }
+
         holder.setText(R.id.title, title);
         holder.getConvertView().setTag(title);
         switch (title) {
@@ -69,7 +79,5 @@ public class MeAdapter extends RecyclerViewAdapter<String> {
             default:
                 break;
         }
-
-
     }
 }

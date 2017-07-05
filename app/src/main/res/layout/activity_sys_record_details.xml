@@ -2,7 +2,6 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_sys_record_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_background_color"
@@ -14,6 +13,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="266dp"
+        android:layout_marginTop="10dp"
         android:background="@color/white"
         android:padding="12dp">
 
@@ -56,7 +56,6 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:gravity="right|center_vertical"
-            android:text="2017-03-25 17:22:22"
             android:textColor="@color/toolbar_register_color"
             android:textSize="@dimen/font_size_normal"/>
 
@@ -73,12 +72,12 @@
             android:textSize="@dimen/font_size_normal"/>
 
         <TextView
+            android:id="@+id/tv_expires"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignTop="@id/tv_expires_hint"
             android:gravity="right|center_vertical"
-            android:text="一年"
             android:textColor="@color/toolbar_register_color"
             android:textSize="@dimen/font_size_normal"/>
 
@@ -102,9 +101,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignTop="@id/tv_gift_data_hint"
             android:gravity="right|center_vertical"
-            android:text="100M"
             android:textColor="@color/toolbar_title_color"
             android:textSize="@dimen/font_size_normal"/>
-
     </RelativeLayout>
 </LinearLayout>

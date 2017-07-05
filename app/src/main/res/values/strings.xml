@@ -142,7 +142,7 @@
     <string name="period_of_validity">有效期：</string>
     <string name="fee">费用：</string>
     <string name="back_to_main">返回首页</string>
-    <string name="fee_value">&#165;3.00</string>
+    <string name="fee_value">&#165;99.00</string>
     <string name="goto_recharge_record">进入充值记录</string>
 
     <!--home-->
@@ -244,7 +244,7 @@
     <string name="data_flow">流量：</string>
     <string name="remark">添加备注（30字以内）</string>
     <string name="confirm_to_gift">确认</string>
-    <string name="gift_data">转赠流量</string>
+    <string name="gift_data">赠送流量</string>
     <string name="gift_history">转赠记录</string>
     <!--QR scan-->
     <string name="manual_input_validation_code">手动输入验证码</string>

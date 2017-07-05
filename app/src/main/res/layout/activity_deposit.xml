@@ -26,7 +26,6 @@
             android:layout_height="55dp"
             android:layout_alignParentLeft="true"
             android:gravity="left|center_vertical"
-            android:text="@string/cash_pledge"
             android:textColor="@color/user_account_color"
             android:textSize="@dimen/font_size_normal_high"/>
 
@@ -40,7 +39,6 @@
             android:text="@string/fee_value"
             android:textColor="#FF1919"
             android:textSize="@dimen/font_size_normal_high"/>
-
         <View
             android:id="@+id/line"
             android:layout_width="match_parent"

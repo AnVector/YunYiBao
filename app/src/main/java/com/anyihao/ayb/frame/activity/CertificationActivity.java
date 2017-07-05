@@ -41,7 +41,7 @@ public class CertificationActivity extends ABaseActivity {
     AppCompatButton btnSubmit;
     private String userName;
     private String IDNumber;
-
+    private static final int REQUEST_CERTIFICATE_CODE = 0X0001;
 
     /**
      * 获取布局文件Id
@@ -101,6 +101,16 @@ public class CertificationActivity extends ABaseActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CERTIFICATE_CODE) {
+            if (resultCode == DepositActivity.RESULT_DEPOSIT_CODE) {
+                this.finish();
+            }
+        }
+    }
+
     private void certificate() {
         Map<String, String> params = new HashMap<>();
         params.put("cmd", "UPDATESTATUS");
@@ -128,14 +138,19 @@ public class CertificationActivity extends ABaseActivity {
                     .tv_message);
             if (bean.getCode() == 200) {
                 Intent intent = new Intent(CertificationActivity.this, DepositActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CERTIFICATE_CODE);
             }
         }
     }
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-        ToastUtils.showToast(getApplicationContext(), error, R.layout.toast, R.id
-                .tv_message);
+        if (StringUtils.isEmpty(error))
+            return;
+        if (error.contains("ConnectException")) {
+            ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
+        } else {
+            ToastUtils.showToast(getApplicationContext(), error);
+        }
     }
 }

@@ -9,7 +9,7 @@
 
     <!-- 这个控件就是扫描的窗口了 -->
     <com.journeyapps.barcodescanner.DecoratedBarcodeView
-        android:id="@+id/dbv_custom"
+        android:id="@+id/zxing_barcode_scanner"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"

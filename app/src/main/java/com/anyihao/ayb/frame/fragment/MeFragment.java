@@ -336,7 +336,9 @@ public class MeFragment extends ABaseFragment {
             mData.add("code");
             mData.add("system");
             mData.add(bean.getIntegral());
-            mData.add("privilege");
+            if ("BUSINESS".equals(bean.getIdentity())) {
+                mData.add("privilege");
+            }
             mData.add("management");
             mAdapter.add(0, mData.size(), mData);
             if (bean.getCode() == 200) {
@@ -369,6 +371,8 @@ public class MeFragment extends ABaseFragment {
         if (error.contains("ConnectException") && !showNetworkErr) {
             showNetworkErr = true;
             ToastUtils.showToast(mContext.getApplicationContext(), "网络连接失败，请检查网络设置");
+        }else {
+            ToastUtils.showToast(mContext.getApplicationContext(), error);
         }
 
     }

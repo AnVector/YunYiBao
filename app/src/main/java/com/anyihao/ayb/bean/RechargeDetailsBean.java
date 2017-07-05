@@ -1,7 +1,6 @@
 package com.anyihao.ayb.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
 /**
  * author: Administrator
@@ -9,13 +8,13 @@ import android.os.Parcelable;
  * email:looper@126.com
  */
 
-public class RechargeDetailsBean implements Parcelable {
+public class RechargeDetailsBean implements Serializable {
 
     private int code;
     private String msg;
     private String idxOrderID;
-    private int flow;
-    private int pkgType;
+    private String flow;
+    private String pkgType;
     private String topupType;
     private String status;
     private int amount;
@@ -46,19 +45,19 @@ public class RechargeDetailsBean implements Parcelable {
         this.idxOrderID = idxOrderID;
     }
 
-    public int getFlow() {
+    public String getFlow() {
         return flow;
     }
 
-    public void setFlow(int flow) {
+    public void setFlow(String flow) {
         this.flow = flow;
     }
 
-    public int getPkgType() {
+    public String getPkgType() {
         return pkgType;
     }
 
-    public void setPkgType(int pkgType) {
+    public void setPkgType(String pkgType) {
         this.pkgType = pkgType;
     }
 
@@ -101,51 +100,4 @@ public class RechargeDetailsBean implements Parcelable {
     public void setEffectTm(String effectTm) {
         this.effectTm = effectTm;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.code);
-        dest.writeString(this.msg);
-        dest.writeString(this.idxOrderID);
-        dest.writeInt(this.flow);
-        dest.writeInt(this.pkgType);
-        dest.writeString(this.topupType);
-        dest.writeString(this.status);
-        dest.writeInt(this.amount);
-        dest.writeString(this.crtTm);
-        dest.writeString(this.effectTm);
-    }
-
-    public RechargeDetailsBean() {
-    }
-
-    protected RechargeDetailsBean(Parcel in) {
-        this.code = in.readInt();
-        this.msg = in.readString();
-        this.idxOrderID = in.readString();
-        this.flow = in.readInt();
-        this.pkgType = in.readInt();
-        this.topupType = in.readString();
-        this.status = in.readString();
-        this.amount = in.readInt();
-        this.crtTm = in.readString();
-        this.effectTm = in.readString();
-    }
-
-    public static final Creator<RechargeDetailsBean> CREATOR = new Creator<RechargeDetailsBean>() {
-        @Override
-        public RechargeDetailsBean createFromParcel(Parcel source) {
-            return new RechargeDetailsBean(source);
-        }
-
-        @Override
-        public RechargeDetailsBean[] newArray(int size) {
-            return new RechargeDetailsBean[size];
-        }
-    };
 }

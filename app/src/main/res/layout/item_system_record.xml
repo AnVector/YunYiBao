@@ -12,7 +12,7 @@
         android:paddingRight="15dp">
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/title"
-            android:layout_below="@id/title"
+            android:layout_below="@id/tv_title"
             android:layout_marginTop="5dp"
             android:gravity="center"
             android:textColor="@color/light_gray"
