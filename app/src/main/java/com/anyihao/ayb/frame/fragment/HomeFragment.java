@@ -24,9 +24,12 @@ import com.anyihao.androidbase.utils.DensityUtils;
 import com.anyihao.androidbase.utils.DeviceUtils;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.WifiAdapter;
+import com.anyihao.ayb.bean.AdvertiseBean;
+import com.anyihao.ayb.bean.AdvertiseBean.DataBean;
 import com.anyihao.ayb.bean.CertificationStatusBean;
 import com.anyihao.ayb.bean.ResultBean;
 import com.anyihao.ayb.bean.SsidPwdBean;
@@ -50,7 +53,6 @@ import com.orhanobut.dialogplus.OnCancelListener;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
-import com.orhanobut.logger.Logger;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -91,7 +93,6 @@ public class HomeFragment extends ABaseFragment {
     private String mPassword;
     private int mProgress;
     private String mAlias;
-    String[] advertisement = new String[]{"流量大减价，一律两元！一律两元！", "流量大减价，一律两元！一律两元！"};
     String[] array = new String[]{"CYBWF_898602B11116C0069502", "CYBWF_898602B11116C0069503",
             "CYBWF_898602B11116C0069504", "CYBWF_898602B11116C0069505",
             "CYBWF_898602B11116C0069506", "CYBWF_898602B11116C0069507",
@@ -128,18 +129,12 @@ public class HomeFragment extends ABaseFragment {
         recyclerview.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager
                 .VERTICAL, false));
         mAdapter.add(0, mData.size(), mData);
-
-        for (int i = 0; i < advertisement.length; i++) {
-            View ll_content = View.inflate(mContext, R.layout.item_flipper, null);
-            TextView tv_content = (TextView) ll_content.findViewById(R.id.tv_content);
-            tv_content.setText(advertisement[i]);
-            flipper.addView(ll_content);
-        }
         isLogin = PreferencesUtils.getBoolean(mContext.getApplicationContext(), "isLogin", false);
 
         if (isLogin) {
             getUserCertStatus();
         }
+        getAdvertisement();
     }
 
 
@@ -263,6 +258,25 @@ public class HomeFragment extends ABaseFragment {
         });
     }
 
+    private void showAdvertisement(List<DataBean> advertisement) {
+        for (int i = 0; i < advertisement.size(); i++) {
+            View ll_content = View.inflate(mContext, R.layout.item_flipper, null);
+            ll_content.setTag(advertisement.get(i));
+            ll_content.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Object object = v.getTag();
+                    if (object instanceof DataBean) {
+                        ToastUtils.showToast(mContext, "" + ((DataBean) object).getType());
+                    }
+                }
+            });
+            TextView tv_content = (TextView) ll_content.findViewById(R.id.tv_content);
+            tv_content.setText(advertisement.get(i).getTitle());
+            flipper.addView(ll_content);
+        }
+    }
+
 
     private void getSsidPwd(String aliasName) {
         Map<String, String> params = new HashMap<>();
@@ -270,13 +284,24 @@ public class HomeFragment extends ABaseFragment {
         params.put("uid", PreferencesUtils.getString(mContext.getApplicationContext(), "uid", ""));
         params.put("aliasName", aliasName);
 
+        postForm(params, 1, 2);
+    }
+
+    private void getAdvertisement() {
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "AD");
+        postForm(params, 1, 3);
+    }
+
+    private void postForm(Map<String, String> params, int page, int actionType) {
         PresenterFactory.getInstance().createPresenter(this).execute(new Task.TaskBuilder()
                 .setTaskType(TaskType.Method.POST)
                 .setUrl(GlobalConsts.PREFIX_URL)
                 .setParams(params)
-                .setPage(1)
-                .setActionType(2)
+                .setPage(page)
+                .setActionType(actionType)
                 .createTask());
+
     }
 
     private void onGetPwdSuccess() {
@@ -302,13 +327,7 @@ public class HomeFragment extends ABaseFragment {
         params.put("cmd", "QUERYSTATUS");
         params.put("uid", PreferencesUtils.getString(mContext.getApplicationContext(), "uid", ""));
 
-        PresenterFactory.getInstance().createPresenter(this).execute(new Task.TaskBuilder()
-                .setTaskType(TaskType.Method.POST)
-                .setParams(params)
-                .setPage(1)
-                .setActionType(0)
-                .setUrl(GlobalConsts.PREFIX_URL)
-                .createTask());
+        postForm(params, 1, 0);
     }
 
     private void addAuthorizedDevice() {
@@ -319,13 +338,7 @@ public class HomeFragment extends ABaseFragment {
         params.put("remarks", "POHONE");
         params.put("addStatus", "1");
 
-        PresenterFactory.getInstance().createPresenter(this).execute(new Task.TaskBuilder()
-                .setTaskType(TaskType.Method.POST)
-                .setParams(params)
-                .setPage(1)
-                .setActionType(1)
-                .setUrl(GlobalConsts.PREFIX_URL)
-                .createTask());
+        postForm(params, 1, 1);
     }
 
     private void showDialog(int layoutId, final boolean bool) {
@@ -432,18 +445,37 @@ public class HomeFragment extends ABaseFragment {
                 case 491://设备未授权
                     onGetPwdFailure();
                     break;
-                case 468://IEBox设备未开启
+                default:
                     ToastUtils.showToast(mContext.getApplicationContext(), bean.getMsg());
                     break;
-                default:
-                    break;
+            }
+        }
+
+        if (actionType == 3) {
+            AdvertiseBean bean = GsonUtils.getInstance().transitionToBean(result, AdvertiseBean
+                    .class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                List<DataBean> beans = bean.getData();
+                if (beans == null)
+                    return;
+                if (beans.size() > 0) {
+                    showAdvertisement(beans);
+                }
             }
         }
     }
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-        Logger.d(TAG, error);
+        if (StringUtils.isEmpty(error))
+            return;
+        if (error.contains("ConnectException")) {
+            ToastUtils.showToast(mContext.getApplicationContext(), "网络连接失败，请检查网络设置");
+        } else if (error.contains("404")) {
+            ToastUtils.showToast(mContext.getApplicationContext(), "未知异常");
+        }
     }
 
     @Override

@@ -1,49 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_gravity="center_horizontal"
-                android:background="@color/white"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/iv_user_profile"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:scaleType="fitXY"
-        android:layout_centerVertical="true"
-        android:src="@drawable/user_profile"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/white">
 
-    <TextView
-        android:id="@+id/tv_user_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/iv_user_profile"
-        android:layout_alignTop="@id/iv_user_profile"
-        android:gravity="left|center_vertical"
-        android:layout_marginLeft="10dp"
-        android:textColor="@color/user_account_color"
-        android:textSize="@dimen/font_size_normal_high"/>
+        <ImageView
+            android:id="@+id/iv_user_profile"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/user_profile"/>
+
+        <TextView
+            android:id="@+id/tv_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="@id/iv_user_profile"
+            android:layout_alignTop="@id/iv_user_profile"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/iv_user_profile"
+            android:gravity="left|center_vertical"
+            android:textColor="@color/user_account_color"
+            android:textSize="@dimen/font_size_normal_high"/>
 
 
-    <TextView
-        android:id="@+id/tv_online_device"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/tv_user_name"
-        android:layout_alignLeft="@id/tv_user_name"
-        android:gravity="left|center_vertical"
-        android:textColor="@color/pay_title_text_color"
-        android:textSize="@dimen/font_size_small"/>
+        <TextView
+            android:id="@+id/tv_online_device"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/tv_user_name"
+            android:layout_below="@id/tv_user_name"
+            android:layout_marginTop="4dp"
+            android:gravity="left|center_vertical"
+            android:textColor="@color/pay_title_text_color"
+            android:textSize="@dimen/font_size_small"/>
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="0.6dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="15dp"
+            android:background="@color/line_color"/>
+    </RelativeLayout>
 
     <View
-        android:id="@+id/line"
+        android:id="@+id/space"
         android:layout_width="match_parent"
-        android:layout_height="0.6dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/line_color"/>
-
-</RelativeLayout>
+        android:layout_height="15dp"
+        android:background="@color/app_background_color"
+        android:visibility="gone"/>
+</LinearLayout>

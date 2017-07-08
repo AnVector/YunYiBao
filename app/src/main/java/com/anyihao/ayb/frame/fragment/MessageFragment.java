@@ -34,8 +34,8 @@ import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 import com.marshalchen.ultimaterecyclerview.itemTouchHelper.SimpleItemTouchHelperCallback;
 import com.marshalchen.ultimaterecyclerview.ui.emptyview.emptyViewOnShownListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -48,8 +48,8 @@ public class MessageFragment extends ABaseFragment {
     private MessageAdapter mAdapter;
     protected LinearLayoutManager layoutManager;
     private ItemTouchHelper mItemTouchHelper;
-    private List<DataBean> mData = new ArrayList<>();
-    private List<DataBean> mItems;
+    private List<DataBean> mData = new LinkedList<>();
+    private List<DataBean> mNormalMsg;
     private String type;
     private int page = 1;
     private static final int PAGE_SIZE = 8;
@@ -165,7 +165,7 @@ public class MessageFragment extends ABaseFragment {
 
     private void onFireRefresh() {
         mAdapter.removeAllInternal(mData);
-        mAdapter.insert(mItems);
+        mAdapter.insert(mNormalMsg);
         ultimateRecyclerView.setRefreshing(false);
         //   ultimateRecyclerView.scrollBy(0, -50);
         layoutManager.scrollToPosition(0);
@@ -176,8 +176,8 @@ public class MessageFragment extends ABaseFragment {
     }
 
     private void onLoadMore() {
-        mAdapter.insert(mItems);
-        if (mItems.size() < PAGE_SIZE) {
+        mAdapter.insert(mNormalMsg);
+        if (mNormalMsg.size() < PAGE_SIZE) {
             ultimateRecyclerView.disableLoadmore();
         }
     }
@@ -198,7 +198,6 @@ public class MessageFragment extends ABaseFragment {
         params.put("pagesize", PAGE_SIZE + "");
         params.put("uid", PreferencesUtils.getString(mContext.getApplicationContext(), "uid", ""));
         params.put("type", type);
-
         PresenterFactory.getInstance().createPresenter(this).execute(new Task.TaskBuilder()
                 .setParams(params)
                 .setTaskType(TaskType.Method.POST)
@@ -223,7 +222,7 @@ public class MessageFragment extends ABaseFragment {
                 .setParams(params)
                 .setTaskType(TaskType.Method.POST)
                 .setUrl(GlobalConsts.PREFIX_URL)
-                .setPage(100)
+                .setPage(1)
                 .setActionType(1)
                 .createTask());
     }
@@ -243,7 +242,7 @@ public class MessageFragment extends ABaseFragment {
             if (bean.getCode() == 200) {
                 List<DataBean> beans = bean.getData();
                 if (beans.size() > 0) {
-                    mItems = beans;
+                    mNormalMsg = beans;
                     if (isRefresh) {
                         onFireRefresh();
                     } else {
@@ -271,9 +270,15 @@ public class MessageFragment extends ABaseFragment {
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
+        if (StringUtils.isEmpty(error))
+            return;
         if (error.contains("ConnectException")) {
             ToastUtils.showToast(mContext.getApplicationContext(), "网络连接失败，请检查网络设置");
             ultimateRecyclerView.showEmptyView();
+        } else if (error.contains("404")) {
+            ToastUtils.showToast(mContext.getApplicationContext(), "未知异常");
+        } else {
+            ToastUtils.showToast(mContext.getApplicationContext(), error);
         }
     }
 }

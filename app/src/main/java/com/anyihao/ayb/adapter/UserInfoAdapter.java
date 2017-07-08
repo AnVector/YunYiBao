@@ -26,7 +26,7 @@ public class UserInfoAdapter extends RecyclerViewAdapter<String> {
             holder.setVisible(R.id.value, false);
             holder.setVisible(R.id.img_profile, true);
             holder.setVisible(R.id.img_code, false);
-            holder.displayImage(R.id.img_profile, s, R.drawable.user_profile);
+            holder.displayCircleImage(R.id.img_profile, s, R.drawable.user_profile);
         } else if ("我的二维码".equals(key)) {
             holder.setImageResource(R.id.img_code, R.drawable.ic_qr_code);
             holder.setVisible(R.id.img_code, true);

@@ -524,7 +524,15 @@
             android:name=".frame.activity.DeviceCodeActivity"
             android:launchMode="singleTop">
         </activity>
-        <activity android:name=".frame.activity.QuestionDetailsActivity">
+        <activity
+            android:name=".frame.activity.QuestionDetailsActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.TransferRecordActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity android:name=".frame.activity.WebActivity">
         </activity>
     </application>
 

@@ -19,8 +19,10 @@ import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.RechargeRecordAdapter;
+import com.anyihao.ayb.adapter.TransferRecordAdapter;
 import com.anyihao.ayb.bean.RechargeRecordListBean;
 import com.anyihao.ayb.bean.RechargeRecordListBean.DataBean;
+import com.anyihao.ayb.bean.TransferListBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.listener.OnItemClickListener;
@@ -45,10 +47,12 @@ public class RechargeRecordActivity extends ABaseActivity {
     @BindView(R.id.ultimate_recycler_view)
     UltimateRecyclerView recyclerView;
     private static final int PAGE_SIZE = 10;
-    private RechargeRecordAdapter mAdapter;
+    private RechargeRecordAdapter mRechargeAdapter;
+    private TransferRecordAdapter mTransferAdapter;
     private LinearLayoutManager layoutManager;
     private ItemTouchHelper mItemTouchHelper;
-    private List<DataBean> mData = new ArrayList<>();
+    private List<RechargeRecordListBean.DataBean> mRechargeData = new ArrayList<>();
+    private List<TransferListBean.DataBean> mTransferData = new ArrayList<>();
     private List<DataBean> mItems;
     private int page = 1;
     private boolean isRefresh;
@@ -72,7 +76,8 @@ public class RechargeRecordActivity extends ABaseActivity {
         }
         titleMid.setText(getString(R.string.recharge_record));
         recyclerView.setHasFixedSize(false);
-        mAdapter = new RechargeRecordAdapter(mData, R.layout.item_recharge_record);
+        mRechargeAdapter = new RechargeRecordAdapter(mRechargeData, R.layout
+                .item_recharge_record);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 //        StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration
@@ -100,12 +105,11 @@ public class RechargeRecordActivity extends ABaseActivity {
 //        recyclerView.setParallaxHeader(getLayoutInflater().inflate(R.layout
 //                .parallax_recyclerview_header, recyclerView.mRecyclerView, false));
 //        recyclerView.setRecylerViewBackgroundColor(Color.parseColor("#ffffff"));
-        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback
-                (mAdapter);
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mRechargeAdapter);
         mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(recyclerView.mRecyclerView);
         recyclerView.reenableLoadmore();
-        recyclerView.setAdapter(mAdapter);
+        recyclerView.setAdapter(mRechargeAdapter);
         getRechargeRecord();
     }
 
@@ -122,7 +126,7 @@ public class RechargeRecordActivity extends ABaseActivity {
             public void onParallaxScroll(float percentage, float offset, View parallax) {
             }
         });
-        mAdapter.setOnDragStartListener(new UltimateViewAdapter.OnStartDragListener() {
+        mRechargeAdapter.setOnDragStartListener(new UltimateViewAdapter.OnStartDragListener() {
 
             @Override
             public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
@@ -148,13 +152,13 @@ public class RechargeRecordActivity extends ABaseActivity {
             }
         });
 
-        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+        mRechargeAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
                 if (o instanceof DataBean) {
                     Intent intent = new Intent(RechargeRecordActivity.this,
                             RechargeRecordDetailsActivity
-                            .class);
+                                    .class);
                     intent.putExtra("idxOrderID", ((DataBean) o).getIdxOrderID());
                     startActivity(intent);
                 }
@@ -170,8 +174,8 @@ public class RechargeRecordActivity extends ABaseActivity {
     }
 
     private void onFireRefresh() {
-        mAdapter.removeAllInternal(mData);
-        mAdapter.insert(mItems);
+        mRechargeAdapter.removeAllInternal(mRechargeData);
+        mRechargeAdapter.insert(mItems);
         recyclerView.setRefreshing(false);
         //   ultimateRecyclerView.scrollBy(0, -50);
         layoutManager.scrollToPosition(0);
@@ -182,7 +186,7 @@ public class RechargeRecordActivity extends ABaseActivity {
     }
 
     private void onLoadMore() {
-        mAdapter.insert(mItems);
+        mRechargeAdapter.insert(mItems);
         if (mItems.size() < PAGE_SIZE) {
             recyclerView.disableLoadmore();
         }
@@ -206,6 +210,23 @@ public class RechargeRecordActivity extends ABaseActivity {
                 .createTask());
     }
 
+    private void getPresentRecord() {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "TRANSFER");
+        params.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
+        params.put("page", page + "");
+        params.put("pagesize", PAGE_SIZE + "");
+
+        PresenterFactory.getInstance().createPresenter(this).execute(new Task.TaskBuilder()
+                .setTaskType(TaskType.Method.POST)
+                .setParams(params)
+                .setPage(page)
+                .setActionType(1)
+                .setUrl(GlobalConsts.PREFIX_URL)
+                .createTask());
+    }
+
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
         if (actionType == 0) {
@@ -214,7 +235,7 @@ public class RechargeRecordActivity extends ABaseActivity {
             if (bean == null)
                 return;
             if (bean.getCode() == 200) {
-                List<DataBean> beans = bean.getData();
+                List<RechargeRecordListBean.DataBean> beans = bean.getData();
                 if (beans.size() > 0) {
                     ToastUtils.showToast(getApplicationContext(), bean.getMsg());
                     mItems = beans;
@@ -240,6 +261,8 @@ public class RechargeRecordActivity extends ABaseActivity {
             return;
         if (error.contains("ConnectException")) {
             ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
+        } else if (error.contains("404")) {
+            ToastUtils.showToast(getApplicationContext(), "未知异常");
         } else {
             ToastUtils.showToast(getApplicationContext(), error);
         }

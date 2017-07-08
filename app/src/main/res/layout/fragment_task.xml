@@ -1,257 +1,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
+              android:layout_height="wrap_content"
               android:background="@color/app_background_color"
               android:orientation="vertical"
               tools:context="com.anyihao.ayb.frame.fragment.DiscoverFragment">
+
     <View
         android:id="@+id/fake_status_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/statusbar_view_height"/>
+
     <include
         layout="@layout/toolbar_common"/>
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="60dp">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="130dp"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/task_header_bg">
+            <include layout="@layout/task_header_layout"/>
 
-                <ImageView
-                    android:id="@+id/iv_user_profile"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="16dp"
-                    android:background="@drawable/user_profile_bg"
-                    android:padding="2dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/user_profile"/>
-
-                <TextView
-                    android:id="@+id/tv_points"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/iv_user_profile"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_toRightOf="@id/iv_user_profile"
-                    android:gravity="left|center_vertical"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/font_size_normal"/>
-
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/btn_sign_in"
-                    android:layout_width="97dp"
-                    android:layout_height="53dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="24dp"
-                    android:background="@drawable/btn_sign_in"
-                    android:gravity="center"
-                    android:text="@string/sign_in"
-                    android:textColor="#7eb1f4"
-                    android:textSize="@dimen/font_size_fif"
-                    android:textStyle="bold"/>
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recyclerview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_alignLeft="@id/tv_points"
-                    android:layout_below="@id/iv_user_profile"
-                    android:layout_marginTop="-5dp">
-                </android.support.v7.widget.RecyclerView>
-
-                <ImageButton
-                    android:id="@+id/imb_sign"
-                    android:layout_width="22dp"
-                    android:layout_height="26dp"
-                    android:layout_above="@id/recyclerview"
-                    android:layout_alignRight="@id/recyclerview"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginRight="-4dp"
-                    android:scaleType="fitXY"
-                    android:background="@null"
-                    android:src="@drawable/ic_gift"/>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="195dp"
-                android:background="@color/white">
-
-                <TextView
-                    android:id="@+id/tv_limited_exchange_hint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="13dp"
-                    android:gravity="center"
-                    android:text="@string/limited_exchange"
-                    android:textColor="#020202"
-                    android:textSize="@dimen/font_size_sev"
-                    android:textStyle="bold"/>
-
-                <ImageView
-                    android:id="@+id/iv_points_exchange"
-                    android:layout_width="95dp"
-                    android:layout_height="75dp"
-                    android:layout_alignLeft="@id/tv_limited_exchange_hint"
-                    android:layout_below="@id/tv_limited_exchange_hint"
-                    android:layout_marginTop="20dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/points_exchange"/>
-
-                <TextView
-                    android:id="@+id/tv_points_exchange_hint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/tv_limited_exchange_hint"
-                    android:layout_below="@id/iv_points_exchange"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center"
-                    android:text="@string/points_exchange"
-                    android:textColor="#020202"
-                    android:textSize="@dimen/font_size_normal_high"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/tv_limited_exchange_hint"
-                    android:layout_below="@id/tv_points_exchange_hint"
-                    android:layout_marginTop="10dp"
-                    android:gravity="center"
-                    android:text="999Q币"
-                    android:textColor="#929292"
-                    android:textSize="@dimen/font_size_small"/>
-
-                <View
-                    android:id="@+id/line"
-                    android:layout_width="0.8dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="137dp"
-                    android:background="@color/line_color"/>
-
-                <ImageView
-                    android:id="@+id/iv_advertisement"
-                    android:layout_width="90dp"
-                    android:layout_height="52dp"
-                    android:layout_alignTop="@id/tv_limited_exchange_hint"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@id/line"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/advertisement"/>
-
-                <TextView
-                    android:id="@+id/tv_advertisement_hint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/tv_limited_exchange_hint"
-                    android:layout_marginLeft="34dp"
-                    android:layout_marginTop="18dp"
-                    android:layout_toRightOf="@id/iv_advertisement"
-                    android:gravity="center"
-                    android:text="@string/donate_data"
-                    android:textColor="#020202"
-                    android:textStyle="bold"/>
-
-                <View
-                    android:id="@+id/line_right_top"
-                    android:layout_width="match_parent"
-                    android:layout_height="0.8dp"
-                    android:layout_below="@id/iv_advertisement"
-                    android:layout_marginTop="8dp"
-                    android:layout_toRightOf="@id/line"
-                    android:background="@color/line_color"/>
-
-                <ImageView
-                    android:id="@+id/iv_ticket_left"
-                    android:layout_width="86dp"
-                    android:layout_height="37dp"
-                    android:layout_alignLeft="@id/iv_advertisement"
-                    android:layout_below="@id/line_right_top"
-                    android:layout_marginTop="19dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/task_ticket_left"/>
-
-                <TextView
-                    android:id="@+id/tv_ticket_left_hint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/iv_advertisement"
-                    android:layout_alignTop="@id/tv_points_exchange_hint"
-                    android:gravity="center"
-                    android:text="500M流量"
-                    android:textColor="#020202"
-                    android:textSize="@dimen/font_size_fif"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:id="@+id/tv_ticket_left_desc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/iv_advertisement"
-                    android:layout_below="@id/tv_ticket_left_hint"
-                    android:layout_marginTop="11dp"
-                    android:text="新老用户专享！"
-                    android:textColor="#929292"
-                    android:textSize="@dimen/font_size_small"/>
-
-                <View
-                    android:id="@+id/line_right_bottom"
-                    android:layout_width="0.8dp"
-                    android:layout_height="match_parent"
-                    android:layout_below="@id/line_right_top"
-                    android:layout_marginLeft="110dp"
-                    android:layout_toRightOf="@id/line"
-                    android:background="@color/line_color"/>
-
-                <ImageView
-                    android:id="@+id/iv_ticket_right"
-                    android:layout_width="86dp"
-                    android:layout_height="37dp"
-                    android:layout_alignTop="@id/iv_ticket_left"
-                    android:layout_marginLeft="15dp"
-                    android:layout_toRightOf="@id/line_right_bottom"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/task_ticket_right"/>
-
-                <TextView
-                    android:id="@+id/tv_ticket_right_hint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/iv_ticket_right"
-                    android:layout_alignTop="@id/tv_ticket_left_hint"
-                    android:gravity="center"
-                    android:text="100M流量"
-                    android:textColor="#020202"
-                    android:textSize="@dimen/font_size_fif"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:id="@+id/tv_ticket_right_desc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/iv_ticket_right"
-                    android:layout_alignTop="@id/tv_ticket_left_desc"
-                    android:gravity="center"
-                    android:text="新老用户专享！"
-                    android:textColor="#929292"
-                    android:textSize="@dimen/font_size_small"/>
-            </RelativeLayout>
+            <include layout="@layout/task_middle_layout"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -259,15 +34,45 @@
                 android:layout_marginTop="15dp"
                 android:background="@color/white"
                 android:orientation="vertical"
-                android:paddingBottom="20dp"
-                android:paddingTop="20dp">
+                android:paddingBottom="12dp"
+                android:paddingLeft="9dp"
+                android:paddingRight="9dp"
+                android:paddingTop="12dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
                     android:gravity="center"
-                    android:text="热门兑换"
+                    android:text="@string/lease_zone"
+                    android:textColor="#020202"
+                    android:textSize="@dimen/font_size_sev"
+                    android:textStyle="bold"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerview_middle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp">
+                </android.support.v7.widget.RecyclerView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingBottom="12dp"
+                android:paddingLeft="9dp"
+                android:paddingRight="9dp"
+                android:paddingTop="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/normal_zone"
                     android:textColor="#020202"
                     android:textSize="@dimen/font_size_sev"
                     android:textStyle="bold"/>
@@ -276,9 +81,10 @@
                     android:id="@+id/recyclerview_bottom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="19dp">
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp">
                 </android.support.v7.widget.RecyclerView>
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

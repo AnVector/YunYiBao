@@ -22,6 +22,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.anyihao.ayb.ui.CropCircleTransformation;
+import com.anyihao.ayb.ui.RoundedCornersTransformation;
 import com.bumptech.glide.Glide;
 
 /**
@@ -113,11 +114,22 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
-    public ViewHolder displayImage(int viewId, String uri, int resouceId) {
+    public ViewHolder displayCircleImage(int viewId, String uri, int resouceId) {
         ImageView view = getView(viewId);
         Glide.with(mContext)
                 .load(uri)
                 .bitmapTransform(new CropCircleTransformation(mContext))
+                .placeholder(resouceId)
+                .into(view);
+        return this;
+    }
+
+    public ViewHolder displayRoundCornerImage(int viewId, String uri, int resouceId, int radius) {
+        ImageView view = getView(viewId);
+        Glide.with(mContext)
+                .load(uri)
+                .bitmapTransform(new RoundedCornersTransformation(mContext, radius, 0,
+                        RoundedCornersTransformation.CornerType.ALL))
                 .placeholder(resouceId)
                 .into(view);
         return this;
@@ -164,6 +176,12 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     public ViewHolder setVisible(int viewId, boolean visible) {
         View view = getView(viewId);
         view.setVisibility(visible ? View.VISIBLE : View.GONE);
+        return this;
+    }
+
+    public ViewHolder setInVisible(int viewId) {
+        View view = getView(viewId);
+        view.setVisibility(View.INVISIBLE);
         return this;
     }
 

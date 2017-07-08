@@ -34,27 +34,19 @@ public class ConnectedDevicesActivity extends ABaseActivity {
 
     @BindView(R.id.ultimate_recycler_view)
     UltimateRecyclerView recyclerView;
-    @BindView(R.id.line)
-    View line;
     @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.tv_count)
     TextView tvCount;
-    @BindView(R.id.iv_user_profile)
-    ImageView ivUserProfile;
-    @BindView(R.id.tv_user_name)
-    TextView tvUserName;
-    @BindView(R.id.tv_online_device)
-    TextView tvOnlineDevice;
     @BindView(R.id.ll_container)
     LinearLayout llContainer;
     private ConnectedDeviceAdapter mAdapter;
     private ItemTouchHelper mItemTouchHelper;
     protected LinearLayoutManager layoutManager;
     //    private ItemTouchHelper mItemTouchHelper;
-    private String[] array = new String[]{"Jack", "Rose", "Frank", "Bruce",
+    private String[] array = new String[]{"本机", "Jack", "Rose", "Frank", "Bruce",
             "Tonny", "Emmy", "Jimy",
             "Bill"};
     private Dialog bottomDialog;
@@ -62,6 +54,7 @@ public class ConnectedDevicesActivity extends ABaseActivity {
     private TextView tvBriberyMoney;
     private TextView tvCancel;
     private List<String> mData = Arrays.asList(array);
+    private String phoneNum;
 
     @Override
     protected int getContentViewId() {
@@ -84,10 +77,6 @@ public class ConnectedDevicesActivity extends ABaseActivity {
         toolbar.setBackground(null);
         toolbarTitle.setText(getString(R.string.connected_devices));
         toolbarTitle.setTextColor(getResources().getColor(R.color.white));
-
-        tvUserName.setText(getString(R.string.device_of_mine));
-        tvOnlineDevice.setText("iphone在线");
-        line.setVisibility(View.GONE);
 
         recyclerView.setHasFixedSize(false);
         mAdapter = new ConnectedDeviceAdapter(mData, R.layout.item_connected_device_list);
@@ -118,15 +107,6 @@ public class ConnectedDevicesActivity extends ABaseActivity {
         StatusBarUtil.setTranslucentForImageView(this, 0, llContainer);
     }
 
-    private void changeLeftIcon(TextView tv, Context context, int drawableId) {
-        Drawable lefeIcon;
-        Resources res = context.getResources();
-        lefeIcon = res.getDrawable(drawableId);
-        //调用setCompoundDrawables时，必须调用Drawable.setBounds()方法,否则图片不显示
-        lefeIcon.setBounds(0, 0, lefeIcon.getMinimumWidth(), lefeIcon.getMinimumHeight());
-        tv.setCompoundDrawables(lefeIcon, null, null, null); //设置左图标
-    }
-
     @Override
     protected void initEvent() {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -138,6 +118,7 @@ public class ConnectedDevicesActivity extends ABaseActivity {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
+                phoneNum = o.toString();
                 if (bottomDialog != null) {
                     bottomDialog.show();
                 }
@@ -152,6 +133,7 @@ public class ConnectedDevicesActivity extends ABaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ConnectedDevicesActivity.this, SayHiActivity.class);
+                intent.putExtra("uid", phoneNum);
                 startActivity(intent);
             }
         });
@@ -161,6 +143,8 @@ public class ConnectedDevicesActivity extends ABaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ConnectedDevicesActivity.this, BriberyMoneyActivity
                         .class);
+                intent.putExtra("phoneNum", phoneNum);
+                intent.putExtra("type", 0);
                 startActivity(intent);
             }
         });

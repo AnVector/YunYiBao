@@ -37,15 +37,15 @@ public class ConnectedDeviceAdapter extends UAdapter<String> {
         if (bp && holder instanceof ConnectedDeviceListViewHolder) {
             String content = mData.get((hasHeaderView() ? position - 1 : position));
             if (content == null) return;
+            if (position == 0) {
+                ((ConnectedDeviceListViewHolder) holder).space.setVisibility(View.VISIBLE);
+                ((ConnectedDeviceListViewHolder) holder).line.setVisibility(View.GONE);
+            }
             ((ConnectedDeviceListViewHolder) holder).tvUserName.setText(content);
             if (position % 2 == 0) {
                 ((ConnectedDeviceListViewHolder) holder).tvOnlineDevice.setText("iPad在线");
             } else {
                 ((ConnectedDeviceListViewHolder) holder).tvOnlineDevice.setText("手机在线");
-            }
-
-            if (position == getAdapterItemCount() - 1) {
-                ((ConnectedDeviceListViewHolder) holder).line.setVisibility(View.GONE);
             }
         }
     }
@@ -55,12 +55,14 @@ public class ConnectedDeviceAdapter extends UAdapter<String> {
         public TextView tvUserName;
         public TextView tvOnlineDevice;
         public View line;
+        public View space;
 
         public ConnectedDeviceListViewHolder(View itemView) {
             super(itemView);
             tvUserName = (TextView) itemView.findViewById(R.id.tv_user_name);
             tvOnlineDevice = (TextView) itemView.findViewById(R.id.tv_online_device);
             line = itemView.findViewById(R.id.line);
+            space = itemView.findViewById(R.id.space);
         }
     }
 }

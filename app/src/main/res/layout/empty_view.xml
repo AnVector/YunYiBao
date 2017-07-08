@@ -11,7 +11,7 @@
         android:layout_width="260dp"
         android:layout_height="210dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="89dp"
+        android:layout_marginTop="49dp"
         android:scaleType="fitXY"/>
 
     <TextView
@@ -19,7 +19,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="32dp"
         android:gravity="center"
         android:textColor="@color/toolbar_register_color"
         android:textSize="@dimen/font_size_sev"/>

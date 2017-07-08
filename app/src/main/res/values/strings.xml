@@ -72,6 +72,7 @@
     <string name="device_list">设备列表</string>
     <string name="scan">扫描</string>
     <string name="service_location">设备服务点</string>
+    <string name="transfer_record">转赠记录</string>
 
     <!--user register-->
     <string name="phone_num_input_hint">请填写注册手机号</string>
@@ -107,6 +108,7 @@
     <string name="contact_us">客服热线</string>
     <string name="logout">退出登录</string>
     <string name="not_login">未登录</string>
+    <string name="logout_prompt">确认要退出登录么？</string>
 
     <!--radar-->
     <string name="call_the_seller">呼叫商家</string>
@@ -118,6 +120,9 @@
     <string name="limited_exchange">限量兑换</string>
     <string name="points_exchange">积分兑换</string>
     <string name="donate_data">转赠流量</string>
+    <string name="lease_zone">租赁用户专区</string>
+    <string name="normal_zone">普通用户专区</string>
+    <string name="signed">已签到</string>
 
     <!--modify self info-->
     <string name="save">保存</string>
@@ -192,6 +197,7 @@
     <string name="device_of_unknown">未知设备</string>
     <string name="cancle">取消</string>
     <string name="defriend">拉黑用户</string>
+    <string name="init_data_flow">0M</string>
 
     <!--RdoCash ratio-->
     <string name="ratio_day_chart">转化率日报表</string>
@@ -246,6 +252,7 @@
     <string name="confirm_to_gift">确认</string>
     <string name="gift_data">赠送流量</string>
     <string name="gift_history">转赠记录</string>
+    <string name="data_amount_hint">请输入转赠的流量（10M的倍数）</string>
     <!--QR scan-->
     <string name="manual_input_validation_code">手动输入验证码</string>
     <string name="invite_code_hint">您的邀请码为：</string>
@@ -261,7 +268,7 @@
     <string name="record_details">记录详情</string>
     <string name="system_gift">系统赠送</string>
     <string name="data_gift">赠送流量</string>
-    <string name="expires">有效期限</string>
+    <string name="expires">截止日期</string>
     <string name="gift_time">赠送时间</string>
     <!--merchat privilege-->
     <string name="merchat_privilege">商家特权</string>

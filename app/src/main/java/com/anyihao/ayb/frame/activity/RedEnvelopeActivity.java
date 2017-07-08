@@ -47,7 +47,6 @@ public class RedEnvelopeActivity extends ABaseActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         toolbarTitleMid.setText(getString(R.string.red_envelope));
-
     }
 
     @Override

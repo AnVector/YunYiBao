@@ -98,7 +98,7 @@ public class SysRecordDetailsActivity extends ABaseActivity {
                 return;
             if (bean.getCode() == 200) {
                 tvDataAmount.setText(bean.getFlow());
-                tvExpires.setText(bean.getCrtTm() + "至" + bean.getEffectTm());
+                tvExpires.setText(bean.getEffectTm());
                 tvDate.setText(bean.getCrtTm());
             } else {
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg());

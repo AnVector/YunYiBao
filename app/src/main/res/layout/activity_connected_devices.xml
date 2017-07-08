@@ -45,16 +45,12 @@
             android:gravity="center"
             android:text="@string/connected_devices_hint"
             android:textColor="@color/white"
-            android:textSize="@dimen/font_size_fif"
-            android:textStyle="bold"/>
-
-        <include
-            layout="@layout/item_connected_device_list"/>
+            android:textSize="@dimen/font_size_fif"/>
 
         <com.marshalchen.ultimaterecyclerview.UltimateRecyclerView
             android:id="@+id/ultimate_recycler_view"
             android:layout_width="match_parent"
-            android:layout_marginTop="15dp"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"/>
     </LinearLayout>
 </FrameLayout>

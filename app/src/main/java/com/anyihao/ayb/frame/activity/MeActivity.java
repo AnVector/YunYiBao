@@ -175,9 +175,8 @@ public class MeActivity extends ABaseActivity {
                 .setType(TimePickerView.Type.YEAR_MONTH_DAY)
                 .setLabel("", "", "", "", "", "") //设置空字符串以隐藏单位提示   hide label
                 .setDividerColor(Color.parseColor("#C8C8C8"))
-                .setDividerType(WheelView.DividerType.WRAP)
                 .setTextColorCenter(Color.parseColor("#333333"))
-                .setLineSpacingMultiplier(1.2f)
+                .setLineSpacingMultiplier(1.5f)
                 .setCancelText("取消")
                 .setSubmitText("确定")
                 .setContentSize(16)
@@ -405,7 +404,6 @@ public class MeActivity extends ABaseActivity {
         })
 
                 .setDividerColor(Color.parseColor("#C8C8C8"))
-                .setDividerType(WheelView.DividerType.WRAP)
                 .setTextColorCenter(Color.parseColor("#333333")) //设置选中项文字颜色
                 .setContentTextSize(16)
                 .setLineSpacingMultiplier(2.0f)

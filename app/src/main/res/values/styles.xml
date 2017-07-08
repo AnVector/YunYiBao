@@ -50,7 +50,8 @@
         <item name="android:layout_width">65dp</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:gravity">center</item>
-        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
         <item name="android:button">@null</item>
         <item name="android:background">@drawable/auth_edit_text_bg_selector</item>
         <item name="android:textColor">@drawable/auth_text_bg_selector</item>

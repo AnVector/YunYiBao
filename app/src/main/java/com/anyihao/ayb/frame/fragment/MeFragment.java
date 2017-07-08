@@ -371,7 +371,9 @@ public class MeFragment extends ABaseFragment {
         if (error.contains("ConnectException") && !showNetworkErr) {
             showNetworkErr = true;
             ToastUtils.showToast(mContext.getApplicationContext(), "网络连接失败，请检查网络设置");
-        }else {
+        } else if (error.contains("404")) {
+            ToastUtils.showToast(mContext.getApplicationContext(), "未知异常");
+        } else {
             ToastUtils.showToast(mContext.getApplicationContext(), error);
         }
 

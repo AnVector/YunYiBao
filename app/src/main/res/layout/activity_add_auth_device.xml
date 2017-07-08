@@ -63,10 +63,8 @@
         android:layout_width="match_parent"
         android:layout_height="34dp"
         android:layout_marginTop="34dp"
-        android:gravity="left|center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="26dp"
-        android:paddingRight="26dp">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/rbt_phone"

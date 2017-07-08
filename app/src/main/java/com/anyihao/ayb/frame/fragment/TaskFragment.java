@@ -1,7 +1,6 @@
 package com.anyihao.ayb.frame.fragment;
 
 
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
@@ -20,11 +19,27 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.mvp.Task;
+import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.GsonUtils;
+import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
-import com.anyihao.ayb.adapter.AdAdapter;
-import com.anyihao.ayb.adapter.SignInAdapter;
-import com.anyihao.ayb.frame.activity.ExchangeDetailsActivity;
+import com.anyihao.ayb.adapter.LendAdapter;
+import com.anyihao.ayb.adapter.NormalAdapter;
+import com.anyihao.ayb.adapter.SignAdapter;
+import com.anyihao.ayb.bean.SignBean;
+import com.anyihao.ayb.bean.TaskInfoListBean;
+import com.anyihao.ayb.bean.TaskInfoListBean.DataBean;
+import com.anyihao.ayb.bean.TaskInfoListBean.DataBean.LendBean;
+import com.anyihao.ayb.bean.TaskInfoListBean.DataBean.LimitedBean;
+import com.anyihao.ayb.bean.TaskInfoListBean.DataBean.NormalBean;
+import com.anyihao.ayb.common.PresenterFactory;
+import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.listener.OnItemClickListener;
+import com.anyihao.ayb.ui.CropCircleTransformation;
+import com.bumptech.glide.Glide;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
 import com.orhanobut.dialogplus.OnCancelListener;
@@ -32,11 +47,13 @@ import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.Unbinder;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,8 +66,6 @@ public class TaskFragment extends ABaseFragment {
     Toolbar toolbar;
     @BindView(R.id.iv_user_profile)
     ImageView ivUserProfile;
-    @BindView(R.id.tv_points)
-    TextView tvPoints;
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
     @BindView(R.id.tv_limited_exchange_hint)
@@ -89,40 +104,57 @@ public class TaskFragment extends ABaseFragment {
     ImageButton imbSign;
     @BindView(R.id.fake_status_bar)
     View fakeStatusBar;
-    Unbinder unbinder;
-    private AdAdapter mAdapter;
-    private SignInAdapter signInAdapter;
-    String[] weekendArray = new String[]{"1", "2", "3", "4", "5", "6", "7"};
-    String[] array = new String[]{"2017现金红包", "2017现金红包", "2017现金红包", "2017现金红包", "2017现金红包",
-            "2017现金红包", "2017现金红包",
-            "2017现金红包", "2017现金红包", "2017现金红包"};
-    private List<String> mData = Arrays.asList(array);
-    private List<String> mWeekendData = Arrays.asList(weekendArray);
+    @BindView(R.id.recyclerview_middle)
+    RecyclerView recyclerviewMiddle;
+    @BindView(R.id.tv_points)
+    TextView tvPoints;
+    @BindView(R.id.tv_my_points)
+    TextView tvMyPoints;
+    private NormalAdapter mNormalAdapter;
+    private LendAdapter mLendAdapter;
+    private SignAdapter mSignAdapter;
+    private String[] weekday = new String[]{"10", "20", "30", "40", "50", "60", "70"};
+    private List<LendBean> mLendData = new ArrayList<>();
+    private List<NormalBean> mNormalData = new ArrayList<>();
+    private List<String> mWeekData = Arrays.asList(weekday);
+
+    private int isSign = 0;
+    private int signCount = 0;
+    private int index = 0;
 
     @Override
     protected void initData() {
         toolbar.setNavigationIcon(null);
         titleMid.setText(getString(R.string.task));
-        SpannableString spannableString = new SpannableString("我的积分：999分");
+        fakeStatusBar.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+        mNormalAdapter = new NormalAdapter(mContext, R.layout.item_task_ad);
+        recyclerviewBottom.setAdapter(mNormalAdapter);
+        recyclerviewBottom.setLayoutManager(new GridLayoutManager(mContext, 2,
+                GridLayoutManager.VERTICAL, false));
+
+        mLendAdapter = new LendAdapter(mContext, R.layout.item_task_ad);
+        recyclerviewMiddle.setAdapter(mLendAdapter);
+        recyclerviewMiddle.setLayoutManager(new GridLayoutManager(mContext, 2,
+                GridLayoutManager.VERTICAL, false));
+
+        mSignAdapter = new SignAdapter(mContext, R.layout.item_sign_history, mWeekData);
+        recyclerview.setAdapter(mSignAdapter);
+        recyclerview.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager
+                .HORIZONTAL, false));
+        getTaskList();
+    }
+
+    private void setTextStyle() {
+        String txt = tvMyPoints.getText().toString().trim();
+        if (StringUtils.isEmpty(txt))
+            return;
+        SpannableString spannableString = new SpannableString(txt);
         RelativeSizeSpan sizeSpan = new RelativeSizeSpan(1.285f);
         StyleSpan styleSpan = new StyleSpan(Typeface.BOLD);
-        spannableString.setSpan(sizeSpan, 5, 8, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        spannableString.setSpan(styleSpan, 5, 8, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        tvPoints.setText(spannableString);
-        mAdapter = new AdAdapter(getContext(), R.layout.item_task_ad);
-        recyclerviewBottom.setAdapter(mAdapter);
-        recyclerviewBottom.setLayoutManager(new GridLayoutManager(getContext(), 2,
-                GridLayoutManager.VERTICAL, false));
-        recyclerviewBottom.setHasFixedSize(true);
-        mAdapter.add(0, mData.size(), mData);
-
-        signInAdapter = new SignInAdapter(getContext(), R.layout.item_sign_history);
-        recyclerview.setAdapter(signInAdapter);
-        recyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager
-                .HORIZONTAL, false));
-        recyclerview.setHasFixedSize(true);
-        signInAdapter.add(0, mWeekendData.size(), mWeekendData);
-        fakeStatusBar.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+        spannableString.setSpan(sizeSpan, 5, txt.length() - 1, Spanned
+                .SPAN_INCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(styleSpan, 5, txt.length() - 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        tvMyPoints.setText(spannableString);
     }
 
     @Override
@@ -131,12 +163,17 @@ public class TaskFragment extends ABaseFragment {
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ExchangeDetailsActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(getActivity(), ExchangeDetailsActivity.class);
+//                startActivity(intent);
+                if (isSign == 1) {
+                    ToastUtils.showToast(mContext.getApplicationContext(), "已签到");
+                    return;
+                }
+                sign();
             }
         });
 
-        signInAdapter.setOnItemClickListener(new OnItemClickListener() {
+        mSignAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
                 showDialog();
@@ -155,6 +192,47 @@ public class TaskFragment extends ABaseFragment {
             }
         });
 
+    }
+
+    private void updateSignHistory(int count) {
+        signCount = count;
+        for (int i = 1; i <= count; i++) {
+            if (i < count) {
+                mWeekData.set(i - 1, i + "1");
+            } else {
+                mWeekData.set(i - 1, i + "2");
+            }
+        }
+        mSignAdapter.update(0, count);
+    }
+
+    private void getTaskList() {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "EXCHANGELIST");
+        params.put("uid", PreferencesUtils.getString(mContext.getApplicationContext(), "uid", ""));
+        params.put("userType", PreferencesUtils.getString(mContext.getApplicationContext(),
+                "userType", ""));
+        postForm(params, 1, 0);
+    }
+
+    private void postForm(Map<String, String> params, int page, int actionType) {
+        PresenterFactory.getInstance().createPresenter(this)
+                .execute(new Task.TaskBuilder()
+                        .setTaskType(TaskType.Method.POST)
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setParams(params)
+                        .setPage(page)
+                        .setActionType(actionType)
+                        .createTask());
+    }
+
+    private void sign() {
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "SIGN");
+        params.put("uid", PreferencesUtils.getString(mContext.getApplicationContext(), "uid", ""));
+
+        postForm(params, 1, 1);
     }
 
     private void showDialog() {
@@ -207,10 +285,97 @@ public class TaskFragment extends ABaseFragment {
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
 
+        if (actionType == 0) {
+            TaskInfoListBean bean = GsonUtils.getInstance().transitionToBean(result,
+                    TaskInfoListBean.class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                DataBean dataBean = bean.getData();
+                if (dataBean == null)
+                    return;
+                List<NormalBean> normalBeans = dataBean.getNormal();
+                List<LimitedBean> limitedBeans = dataBean.getLimited();
+                List<LendBean> lendBeans = dataBean.getLend();
+                if (normalBeans.size() > 0) {
+                    mNormalAdapter.remove(0, mNormalData.size());
+                    mNormalData.clear();
+                    mNormalData.addAll(normalBeans);
+                    mNormalAdapter.add(0, normalBeans.size(), normalBeans);
+                }
+
+                if (lendBeans.size() > 0) {
+                    mLendAdapter.remove(0, mLendData.size());
+                    mLendData.clear();
+                    mLendData.addAll(lendBeans);
+                    mLendAdapter.add(0, lendBeans.size(), lendBeans);
+                }
+
+                if (limitedBeans.size() == 4) {
+                    Glide.with(mContext)
+                            .load(limitedBeans.get(0).getImage())
+                            .crossFade()
+                            .into(ivPointsExchange);
+                    tvPointsExchangeHint.setText("可领取" + limitedBeans.get(0).getExContent() + "流量");
+                    tvPoints.setText(limitedBeans.get(0).getIntegral() + "积分");
+                    Glide.with(mContext)
+                            .load(limitedBeans.get(1).getImage())
+                            .crossFade()
+                            .into(ivAdvertisement);
+                    Glide.with(mContext)
+                            .load(limitedBeans.get(2).getImage())
+                            .crossFade()
+                            .into(ivTicketLeft);
+                    tvTicketLeftDesc.setText("可兑换" + limitedBeans.get(2).getExContent() + "流量");
+                    tvTicketLeftHint.setText(limitedBeans.get(2).getIntegral() + "积分");
+                    Glide.with(mContext)
+                            .load(limitedBeans.get(3).getImage())
+                            .crossFade()
+                            .into(ivTicketRight);
+                    tvTicketRightDesc.setText("可兑换" + limitedBeans.get(3).getExContent() + "流量");
+                    tvTicketRightHint.setText(limitedBeans.get(3).getIntegral() + "积分");
+                }
+
+                Glide.with(mContext)
+                        .load(dataBean.getAvatar())
+                        .crossFade()
+                        .bitmapTransform(new CropCircleTransformation(mContext))
+                        .placeholder(R.drawable.user_profile)
+                        .into(ivUserProfile);
+                tvMyPoints.setText("我的积分：" + dataBean.getPoint() + "分");
+                setTextStyle();
+                isSign = dataBean.getSignStatus();
+                if (isSign == 1) {
+                    btnSignIn.setText("已签到");
+                }
+                updateSignHistory(dataBean.getDay());
+            }
+        }
+
+        if (actionType == 1) {
+            SignBean bean = GsonUtils.getInstance().transitionToBean(result, SignBean.class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                btnSignIn.setText("已签到");
+                tvMyPoints.setText("我的积分：" + bean.getPoint() + "分");
+                setTextStyle();
+                isSign = 1;
+                updateSignHistory(bean.getDay());
+            }
+        }
     }
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-
+        if (StringUtils.isEmpty(error))
+            return;
+        if (error.contains("ConnectException")) {
+            ToastUtils.showToast(mContext.getApplicationContext(), "网络连接失败，请检查网络设置");
+        } else if (error.contains("404")) {
+            ToastUtils.showToast(mContext.getApplicationContext(), "未知异常");
+        } else {
+            ToastUtils.showToast(mContext.getApplicationContext(), error);
+        }
     }
 }

@@ -5,12 +5,16 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.DensityUtils;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.androidbase.utils.StringUtils;
@@ -22,6 +26,12 @@ import com.anyihao.ayb.bean.UserLevelBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.listener.OnItemClickListener;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.Holder;
+import com.orhanobut.dialogplus.OnCancelListener;
+import com.orhanobut.dialogplus.OnClickListener;
+import com.orhanobut.dialogplus.OnDismissListener;
+import com.orhanobut.dialogplus.ViewHolder;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -150,8 +160,7 @@ public class SettingsActivity extends ABaseActivity {
                             .id.tv_message);
                     return;
                 }
-                logOut();
-
+                showDialog();
             }
         });
 
@@ -199,6 +208,62 @@ public class SettingsActivity extends ABaseActivity {
                         .createTask());
     }
 
+    private void showDialog() {
+        Holder holder = new ViewHolder(LayoutInflater.from(this).inflate(R.layout.confirm_dialog,
+                null));
+        TextView tvTitle = (TextView) holder.getInflatedView().findViewById(R.id.dia_title);
+        Button btnLeft = (Button) holder.getInflatedView().findViewById(R.id.btn_cancel);
+        Button btnRight = (Button) holder.getInflatedView().findViewById(R.id.btn_ok);
+        tvTitle.setText(getString(R.string.logout_prompt));
+        btnLeft.setText(getString(R.string.cancel));
+        btnRight.setText(getString(R.string.ok));
+        OnClickListener clickListener = new OnClickListener() {
+            @Override
+            public void onClick(DialogPlus dialog, View view) {
+                switch (view.getId()) {
+                    case R.id.btn_cancel:
+                        dialog.dismiss();
+                        break;
+                    case R.id.btn_ok:
+                        logOut();
+                        dialog.dismiss();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
+
+        OnDismissListener dismissListener = new OnDismissListener() {
+            @Override
+            public void onDismiss(DialogPlus dialog) {
+//                ToastUtils.showLongToast(getActivity(), "dismiss");
+            }
+        };
+
+        OnCancelListener cancelListener = new OnCancelListener() {
+            @Override
+            public void onCancel(DialogPlus dialog) {
+//                ToastUtils.showLongToast(getActivity(), "cancel");
+            }
+        };
+
+        final DialogPlus dialog = DialogPlus.newDialog(this)
+                .setContentHolder(holder)
+                .setGravity(Gravity.CENTER)
+                .setOnDismissListener(dismissListener)
+                .setOnCancelListener(cancelListener)
+                .setCancelable(true)
+                .setInAnimation(R.anim.fade_in_center)
+                .setOutAnimation(R.anim.fade_out_center)
+                .setOnClickListener(clickListener)
+                .setContentWidth(DensityUtils.dp2px(this, 298f))
+                .setContentHeight(DensityUtils.dp2px(this, 195f))
+                .setContentBackgroundResource(R.drawable.dialog_bg)
+                .create();
+        dialog.show();
+    }
+
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
         if (actionType == 0) {
@@ -229,10 +294,14 @@ public class SettingsActivity extends ABaseActivity {
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-        if(StringUtils.isEmpty(error))
+        if (StringUtils.isEmpty(error))
             return;
         if (error.contains("ConnectException")) {
             ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
+        } else if (error.contains("404")) {
+            ToastUtils.showToast(getApplicationContext(), "未知异常");
+        } else {
+            ToastUtils.showToast(getApplicationContext(), error);
         }
     }
 }

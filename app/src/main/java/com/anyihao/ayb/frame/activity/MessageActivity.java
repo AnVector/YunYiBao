@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.UTabAdapter;
+import com.anyihao.ayb.frame.fragment.EnvelopeFragment;
 import com.anyihao.ayb.frame.fragment.MessageFragment;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class MessageActivity extends ABaseActivity {
     private UTabAdapter mTabAdapter;
     private List<Fragment> mFragments = new ArrayList<>();
     private String[] mTitleArray = new String[]{"红包消息", "个人消息", "系统消息"};
-    private String[] mMessageArray = new String[]{"REDPACKAGE", "PERSON", "SYSTEM"};
+    private String[] mMessageArray = new String[]{"PERSON", "SYSTEM"};
     private List<String> mTitles = Arrays.asList(mTitleArray);
 
     @Override
@@ -57,9 +58,15 @@ public class MessageActivity extends ABaseActivity {
     }
 
     private void initViewPager() {
-        MessageFragment fragment;
         Bundle bundle;
-        for (int i = 0; i < 3; ++i) {
+        EnvelopeFragment envelopeFragment = new EnvelopeFragment();
+        bundle = new Bundle();
+        bundle.putString("type", "REDPACKAGE");
+        envelopeFragment.setArguments(bundle);
+        mFragments.add(envelopeFragment);
+
+        MessageFragment fragment;
+        for (int i = 0; i < 2; ++i) {
             fragment = new MessageFragment();
             bundle = new Bundle();
             bundle.putString("type", mMessageArray[i]);

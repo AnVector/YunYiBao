@@ -14,13 +14,14 @@ import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.UTabAdapter;
 import com.anyihao.ayb.frame.fragment.ChartFragment;
 import com.bigkoo.pickerview.TimePickerView;
-import com.bigkoo.pickerview.lib.WheelView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 
@@ -33,15 +34,15 @@ public class FlowChartActivity extends ABaseActivity {
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
     @BindView(R.id.viewpager)
-    ViewPager viewpager;
-    private TimePickerView pvDay;
-    private TimePickerView pvHour;
+    ViewPager mViewpager;
+    private TimePickerView mPvMonth;
+    private TimePickerView mPvDay;
     private UTabAdapter mTabAdapter;
     private List<Fragment> mFragments = new ArrayList<>();
     private String[] mTitleArray = new String[]{"日报表", "月报表"};
     private String[] cmdArray = new String[]{"DAYFLOW", "MONTHFLOW"};
-    private String[] dateArray = new String[]{"day", "month"};
     private List<String> mTitles = Arrays.asList(mTitleArray);
+    private Date mDate = new Date();
 
     @Override
     protected int getContentViewId() {
@@ -57,7 +58,7 @@ public class FlowChartActivity extends ABaseActivity {
     protected void initData() {
         initViewPager();
         initTimePicker();
-        tabLayout.setupWithViewPager(viewpager);
+        tabLayout.setupWithViewPager(mViewpager);
         toolbar.inflateMenu(R.menu.flow_chart_toolbar_menu);
         toolbar.setNavigationIcon(R.drawable.ic_back);
 //        setSupportActionBar(toolbar);
@@ -72,15 +73,21 @@ public class FlowChartActivity extends ABaseActivity {
         Bundle bundle;
         for (int i = 0; i < 2; i++) {
             fragment = new ChartFragment();
+            SimpleDateFormat sdf;
             bundle = new Bundle();
             bundle.putString("cmd", cmdArray[i]);
-            bundle.putString("date", dateArray[i]);
+            if (cmdArray[i].contains("DAY")) {
+                sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+            } else {
+                sdf = new SimpleDateFormat("yyyy-MM", Locale.CHINA);
+            }
+            bundle.putString("time", sdf.format(mDate));
             fragment.setArguments(bundle);
             mFragments.add(fragment);
         }
         mTabAdapter = new UTabAdapter(getSupportFragmentManager(), mFragments, mTitles);
-        viewpager.setAdapter(mTabAdapter);
-        viewpager.setCurrentItem(0, true);
+        mViewpager.setAdapter(mTabAdapter);
+        mViewpager.setCurrentItem(0, true);
     }
 
     @Override
@@ -95,9 +102,19 @@ public class FlowChartActivity extends ABaseActivity {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-//                Intent intent = new Intent(getActivity(), SettingsActivity.class);
-//                startActivity(intent);
-                pvDay.show();
+                ChartFragment fragment = (ChartFragment) mFragments.get(mViewpager
+                        .getCurrentItem());
+                if (fragment == null)
+                    return true;
+                Bundle bundle = fragment.getArguments();
+                if (bundle == null)
+                    return true;
+                String cmd = bundle.getString("cmd");
+                if ("DAYFLOW".equals(cmd)) {
+                    mPvDay.show();
+                } else {
+                    mPvMonth.show();
+                }
                 return true;
             }
         });
@@ -114,36 +131,53 @@ public class FlowChartActivity extends ABaseActivity {
         Calendar endDate = Calendar.getInstance();
         endDate.set(2050, 1, 1);
         //时间选择器
-        pvDay = new TimePickerView.Builder(this, new TimePickerView.OnTimeSelectListener() {
+        mPvMonth = new TimePickerView.Builder(this, new TimePickerView.OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {//选中事件回调
                 // 这里回调过来的v,就是show()方法里面所添加的 View 参数，如果show的时候没有添加参数，v则为null
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM", Locale.CHINA);
+                String time = sdf.format(date);
+                ChartFragment fragment = (ChartFragment) mFragments.get(mViewpager
+                        .getCurrentItem());
+                if (fragment == null)
+                    return;
+                if (fragment.isVisible() && !fragment.isDetached()) {
+                    fragment.queryByTime(time);
+                }
             }
         })
-                .setType(TimePickerView.Type.YEAR_MONTH_DAY)
+                .setType(TimePickerView.Type.YEAR_MONTH)
                 .setLabel("", "", "", "", "", "") //设置空字符串以隐藏单位提示   hide label
                 .setDividerColor(Color.parseColor("#C8C8C8"))
-                .setDividerType(WheelView.DividerType.WRAP)
                 .setTextColorCenter(Color.parseColor("#333333"))
-                .setLineSpacingMultiplier(1.2f)
+                .setLineSpacingMultiplier(1.5f)
                 .setCancelText("取消")
                 .setSubmitText("确定")
                 .setContentSize(16)
                 .setDate(selectedDate)
                 .setRangDate(startDate, endDate)
                 .build();
-        pvHour = new TimePickerView.Builder(this, new TimePickerView.OnTimeSelectListener() {
+        mPvDay = new TimePickerView.Builder(this, new TimePickerView.OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {//选中事件回调
                 // 这里回调过来的v,就是show()方法里面所添加的 View 参数，如果show的时候没有添加参数，v则为null
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+                String time = sdf.format(date);
+                ChartFragment fragment = (ChartFragment) mFragments.get(mViewpager
+                        .getCurrentItem());
+                if (fragment == null)
+                    return;
+                if (fragment.isVisible() && !fragment.isDetached()) {
+                    fragment.queryByTime(time);
+                }
+
             }
         })
-                .setType(TimePickerView.Type.YEAR_MONTH_DAY_HOUR_MIN)
-                .setLabel("", "", "", "", "", "") //设置空字符串以隐藏单位提示   hide label
+                .setType(TimePickerView.Type.YEAR_MONTH_DAY)
+                .setLabel("", "", "", "", "", "")
                 .setDividerColor(Color.parseColor("#C8C8C8"))
-                .setDividerType(WheelView.DividerType.WRAP)
                 .setTextColorCenter(Color.parseColor("#333333"))
-                .setLineSpacingMultiplier(1.2f)
+                .setLineSpacingMultiplier(1.5f)
                 .setCancelText("取消")
                 .setSubmitText("确定")
                 .setContentSize(16)

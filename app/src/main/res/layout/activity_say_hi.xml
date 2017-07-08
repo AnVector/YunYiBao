@@ -24,13 +24,14 @@
         android:textSize="@dimen/font_size_small"/>
 
     <com.chaychan.viewlib.PowerfulEditText
-        android:id="@+id/tv_say_hi_content"
+        android:id="@+id/edt_content"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_gravity="center_horizontal"
         android:background="@color/white"
         android:drawableRight="@drawable/edit_text_selector"
         android:gravity="left|center_vertical"
+        android:maxLines="1"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:textCursorDrawable="@drawable/edittext_cursor_color"

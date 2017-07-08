@@ -9,7 +9,7 @@
         android:layout_width="15dp"
         android:layout_height="15dp"
         android:padding="1dp"
-        android:background="@drawable/sign_in_bg"
+        android:background="@drawable/unsign_bg"
         android:gravity="center"
         android:textColor="#fffefe"
         android:textSize="9sp"/>

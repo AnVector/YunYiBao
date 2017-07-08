@@ -31,14 +31,16 @@
             android:textSize="@dimen/font_size_normal_high"/>
 
         <com.chaychan.viewlib.PowerfulEditText
-            android:id="@+id/tv_user_name"
+            android:id="@+id/edt_user_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:background="@null"
             android:drawableRight="@drawable/edit_text_selector"
             android:gravity="center_vertical"
+            android:hint="@string/retrieve_input_hint"
             android:maxLines="1"
+            android:textColorHint="@color/light_gray"
             android:textCursorDrawable="@drawable/edittext_cursor_color"
             android:textSize="@dimen/font_size_thi"
             app:funcType="canClear"/>
@@ -68,14 +70,17 @@
             android:textSize="@dimen/font_size_normal_high"/>
 
         <com.chaychan.viewlib.PowerfulEditText
-            android:id="@+id/tv_data_amount"
+            android:id="@+id/edt_data_amount"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_gravity="center_vertical"
             android:background="@null"
             android:drawableRight="@drawable/edit_text_selector"
             android:gravity="center_vertical"
+            android:hint="@string/data_amount_hint"
+            android:inputType="number"
             android:maxLines="1"
+            android:textColorHint="@color/light_gray"
             android:textCursorDrawable="@drawable/edittext_cursor_color"
             android:textSize="@dimen/font_size_thi"
             app:funcType="canClear"/>
@@ -89,7 +94,7 @@
 
 
     <com.chaychan.viewlib.PowerfulEditText
-        android:id="@+id/tv_remark"
+        android:id="@+id/edt_remark"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_gravity="center_horizontal"

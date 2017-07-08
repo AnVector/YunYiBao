@@ -63,6 +63,11 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<ViewHo
         notifyItemRangeInserted(positionStart, itemCount);
     }
 
+    // 定义对外开放的更新数据的方法
+    public void update(int positionStart, int itemCount) {
+        notifyItemRangeChanged(positionStart, itemCount);
+    }
+
     // 定义对外开发的删除数据的方法
     public void remove(int positionStart, int itemCount) {
         notifyItemRangeRemoved(positionStart, itemCount);

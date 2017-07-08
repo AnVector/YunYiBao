@@ -22,7 +22,7 @@ public class CreditAdapter extends RecyclerViewAdapter<DataBean> {
         if (dataBean != null) {
             holder.setText(R.id.title, dataBean.getDescription());
             holder.setText(R.id.date, dataBean.getCrtTm());
-            holder.setText(R.id.tv_points, "+" + dataBean.getPoints());
+            holder.setText(R.id.tv_points,dataBean.getPoints());
         }
         if (holder.getLayoutPosition() == mDatas.size() - 1) {
             holder.setVisible(R.id.line, false);
