@@ -9,9 +9,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
-import com.anyihao.androidbase.utils.ToastUtils;
+import com.anyihao.androidbase.utils.StatusBarUtil;
 import com.anyihao.ayb.R;
-import com.jaeger.library.StatusBarUtil;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
@@ -138,13 +137,13 @@ public class ScanActivity extends ABaseActivity implements DecoratedBarcodeView.
     // torch 手电筒
     @Override
     public void onTorchOn() {
-        ToastUtils.showShortToast(this, "torch on");
+//        ToastUtils.showShortToast(this, "torch on");
         isLightOn = true;
     }
 
     @Override
     public void onTorchOff() {
-        ToastUtils.showShortToast(this, "torch off");
+//        ToastUtils.showShortToast(this, "torch off");
         isLightOn = false;
     }
 

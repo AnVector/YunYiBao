@@ -6,9 +6,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.utils.StatusBarUtil;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.MessageBean.DataBean;
-import com.jaeger.library.StatusBarUtil;
 
 import butterknife.BindView;
 

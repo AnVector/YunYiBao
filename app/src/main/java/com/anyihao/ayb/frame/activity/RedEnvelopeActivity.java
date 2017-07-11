@@ -3,19 +3,26 @@ package com.anyihao.ayb.frame.activity;
 import android.content.Intent;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.mvp.Task;
+import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.GsonUtils;
+import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
-import com.orhanobut.dialogplus.DialogPlus;
-import com.orhanobut.dialogplus.Holder;
-import com.orhanobut.dialogplus.OnCancelListener;
-import com.orhanobut.dialogplus.OnClickListener;
-import com.orhanobut.dialogplus.OnDismissListener;
-import com.orhanobut.dialogplus.ViewHolder;
+import com.anyihao.ayb.bean.ResultBean;
+import com.anyihao.ayb.common.PresenterFactory;
+import com.anyihao.ayb.constant.GlobalConsts;
+import com.anyihao.ayb.ui.CropCircleTransformation;
+import com.bumptech.glide.Glide;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -29,6 +36,28 @@ public class RedEnvelopeActivity extends ABaseActivity {
     ImageView ivUserProfile;
     @BindView(R.id.btn_unfold_it)
     AppCompatButton btnUnfoldIt;
+    @BindView(R.id.tv_envelope_value)
+    TextView tvEnvelopeValue;
+    @BindView(R.id.tv_use_expires)
+    TextView tvUseExpires;
+    @BindView(R.id.btn_go_to_account)
+    TextView btnGoToAccount;
+    @BindView(R.id.ll_open)
+    LinearLayout llOpen;
+    @BindView(R.id.toolbar_title_right)
+    TextView toolbarTitleRight;
+    @BindView(R.id.ll_close)
+    LinearLayout llClose;
+    @BindView(R.id.iv_profile)
+    ImageView ivProfile;
+    @BindView(R.id.tv_from)
+    TextView tvFrom;
+    private String sendName;
+    private String sendAvatar;
+    private String flow;
+    private String effectTime;
+    private int status;
+    private int keyId;
 
     @Override
     protected int getContentViewId() {
@@ -37,7 +66,15 @@ public class RedEnvelopeActivity extends ABaseActivity {
 
     @Override
     protected void getExtraParams() {
-
+        Intent intent = getIntent();
+        if (intent == null)
+            return;
+        keyId = intent.getIntExtra("keyId", 0);
+        sendName = intent.getStringExtra("sendName");
+        sendAvatar = intent.getStringExtra("sendAvatar");
+        flow = intent.getStringExtra("flow");
+        effectTime = intent.getStringExtra("effectTime");
+        status = intent.getIntExtra("status", 0);
     }
 
     @Override
@@ -47,6 +84,34 @@ public class RedEnvelopeActivity extends ABaseActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         toolbarTitleMid.setText(getString(R.string.red_envelope));
+
+        if (status == 0) {
+            llClose.setVisibility(View.VISIBLE);
+            llOpen.setVisibility(View.GONE);
+            if (!StringUtils.isEmpty(sendAvatar)) {
+                Glide.with(this).load(sendAvatar)
+                        .bitmapTransform(new CropCircleTransformation(this))
+                        .placeholder(R.drawable.user_profile)
+                        .crossFade().into(ivUserProfile);
+            }
+        } else {
+            openEnvelope();
+        }
+    }
+
+    private void openEnvelope() {
+        llClose.setVisibility(View.GONE);
+        llOpen.setVisibility(View.VISIBLE);
+        if (!StringUtils.isEmpty(sendAvatar)) {
+            Glide.with(this).load(sendAvatar)
+                    .bitmapTransform(new CropCircleTransformation(this))
+                    .placeholder(R.drawable.user_profile)
+                    .crossFade().into(ivProfile);
+        }
+
+        tvEnvelopeValue.setText(flow);
+        tvUseExpires.setText(effectTime);
+        tvFrom.setText(sendName);
     }
 
     @Override
@@ -62,69 +127,62 @@ public class RedEnvelopeActivity extends ABaseActivity {
         btnUnfoldIt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                flagEnvelope();
+                openEnvelope();
             }
         });
-        btnUnfoldIt.setOnClickListener(new View.OnClickListener() {
+
+        btnGoToAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog();
+                Intent intent = new Intent(RedEnvelopeActivity.this, FlowAccountActivity.class);
+                startActivity(intent);
             }
         });
 
     }
 
-    private void showDialog() {
-        Holder holder = new ViewHolder(R.layout.red_envelope_dialog);
-        OnClickListener clickListener = new OnClickListener() {
-            @Override
-            public void onClick(DialogPlus dialog, View view) {
-                switch (view.getId()) {
-                    case R.id.btn_go_to_account:
-                        Intent intent = new Intent(RedEnvelopeActivity.this,
-                                FlowAccountActivity.class);
-                        startActivity(intent);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        };
+    private void flagEnvelope() {
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "REDPACK");
+        params.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
+        params.put("keyId", keyId + "");
 
-        OnDismissListener dismissListener = new OnDismissListener() {
-            @Override
-            public void onDismiss(DialogPlus dialog) {
-//                ToastUtils.showLongToast(getActivity(), "dismiss");
-            }
-        };
-
-        OnCancelListener cancelListener = new OnCancelListener() {
-            @Override
-            public void onCancel(DialogPlus dialog) {
-//                ToastUtils.showLongToast(getActivity(), "cancel");
-            }
-        };
-
-        final DialogPlus dialog = DialogPlus.newDialog(this)
-                .setContentHolder(holder)
-                .setGravity(Gravity.CENTER)
-                .setOnDismissListener(dismissListener)
-                .setOnCancelListener(cancelListener)
-                .setCancelable(true)
-                .setOnClickListener(clickListener)
-                .setContentWidth(ViewGroup.LayoutParams.WRAP_CONTENT)
-                .setContentBackgroundResource(R.drawable.opened_red_envelope)
-                .create();
-        dialog.show();
+        PresenterFactory.getInstance().createPresenter(this)
+                .execute(new Task.TaskBuilder()
+                        .setTaskType(TaskType.Method.POST)
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setParams(params)
+                        .setPage(1)
+                        .setActionType(0)
+                        .createTask());
     }
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
+        if (actionType == 0) {
+            ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean.class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                ToastUtils.showToast(getApplicationContext(), "红包领取成功");
+            } else {
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg());
+            }
+        }
 
     }
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-
+        if (StringUtils.isEmpty(error))
+            return;
+        if (error.contains("ConnectException")) {
+            ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
+        } else if (error.contains("404")) {
+            ToastUtils.showToast(getApplicationContext(), "未知异常");
+        } else {
+            ToastUtils.showToast(getApplicationContext(), error);
+        }
     }
 }

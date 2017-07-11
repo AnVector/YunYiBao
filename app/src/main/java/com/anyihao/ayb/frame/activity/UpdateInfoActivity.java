@@ -17,8 +17,8 @@ import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.chaychan.viewlib.PowerfulEditText;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -41,6 +41,7 @@ public class UpdateInfoActivity extends ABaseActivity {
     private String value;
     private String newValue;
     private String property;
+    public static final int RESULT_UPDATE_SUCCESS_CODE = 0X0002;
 
     @Override
     protected int getContentViewId() {
@@ -124,25 +125,17 @@ public class UpdateInfoActivity extends ABaseActivity {
     }
 
     private void updateInfo() {
-        JSONObject json = new JSONObject();
-        try {
-            json.put("cmd", "PERSONSAVE");
-            json.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
-            json.put("userType", PreferencesUtils.getString(getApplicationContext(), "userType",
-                    ""));
-            json.put(property, newValue);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "PERSONSAVE");
+        params.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
+        params.put("userType", PreferencesUtils.getString(getApplicationContext(), "userType",
+                ""));
+        params.put(property, newValue);
         PresenterFactory.getInstance().createPresenter(this)
                 .execute(new Task.TaskBuilder()
                         .setTaskType(TaskType.Method.POST)
-                        .setUrl(GlobalConsts.PREFIX_URL + "?cmd=PERSONSAVE" + "&" + "uid=" +
-                                PreferencesUtils.getString(getApplicationContext(), "uid", "") +
-                                "&" + "userType=" + PreferencesUtils.getString
-                                (getApplicationContext(), "userType",
-                                        "") + "&" + property + "=" + newValue)
-                        .setContent(json.toString())
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setParams(params)
                         .setPage(1)
                         .setActionType(0)
                         .createTask());
@@ -158,6 +151,7 @@ public class UpdateInfoActivity extends ABaseActivity {
             ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast, R.id
                     .tv_message);
             if (bean.getCode() == 200) {
+                setResult(RESULT_UPDATE_SUCCESS_CODE);
                 finish();
             }
         }
@@ -166,9 +160,14 @@ public class UpdateInfoActivity extends ABaseActivity {
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-        if (actionType == 0) {
-            ToastUtils.showToast(getApplicationContext(), error, R.layout.toast, R.id
-                    .tv_message);
+        if (StringUtils.isEmpty(error))
+            return;
+        if (error.contains("ConnectException")) {
+            ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
+        } else if (error.contains("404")) {
+            ToastUtils.showToast(getApplicationContext(), "未知异常");
+        } else {
+            ToastUtils.showToast(getApplicationContext(), error);
         }
 
     }

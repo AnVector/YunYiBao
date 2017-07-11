@@ -182,6 +182,8 @@ public class RechargeActivity extends ABaseActivity {
             return;
         if (error.contains("ConnectException")) {
             ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
+        } else if (error.contains("404")) {
+            ToastUtils.showToast(getApplicationContext(), "未知异常");
         } else {
             ToastUtils.showToast(getApplicationContext(), error);
         }

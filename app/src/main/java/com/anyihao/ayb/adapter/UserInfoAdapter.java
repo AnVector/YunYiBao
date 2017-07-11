@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.anyihao.ayb.R;
 
+import java.util.List;
+
 /**
  * Created by Admin on 2017/4/7.
  */
@@ -13,8 +15,8 @@ public class UserInfoAdapter extends RecyclerViewAdapter<String> {
     private String[] array = new String[]{"头像", "昵称", "我的二维码", "性别", "生日", "手机号码", "邮箱", "地区",
             "押金退款"};
 
-    public UserInfoAdapter(Context context, int layoutId) {
-        super(context, layoutId);
+    public UserInfoAdapter(Context context, int layoutId, List<String> datas) {
+        super(context, layoutId, datas);
     }
 
     @Override

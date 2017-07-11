@@ -46,6 +46,7 @@
     <string name="ok">确定</string>
     <string name="male">男</string>
     <string name="female">女</string>
+    <string name="profile_qr_hint">用云逸宝扫二维码，租赁设备</string>
 
     <!--Toolbar Title-->
     <string name="data_flow_charge">流量充值</string>

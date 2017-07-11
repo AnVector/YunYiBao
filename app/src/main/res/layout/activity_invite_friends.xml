@@ -9,7 +9,7 @@
     tools:context="com.anyihao.ayb.frame.activity.InviteFriendsActivity">
 
     <include
-        layout="@layout/toolbar_invite_friends"/>
+        layout="@layout/toolbar_common"/>
 
     <TextView
         android:id="@+id/tv_remind"

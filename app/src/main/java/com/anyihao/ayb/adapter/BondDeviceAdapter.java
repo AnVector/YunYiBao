@@ -48,9 +48,6 @@ public class BondDeviceAdapter extends UAdapter<String> {
                         (BondDeviceListViewHolder) holder).getResources().getColor(R.color
                         .user_account_color));
             } else {
-                changeLeftIcon(((BondDeviceListViewHolder) holder).tvDevice, (
-                        (BondDeviceListViewHolder) holder).tvDevice.getContext(), R.drawable
-                        .ic_device_disconnect);
                 ((BondDeviceListViewHolder) holder).tvDeviceState.setText("未开启");
                 ((BondDeviceListViewHolder) holder).tvDeviceState.setTextColor((
                         (BondDeviceListViewHolder) holder).getResources().getColor(R.color

@@ -7,7 +7,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -23,7 +22,6 @@ import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.EnvelopeAdapter;
 import com.anyihao.ayb.bean.RedPackageBean;
 import com.anyihao.ayb.bean.RedPackageBean.DataBean;
-import com.anyihao.ayb.bean.ResultBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.frame.activity.RedEnvelopeActivity;
@@ -53,6 +51,8 @@ public class EnvelopeFragment extends ABaseFragment {
     private int page = 1;
     private static final int PAGE_SIZE = 8;
     private boolean isRefresh;
+
+    private static final int REQUEST_ENVELOPE_CODE = 0x0001;
 
     @Override
     protected void initData() {
@@ -137,10 +137,15 @@ public class EnvelopeFragment extends ABaseFragment {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
 
-                Intent intent = new Intent();
                 if (o instanceof DataBean) {
-                    intent.setClass(mContext, RedEnvelopeActivity.class);
-                    startActivity(intent);
+                    Intent intent = new Intent(mContext, RedEnvelopeActivity.class);
+                    intent.putExtra("keyId", ((DataBean) o).getKeyId());
+                    intent.putExtra("sendName", ((DataBean) o).getSendName());
+                    intent.putExtra("sendAvatar", ((DataBean) o).getSendAvatar());
+                    intent.putExtra("flow", ((DataBean) o).getFlow());
+                    intent.putExtra("effectTime", ((DataBean) o).getEffecTm());
+                    intent.putExtra("status", ((DataBean) o).getStatus());
+                    startActivityForResult(intent, REQUEST_ENVELOPE_CODE);
                 }
             }
 
@@ -150,6 +155,18 @@ public class EnvelopeFragment extends ABaseFragment {
                 return false;
             }
         });
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == REQUEST_ENVELOPE_CODE) {
+            isRefresh = true;
+            page = 1;
+            getMessage();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
 
     }
 
@@ -197,26 +214,6 @@ public class EnvelopeFragment extends ABaseFragment {
                 .createTask());
     }
 
-    private void flagMessage(int keyId) {
-
-        if (StringUtils.isEmpty(type)) {
-            return;
-        }
-        Map<String, String> params = new HashMap<>();
-        params.put("cmd", "MSGRESULT");
-        params.put("uid", PreferencesUtils.getString(mContext.getApplicationContext(), "uid", ""));
-        params.put("type", type);
-        params.put("keyId", keyId + "");
-
-        PresenterFactory.getInstance().createPresenter(this).execute(new Task.TaskBuilder()
-                .setParams(params)
-                .setTaskType(TaskType.Method.POST)
-                .setUrl(GlobalConsts.PREFIX_URL)
-                .setPage(1)
-                .setActionType(2)
-                .createTask());
-    }
-
     @Override
     protected int getContentViewId() {
         return R.layout.fragment_message;
@@ -248,16 +245,6 @@ public class EnvelopeFragment extends ABaseFragment {
             }
 
         }
-
-        if (actionType == 2) {
-            ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean.class);
-            if (bean == null)
-                return;
-            if (bean.getCode() == 200) {
-                Log.d(TAG, "消息标记为已读成功");
-            }
-        }
-
     }
 
     @Override

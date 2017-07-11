@@ -4,7 +4,16 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +23,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.anyihao.androidbase.mvp.Task;
@@ -21,6 +31,7 @@ import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.DensityUtils;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.UserInfoAdapter;
@@ -30,10 +41,18 @@ import com.anyihao.ayb.bean.UserInfoBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.listener.OnItemClickListener;
+import com.anyihao.ayb.ui.RoundedCornersTransformation;
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.bigkoo.pickerview.TimePickerView;
-import com.bigkoo.pickerview.lib.WheelView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.gson.Gson;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
 import com.orhanobut.dialogplus.OnCancelListener;
@@ -86,14 +105,20 @@ public class MeActivity extends ABaseActivity {
     private TextView tvValue;
     private String mArea;
     private String mDate;
-    private String mGender;
     private String mPhoneNum;
-    private TimePickerView pvDate;
+    private TimePickerView mPvDate;
     private Dialog bottomDialog;
     private View dialogContentView;
     private TextView tvMale;
     private TextView tvFemale;
     private TextView tvCancel;
+    private Bitmap mBitmap;
+    private Bitmap mAvatar;
+    private String mAvatarUrl;
+    private String mUserName;
+    private String mGender;
+    private String mZone;
+    private static final int REQUEST_UPDATE_CODE = 0x0001;
 
     @Override
     protected int getContentViewId() {
@@ -145,7 +170,7 @@ public class MeActivity extends ABaseActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         titleMid.setText(getString(R.string.about_me));
-        mAdapter = new UserInfoAdapter(this, R.layout.item_user_info);
+        mAdapter = new UserInfoAdapter(this, R.layout.item_user_info, mData);
         recyclerview.setAdapter(mAdapter);
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager
                 .VERTICAL, false));
@@ -163,7 +188,7 @@ public class MeActivity extends ABaseActivity {
         Calendar endDate = Calendar.getInstance();
         endDate.set(2050, 1, 1);
         //时间选择器
-        pvDate = new TimePickerView.Builder(this, new TimePickerView.OnTimeSelectListener() {
+        mPvDate = new TimePickerView.Builder(this, new TimePickerView.OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {//选中事件回调
                 // 这里回调过来的v,就是show()方法里面所添加的 View 参数，如果show的时候没有添加参数，v则为null
@@ -211,12 +236,20 @@ public class MeActivity extends ABaseActivity {
                             break;
                         case "生日":
                             tvValue = (TextView) view.findViewById(R.id.value);
-                            if (pvDate != null) {
-                                pvDate.show(tvValue);
+                            if (mPvDate != null) {
+                                mPvDate.show(tvValue);
                             }
                             break;
                         case "我的二维码":
-                            showCodeDialog();
+                            if (mAvatar != null) {
+                                generateQRCode(uid, 560, 560, mAvatar);
+                            } else {
+                                generateQRCode(uid, 560, 560, BitmapFactory.decodeResource
+                                        (getResources(), R.drawable.user_profile));
+                            }
+                            if (mBitmap != null) {
+                                showCodeDialog();
+                            }
                             break;
                         case "押金退款":
                             if ("未缴纳".equals(o.toString())) {
@@ -244,7 +277,7 @@ public class MeActivity extends ABaseActivity {
                             intent.putExtra(UpdateInfoActivity.INFORMATION_KEY, view.getTag()
                                     .toString());
                             intent.putExtra(UpdateInfoActivity.INFORMATION_VALUE, o.toString());
-                            startActivity(intent);
+                            startActivityForResult(intent, REQUEST_UPDATE_CODE);
                             break;
                     }
                 }
@@ -378,19 +411,15 @@ public class MeActivity extends ABaseActivity {
              * 添加城市数据
              */
             options2Items.add(CityList);
-
             /**
              * 添加地区数据
              */
             options3Items.add(Province_AreaList);
         }
-
         mHandler.sendEmptyMessage(MSG_LOAD_SUCCESS);
-
     }
 
     private void showPickerView(View v) {// 弹出选择器
-
         OptionsPickerView pvOptions = new OptionsPickerView.Builder(this, new OptionsPickerView
                 .OnOptionsSelectListener() {
             @Override
@@ -410,7 +439,6 @@ public class MeActivity extends ABaseActivity {
                 .setSubmitText("确定")
                 .setCancelText("取消")
                 .build();
-
         /*pvOptions.setPicker(options1Items);//一级选择器
         pvOptions.setPicker(options1Items, options2Items);//二级选择器*/
         pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器
@@ -450,7 +478,27 @@ public class MeActivity extends ABaseActivity {
     }
 
     private void showCodeDialog() {
-        Holder holder = new ViewHolder(R.layout.me_qr_code_dialog);
+        Holder holder = new ViewHolder(LayoutInflater.from(this).inflate(R.layout
+                .me_qr_code_dialog, null));
+
+        ImageView ivProfile = (ImageView) holder.getInflatedView().findViewById(R.id
+                .iv_user_profile);
+        Glide.with(this).load(mAvatarUrl)
+                .placeholder(R.drawable.user_profile)
+                .bitmapTransform(new RoundedCornersTransformation(this, 8, 0,
+                        RoundedCornersTransformation.CornerType.ALL)).crossFade().into(ivProfile);
+        TextView tvUserName = (TextView) holder.getInflatedView().findViewById(R.id.tv_user_name);
+        tvUserName.setText(mUserName);
+        ImageView ivGender = (ImageView) holder.getInflatedView().findViewById(R.id.iv_sex);
+        if ("女".equals(mGender)) {
+            ivGender.setImageResource(R.drawable.ic_female);
+        } else {
+            ivGender.setImageResource(R.drawable.ic_male);
+        }
+        TextView tvZone = (TextView) holder.getInflatedView().findViewById(R.id.tv_zone);
+        tvZone.setText(mZone);
+        ImageView ivQRCode = (ImageView) holder.getInflatedView().findViewById(R.id.iv_qr_code);
+        ivQRCode.setImageBitmap(mBitmap);
         OnClickListener clickListener = new OnClickListener() {
             @Override
             public void onClick(DialogPlus dialog, View view) {
@@ -478,7 +526,8 @@ public class MeActivity extends ABaseActivity {
                 .setOnCancelListener(cancelListener)
                 .setCancelable(true)
                 .setOnClickListener(clickListener)
-                .setContentWidth(ViewGroup.LayoutParams.WRAP_CONTENT)
+                .setContentHeight(DensityUtils.dp2px(this, 440))
+                .setContentWidth(DensityUtils.dp2px(this, 330))
                 .setContentBackgroundResource(R.drawable.qr_info_dialog_bg)
                 .create();
         dialog.show();
@@ -551,6 +600,16 @@ public class MeActivity extends ABaseActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_UPDATE_CODE) {
+            if (resultCode == UpdateInfoActivity.RESULT_UPDATE_SUCCESS_CODE) {
+                getUserInfo();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
     public void onSuccess(String result, int page, Integer actionType) {
         ((CircularProgressDrawable) progressbarCircular.getIndeterminateDrawable()).stop();
         progressbarCircular.setVisibility(View.GONE);
@@ -558,19 +617,25 @@ public class MeActivity extends ABaseActivity {
             UserInfoBean bean = GsonUtils.getInstance().transitionToBean(result, UserInfoBean
                     .class);
             if (bean == null) {
-                ToastUtils.showToast(getApplicationContext(), "暂无数据", R.layout.toast, R.id
-                        .tv_message);
+                ToastUtils.showToast(getApplicationContext(), "暂无数据");
                 return;
             }
             if (bean.getCode() == 200) {
+                mAdapter.remove(0, mData.size());
+                mData.clear();
                 mPhoneNum = bean.getPhoneNumber();
-                mData.add(bean.getAvatar());
+                mAvatarUrl = bean.getAvatar();
+                getProfileBitmap(mAvatarUrl);
+                mData.add(mAvatarUrl);
+                mUserName = bean.getNickname();
                 mData.add(bean.getNickname());
                 mData.add("QRCODE");
+                mGender = bean.getSex();
                 mData.add(bean.getSex());
                 mData.add(bean.getBirthday());
                 mData.add(mPhoneNum);
                 mData.add(bean.getEmail());
+                mZone = bean.getArea();
                 mData.add(bean.getArea());
                 mData.add(bean.getDeposit());
                 mAdapter.add(0, mData.size(), mData);
@@ -601,10 +666,111 @@ public class MeActivity extends ABaseActivity {
 
     }
 
+    private void getProfileBitmap(String url) {
+        Glide.with(this).load(url).asBitmap().into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
+                    glideAnimation) {
+                mAvatar = getRoundedCornerBitmap(resource, 4);
+            }
+
+            @Override
+            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                super.onLoadFailed(e, errorDrawable);
+            }
+        });
+    }
+
+    private Bitmap getRoundedCornerBitmap(Bitmap bitmap, float roundPx) {
+
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap
+                .getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        final RectF rectF = new RectF(rect);
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+        return output;
+    }
+
+
+    private Bitmap generateBitmap(String content, int width, int height) {
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        Map<EncodeHintType, String> hints = new HashMap<>();
+        hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
+        try {
+            BitMatrix encode = qrCodeWriter.encode(content, BarcodeFormat.QR_CODE, width, height,
+                    hints);
+            int[] pixels = new int[width * height];
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < width; j++) {
+                    if (encode.get(j, i)) {
+                        pixels[i * width + j] = 0x00000000;
+                    } else {
+                        pixels[i * width + j] = 0xffffffff;
+                    }
+                }
+            }
+            return Bitmap.createBitmap(pixels, 0, width, width, height, Bitmap.Config.RGB_565);
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private Bitmap addLogo(Bitmap qrBitmap, Bitmap logoBitmap) {
+        if (qrBitmap == null || logoBitmap == null)
+            return null;
+        int qrBitmapWidth = qrBitmap.getWidth();
+        int qrBitmapHeight = qrBitmap.getHeight();
+        int logoBitmapWidth = logoBitmap.getWidth();
+        int logoBitmapHeight = logoBitmap.getHeight();
+        Bitmap blankBitmap = Bitmap.createBitmap(qrBitmapWidth, qrBitmapHeight, Bitmap.Config
+                .ARGB_8888);
+        Canvas canvas = new Canvas(blankBitmap);
+        canvas.drawBitmap(qrBitmap, 0, 0, null);
+        canvas.save(Canvas.ALL_SAVE_FLAG);
+        float scaleSize = 1.0f;
+        while ((logoBitmapWidth / scaleSize) > (qrBitmapWidth / 5) || (logoBitmapHeight /
+                scaleSize) > (qrBitmapHeight / 5)) {
+            scaleSize *= 2;
+        }
+        float sx = 1.0f / scaleSize;
+        canvas.scale(sx, sx, qrBitmapWidth / 2, qrBitmapHeight / 2);
+        canvas.drawBitmap(logoBitmap, (qrBitmapWidth - logoBitmapWidth) / 2, (qrBitmapHeight -
+                logoBitmapHeight) / 2, null);
+        canvas.restore();
+        return blankBitmap;
+    }
+
+    private void generateQRCode(String content, int width, int height, Bitmap logoBitmap) {
+
+        Bitmap qrBitmap = generateBitmap(content, width, height);
+        mBitmap = addLogo(qrBitmap, logoBitmap);
+    }
+
+
     @Override
     public void onFailure(String error, int page, Integer actionType) {
         ((CircularProgressDrawable) progressbarCircular.getIndeterminateDrawable()).stop();
         progressbarCircular.setVisibility(View.GONE);
-        ToastUtils.showToast(getApplicationContext(), error);
+        if (StringUtils.isEmpty(error))
+            return;
+        if (error.contains("ConnectException")) {
+            ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
+        } else if (error.contains("404")) {
+            ToastUtils.showToast(getApplicationContext(), "未知异常");
+        } else {
+            ToastUtils.showToast(getApplicationContext(), error);
+        }
     }
 }

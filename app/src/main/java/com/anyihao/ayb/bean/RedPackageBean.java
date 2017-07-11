@@ -80,6 +80,8 @@ public class RedPackageBean implements Serializable {
         private String sendAvatar;
         private int keyId;
 
+        private String effecTm;
+
         public String getMessage() {
             return message;
         }
@@ -134,6 +136,14 @@ public class RedPackageBean implements Serializable {
 
         public void setKeyId(int keyId) {
             this.keyId = keyId;
+        }
+
+        public String getEffecTm() {
+            return effecTm;
+        }
+
+        public void setEffecTm(String effecTm) {
+            this.effecTm = effecTm;
         }
     }
 }

@@ -12,7 +12,6 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/easypermissions" />
             <option value="$PROJECT_DIR$/okhttputils" />
-            <option value="$PROJECT_DIR$/socketutils" />
             <option value="$PROJECT_DIR$/ultimaterecyclerview" />
           </set>
         </option>

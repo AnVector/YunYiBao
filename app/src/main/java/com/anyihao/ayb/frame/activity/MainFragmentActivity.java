@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.RadioButton;
 
 import com.anyihao.androidbase.manager.ActivityManager;
+import com.anyihao.androidbase.utils.StatusBarUtil;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.UFragmentPagerAdapter;
@@ -21,7 +22,7 @@ import com.anyihao.ayb.frame.fragment.DiscoverFragment;
 import com.anyihao.ayb.frame.fragment.HomeFragment;
 import com.anyihao.ayb.frame.fragment.MeFragment;
 import com.anyihao.ayb.frame.fragment.TaskFragment;
-import com.jaeger.library.StatusBarUtil;
+import com.anyihao.ayb.ui.CustomViewPager;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -34,8 +35,6 @@ import butterknife.BindView;
  */
 public class MainFragmentActivity extends ABaseActivity {
 
-    @BindView(R.id.viewpager)
-    ViewPager mViewPager;
     @BindView(R.id.radio_button_device)
     RadioButton mRadioButtonDevice;
     @BindView(R.id.radio_button_me)
@@ -45,6 +44,8 @@ public class MainFragmentActivity extends ABaseActivity {
     RadioButton mRadioButtonDiscovery;
     @BindView(R.id.radio_button_task)
     RadioButton mRadioButtonTask;
+    @BindView(R.id.viewpager)
+    CustomViewPager mViewPager;
     private List<Fragment> mFragmentList = new ArrayList<>();
     private UFragmentPagerAdapter uFragmentPagerAdapter;
     private DownloadManager mDownloadManager;
@@ -98,7 +99,6 @@ public class MainFragmentActivity extends ABaseActivity {
                 mFragmentList);
         mViewPager.setAdapter(uFragmentPagerAdapter);
         mViewPager.setCurrentItem(0, true);
-        mViewPager.setOffscreenPageLimit(4);
         mCurrent = mRadioButtonDevice;
         changeIcon(mRadioButtonDevice, R.drawable.device_focused);
     }

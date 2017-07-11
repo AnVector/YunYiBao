@@ -15,6 +15,15 @@
         android:gravity="left|top"
         android:textSize="@dimen/font_size_normal_high"/>
 
+    <View
+        android:id="@+id/red_dot"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_alignTop="@id/tv_status"
+        android:layout_marginLeft="2dp"
+        android:layout_toRightOf="@id/tv_status"
+        android:background="@drawable/red_dot"/>
+
     <TextView
         android:id="@+id/tv_date"
         android:layout_width="wrap_content"

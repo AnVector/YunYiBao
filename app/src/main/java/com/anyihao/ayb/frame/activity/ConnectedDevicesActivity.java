@@ -1,10 +1,7 @@
 package com.anyihao.ayb.frame.activity;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -12,15 +9,14 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.anyihao.androidbase.utils.DensityUtils;
+import com.anyihao.androidbase.utils.StatusBarUtil;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.ConnectedDeviceAdapter;
 import com.anyihao.ayb.listener.OnItemClickListener;
-import com.jaeger.library.StatusBarUtil;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.itemTouchHelper.SimpleItemTouchHelperCallback;
 

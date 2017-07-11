@@ -32,32 +32,39 @@ public class EnvelopeAdapter extends UAdapter<DataBean> {
         if (v == null) {
             return null;
         }
-        return new MessageViewHolder(v);
+        return new EnvelopeViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        if (bp && holder instanceof MessageViewHolder) {
+        if (bp && holder instanceof EnvelopeViewHolder) {
             DataBean content = mData.get((hasHeaderView() ? position - 1 : position));
             if (content == null) return;
-            ((MessageViewHolder) holder).tvStatus.setText(content.getSendName());
-            ((MessageViewHolder) holder).tvDate.setText(content.getCrtTm());
-            ((MessageViewHolder) holder).tvContent.setText(content.getMessage());
+            ((EnvelopeViewHolder) holder).tvStatus.setText(content.getSendName());
+            ((EnvelopeViewHolder) holder).tvDate.setText(content.getCrtTm());
+            ((EnvelopeViewHolder) holder).tvContent.setText(content.getMessage());
+            if (content.getStatus() == 1) {
+                ((EnvelopeViewHolder) holder).dot.setVisibility(View.GONE);
+            } else {
+                ((EnvelopeViewHolder) holder).dot.setVisibility(View.VISIBLE);
+            }
         }
     }
 
-    private class MessageViewHolder extends UltimateRecyclerviewViewHolder {
+    private class EnvelopeViewHolder extends UltimateRecyclerviewViewHolder {
 
         public TextView tvStatus;
         public TextView tvDate;
         public TextView tvContent;
+        public View dot;
 
-        public MessageViewHolder(View itemView) {
+        public EnvelopeViewHolder(View itemView) {
             super(itemView);
             tvStatus = (TextView) itemView.findViewById(R.id.tv_status);
             tvDate = (TextView) itemView.findViewById(R.id.tv_date);
             tvContent = (TextView) itemView.findViewById(R.id.tv_content);
+            dot = itemView.findViewById(R.id.red_dot);
         }
     }
 }

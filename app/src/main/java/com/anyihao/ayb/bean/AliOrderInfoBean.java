@@ -1,7 +1,6 @@
 package com.anyihao.ayb.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
 /**
  * author: Administrator
@@ -9,7 +8,7 @@ import android.os.Parcelable;
  * email:looper@126.com
  */
 
-public class AliOrderInfoBean implements Parcelable {
+public class AliOrderInfoBean implements Serializable {
 
     private int code;
     private String msg;
@@ -38,37 +37,4 @@ public class AliOrderInfoBean implements Parcelable {
     public void setOrderInfo(String orderInfo) {
         this.orderInfo = orderInfo;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.code);
-        dest.writeString(this.msg);
-        dest.writeString(this.orderInfo);
-    }
-
-    public AliOrderInfoBean() {
-    }
-
-    protected AliOrderInfoBean(Parcel in) {
-        this.code = in.readInt();
-        this.msg = in.readString();
-        this.orderInfo = in.readString();
-    }
-
-    public static final Creator<AliOrderInfoBean> CREATOR = new Creator<AliOrderInfoBean>() {
-        @Override
-        public AliOrderInfoBean createFromParcel(Parcel source) {
-            return new AliOrderInfoBean(source);
-        }
-
-        @Override
-        public AliOrderInfoBean[] newArray(int size) {
-            return new AliOrderInfoBean[size];
-        }
-    };
 }

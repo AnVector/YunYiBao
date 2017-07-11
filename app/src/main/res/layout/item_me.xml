@@ -17,10 +17,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:drawableLeft="@drawable/ic_balance"
             android:drawablePadding="15dp"
             android:gravity="center_vertical"
-            android:text="@string/my_balance"
             android:textSize="@dimen/font_size_fif"/>
 
         <ImageButton

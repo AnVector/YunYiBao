@@ -225,15 +225,12 @@ dependencies {
     compile project(':androidbase')
     //okhttp
     //socketutils
-    compile project(':socketutils')
     //ultimaterecyclerview
     compile project(':ultimaterecyclerview')
     //multidex
     compile 'com.android.support:multidex:1.0.1'
     //GreenDao
     compile 'org.greenrobot:greendao:3.2.0'
-    //CircleImageView
-    compile 'de.hdodenhof:circleimageview:2.1.0'
     //leakcanary
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
@@ -242,7 +239,7 @@ dependencies {
     compile 'com.journeyapps:zxing-android-embedded:3.5.0'
     //android-pickerView
     compile 'com.contrarywind:Android-PickerView:3.2.4'
-    //PowerfulViewLibrary
+    //PowerfulViewLibrary'
     compile 'com.github.chaychan:PowerfulViewLibrary:1.1.0'
     compile 'com.feezu.liuli:timeselector:1.1.3'
     compile 'com.github.castorflex.smoothprogressbar:library:1.0.1-SNAPSHOT@aar'
@@ -253,4 +250,5 @@ dependencies {
     compile 'info.hoang8f:android-segmented:1.0.6'
     //MPAndroidCharts
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+    compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.1.6'
 }

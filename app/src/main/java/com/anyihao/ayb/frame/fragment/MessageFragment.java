@@ -27,7 +27,6 @@ import com.anyihao.ayb.bean.ResultBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.frame.activity.MessageDetailsActivity;
-import com.anyihao.ayb.frame.activity.RedEnvelopeActivity;
 import com.anyihao.ayb.listener.OnItemClickListener;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
@@ -66,7 +65,7 @@ public class MessageFragment extends ABaseFragment {
 
         ultimateRecyclerView.setHasFixedSize(false);
         mAdapter = new MessageAdapter(mData, R.layout.item_message);
-        layoutManager = new LinearLayoutManager(getContext());
+        layoutManager = new LinearLayoutManager(mContext);
         ultimateRecyclerView.setLayoutManager(layoutManager);
 //        StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration
 //                (informationAdapter);
@@ -140,14 +139,13 @@ public class MessageFragment extends ABaseFragment {
 
                 Intent intent = new Intent();
                 if (o instanceof DataBean) {
-                    DataBean bean = (DataBean) o;
-                    if ("PERSON".equals(type) || "SYSTEM".equals(type)) {
-                        intent.setClass(mContext, MessageDetailsActivity.class);
-                        intent.putExtra("details", bean);
-                        flagMessage(bean.getKeyId());
-                    } else {
-                        intent.setClass(mContext, RedEnvelopeActivity.class);
+                    if (((DataBean) o).getStatus() == 0) {
+                        view.findViewById(R.id.red_dot).setVisibility(View.GONE);
                     }
+                    DataBean bean = (DataBean) o;
+                    intent.setClass(mContext, MessageDetailsActivity.class);
+                    intent.putExtra("details", bean);
+                    flagMessage(bean.getKeyId());
                     startActivity(intent);
                 }
 
@@ -183,8 +181,7 @@ public class MessageFragment extends ABaseFragment {
     }
 
     private void onLoadNoData() {
-        ToastUtils.showToast(mContext.getApplicationContext(), "暂无消息", R.layout
-                .toast, R.id.tv_message);
+//        ToastUtils.showToast(mContext.getApplicationContext(), "暂无消息");
         ultimateRecyclerView.showEmptyView();
     }
 

@@ -18,6 +18,7 @@ import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
+import com.anyihao.ayb.bean.AliOrderInfoBean;
 import com.anyihao.ayb.bean.WxOrderInfoBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
@@ -149,24 +150,49 @@ public class PayActivity extends ABaseActivity {
         }
     }
 
+    private void payByAliPay(String orderInfo) {
+        if (StringUtils.isEmpty(orderInfo))
+            return;
+
+    }
+
     private void getOrderInfo() {
+        if (StringUtils.isEmpty(topupType) || StringUtils.isEmpty(packageID))
+            return;
         Map<String, String> params = new HashMap<>();
         params.put("cmd", "PAY");
         params.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
         params.put("topupType", topupType);
         params.put("keyPackageID", packageID);
+        int actionType = 0;
+        if ("WXPAY".equals(topupType)) {
+            actionType = 1;
+        }
         PresenterFactory.getInstance().createPresenter(this)
                 .execute(new Task.TaskBuilder()
                         .setTaskType(TaskType.Method.POST)
                         .setUrl(GlobalConsts.PREFIX_URL)
                         .setParams(params)
                         .setPage(1)
-                        .setActionType(1)
+                        .setActionType(actionType)
                         .createTask());
     }
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
+
+        if (actionType == 0) {
+            AliOrderInfoBean bean = GsonUtils.getInstance().transitionToBean(result,
+                    AliOrderInfoBean.class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                payByAliPay(bean.getOrderInfo());
+            } else {
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg());
+            }
+        }
+
         if (actionType == 1) {
             WxOrderInfoBean bean = GsonUtils.getInstance().transitionToBean(result,
                     WxOrderInfoBean.class);
@@ -175,6 +201,8 @@ public class PayActivity extends ABaseActivity {
             if (bean.getCode() == 200) {
                 payByWx(bean.getAppId(), bean.getPartnerId(), bean.getPrepayId(), bean
                         .getPackege(), bean.getNonceStr(), bean.getTimestamp(), bean.getSign());
+            } else {
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg());
             }
 
         }
@@ -186,6 +214,8 @@ public class PayActivity extends ABaseActivity {
             return;
         if (error.contains("ConnectException")) {
             ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
+        } else if (error.contains("404")) {
+            ToastUtils.showToast(getApplicationContext(), "未知异常");
         } else {
             ToastUtils.showToast(getApplicationContext(), error);
         }

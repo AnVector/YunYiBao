@@ -8,9 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -40,6 +43,7 @@ import com.anyihao.ayb.frame.activity.RechargeRecordActivity;
 import com.anyihao.ayb.frame.activity.SettingsActivity;
 import com.anyihao.ayb.frame.activity.SystemRecordActivity;
 import com.anyihao.ayb.listener.OnItemClickListener;
+import com.anyihao.ayb.ui.CropCircleTransformation;
 import com.bumptech.glide.Glide;
 import com.chaychan.viewlib.PowerfulEditText;
 import com.orhanobut.dialogplus.DialogPlus;
@@ -49,14 +53,13 @@ import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import de.hdodenhof.circleimageview.CircleImageView;
+import butterknife.Unbinder;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -76,15 +79,13 @@ public class MeFragment extends ABaseFragment {
     @BindView(R.id.rl_profile)
     RelativeLayout rlProfile;
     @BindView(R.id.ic_profile)
-    CircleImageView icProfile;
+    ImageView icProfile;
+    Unbinder unbinder;
     private MeAdapter mAdapter;
     private static int REQUEST_SETTINGS_CODE = 0x00001;
     private static int REQUEST_LOGIN_CODE = 0x00003;
     private boolean isLogin = false;
-    private List<String> mData = new LinkedList<>();
-    private String[] mItemArray = new String[]{"", "shop", "chart", "history", "friends", "code",
-            "system", "", "privilege", "management"};
-    private List<String> mItems = Arrays.asList(mItemArray);
+    private List<String> mData = new ArrayList<>();
     private boolean showNetworkErr;
     private String mIntegral;
 
@@ -95,22 +96,22 @@ public class MeFragment extends ABaseFragment {
 
     @Override
     protected void initData() {
-//        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-//        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
-//        if(null!=actionBar){
-//            actionBar.setDisplayHomeAsUpEnabled(true);
+//        ((AppCompatActivity) mContext).setSupportActionBar(toolbar);
+//        ActionBar actionBar = ((AppCompatActivity) mContext).getSupportActionBar();
+//        if (null != actionBar) {
+//            actionBar.setDisplayShowTitleEnabled(false);
 //        }
-        mData.clear();
-        mData.addAll(mItems);
-        getUserInfo();
+        for (int i = 0; i < 9; i++) {
+            mData.add(i, "");
+        }
         fakeStatusBar.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         toolbar.inflateMenu(R.menu.toolbar_menu);
-        toolbarTitle.setText(getString(R.string.me));
-        mRecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager
+        toolbarTitle.setText(mContext.getString(R.string.me));
+        mRecyclerview.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager
                 .VERTICAL, false));
-        mAdapter = new MeAdapter(getContext(), R.layout.item_me);
+        mAdapter = new MeAdapter(mContext, R.layout.item_me, mData);
         mRecyclerview.setAdapter(mAdapter);
-        mAdapter.add(0, mData.size(), mData);
+        getUserInfo();
     }
 
     @Override
@@ -176,43 +177,43 @@ public class MeFragment extends ABaseFragment {
                     Intent intent;
                     switch (view.getTag().toString()) {
                         case "我的流量":
-                            intent = new Intent(getActivity(), FlowAccountActivity.class);
+                            intent = new Intent(mContext, FlowAccountActivity.class);
                             startActivity(intent);
                             break;
                         case "流量商城":
-                            intent = new Intent(getActivity(), RechargeActivity.class);
+                            intent = new Intent(mContext, RechargeActivity.class);
                             startActivity(intent);
                             break;
                         case "流量报表":
-                            intent = new Intent(getActivity(), FlowChartActivity.class);
+                            intent = new Intent(mContext, FlowChartActivity.class);
                             startActivity(intent);
                             break;
                         case "充值记录":
-                            intent = new Intent(getActivity(), RechargeRecordActivity.class);
+                            intent = new Intent(mContext, RechargeRecordActivity.class);
                             startActivity(intent);
                             break;
                         case "邀请好友":
-                            intent = new Intent(getActivity(), InviteFriendsActivity.class);
+                            intent = new Intent(mContext, InviteFriendsActivity.class);
                             startActivity(intent);
                             break;
                         case "输入邀请码":
                             showDialog();
                             break;
                         case "系统赠送记录":
-                            intent = new Intent(getActivity(), SystemRecordActivity.class);
+                            intent = new Intent(mContext, SystemRecordActivity.class);
                             startActivity(intent);
                             break;
                         case "我的积分":
-                            intent = new Intent(getActivity(), CreditActivity.class);
+                            intent = new Intent(mContext, CreditActivity.class);
                             intent.putExtra("integral", mIntegral);
                             startActivity(intent);
                             break;
                         case "商家特权":
-                            intent = new Intent(getActivity(), MerchantPrivilegeActivity.class);
+                            intent = new Intent(mContext, MerchantPrivilegeActivity.class);
                             startActivity(intent);
                             break;
                         case "授权设备管理":
-                            intent = new Intent(getActivity(), DeviceManageActivity.class);
+                            intent = new Intent(mContext, DeviceManageActivity.class);
                             startActivity(intent);
                             break;
                         default:
@@ -247,6 +248,11 @@ public class MeFragment extends ABaseFragment {
     private void startActivityForLogin() {
         Intent intent = new Intent(mContext, LoginActivity.class);
         startActivityForResult(intent, REQUEST_LOGIN_CODE);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -294,18 +300,18 @@ public class MeFragment extends ABaseFragment {
         OnDismissListener dismissListener = new OnDismissListener() {
             @Override
             public void onDismiss(DialogPlus dialog) {
-//                ToastUtils.showLongToast(getActivity(), "dismiss");
+//                ToastUtils.showLongToast(mContext, "dismiss");
             }
         };
 
         OnCancelListener cancelListener = new OnCancelListener() {
             @Override
             public void onCancel(DialogPlus dialog) {
-//                ToastUtils.showLongToast(getActivity(), "cancel");
+//                ToastUtils.showLongToast(mContext, "cancel");
             }
         };
 
-        final DialogPlus dialog = DialogPlus.newDialog(getActivity())
+        final DialogPlus dialog = DialogPlus.newDialog(mContext)
                 .setContentHolder(holder)
                 .setGravity(Gravity.CENTER)
                 .setOnDismissListener(dismissListener)
@@ -326,32 +332,36 @@ public class MeFragment extends ABaseFragment {
                     .class);
             if (bean == null)
                 return;
-            mAdapter.remove(0, mData.size());
+            int k = mData.size();
             mData.clear();
-            mData.add(bean.getFlow());
-            mData.add("shop");
-            mData.add("chart");
-            mData.add("history");
-            mData.add("friends");
-            mData.add("code");
-            mData.add("system");
-            mData.add(bean.getIntegral());
+            mAdapter.remove(0, k);
+            int count = 9;
             if ("BUSINESS".equals(bean.getIdentity())) {
-                mData.add("privilege");
+                count = 10;
             }
-            mData.add("management");
+            for (int i = 0; i < count; i++) {
+                if (i == 0) {
+                    mData.add(0, bean.getFlow());
+                } else if (i == 7) {
+                    mData.add(7, bean.getIntegral());
+                } else {
+                    mData.add(i, "");
+                }
+            }
             mAdapter.add(0, mData.size(), mData);
             if (bean.getCode() == 200) {
                 isLogin = true;
                 mIntegral = bean.getIntegral();
                 tvGreeting.setText(String.format(mContext.getResources().getString(R.string
                         .say_hello), bean.getNickname()));
-                Glide.with(this).load(bean.getAvatar()).placeholder(R.drawable.user_profile)
-                        .crossFade().into
-                        (icProfile);
+                Glide.with(this).load(bean.getAvatar())
+                        .bitmapTransform(new CropCircleTransformation(mContext))
+                        .placeholder(R.drawable.user_profile)
+                        .crossFade().into(icProfile);
             }
             if (bean.getCode() == 437) {
                 isLogin = false;
+                icProfile.setImageResource(R.drawable.user_profile);
                 tvGreeting.setText("未登录");
             }
         }
@@ -376,6 +386,5 @@ public class MeFragment extends ABaseFragment {
         } else {
             ToastUtils.showToast(mContext.getApplicationContext(), error);
         }
-
     }
 }

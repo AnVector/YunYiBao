@@ -15,18 +15,16 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
 import android.widget.RemoteViews;
 
-import com.anyihao.ayb.ITaskCallback;
-import com.anyihao.ayb.IWifiInfoManager;
-import com.anyihao.ayb.WifiInfo;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.NetworkUtils;
 import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.ayb.ITaskCallback;
+import com.anyihao.ayb.IWifiInfoManager;
 import com.anyihao.ayb.R;
+import com.anyihao.ayb.WifiInfo;
 import com.anyihao.ayb.frame.activity.MainActivity;
-import com.anyihao.ayb.util.EuUdpClient;
 import com.orhanobut.logger.Logger;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -79,12 +77,12 @@ public class PollingService extends Service {
         public void registerCallback(ITaskCallback cb) throws RemoteException {
             if (cb != null) {
                 boolean isSuccess = mRemoteCallbackList.register(cb);
-                if(isSuccess){
+                if (isSuccess) {
                     Logger.e("注册跨进程广播成功");
-                }else{
+                } else {
                     Logger.e("注册跨进程广播失败");
                 }
-            }else{
+            } else {
                 Logger.e("注册跨进程广播失败");
             }
         }
@@ -109,8 +107,9 @@ public class PollingService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        int check = checkCallingOrSelfPermission("com.looper.easylife.permission.ACCESS_POLLING_SERVICE");
-        if(check == PackageManager.PERMISSION_DENIED){
+        int check = checkCallingOrSelfPermission("com.looper.easylife.permission" +
+                ".ACCESS_POLLING_SERVICE");
+        if (check == PackageManager.PERMISSION_DENIED) {
             Logger.e("连接权限验证失败，拒绝连接");
             return null;
         }
@@ -148,15 +147,15 @@ public class PollingService extends Service {
             public void run() {
 //                Logger.e("后台子线程Tid=" + Thread
 //                        .currentThread().getId());
-                try {
-                    String msg = EuUdpClient.getInstance().getWifiInfo();
+//                try {
+//                    String msg = EuUdpClient.getInstance().getWifiInfo();
 //                    Logger.e("第" + (++count) + "次发送UDP请求功");
-                    convertUUWifiInfo(msg);
-                } catch (IOException e) {
+//                    convertUUWifiInfo(msg);
+//                } catch (IOException e) {
 //                    Logger.e("第" + (++count) + "次发送UDP请求失败");
-                    e.printStackTrace();
-                    setDiscStatus();
-                }
+//                    e.printStackTrace();
+//                    setDiscStatus();
+//                }
             }
         };
 //        if(NetworkUtils.isWifiConnected(this)){
@@ -170,7 +169,7 @@ public class PollingService extends Service {
             ITaskCallback cb = mRemoteCallbackList.getBroadcastItem(i);
             if (cb != null) {
                 try {
-                    cb.onNetworkChanged(uuWifiBean,count,isConnected);
+                    cb.onNetworkChanged(uuWifiBean, count, isConnected);
 //                    Logger.e("Binder回调线程Tid=" + Thread
 //                            .currentThread().getId());
                 } catch (RemoteException e) {
@@ -375,8 +374,10 @@ public class PollingService extends Service {
             mTimer.cancel();
         }
         //Disable this callback list.
-        // All registered callbacks are unregistered, and the list is disabled so that future calls to register(E) will fail.
-        // This should be used when a Service is stopping, to prevent clients from registering callbacks after it is stopped.
+        // All registered callbacks are unregistered, and the list is disabled so that future
+        // calls to register(E) will fail.
+        // This should be used when a Service is stopping, to prevent clients from registering
+        // callbacks after it is stopped.
         mRemoteCallbackList.kill();
         super.onDestroy();
     }

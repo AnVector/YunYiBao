@@ -16,13 +16,13 @@ import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.LogUtils;
 import com.anyihao.androidbase.utils.MD5;
 import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.StatusBarUtil;
 import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.LoginBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
-import com.jaeger.library.StatusBarUtil;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -255,12 +255,16 @@ public class LoginActivity extends ABaseActivity {
     }
 
     private void onLoginFailed(String message) {
+        btnLogin.setEnabled(true);
+        if (StringUtils.isEmpty(message))
+            return;
         if (message.contains("ConnectException")) {
             ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
+        } else if (message.contains("404")) {
+            ToastUtils.showToast(getApplicationContext(), "未知异常");
         } else {
             ToastUtils.showToast(getApplicationContext(), message);
         }
-        btnLogin.setEnabled(true);
     }
 
     @Override

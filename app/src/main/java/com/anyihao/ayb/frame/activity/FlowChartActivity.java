@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -59,12 +60,11 @@ public class FlowChartActivity extends ABaseActivity {
         initViewPager();
         initTimePicker();
         tabLayout.setupWithViewPager(mViewpager);
-        toolbar.inflateMenu(R.menu.flow_chart_toolbar_menu);
         toolbar.setNavigationIcon(R.drawable.ic_back);
-//        setSupportActionBar(toolbar);
-//        if (getSupportActionBar() != null) {
-//            getSupportActionBar().setDisplayShowTitleEnabled(false);
-//        }
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         toolbarTitle.setText(getString(R.string.data_flow_chart));
     }
 
@@ -98,27 +98,6 @@ public class FlowChartActivity extends ABaseActivity {
                 onBackPressed();
             }
         });
-
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                ChartFragment fragment = (ChartFragment) mFragments.get(mViewpager
-                        .getCurrentItem());
-                if (fragment == null)
-                    return true;
-                Bundle bundle = fragment.getArguments();
-                if (bundle == null)
-                    return true;
-                String cmd = bundle.getString("cmd");
-                if ("DAYFLOW".equals(cmd)) {
-                    mPvDay.show();
-                } else {
-                    mPvMonth.show();
-                }
-                return true;
-            }
-        });
-
     }
 
     private void initTimePicker() {
@@ -184,6 +163,36 @@ public class FlowChartActivity extends ABaseActivity {
                 .setDate(selectedDate)
                 .setRangDate(startDate, endDate)
                 .build();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.action_search).setIcon(getResources().getDrawable(R.drawable.ic_select));
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        ChartFragment fragment = (ChartFragment) mFragments.get(mViewpager
+                .getCurrentItem());
+        if (fragment == null)
+            return true;
+        Bundle bundle = fragment.getArguments();
+        if (bundle == null)
+            return true;
+        String cmd = bundle.getString("cmd");
+        if ("DAYFLOW".equals(cmd)) {
+            mPvDay.show();
+        } else {
+            mPvMonth.show();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

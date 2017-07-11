@@ -123,14 +123,13 @@ public class HomeFragment extends ABaseFragment {
         toolbarTitle.setTextColor(getResources().getColor(R.color.white));
         toolbarTitle.setText(getString(R.string.app_name));
         toolbarHelp.setText(getString(R.string.help_center));
-        toolbar.inflateMenu(R.menu.main_menu);
+        toolbar.inflateMenu(R.menu.home_menu);
         mAdapter = new WifiAdapter(mContext, R.layout.item_main);
         recyclerview.setAdapter(mAdapter);
         recyclerview.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager
                 .VERTICAL, false));
         mAdapter.add(0, mData.size(), mData);
         isLogin = PreferencesUtils.getBoolean(mContext.getApplicationContext(), "isLogin", false);
-
         if (isLogin) {
             getUserCertStatus();
         }
@@ -273,7 +272,9 @@ public class HomeFragment extends ABaseFragment {
             });
             TextView tv_content = (TextView) ll_content.findViewById(R.id.tv_content);
             tv_content.setText(advertisement.get(i).getTitle());
-            flipper.addView(ll_content);
+            if (flipper != null) {
+                flipper.addView(ll_content);
+            }
         }
     }
 

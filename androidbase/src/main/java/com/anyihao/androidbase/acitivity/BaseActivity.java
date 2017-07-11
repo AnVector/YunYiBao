@@ -6,12 +6,15 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Window;
 
 import com.anyihao.androidbase.R;
 import com.anyihao.androidbase.manager.ActivityManager;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.List;
 
 import pub.devrel.easypermissions.EasyPermissions;

@@ -1,6 +1,7 @@
 package com.anyihao.ayb.frame.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -11,6 +12,7 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.StatusBarUtil;
 import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
@@ -18,7 +20,6 @@ import com.anyihao.ayb.bean.ShareBean;
 import com.anyihao.ayb.bean.ShareTypeBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
-import com.jaeger.library.StatusBarUtil;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
@@ -78,11 +79,13 @@ public class InviteFriendsActivity extends ABaseActivity {
         setTextFont(inviteCodeHint);
         setTextFont(tvInviteCode);
         toolbar.setNavigationIcon(R.drawable.ic_back_white);
+        toolbar.setBackground(null);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         titleMid.setText(getString(R.string.invite_friends));
+        titleMid.setTextColor(Color.parseColor("#FFFFFF"));
         getInviteCode();
         getShareContent();
     }

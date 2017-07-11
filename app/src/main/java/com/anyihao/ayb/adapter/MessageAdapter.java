@@ -29,9 +29,6 @@ public class MessageAdapter extends UAdapter<DataBean> {
     public UltimateRecyclerviewViewHolder onCreateViewHolder(ViewGroup parent) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(layoutId, parent, false);
-        if (v == null) {
-            return null;
-        }
         return new MessageViewHolder(v);
     }
 
@@ -44,6 +41,11 @@ public class MessageAdapter extends UAdapter<DataBean> {
             ((MessageViewHolder) holder).tvStatus.setText(content.getSendName());
             ((MessageViewHolder) holder).tvDate.setText(content.getCrtTm());
             ((MessageViewHolder) holder).tvContent.setText(content.getMessage());
+            if (content.getStatus() == 1) {
+                ((MessageViewHolder) holder).dot.setVisibility(View.GONE);
+            } else {
+                ((MessageViewHolder) holder).dot.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -52,12 +54,14 @@ public class MessageAdapter extends UAdapter<DataBean> {
         public TextView tvStatus;
         public TextView tvDate;
         public TextView tvContent;
+        public View dot;
 
         public MessageViewHolder(View itemView) {
             super(itemView);
             tvStatus = (TextView) itemView.findViewById(R.id.tv_status);
             tvDate = (TextView) itemView.findViewById(R.id.tv_date);
             tvContent = (TextView) itemView.findViewById(R.id.tv_content);
+            dot = itemView.findViewById(R.id.red_dot);
         }
     }
 }

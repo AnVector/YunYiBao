@@ -244,12 +244,6 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name=".common.UService"
-            android:enabled="true"
-            android:exported="true">
-        </service>
-
         <activity
             android:name=".frame.activity.LoginActivity"
             android:launchMode="singleTop">
@@ -426,10 +420,6 @@
         </activity>
         <activity
             android:name=".frame.activity.FlowChartActivity"
-            android:launchMode="singleTop">
-        </activity>
-        <activity
-            android:name=".frame.activity.SearchActivity"
             android:launchMode="singleTop">
         </activity>
         <activity
