@@ -3,6 +3,7 @@ package com.anyihao.ayb.adapter;
 import android.content.Context;
 
 import com.anyihao.ayb.R;
+import com.anyihao.ayb.bean.ProfileBean;
 
 import java.util.List;
 
@@ -10,36 +11,46 @@ import java.util.List;
  * Created by Admin on 2017/4/7.
  */
 
-public class UserInfoAdapter extends RecyclerViewAdapter<String> {
+public class UserInfoAdapter extends RecyclerViewAdapter<ProfileBean> {
 
-    private String[] array = new String[]{"头像", "昵称", "我的二维码", "性别", "生日", "手机号码", "邮箱", "地区",
-            "押金退款"};
-
-    public UserInfoAdapter(Context context, int layoutId, List<String> datas) {
+    public UserInfoAdapter(Context context, int layoutId, List<ProfileBean> datas) {
         super(context, layoutId, datas);
     }
 
     @Override
-    public void convert(ViewHolder holder, String s) {
-        String key = array[holder.getLayoutPosition()];
-        holder.getConvertView().setTag(key);
-        holder.setText(R.id.title, key);
-        if ("头像".equals(key)) {
-            holder.setVisible(R.id.value, false);
-            holder.setVisible(R.id.img_profile, true);
-            holder.setVisible(R.id.img_code, false);
-            holder.displayCircleImage(R.id.img_profile, s, R.drawable.user_profile);
-        } else if ("我的二维码".equals(key)) {
-            holder.setImageResource(R.id.img_code, R.drawable.ic_qr_code);
-            holder.setVisible(R.id.img_code, true);
-            holder.setVisible(R.id.img_profile, false);
-        } else if ("押金退款".equals(key)) {
-            holder.setVisible(R.id.line, false);
-            holder.setText(R.id.value, s);
-        } else {
-            holder.setText(R.id.value, s);
+    public void convert(ViewHolder holder, ProfileBean profileBean) {
+        if (profileBean == null)
+            return;
+        String title = profileBean.getTitle();
+        holder.setText(R.id.title, title);
+        switch (title) {
+            case "头像":
+                holder.setVisible(R.id.value, false);
+                holder.setVisible(R.id.space, false);
+                holder.setVisible(R.id.line, true);
+                holder.setVisible(R.id.img_profile, true);
+                holder.setVisible(R.id.img_code, false);
+                holder.displayCircleImage(R.id.img_profile, profileBean.getValue(), R.drawable
+                        .user_profile);
+                break;
+            case "我的二维码":
+                holder.setImageResource(R.id.img_code, R.drawable.ic_qr_code);
+                holder.setVisible(R.id.img_code, true);
+                holder.setVisible(R.id.line, true);
+                holder.setVisible(R.id.img_profile, false);
+                holder.setVisible(R.id.value, false);
+                break;
+            case "押金退款":
+                holder.setVisible(R.id.line, false);
+                holder.setText(R.id.value, profileBean.getValue());
+                break;
+            default:
+                holder.setText(R.id.value, profileBean.getValue());
+                holder.setVisible(R.id.img_code, false);
+                holder.setVisible(R.id.img_profile, false);
+                break;
         }
-        if ("生日".equals(key)) {
+        if ("生日".equals(title)) {
             holder.setVisible(R.id.space, true);
             holder.setVisible(R.id.line, false);
         }

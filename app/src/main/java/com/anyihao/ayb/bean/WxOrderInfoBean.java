@@ -1,5 +1,7 @@
 package com.anyihao.ayb.bean;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -10,14 +12,27 @@ import java.io.Serializable;
 
 public class WxOrderInfoBean implements Serializable {
 
+
+    /**
+     * code : 200
+     * msg : 订单生成成功
+     * appid : wxc6a6d430c1f2c793
+     * partnerid : 1400678202
+     * prepayid : wx2017071219285926eea41f5c0120228043
+     * package : Sign=WXPay
+     * noncestr : J1DOHN06P3MCHC1DAP2QNYLWKQJCN9O4
+     * timestamp : 1499859134
+     * sign : C92885A62AFD1B34B039916D8FC05A52
+     */
+
     private int code;
     private String msg;
-    private String appId;
-    private String partnerId;
-    private String prepayId;
-    private String orderId;
-    private String packege;
-    private String nonceStr;
+    private String appid;
+    private String partnerid;
+    private String prepayid;
+    @SerializedName("package")
+    private String packageX;
+    private String noncestr;
     private String timestamp;
     private String sign;
 
@@ -37,52 +52,44 @@ public class WxOrderInfoBean implements Serializable {
         this.msg = msg;
     }
 
-    public String getAppId() {
-        return appId;
+    public String getAppid() {
+        return appid;
     }
 
-    public void setAppId(String appId) {
-        this.appId = appId;
+    public void setAppid(String appid) {
+        this.appid = appid;
     }
 
-    public String getPartnerId() {
-        return partnerId;
+    public String getPartnerid() {
+        return partnerid;
     }
 
-    public void setPartnerId(String partnerId) {
-        this.partnerId = partnerId;
+    public void setPartnerid(String partnerid) {
+        this.partnerid = partnerid;
     }
 
-    public String getPrepayId() {
-        return prepayId;
+    public String getPrepayid() {
+        return prepayid;
     }
 
-    public void setPrepayId(String prepayId) {
-        this.prepayId = prepayId;
+    public void setPrepayid(String prepayid) {
+        this.prepayid = prepayid;
     }
 
-    public String getOrderId() {
-        return orderId;
+    public String getPackageX() {
+        return packageX;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setPackageX(String packageX) {
+        this.packageX = packageX;
     }
 
-    public String getPackege() {
-        return packege;
+    public String getNoncestr() {
+        return noncestr;
     }
 
-    public void setPackege(String packege) {
-        this.packege = packege;
-    }
-
-    public String getNonceStr() {
-        return nonceStr;
-    }
-
-    public void setNonceStr(String nonceStr) {
-        this.nonceStr = nonceStr;
+    public void setNoncestr(String noncestr) {
+        this.noncestr = noncestr;
     }
 
     public String getTimestamp() {

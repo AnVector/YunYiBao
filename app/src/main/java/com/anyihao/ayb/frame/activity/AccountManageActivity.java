@@ -141,25 +141,9 @@ public class AccountManageActivity extends ABaseActivity {
             }
         };
 
-        OnDismissListener dismissListener = new OnDismissListener() {
-            @Override
-            public void onDismiss(DialogPlus dialog) {
-//                ToastUtils.showLongToast(getActivity(), "dismiss");
-            }
-        };
-
-        OnCancelListener cancelListener = new OnCancelListener() {
-            @Override
-            public void onCancel(DialogPlus dialog) {
-//                ToastUtils.showLongToast(getActivity(), "cancel");
-            }
-        };
-
         final DialogPlus dialog = DialogPlus.newDialog(this)
                 .setContentHolder(holder)
                 .setGravity(Gravity.CENTER)
-                .setOnDismissListener(dismissListener)
-                .setOnCancelListener(cancelListener)
                 .setCancelable(true)
                 .setInAnimation(R.anim.fade_in_center)
                 .setOutAnimation(R.anim.fade_out_center)

@@ -221,7 +221,8 @@
         <activity
             android:name=".frame.activity.GuideActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".frame.activity.MainFragmentActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -388,10 +389,6 @@
         </activity>
         <activity
             android:name=".frame.activity.RechargeRecordDetailsActivity"
-            android:launchMode="singleTop">
-        </activity>
-        <activity
-            android:name=".frame.activity.PayResultActivity"
             android:launchMode="singleTop">
         </activity>
         <activity

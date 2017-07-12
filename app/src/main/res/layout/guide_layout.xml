@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iv_guide"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_go"
+        android:layout_width="170dp"
+        android:layout_height="75dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="44dp"
+        android:background="@drawable/btn_launch"
+        android:gravity="center"
+        android:text="@string/go_to_app"
+        android:textColor="#ff5b5a"
+        android:textSize="@dimen/font_size_sev"
+        android:textStyle="bold"
+        android:visibility="gone"/>
+</RelativeLayout>

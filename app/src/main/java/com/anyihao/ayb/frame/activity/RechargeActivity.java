@@ -29,6 +29,7 @@ import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.frame.fragment.PackageFragment;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -143,17 +144,19 @@ public class RechargeActivity extends ABaseActivity {
         });
     }
 
-    private void setAmountTextStyle(TextView v, String t) {
-        if (v == null || StringUtils.isEmpty(t))
+    private void setAmountTextStyle(double amount) {
+        if (tvFlow == null)
             return;
-        SpannableString spannableString = new SpannableString(t);
+        String txt = String.format(getResources().getString(R.string
+                .data_available), transferAmount(amount));
+        SpannableString spannableString = new SpannableString(txt);
         ForegroundColorSpan colorSpan = new ForegroundColorSpan(Color.parseColor("#2DA8F4"));
         StyleSpan styleSpan = new StyleSpan(Typeface.BOLD);
         spannableString.setSpan(colorSpan, 7, spannableString.length(), Spanned
                 .SPAN_INCLUSIVE_EXCLUSIVE);
         spannableString.setSpan(styleSpan, 7, spannableString.length(), Spanned
                 .SPAN_INCLUSIVE_EXCLUSIVE);
-        v.setText(spannableString);
+        tvFlow.setText(spannableString);
     }
 
     @Override
@@ -166,14 +169,20 @@ public class RechargeActivity extends ABaseActivity {
             if (bean.getCode() == 200) {
                 tvNickname.setText(String.format(getResources().getString(R.string
                         .recharge_nick_name), bean.getNickname()));
-                tvFlow.setText(String.format(getResources().getString(R.string
-                        .data_available), bean.getTotalUseFlow()));
-                setAmountTextStyle(tvFlow, tvFlow.getText().toString().trim());
-
+                setAmountTextStyle(bean.getTotalUseFlow());
             } else {
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg());
             }
         }
+    }
+
+    private String transferAmount(double amount) {
+        if (amount > 1024) {
+            BigDecimal bg = new BigDecimal(amount / 1024);
+            amount = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+            return amount + "G";
+        }
+        return amount + "M";
     }
 
     @Override

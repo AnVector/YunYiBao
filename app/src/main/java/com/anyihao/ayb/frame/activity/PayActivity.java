@@ -9,6 +9,7 @@ import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.anyihao.androidbase.mvp.Task;
@@ -50,8 +51,13 @@ public class PayActivity extends ABaseActivity {
     AppCompatButton btnConfirmToPay;
     @BindView(R.id.tv_amount)
     TextView tvAmount;
+    @BindView(R.id.rl_ali_pay)
+    RelativeLayout rlAliPay;
+    @BindView(R.id.rl_wx_pay)
+    RelativeLayout rlWxPay;
     private IWXAPI wxApi;
     private boolean isWxPaySupported;
+    private boolean isWxInstalled = true;
     private String money;
     private String amount;
     private String expires;
@@ -95,6 +101,7 @@ public class PayActivity extends ABaseActivity {
         wxApi = WXAPIFactory.createWXAPI(this, null);
         wxApi.registerApp(GlobalConsts.WX_APP_ID);
         isWxPaySupported = wxApi.getWXAppSupportAPI() >= Build.PAY_SUPPORTED_SDK_INT;
+        isWxInstalled = wxApi.isWXAppSupportAPI();
     }
 
     @Override
@@ -137,7 +144,7 @@ public class PayActivity extends ABaseActivity {
     private void payByWx(String appId, String partnerId, String prepayId, String packageValue,
                          String nonceStr, String timeStamp, String sign) {
         if (isWxPaySupported) {
-            ToastUtils.showLongToastSafe(PayActivity.this, "订单获取中...");
+            ToastUtils.showToast(PayActivity.this, "订单获取中...");
             PayReq request = new PayReq();
             request.appId = appId;
             request.partnerId = partnerId;
@@ -167,6 +174,10 @@ public class PayActivity extends ABaseActivity {
         int actionType = 0;
         if ("WXPAY".equals(topupType)) {
             actionType = 1;
+        }
+        if (actionType == 1 && !isWxInstalled) {
+            ToastUtils.showToast(getApplicationContext(), "微信客户端未安装");
+            return;
         }
         PresenterFactory.getInstance().createPresenter(this)
                 .execute(new Task.TaskBuilder()
@@ -199,8 +210,8 @@ public class PayActivity extends ABaseActivity {
             if (bean == null)
                 return;
             if (bean.getCode() == 200) {
-                payByWx(bean.getAppId(), bean.getPartnerId(), bean.getPrepayId(), bean
-                        .getPackege(), bean.getNonceStr(), bean.getTimestamp(), bean.getSign());
+                payByWx(bean.getAppid(), bean.getPartnerid(), bean.getPrepayid(), bean
+                        .getPackageX(), bean.getNoncestr(), bean.getTimestamp(), bean.getSign());
             } else {
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg());
             }

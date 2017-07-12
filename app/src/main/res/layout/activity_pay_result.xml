@@ -2,12 +2,11 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_pay_result"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_background_color"
     android:orientation="vertical"
-    tools:context="com.anyihao.ayb.frame.activity.PayResultActivity">
+    tools:context="com.anyihao.ayb.wxapi.WXPayEntryActivity">
 
     <include
         layout="@layout/toolbar_common"/>
@@ -35,7 +34,6 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="18dp"
             android:gravity="center"
-            android:text="@string/payment_suceess"
             android:textColor="@color/payment_success_text_color"
             android:textSize="@dimen/font_size_normal_high"/>
 
@@ -113,7 +111,6 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
             android:gravity="center"
-            android:text="@string/fee_value"
             android:textColor="@color/payment_fee_text_color"
             android:textSize="@dimen/font_size_normal_high"/>
 

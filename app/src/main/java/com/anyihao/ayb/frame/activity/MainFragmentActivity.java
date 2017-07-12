@@ -99,6 +99,7 @@ public class MainFragmentActivity extends ABaseActivity {
                 mFragmentList);
         mViewPager.setAdapter(uFragmentPagerAdapter);
         mViewPager.setCurrentItem(0, true);
+        mViewPager.setOffscreenPageLimit(3);
         mCurrent = mRadioButtonDevice;
         changeIcon(mRadioButtonDevice, R.drawable.device_focused);
     }

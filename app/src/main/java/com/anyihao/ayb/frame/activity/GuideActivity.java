@@ -1,7 +1,6 @@
 package com.anyihao.ayb.frame.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatButton;
@@ -11,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.anyihao.ayb.R;
+import com.anyihao.ayb.ui.pagetransformer.DepthPageTransformer;
 
 import butterknife.BindView;
 
@@ -21,14 +21,8 @@ public class GuideActivity extends ABaseActivity {
             R.drawable.guide_pic_2, R.drawable.guide_pic_3};
     @BindView(R.id.guide_viewpager)
     ViewPager mGuideViewpager;
-    @BindView(R.id.btn_go)
-    AppCompatButton btnGo;
+    private AppCompatButton btnGo;
     private int currentIndex = 0;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     protected int getContentViewId() {
@@ -54,31 +48,38 @@ public class GuideActivity extends ABaseActivity {
                 return false;
             }
         });
+    }
 
-        btnGo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (currentIndex == 2) {
-                    Intent intent = new Intent(GuideActivity.this, MainFragmentActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }
-        });
-
+    @Override
+    protected void setStatusBarTheme() {
     }
 
     private void initViewPager() {
-
+//        mGuideViewpager.setPageTransformer(true, new DepthPageTransformer());
         mGuideViewpager.setAdapter(new PagerAdapter() {
             @Override
             public Object instantiateItem(ViewGroup container, int position) {
-                ImageView img = new ImageView(GuideActivity.this);
+                View contentView = getLayoutInflater().inflate(R.layout.guide_layout, null);
+                ImageView img = (ImageView) contentView.findViewById(R.id.iv_guide);
+                if (position == 2) {
+                    btnGo = (AppCompatButton) contentView.findViewById(R.id.btn_go);
+                    btnGo.setVisibility(View.VISIBLE);
+                    btnGo.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (currentIndex == 2) {
+                                Intent intent = new Intent(GuideActivity.this,
+                                        MainFragmentActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        }
+                    });
+                }
                 img.setImageResource(mGuidePics[position]);
-                img.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 container.setTag(position);//为container添加tag
-                container.addView(img);
-                return img;
+                container.addView(contentView);
+                return contentView;
             }
 
             @Override

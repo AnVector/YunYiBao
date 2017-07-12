@@ -23,6 +23,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,6 +36,7 @@ import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.UserInfoAdapter;
+import com.anyihao.ayb.bean.ProfileBean;
 import com.anyihao.ayb.bean.ProvinceBean;
 import com.anyihao.ayb.bean.ResultBean;
 import com.anyihao.ayb.bean.UserInfoBean;
@@ -91,7 +93,7 @@ public class MeActivity extends ABaseActivity {
     @BindView(R.id.progressbar_circular)
     CircularProgressBar progressbarCircular;
     private UserInfoAdapter mAdapter;
-    private List<String> mData = new LinkedList<>();
+    private List<ProfileBean> mData = new LinkedList<>();
     private ArrayList<ProvinceBean> options1Items = new ArrayList<>();
     private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
     private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
@@ -115,7 +117,7 @@ public class MeActivity extends ABaseActivity {
     private Bitmap mBitmap;
     private Bitmap mAvatar;
     private String mAvatarUrl;
-    private String mUserName;
+    private String mNickName;
     private String mGender;
     private String mZone;
     private static final int REQUEST_UPDATE_CODE = 0x0001;
@@ -222,8 +224,8 @@ public class MeActivity extends ABaseActivity {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-                if (view.getTag() instanceof String) {
-                    switch (view.getTag().toString()) {
+                if (o instanceof ProfileBean) {
+                    switch (((ProfileBean) o).getTitle()) {
                         case "头像":
                             break;
                         case "地区":
@@ -252,8 +254,9 @@ public class MeActivity extends ABaseActivity {
                             }
                             break;
                         case "押金退款":
-                            if ("未缴纳".equals(o.toString())) {
-                                ToastUtils.showToast(getApplicationContext(), o.toString());
+                            if ("未缴纳".equals(((ProfileBean) o).getValue())) {
+                                ToastUtils.showToast(getApplicationContext(), ((ProfileBean) o)
+                                        .getValue());
                                 return;
                             }
                             showConfirmDialog();
@@ -267,6 +270,7 @@ public class MeActivity extends ABaseActivity {
                             startActivity(intent1);
                             break;
                         case "性别":
+                            tvValue = (TextView) view.findViewById(R.id.value);
                             if (bottomDialog != null) {
                                 bottomDialog.show();
                             }
@@ -274,9 +278,10 @@ public class MeActivity extends ABaseActivity {
                         default:
                             Intent intent = new Intent(MeActivity.this, UpdateInfoActivity
                                     .class);
-                            intent.putExtra(UpdateInfoActivity.INFORMATION_KEY, view.getTag()
-                                    .toString());
-                            intent.putExtra(UpdateInfoActivity.INFORMATION_VALUE, o.toString());
+                            intent.putExtra(UpdateInfoActivity.INFORMATION_KEY, ((ProfileBean) o)
+                                    .getTitle());
+                            intent.putExtra(UpdateInfoActivity.INFORMATION_VALUE, ((ProfileBean)
+                                    o).getValue());
                             startActivityForResult(intent, REQUEST_UPDATE_CODE);
                             break;
                     }
@@ -292,8 +297,8 @@ public class MeActivity extends ABaseActivity {
         tvMale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateInfo(3, "男");
                 mGender = "男";
+                updateInfo(3, mGender);
                 if (bottomDialog != null) {
                     bottomDialog.dismiss();
                 }
@@ -303,8 +308,8 @@ public class MeActivity extends ABaseActivity {
         tvFemale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateInfo(3, "女");
                 mGender = "女";
+                updateInfo(3, mGender);
                 if (bottomDialog != null) {
                     bottomDialog.dismiss();
                 }
@@ -488,7 +493,7 @@ public class MeActivity extends ABaseActivity {
                 .bitmapTransform(new RoundedCornersTransformation(this, 8, 0,
                         RoundedCornersTransformation.CornerType.ALL)).crossFade().into(ivProfile);
         TextView tvUserName = (TextView) holder.getInflatedView().findViewById(R.id.tv_user_name);
-        tvUserName.setText(mUserName);
+        tvUserName.setText(mNickName);
         ImageView ivGender = (ImageView) holder.getInflatedView().findViewById(R.id.iv_sex);
         if ("女".equals(mGender)) {
             ivGender.setImageResource(R.drawable.ic_female);
@@ -499,33 +504,11 @@ public class MeActivity extends ABaseActivity {
         tvZone.setText(mZone);
         ImageView ivQRCode = (ImageView) holder.getInflatedView().findViewById(R.id.iv_qr_code);
         ivQRCode.setImageBitmap(mBitmap);
-        OnClickListener clickListener = new OnClickListener() {
-            @Override
-            public void onClick(DialogPlus dialog, View view) {
-            }
-        };
-
-        OnDismissListener dismissListener = new OnDismissListener() {
-            @Override
-            public void onDismiss(DialogPlus dialog) {
-//                ToastUtils.showLongToast(getActivity(), "dismiss");
-            }
-        };
-
-        OnCancelListener cancelListener = new OnCancelListener() {
-            @Override
-            public void onCancel(DialogPlus dialog) {
-//                ToastUtils.showLongToast(getActivity(), "cancel");
-            }
-        };
 
         final DialogPlus dialog = DialogPlus.newDialog(this)
                 .setContentHolder(holder)
                 .setGravity(Gravity.CENTER)
-                .setOnDismissListener(dismissListener)
-                .setOnCancelListener(cancelListener)
                 .setCancelable(true)
-                .setOnClickListener(clickListener)
                 .setContentHeight(DensityUtils.dp2px(this, 440))
                 .setContentWidth(DensityUtils.dp2px(this, 330))
                 .setContentBackgroundResource(R.drawable.qr_info_dialog_bg)
@@ -535,7 +518,14 @@ public class MeActivity extends ABaseActivity {
 
 
     private void showConfirmDialog() {
-        Holder holder = new ViewHolder(R.layout.refund_deposit_dialog);
+        Holder holder = new ViewHolder(LayoutInflater.from(this).inflate(R.layout.confirm_dialog,
+                null));
+        TextView tvTitle = (TextView) holder.getInflatedView().findViewById(R.id.dia_title);
+        Button btnLeft = (Button) holder.getInflatedView().findViewById(R.id.btn_cancel);
+        Button btnRight = (Button) holder.getInflatedView().findViewById(R.id.btn_ok);
+        tvTitle.setText(getString(R.string.refund_deposit_hint));
+        btnLeft.setText(getString(R.string.deposit_confirm));
+        btnRight.setText(getString(R.string.deposit_cancel));
         OnClickListener clickListener = new OnClickListener() {
             @Override
             public void onClick(DialogPlus dialog, View view) {
@@ -543,7 +533,7 @@ public class MeActivity extends ABaseActivity {
                     case R.id.btn_cancel:
                         dialog.dismiss();
                         break;
-                    case R.id.btn_confirm:
+                    case R.id.btn_ok:
                         dialog.dismiss();
                         break;
                     default:
@@ -552,28 +542,14 @@ public class MeActivity extends ABaseActivity {
             }
         };
 
-        OnDismissListener dismissListener = new OnDismissListener() {
-            @Override
-            public void onDismiss(DialogPlus dialog) {
-//                ToastUtils.showLongToast(getActivity(), "dismiss");
-            }
-        };
-
-        OnCancelListener cancelListener = new OnCancelListener() {
-            @Override
-            public void onCancel(DialogPlus dialog) {
-//                ToastUtils.showLongToast(getActivity(), "cancel");
-            }
-        };
 
         final DialogPlus dialog = DialogPlus.newDialog(this)
                 .setContentHolder(holder)
                 .setGravity(Gravity.CENTER)
-                .setOnDismissListener(dismissListener)
-                .setOnCancelListener(cancelListener)
                 .setCancelable(true)
                 .setOnClickListener(clickListener)
-                .setContentWidth(ViewGroup.LayoutParams.WRAP_CONTENT)
+                .setContentWidth(DensityUtils.dp2px(this, 298f))
+                .setContentHeight(DensityUtils.dp2px(this, 195f))
                 .setContentBackgroundResource(R.drawable.dialog_bg)
                 .create();
         dialog.show();
@@ -616,32 +592,20 @@ public class MeActivity extends ABaseActivity {
         if (actionType == 0) {
             UserInfoBean bean = GsonUtils.getInstance().transitionToBean(result, UserInfoBean
                     .class);
-            if (bean == null) {
-                ToastUtils.showToast(getApplicationContext(), "暂无数据");
+            if (bean == null)
                 return;
-            }
             if (bean.getCode() == 200) {
-                mAdapter.remove(0, mData.size());
-                mData.clear();
                 mPhoneNum = bean.getPhoneNumber();
                 mAvatarUrl = bean.getAvatar();
                 getProfileBitmap(mAvatarUrl);
-                mData.add(mAvatarUrl);
-                mUserName = bean.getNickname();
-                mData.add(bean.getNickname());
-                mData.add("QRCODE");
+                mNickName = bean.getNickname();
                 mGender = bean.getSex();
-                mData.add(bean.getSex());
-                mData.add(bean.getBirthday());
-                mData.add(mPhoneNum);
-                mData.add(bean.getEmail());
                 mZone = bean.getArea();
-                mData.add(bean.getArea());
-                mData.add(bean.getDeposit());
-                mAdapter.add(0, mData.size(), mData);
+                mData.clear();
+                mData.addAll(convert2ProfileBean(bean));
+                mAdapter.notifyDataSetChanged();
             } else {
-                ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast, R.id
-                        .tv_message);
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg());
             }
         } else {
             ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean.class);
@@ -664,6 +628,20 @@ public class MeActivity extends ABaseActivity {
         }
 
 
+    }
+
+    private List<ProfileBean> convert2ProfileBean(UserInfoBean bean) {
+        List<ProfileBean> beans = new LinkedList<>();
+        beans.add(0, new ProfileBean().setTitle("头像").setValue(bean.getAvatar()));
+        beans.add(1, new ProfileBean().setTitle("昵称").setValue(bean.getNickname()));
+        beans.add(2, new ProfileBean().setTitle("我的二维码").setValue(""));
+        beans.add(3, new ProfileBean().setTitle("性别").setValue(bean.getSex()));
+        beans.add(4, new ProfileBean().setTitle("生日").setValue(bean.getBirthday()));
+        beans.add(5, new ProfileBean().setTitle("手机号码").setValue(bean.getPhoneNumber()));
+        beans.add(6, new ProfileBean().setTitle("邮箱").setValue(bean.getEmail()));
+        beans.add(7, new ProfileBean().setTitle("地区").setValue(bean.getArea()));
+        beans.add(8, new ProfileBean().setTitle("押金退款").setValue(bean.getDeposit()));
+        return beans;
     }
 
     private void getProfileBitmap(String url) {

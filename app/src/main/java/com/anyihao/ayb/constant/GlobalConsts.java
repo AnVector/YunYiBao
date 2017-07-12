@@ -37,7 +37,5 @@ public class GlobalConsts {
     // 商户收款账号
     public static final String SELLER = "18958100066@189.cn";
     // API address
-    public static final String USER_LOGIN = "http://192.168.58.21:8080/login?";
-    public static final String GET_SERVER_INFO = "http://192.168.58.21:8080/list?";
     public static final String PREFIX_URL = "http://122.224.91.148:8888/vrsws/vappws.json";
 }

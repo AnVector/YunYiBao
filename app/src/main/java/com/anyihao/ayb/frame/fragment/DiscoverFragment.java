@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -69,7 +68,6 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     @BindView(R.id.fake_status_bar)
     View fakeStatusBar;
     private OnLocationChangedListener mListener;
-    private LocationManager mAMapLocationManager;
     //声明mLocationOption对象
     private AMapLocationClientOption mLocationOption;
     //声明mlocationClient对象
@@ -127,6 +125,8 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         mUiSettings.setScrollGesturesEnabled(true);
         //设置地图是否可以手势缩放大小
         mUiSettings.setZoomGesturesEnabled(true);
+//        mUiSettings.setZoomControlsEnabled(false);
+        mUiSettings.setZoomControlsEnabled(false);
     }
 
     private void initLocationStyle() {
@@ -162,25 +162,25 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
                 aMapLocation.getCityCode();//城市编码
                 aMapLocation.getAdCode();//地区编码
                 // 如果不设置标志位，此时再拖动地图时，它会不断将地图移动到当前的位置
-//                if (isFirstLoc) {
-                //设置缩放级别
-                mAmap.moveCamera(CameraUpdateFactory.zoomTo(17));
-                //将地图移动到定位点
-                mAmap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(aMapLocation
-                        .getLatitude(), aMapLocation.getLongitude())));
-                //点击定位按钮 能够将地图的中心移动到定位点
-                mListener.onLocationChanged(aMapLocation);
-                //添加图钉
-                addMarkersToMap(generateMarkerOptions(aMapLocation));
-                //获取定位信息
+                if (isFirstLoc) {
+                    //设置缩放级别
+                    mAmap.moveCamera(CameraUpdateFactory.zoomTo(17));
+                    //将地图移动到定位点
+                    mAmap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(aMapLocation
+                            .getLatitude(), aMapLocation.getLongitude())));
+                    //点击定位按钮 能够将地图的中心移动到定位点
+                    mListener.onLocationChanged(aMapLocation);
+                    //添加图钉
+//                    addMarkersToMap(generateMarkerOptions(aMapLocation));
+                    //获取定位信息
 //                    StringBuffer buffer = new StringBuffer();
 //                    buffer.append(aMapLocation.getCountry() + "" + aMapLocation.getProvince() +
 //                            "" + aMapLocation.getCity() + "" + aMapLocation.getProvince() + "" +
 //                            aMapLocation.getDistrict() + "" + aMapLocation.getStreet() + "" +
 //                            aMapLocation.getStreetNum());
 //                    ToastUtils.showLongToast(mContext, buffer.toString());
-//                    isFirstLoc = false;
-//                }
+                    isFirstLoc = false;
+                }
 
 
             } else {
@@ -244,14 +244,14 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
         //启动定位
         mLocationClient.startLocation();
-        addMarkersToMap(generateMarkerOptions(mLocationClient.getLastKnownLocation()));
+//        addMarkersToMap(generateMarkerOptions(mLocationClient.getLastKnownLocation()));
     }
 
     /**
      * 在地图上添加marker
      */
     private void addMarkersToMap(MarkerOptions markerOption) {
-        if(markerOption == null)
+        if (markerOption == null)
             return;
         mAmap.addMarker(markerOption);
     }
@@ -415,6 +415,7 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     @Override
     public void onPause() {
         super.onPause();
+        deactivate();
         if (mMapView == null)
             return;
         mMapView.onPause();

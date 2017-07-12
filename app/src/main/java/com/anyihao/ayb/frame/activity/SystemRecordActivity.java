@@ -224,11 +224,6 @@ public class SystemRecordActivity extends ABaseActivity {
                     } else {
                         onLoadMore();
                     }
-                } else {
-                    if (page == 1) {
-                        ToastUtils.showToast(getApplicationContext(), "暂无充值记录");
-                    }
-
                 }
             }
         }

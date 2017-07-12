@@ -2,7 +2,6 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_pay"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_background_color"
@@ -86,6 +85,7 @@
         android:textSize="@dimen/font_size_thi"/>
 
     <RelativeLayout
+        android:id="@+id/rl_ali_pay"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:background="@color/white"
@@ -122,6 +122,7 @@
         android:background="@color/line_color"/>
 
     <RelativeLayout
+        android:id="@+id/rl_wx_pay"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:background="@color/white"

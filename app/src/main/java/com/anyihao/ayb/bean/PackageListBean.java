@@ -25,7 +25,7 @@ public class PackageListBean implements Serializable {
 
     private int code;
     private String msg;
-    private String totalUseFlow;
+    private double totalUseFlow;
     private String nickname;
     private List<DataBean> data;
 
@@ -45,11 +45,11 @@ public class PackageListBean implements Serializable {
         this.msg = msg;
     }
 
-    public String getTotalUseFlow() {
+    public double getTotalUseFlow() {
         return totalUseFlow;
     }
 
-    public void setTotalUseFlow(String totalUseFlow) {
+    public void setTotalUseFlow(double totalUseFlow) {
         this.totalUseFlow = totalUseFlow;
     }
 
