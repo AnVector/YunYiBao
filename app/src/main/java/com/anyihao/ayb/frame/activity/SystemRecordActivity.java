@@ -217,7 +217,6 @@ public class SystemRecordActivity extends ABaseActivity {
             if (bean.getCode() == 200) {
                 List<DataBean> beans = bean.getData();
                 if (beans.size() > 0) {
-                    ToastUtils.showToast(getApplicationContext(), bean.getMsg());
                     mItems = beans;
                     if (isRefresh) {
                         onFireRefresh();
@@ -225,6 +224,8 @@ public class SystemRecordActivity extends ABaseActivity {
                         onLoadMore();
                     }
                 }
+            } else {
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg());
             }
         }
     }
@@ -235,6 +236,8 @@ public class SystemRecordActivity extends ABaseActivity {
             return;
         if (error.contains("ConnectException")) {
             ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
+        } else if (error.contains("404")) {
+            ToastUtils.showToast(getApplicationContext(), "未知异常");
         } else {
             ToastUtils.showToast(getApplicationContext(), error);
         }

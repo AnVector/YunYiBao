@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_pay_result"
+    android:layout_width="match_parent"
+    android:layout_height="350dp"
+    android:layout_marginTop="10dp"
+    android:background="@color/white"
+    android:visibility="gone">
+
+    <ImageView
+        android:id="@+id/ic_result"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="43dp"
+        android:scaleType="fitXY"/>
+
+    <TextView
+        android:id="@+id/tv_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ic_result"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:gravity="center"
+        android:textColor="@color/payment_success_text_color"
+        android:textSize="@dimen/font_size_normal_high"/>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/tv_result"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="26dp"
+        android:background="@color/line_color"/>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/line"
+        android:layout_below="@id/line"
+        android:layout_marginTop="12dp"
+        android:gravity="left|center_vertical"
+        android:text="@string/data_flow_charge"
+        android:textSize="@dimen/font_size_normal_high"/>
+
+    <TextView
+        android:id="@+id/tv_purchase_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/line"
+        android:layout_below="@id/tv_title"
+        android:layout_marginTop="12dp"
+        android:gravity="left|center_vertical"
+        android:text="@string/purchase_amount"
+        android:textColor="@color/light_gray"
+        android:textSize="@dimen/font_size_thi"/>
+
+    <TextView
+        android:id="@+id/tv_purchase_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/tv_purchase_amount"
+        android:layout_marginLeft="11dp"
+        android:layout_toRightOf="@id/tv_purchase_amount"
+        android:gravity="center"
+        android:textColor="@color/light_gray"
+        android:textSize="@dimen/font_size_thi"/>
+
+    <TextView
+        android:id="@+id/tv_validity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/line"
+        android:layout_below="@id/tv_purchase_amount"
+        android:layout_marginTop="12dp"
+        android:gravity="left|center_vertical"
+        android:text="@string/period_of_validity"
+        android:textColor="@color/light_gray"
+        android:textSize="@dimen/font_size_thi"/>
+
+    <TextView
+        android:id="@+id/tv_validity_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/tv_validity"
+        android:layout_marginLeft="11dp"
+        android:layout_toRightOf="@id/tv_validity"
+        android:gravity="center"
+        android:textColor="@color/light_gray"
+        android:textSize="@dimen/font_size_thi"/>
+
+    <TextView
+        android:id="@+id/tv_fee_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/tv_validity"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"
+        android:gravity="center"
+        android:textColor="@color/payment_fee_text_color"
+        android:textSize="@dimen/font_size_normal_high"/>
+
+    <TextView
+        android:id="@+id/tv_fee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/tv_validity"
+        android:layout_marginRight="11dp"
+        android:layout_toLeftOf="@id/tv_fee_value"
+        android:gravity="center"
+        android:text="@string/fee"
+        android:textColor="@color/light_gray"
+        android:textSize="@dimen/font_size_thi"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_back"
+        android:layout_width="161dp"
+        android:layout_height="44dp"
+        android:layout_alignLeft="@id/line"
+        android:layout_below="@id/tv_validity"
+        android:layout_marginTop="22dp"
+        android:background="@drawable/edit_text_bg"
+        android:gravity="center"
+        android:text="@string/back_to_main"
+        android:textSize="@dimen/font_size_sev"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_to_recharge_record"
+        android:layout_width="161dp"
+        android:layout_height="44dp"
+        android:layout_alignTop="@id/btn_back"
+        android:layout_marginLeft="14dp"
+        android:layout_toRightOf="@id/btn_back"
+        android:background="@drawable/btn_register"
+        android:gravity="center"
+        android:text="@string/goto_recharge_record"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_size_sev"/>
+</RelativeLayout>

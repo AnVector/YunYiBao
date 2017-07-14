@@ -1,16 +1,17 @@
 package com.anyihao.ayb.wxapi;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.frame.activity.ABaseActivity;
+import com.anyihao.ayb.frame.activity.RechargeRecordActivity;
 import com.orhanobut.logger.Logger;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
@@ -50,7 +51,7 @@ public class WXPayEntryActivity extends ABaseActivity implements IWXAPIEventHand
     @BindView(R.id.btn_to_recharge_record)
     AppCompatButton btnToRechargeRecord;
     private IWXAPI wxApi;
-    private Bundle mBundle = new Bundle();
+    public static final int RESULT_PAY_RESULT_CODE = 0x0007;
 
     @Override
     protected int getContentViewId() {
@@ -69,6 +70,12 @@ public class WXPayEntryActivity extends ABaseActivity implements IWXAPIEventHand
         toolbarTitleMid.setText(getString(R.string.pay_succeed));
         toolbar.setNavigationIcon(R.drawable.ic_back);
         tvResult.setText(getString(R.string.payment_suceess));
+        String amount = PreferencesUtils.getString(getApplicationContext(), "amount", "");
+        String money = PreferencesUtils.getString(getApplicationContext(), "money", "");
+        String expires = PreferencesUtils.getString(getApplicationContext(), "expires", "");
+        tvPurchaseValue.setText(amount);
+        tvFeeValue.setText(money);
+        tvValidityValue.setText(expires);
     }
 
     @Override
@@ -76,7 +83,8 @@ public class WXPayEntryActivity extends ABaseActivity implements IWXAPIEventHand
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                setResult(RESULT_PAY_RESULT_CODE);
+                finish();
             }
         });
 
@@ -87,6 +95,15 @@ public class WXPayEntryActivity extends ABaseActivity implements IWXAPIEventHand
             }
         });
 
+        btnToRechargeRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(WXPayEntryActivity.this, RechargeRecordActivity.class);
+                startActivity(intent);
+                setResult(RESULT_PAY_RESULT_CODE);
+                finish();
+            }
+        });
     }
 
     @Override
@@ -109,7 +126,6 @@ public class WXPayEntryActivity extends ABaseActivity implements IWXAPIEventHand
     @Override
     public void onReq(BaseReq baseReq) {
         Logger.e(TAG, "onPayStart, openId = " + baseReq.openId);
-        baseReq.toBundle(mBundle);
     }
 
     @Override
@@ -132,9 +148,12 @@ public class WXPayEntryActivity extends ABaseActivity implements IWXAPIEventHand
     }
 
     private void onPaySuccess() {
+        icResult.setImageResource(R.drawable.ic_success);
+        tvResult.setText(getString(R.string.payment_suceess));
     }
 
     private void onPayFailure() {
-
+        icResult.setImageResource(R.drawable.ic_fail);
+        tvResult.setText(getString(R.string.payment_failed));
     }
 }

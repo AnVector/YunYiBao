@@ -36,7 +36,6 @@
             android:layout_alignParentRight="true"
             android:layout_alignTop="@id/tv_cash_pledge"
             android:gravity="left|center_vertical"
-            android:text="@string/fee_value"
             android:textColor="#FF1919"
             android:textSize="@dimen/font_size_normal_high"/>
         <View
@@ -53,7 +52,6 @@
             android:layout_below="@id/line"
             android:gravity="left|center_vertical"
             android:maxLines="2"
-            android:text="@string/cash_pledge_hint"
             android:textColor="@color/light_gray"
             android:textSize="@dimen/font_size_small"/>
 

@@ -4,16 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.anyihao.androidbase.mvp.Task;
@@ -43,23 +33,12 @@ import com.anyihao.ayb.bean.UserInfoBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.listener.OnItemClickListener;
-import com.anyihao.ayb.ui.RoundedCornersTransformation;
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.bigkoo.pickerview.TimePickerView;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.gson.Gson;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.QRCodeWriter;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
-import com.orhanobut.dialogplus.OnCancelListener;
 import com.orhanobut.dialogplus.OnClickListener;
-import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
 
 import org.json.JSONArray;
@@ -114,8 +93,6 @@ public class MeActivity extends ABaseActivity {
     private TextView tvMale;
     private TextView tvFemale;
     private TextView tvCancel;
-    private Bitmap mBitmap;
-    private Bitmap mAvatar;
     private String mAvatarUrl;
     private String mNickName;
     private String mGender;
@@ -243,15 +220,13 @@ public class MeActivity extends ABaseActivity {
                             }
                             break;
                         case "我的二维码":
-                            if (mAvatar != null) {
-                                generateQRCode(uid, 560, 560, mAvatar);
-                            } else {
-                                generateQRCode(uid, 560, 560, BitmapFactory.decodeResource
-                                        (getResources(), R.drawable.user_profile));
-                            }
-                            if (mBitmap != null) {
-                                showCodeDialog();
-                            }
+                            Intent intent1 = new Intent(MeActivity.this, QRActivity.class);
+                            intent1.putExtra("uid", uid);
+                            intent1.putExtra("avatar", mAvatarUrl);
+                            intent1.putExtra("nickname", mNickName);
+                            intent1.putExtra("gender", mGender);
+                            intent1.putExtra("zone", mZone);
+                            startActivity(intent1);
                             break;
                         case "押金退款":
                             if ("未缴纳".equals(((ProfileBean) o).getValue())) {
@@ -262,12 +237,12 @@ public class MeActivity extends ABaseActivity {
                             showConfirmDialog();
                             break;
                         case "手机号码":
-                            Intent intent1 = new Intent(MeActivity.this, GetVerifyCodeActivity
+                            Intent intent2 = new Intent(MeActivity.this, GetVerifyCodeActivity
                                     .class);
-                            intent1.putExtra("title", "验证原手机");
-                            intent1.putExtra("action", "ORIGINAL");
-                            intent1.putExtra("phoneNum", mPhoneNum);
-                            startActivity(intent1);
+                            intent2.putExtra("title", "验证原手机");
+                            intent2.putExtra("action", "ORIGINAL");
+                            intent2.putExtra("phoneNum", mPhoneNum);
+                            startActivity(intent2);
                             break;
                         case "性别":
                             tvValue = (TextView) view.findViewById(R.id.value);
@@ -276,13 +251,13 @@ public class MeActivity extends ABaseActivity {
                             }
                             break;
                         default:
-                            Intent intent = new Intent(MeActivity.this, UpdateInfoActivity
+                            Intent intent3 = new Intent(MeActivity.this, UpdateInfoActivity
                                     .class);
-                            intent.putExtra(UpdateInfoActivity.INFORMATION_KEY, ((ProfileBean) o)
+                            intent3.putExtra(UpdateInfoActivity.INFORMATION_KEY, ((ProfileBean) o)
                                     .getTitle());
-                            intent.putExtra(UpdateInfoActivity.INFORMATION_VALUE, ((ProfileBean)
+                            intent3.putExtra(UpdateInfoActivity.INFORMATION_VALUE, ((ProfileBean)
                                     o).getValue());
-                            startActivityForResult(intent, REQUEST_UPDATE_CODE);
+                            startActivityForResult(intent3, REQUEST_UPDATE_CODE);
                             break;
                     }
                 }
@@ -482,41 +457,6 @@ public class MeActivity extends ABaseActivity {
         return detail;
     }
 
-    private void showCodeDialog() {
-        Holder holder = new ViewHolder(LayoutInflater.from(this).inflate(R.layout
-                .me_qr_code_dialog, null));
-
-        ImageView ivProfile = (ImageView) holder.getInflatedView().findViewById(R.id
-                .iv_user_profile);
-        Glide.with(this).load(mAvatarUrl)
-                .placeholder(R.drawable.user_profile)
-                .bitmapTransform(new RoundedCornersTransformation(this, 8, 0,
-                        RoundedCornersTransformation.CornerType.ALL)).crossFade().into(ivProfile);
-        TextView tvUserName = (TextView) holder.getInflatedView().findViewById(R.id.tv_user_name);
-        tvUserName.setText(mNickName);
-        ImageView ivGender = (ImageView) holder.getInflatedView().findViewById(R.id.iv_sex);
-        if ("女".equals(mGender)) {
-            ivGender.setImageResource(R.drawable.ic_female);
-        } else {
-            ivGender.setImageResource(R.drawable.ic_male);
-        }
-        TextView tvZone = (TextView) holder.getInflatedView().findViewById(R.id.tv_zone);
-        tvZone.setText(mZone);
-        ImageView ivQRCode = (ImageView) holder.getInflatedView().findViewById(R.id.iv_qr_code);
-        ivQRCode.setImageBitmap(mBitmap);
-
-        final DialogPlus dialog = DialogPlus.newDialog(this)
-                .setContentHolder(holder)
-                .setGravity(Gravity.CENTER)
-                .setCancelable(true)
-                .setContentHeight(DensityUtils.dp2px(this, 440))
-                .setContentWidth(DensityUtils.dp2px(this, 330))
-                .setContentBackgroundResource(R.drawable.qr_info_dialog_bg)
-                .create();
-        dialog.show();
-    }
-
-
     private void showConfirmDialog() {
         Holder holder = new ViewHolder(LayoutInflater.from(this).inflate(R.layout.confirm_dialog,
                 null));
@@ -597,7 +537,6 @@ public class MeActivity extends ABaseActivity {
             if (bean.getCode() == 200) {
                 mPhoneNum = bean.getPhoneNumber();
                 mAvatarUrl = bean.getAvatar();
-                getProfileBitmap(mAvatarUrl);
                 mNickName = bean.getNickname();
                 mGender = bean.getSex();
                 mZone = bean.getArea();
@@ -643,99 +582,6 @@ public class MeActivity extends ABaseActivity {
         beans.add(8, new ProfileBean().setTitle("押金退款").setValue(bean.getDeposit()));
         return beans;
     }
-
-    private void getProfileBitmap(String url) {
-        Glide.with(this).load(url).asBitmap().into(new SimpleTarget<Bitmap>() {
-            @Override
-            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
-                    glideAnimation) {
-                mAvatar = getRoundedCornerBitmap(resource, 4);
-            }
-
-            @Override
-            public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                super.onLoadFailed(e, errorDrawable);
-            }
-        });
-    }
-
-    private Bitmap getRoundedCornerBitmap(Bitmap bitmap, float roundPx) {
-
-        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap
-                .getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
-
-        final int color = 0xff424242;
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-        final RectF rectF = new RectF(rect);
-
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(color);
-        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-        return output;
-    }
-
-
-    private Bitmap generateBitmap(String content, int width, int height) {
-        QRCodeWriter qrCodeWriter = new QRCodeWriter();
-        Map<EncodeHintType, String> hints = new HashMap<>();
-        hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
-        try {
-            BitMatrix encode = qrCodeWriter.encode(content, BarcodeFormat.QR_CODE, width, height,
-                    hints);
-            int[] pixels = new int[width * height];
-            for (int i = 0; i < height; i++) {
-                for (int j = 0; j < width; j++) {
-                    if (encode.get(j, i)) {
-                        pixels[i * width + j] = 0x00000000;
-                    } else {
-                        pixels[i * width + j] = 0xffffffff;
-                    }
-                }
-            }
-            return Bitmap.createBitmap(pixels, 0, width, width, height, Bitmap.Config.RGB_565);
-        } catch (WriterException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private Bitmap addLogo(Bitmap qrBitmap, Bitmap logoBitmap) {
-        if (qrBitmap == null || logoBitmap == null)
-            return null;
-        int qrBitmapWidth = qrBitmap.getWidth();
-        int qrBitmapHeight = qrBitmap.getHeight();
-        int logoBitmapWidth = logoBitmap.getWidth();
-        int logoBitmapHeight = logoBitmap.getHeight();
-        Bitmap blankBitmap = Bitmap.createBitmap(qrBitmapWidth, qrBitmapHeight, Bitmap.Config
-                .ARGB_8888);
-        Canvas canvas = new Canvas(blankBitmap);
-        canvas.drawBitmap(qrBitmap, 0, 0, null);
-        canvas.save(Canvas.ALL_SAVE_FLAG);
-        float scaleSize = 1.0f;
-        while ((logoBitmapWidth / scaleSize) > (qrBitmapWidth / 5) || (logoBitmapHeight /
-                scaleSize) > (qrBitmapHeight / 5)) {
-            scaleSize *= 2;
-        }
-        float sx = 1.0f / scaleSize;
-        canvas.scale(sx, sx, qrBitmapWidth / 2, qrBitmapHeight / 2);
-        canvas.drawBitmap(logoBitmap, (qrBitmapWidth - logoBitmapWidth) / 2, (qrBitmapHeight -
-                logoBitmapHeight) / 2, null);
-        canvas.restore();
-        return blankBitmap;
-    }
-
-    private void generateQRCode(String content, int width, int height, Bitmap logoBitmap) {
-
-        Bitmap qrBitmap = generateBitmap(content, width, height);
-        mBitmap = addLogo(qrBitmap, logoBitmap);
-    }
-
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {

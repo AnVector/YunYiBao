@@ -1,7 +1,6 @@
 package com.anyihao.ayb.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
 /**
  * author: Administrator
@@ -9,7 +8,7 @@ import android.os.Parcelable;
  * email:looper@126.com
  */
 
-public class VersionInfoBean implements Parcelable {
+public class VersionInfoBean implements Serializable {
 
     private int code;
     private String msg;
@@ -65,43 +64,4 @@ public class VersionInfoBean implements Parcelable {
     public void setVerLink(String verLink) {
         this.verLink = verLink;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.code);
-        dest.writeString(this.msg);
-        dest.writeString(this.var);
-        dest.writeString(this.varContent);
-        dest.writeString(this.telephone);
-        dest.writeString(this.verLink);
-    }
-
-    public VersionInfoBean() {
-    }
-
-    protected VersionInfoBean(Parcel in) {
-        this.code = in.readInt();
-        this.msg = in.readString();
-        this.var = in.readString();
-        this.varContent = in.readString();
-        this.telephone = in.readString();
-        this.verLink = in.readString();
-    }
-
-    public static final Creator<VersionInfoBean> CREATOR = new Creator<VersionInfoBean>() {
-        @Override
-        public VersionInfoBean createFromParcel(Parcel source) {
-            return new VersionInfoBean(source);
-        }
-
-        @Override
-        public VersionInfoBean[] newArray(int size) {
-            return new VersionInfoBean[size];
-        }
-    };
 }

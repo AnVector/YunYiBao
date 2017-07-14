@@ -238,7 +238,6 @@ public class InviteFriendsActivity extends ABaseActivity {
             if (bean.getCode() == 200) {
                 web = new UMWeb(bean.getShareUrl());
                 web.setTitle(bean.getShareTitle());
-                web.setThumb(new UMImage(this, R.drawable.ic_launcher));
                 web.setDescription(bean.getShareContent());
             }
         }
@@ -251,6 +250,10 @@ public class InviteFriendsActivity extends ABaseActivity {
             return;
         if (error.contains("ConnectException")) {
             ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
+        } else if (error.contains("404")) {
+            ToastUtils.showToast(getApplicationContext(), "未知异常");
+        } else {
+            ToastUtils.showToast(getApplicationContext(), error);
         }
     }
 

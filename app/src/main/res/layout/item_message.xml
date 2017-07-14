@@ -49,9 +49,6 @@
         android:textSize="@dimen/font_size_thi"/>
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="0.6dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="12dp"
-        android:background="@color/line_color"/>
+        style="@style/divider_line"
+        android:layout_alignParentBottom="true"/>
 </RelativeLayout>

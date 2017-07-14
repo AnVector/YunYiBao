@@ -34,11 +34,7 @@
         android:textColor="@color/user_account_color"
         android:textSize="@dimen/font_size_fif"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.6dp"
-        android:layout_marginLeft="15dp"
-        android:background="@color/line_color"/>
+    <View style="@style/divider_line"/>
 
     <TextView
         android:id="@+id/tv_amount"
@@ -52,11 +48,7 @@
         android:textColor="@color/user_account_color"
         android:textSize="@dimen/font_size_fif"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.6dp"
-        android:layout_marginLeft="15dp"
-        android:background="@color/line_color"/>
+    <View style="@style/divider_line"/>
 
     <TextView
         android:id="@+id/tv_validity"
@@ -115,11 +107,7 @@
             android:checked="true"/>
     </RelativeLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.6dp"
-        android:layout_marginLeft="15dp"
-        android:background="@color/line_color"/>
+    <View style="@style/divider_line"/>
 
     <RelativeLayout
         android:id="@+id/rl_wx_pay"
@@ -164,4 +152,5 @@
         android:text="@string/confirm_to_pay"
         android:textColor="@color/white"
         android:textSize="@dimen/font_size_large"/>
+
 </LinearLayout>

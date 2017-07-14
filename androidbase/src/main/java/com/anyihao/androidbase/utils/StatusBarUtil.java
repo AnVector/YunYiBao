@@ -56,9 +56,6 @@ public class StatusBarUtil {
                     .FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             activity.getWindow().setStatusBarColor(calculateStatusColor(color, statusBarAlpha));
-            if (isMiui()) {
-                setStatusBarDarkMode(activity, true);
-            }
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();
@@ -74,42 +71,6 @@ public class StatusBarUtil {
             setRootView(activity);
         }
     }
-
-    private static boolean isMiui() {
-        try {
-            Class<?> sysClass = Class.forName("android.os.SystemProperties");
-            Method getStringMethod = sysClass.getDeclaredMethod("get", String.class);
-            String version = (String) getStringMethod.invoke(sysClass, "ro.miui.ui.version" +
-                    ".name");
-            if (!StringUtils.isEmpty(version)) {
-                if (version.contains("V") && version.length() == 2) {
-                    int verNum = Integer.parseInt(version.substring(1));
-                    if (verNum >= 6) {
-                        return true;
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    private static void setStatusBarDarkMode(Activity activity, boolean darkMode) {
-        Window window = activity.getWindow();
-        Class<? extends Window> clazz = window.getClass();
-        try {
-            int darkModeFlag = 0;
-            Class<?> layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
-            Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
-            darkModeFlag = field.getInt(layoutParams);
-            Method extraFlagField = clazz.getMethod("setExtraFlags", int.class, int.class);
-            extraFlagField.invoke(window, darkMode ? darkModeFlag : 0, darkModeFlag);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 
     /**
      * 为滑动返回界面设置状态栏颜色

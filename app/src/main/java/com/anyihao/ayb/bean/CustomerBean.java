@@ -2,16 +2,18 @@ package com.anyihao.ayb.bean;
 
 import com.bigkoo.pickerview.model.IPickerViewData;
 
+import java.io.Serializable;
+
 /**
  * Created by Sai on 15/11/22.
  */
-public class CustomerBean implements IPickerViewData {
+public class CustomerBean implements IPickerViewData, Serializable {
     private long id;
     private String name;
     private String description;
     private String others;
 
-    public CustomerBean(long id, String name, String description, String others){
+    public CustomerBean(long id, String name, String description, String others) {
         this.id = id;
         this.name = name;
         this.description = description;

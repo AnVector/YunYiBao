@@ -2,23 +2,39 @@ package com.anyihao.ayb.frame.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.alipay.sdk.app.PayTask;
 import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
+import com.anyihao.ayb.bean.AliOrderInfoBean;
+import com.anyihao.ayb.bean.PackageListBean;
+import com.anyihao.ayb.bean.PackageListBean.DataBean;
+import com.anyihao.ayb.bean.PayResult;
+import com.anyihao.ayb.bean.WxOrderInfoBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
+import com.orhanobut.logger.Logger;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -51,9 +67,28 @@ public class DepositActivity extends ABaseActivity {
     RadioButton rbtWx;
     @BindView(R.id.btn_submit)
     AppCompatButton btnSubmit;
+    private static final int SDK_PAY_FLAG = 0x0001;
     private static final int REQUEST_DEPOSIT_CODE = 0X0002;
     public static final int RESULT_DEPOSIT_CODE = 0X0003;
     private String topupType = "ALIPAY";
+    private String packageID;
+    private String pkgType;
+    private IWXAPI wxApi;
+    private boolean isWxPaySupported;
+    private boolean isWxInstalled = true;
+
+    Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case SDK_PAY_FLAG:
+                    handleAlipayResult((Map<String, String>) msg.obj);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+    };
 
     @Override
     protected int getContentViewId() {
@@ -80,6 +115,7 @@ public class DepositActivity extends ABaseActivity {
                 .SPAN_INCLUSIVE_EXCLUSIVE);
         spannableString.setSpan(colorSpan2, 0, 2, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         tvCashPledge.setText(spannableString);
+        getDepositInfo();
     }
 
     @Override
@@ -94,8 +130,10 @@ public class DepositActivity extends ABaseActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DepositActivity.this, AuthenticationActivity.class);
-                startActivityForResult(intent, REQUEST_DEPOSIT_CODE);
+//                Intent intent = new Intent(DepositActivity.this, AuthenticationActivity.class);
+//                startActivityForResult(intent, REQUEST_DEPOSIT_CODE);
+                getOrderInfo();
+
             }
         });
 
@@ -120,18 +158,99 @@ public class DepositActivity extends ABaseActivity {
 
     }
 
-    private void getOrderInfo() {
+    private void handleAlipayResult(Map<String, String> result) {
+        if (result == null)
+            return;
+        PayResult payResult = new PayResult(result);
+        /**
+         对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
+         */
+        String resultInfo = payResult.getResult();// 同步返回需要验证的信息
+        Logger.e(resultInfo);
+        String resultStatus = payResult.getResultStatus();
+        // 判断resultStatus 为9000则代表支付成功
+        if (TextUtils.equals(resultStatus, "9000")) {
+            // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
+//            ToastUtils.showToast(PayActivity.this, "支付成功");
+        } else if (TextUtils.equals(resultStatus, "6001")) {
+        } else {
+            // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
+//            ToastUtils.showToast(PayActivity.this, "支付失败");
+        }
+    }
+
+    private void payByWx(String appId, String partnerId, String prepayId, String packageValue,
+                         String nonceStr, String timeStamp, String sign) {
+        if (isWxPaySupported) {
+            ToastUtils.showToast(DepositActivity.this, "订单获取中...");
+            PayReq request = new PayReq();
+            request.appId = appId;
+            request.partnerId = partnerId;
+            request.prepayId = prepayId;
+            request.packageValue = packageValue;
+            request.nonceStr = nonceStr;
+            request.timeStamp = timeStamp;
+            request.sign = sign;
+            wxApi.sendReq(request);
+        }
+    }
+
+    private void payByAliPay(final String orderInfo) {
+        if (StringUtils.isEmpty(orderInfo))
+            return;
+        Runnable payRunnable = new Runnable() {
+
+            @Override
+            public void run() {
+                PayTask alipay = new PayTask(DepositActivity.this);
+                Map<String, String> result = alipay.payV2(orderInfo, false);
+                Logger.e(result.toString());
+                Message msg = new Message();
+                msg.what = SDK_PAY_FLAG;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
+            }
+        };
+        Thread payThread = new Thread(payRunnable);
+        payThread.start();
+
+    }
+
+    private void getDepositInfo() {
         Map<String, String> params = new HashMap<>();
-        params.put("cmd", "PAY");
+        params.put("cmd", "PAYINFO");
         params.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
-        params.put("topupType", topupType);
+        params.put("flowType", "DEPOSIT");
+        params.put("userType", PreferencesUtils.getString(getApplicationContext(), "userType", ""));
         PresenterFactory.getInstance().createPresenter(this)
                 .execute(new Task.TaskBuilder()
                         .setTaskType(TaskType.Method.POST)
                         .setUrl(GlobalConsts.PREFIX_URL)
                         .setParams(params)
                         .setPage(1)
-                        .setActionType(1)
+                        .setActionType(0)
+                        .createTask());
+    }
+
+    private void getOrderInfo() {
+        if (StringUtils.isEmpty(topupType) || StringUtils.isEmpty(packageID))
+            return;
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "PAY");
+        params.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
+        params.put("topupType", topupType);
+        params.put("keyPackageID", packageID);
+        int actionType = 1;
+        if ("WXPAY".equals(topupType)) {
+            actionType = 2;
+        }
+        PresenterFactory.getInstance().createPresenter(this)
+                .execute(new Task.TaskBuilder()
+                        .setTaskType(TaskType.Method.POST)
+                        .setUrl(GlobalConsts.PREFIX_URL)
+                        .setParams(params)
+                        .setPage(1)
+                        .setActionType(actionType)
                         .createTask());
     }
 
@@ -149,11 +268,64 @@ public class DepositActivity extends ABaseActivity {
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
+        if (actionType == 0) {
+            PackageListBean bean = GsonUtils.getInstance().transitionToBean(result,
+                    PackageListBean.class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                List<DataBean> beans = bean.getData();
+                if (beans == null)
+                    return;
+                if (beans.size() > 0) {
+                    DataBean dataBean = beans.get(0);
+                    tvMoney.setText(dataBean.getPrice());
+                    tvCashPledgeHint.setText(dataBean.getPkgDesc());
+                    packageID = dataBean.getPackageID();
+                    pkgType = dataBean.getPkgType();
+                } else {
 
+                }
+            }
+        }
+
+        if (actionType == 1) {
+            AliOrderInfoBean bean = GsonUtils.getInstance().transitionToBean(result,
+                    AliOrderInfoBean.class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                payByAliPay(bean.getOrderInfo());
+            } else {
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg());
+            }
+        }
+
+        if (actionType == 2) {
+            WxOrderInfoBean bean = GsonUtils.getInstance().transitionToBean(result,
+                    WxOrderInfoBean.class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                payByWx(bean.getAppid(), bean.getPartnerid(), bean.getPrepayid(), bean
+                        .getPackageX(), bean.getNoncestr(), bean.getTimestamp(), bean.getSign());
+            } else {
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg());
+            }
+
+        }
     }
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-
+        if (StringUtils.isEmpty(error))
+            return;
+        if (error.contains("ConnectException")) {
+            ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
+        } else if (error.contains("404")) {
+            ToastUtils.showToast(getApplicationContext(), "未知异常");
+        } else {
+            ToastUtils.showToast(getApplicationContext(), error);
+        }
     }
 }

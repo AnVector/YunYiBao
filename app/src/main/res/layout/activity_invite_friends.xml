@@ -163,5 +163,4 @@
         android:text="@string/remind_words"
         android:textColor="@color/white"
         android:textSize="@dimen/font_size_fif"/>
-
 </RelativeLayout>

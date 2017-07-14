@@ -23,8 +23,7 @@
             android:layout_height="70dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="43dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_success"/>
+            android:scaleType="fitXY"/>
 
         <TextView
             android:id="@+id/tv_result"

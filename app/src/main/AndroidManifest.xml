@@ -318,19 +318,11 @@
             android:excludeFromRecents="true"
             android:theme="@style/Theme.UMDefault"/>
         <activity
-            android:name=".frame.activity.OrderActivity"
-            android:launchMode="singleTop">
-        </activity>
-        <activity
             android:name=".frame.activity.ShareActivity"
             android:launchMode="singleTop">
         </activity>
         <activity
             android:name=".frame.activity.PayActivity"
-            android:launchMode="singleTop">
-        </activity>
-        <activity
-            android:name=".frame.activity.AliPayActivity"
             android:launchMode="singleTop">
         </activity>
         <!-- 高德定位 service -->
@@ -520,6 +512,10 @@
             android:launchMode="singleTop">
         </activity>
         <activity android:name=".frame.activity.WebActivity">
+        </activity>
+        <activity
+            android:name=".frame.activity.QRActivity"
+            android:launchMode="singleTop">
         </activity>
     </application>
 

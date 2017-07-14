@@ -2,16 +2,20 @@ package com.anyihao.ayb.frame.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alipay.sdk.app.PayTask;
 import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
@@ -20,9 +24,12 @@ import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.AliOrderInfoBean;
+import com.anyihao.ayb.bean.PayResult;
 import com.anyihao.ayb.bean.WxOrderInfoBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
+import com.anyihao.ayb.wxapi.WXPayEntryActivity;
+import com.orhanobut.logger.Logger;
 import com.tencent.mm.opensdk.constants.Build;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
@@ -64,6 +71,56 @@ public class PayActivity extends ABaseActivity {
     private String packageID;
     private String topupType = "ALIPAY";
 
+    private static final int SDK_PAY_FLAG = 0x0001;
+
+    Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case SDK_PAY_FLAG:
+                    handleAlipayResult((Map<String, String>) msg.obj);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+    };
+
+    private void handleAlipayResult(Map<String, String> result) {
+        if (result == null)
+            return;
+        PayResult payResult = new PayResult(result);
+        /**
+         对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
+         */
+        String resultInfo = payResult.getResult();// 同步返回需要验证的信息
+        Logger.e(resultInfo);
+        String resultStatus = payResult.getResultStatus();
+        // 判断resultStatus 为9000则代表支付成功
+        if (TextUtils.equals(resultStatus, "9000")) {
+            // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
+            Intent intent = new Intent(PayActivity.this, PayResultActivity.class);
+            intent.putExtra("amount", amount);
+            intent.putExtra("money", money);
+            intent.putExtra("expires", expires);
+            intent.putExtra("paySucceed", true);
+            startActivity(intent);
+            finish();
+//            ToastUtils.showToast(PayActivity.this, "支付成功");
+        } else if (TextUtils.equals(resultStatus, "6001")) {
+        } else {
+            // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
+//            ToastUtils.showToast(PayActivity.this, "支付失败");
+            Intent intent = new Intent(PayActivity.this, PayResultActivity.class);
+            intent.putExtra("amount", amount);
+            intent.putExtra("money", money);
+            intent.putExtra("expires", expires);
+            intent.putExtra("paySucceed", false);
+            startActivity(intent);
+            finish();
+        }
+    }
+
     @Override
     protected int getContentViewId() {
         return R.layout.activity_pay;
@@ -78,6 +135,9 @@ public class PayActivity extends ABaseActivity {
         amount = intent.getStringExtra("amount");
         expires = intent.getStringExtra("expires");
         packageID = intent.getStringExtra("packageID");
+        PreferencesUtils.putString(getApplicationContext(), "money", money);
+        PreferencesUtils.putString(getApplicationContext(), "amount", amount);
+        PreferencesUtils.putString(getApplicationContext(), "expires", expires);
     }
 
     @Override
@@ -97,7 +157,6 @@ public class PayActivity extends ABaseActivity {
         tvAmount.setText(String.format(tvAmount.getText().toString(), amount));
         tvValidity.setText(String.format(tvValidity.getText().toString(), expires.replace
                 ("全国流量，即时生效，", "")));
-
         wxApi = WXAPIFactory.createWXAPI(this, null);
         wxApi.registerApp(GlobalConsts.WX_APP_ID);
         isWxPaySupported = wxApi.getWXAppSupportAPI() >= Build.PAY_SUPPORTED_SDK_INT;
@@ -157,9 +216,24 @@ public class PayActivity extends ABaseActivity {
         }
     }
 
-    private void payByAliPay(String orderInfo) {
+    private void payByAliPay(final String orderInfo) {
         if (StringUtils.isEmpty(orderInfo))
             return;
+        Runnable payRunnable = new Runnable() {
+
+            @Override
+            public void run() {
+                PayTask alipay = new PayTask(PayActivity.this);
+                Map<String, String> result = alipay.payV2(orderInfo, false);
+                Logger.e(result.toString());
+                Message msg = new Message();
+                msg.what = SDK_PAY_FLAG;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
+            }
+        };
+        Thread payThread = new Thread(payRunnable);
+        payThread.start();
 
     }
 
@@ -190,8 +264,15 @@ public class PayActivity extends ABaseActivity {
     }
 
     @Override
-    public void onSuccess(String result, int page, Integer actionType) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == WXPayEntryActivity.RESULT_PAY_RESULT_CODE) {
+            finish();
+        }
+    }
 
+    @Override
+    public void onSuccess(String result, int page, Integer actionType) {
         if (actionType == 0) {
             AliOrderInfoBean bean = GsonUtils.getInstance().transitionToBean(result,
                     AliOrderInfoBean.class);

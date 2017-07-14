@@ -30,8 +30,14 @@ public class Presenter extends PresenterCompat {
         if (isViewDestroyed())
             return;
         Map<String, String> params = task.getParams();
+        if (params == null)
+            return;
         for (Map.Entry<String, String> entry : params.entrySet()) {
-            Logger.e(entry.getKey() + "," + entry.getValue());
+            String key = entry.getKey();
+            String value = entry.getValue();
+            Logger.e(key + "=" + value);
+            if (key == null || value == null)
+                return;
         }
         OkHttpUtils
                 .post()
