@@ -1,6 +1,7 @@
 package com.anyihao.ayb.frame.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
@@ -79,12 +80,6 @@ public class LoginActivity extends ABaseActivity {
     }
 
     @Override
-    protected void setStatusBarTheme() {
-        StatusBarUtil.setColor(LoginActivity.this, getResources().getColor(R.color
-                .app_background_color), 0);
-    }
-
-    @Override
     protected void initData() {
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
@@ -155,6 +150,12 @@ public class LoginActivity extends ABaseActivity {
                         SHARE_MEDIA.SINA, authListener);
             }
         });
+    }
+
+    @Override
+    protected void setStatusBarTheme() {
+        super.setStatusBarTheme();
+        StatusBarUtil.setColor(this, Color.parseColor("#F6F6F6"), 0);
     }
 
     private void loginByMobile() {

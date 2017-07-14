@@ -7,10 +7,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.manager.ActivityManager;
 import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.frame.activity.ABaseActivity;
+import com.anyihao.ayb.frame.activity.PayActivity;
 import com.anyihao.ayb.frame.activity.RechargeRecordActivity;
 import com.orhanobut.logger.Logger;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
@@ -69,6 +72,7 @@ public class WXPayEntryActivity extends ABaseActivity implements IWXAPIEventHand
         wxApi.handleIntent(getIntent(), this);
         toolbarTitleMid.setText(getString(R.string.pay_succeed));
         toolbar.setNavigationIcon(R.drawable.ic_back);
+        icResult.setImageResource(R.drawable.ic_success);
         tvResult.setText(getString(R.string.payment_suceess));
         String amount = PreferencesUtils.getString(getApplicationContext(), "amount", "");
         String money = PreferencesUtils.getString(getApplicationContext(), "money", "");
@@ -83,7 +87,7 @@ public class WXPayEntryActivity extends ABaseActivity implements IWXAPIEventHand
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setResult(RESULT_PAY_RESULT_CODE);
+                ActivityManager.getInstance().finishActivity(PayActivity.class);
                 finish();
             }
         });
@@ -100,7 +104,7 @@ public class WXPayEntryActivity extends ABaseActivity implements IWXAPIEventHand
             public void onClick(View v) {
                 Intent intent = new Intent(WXPayEntryActivity.this, RechargeRecordActivity.class);
                 startActivity(intent);
-                setResult(RESULT_PAY_RESULT_CODE);
+                ActivityManager.getInstance().finishActivity(PayActivity.class);
                 finish();
             }
         });
@@ -134,26 +138,17 @@ public class WXPayEntryActivity extends ABaseActivity implements IWXAPIEventHand
         int errCode = baseResp.errCode;
         switch (errCode) {
             case 0:
-                onPaySuccess();
                 break;
             case -1:
-                onPayFailure();
+                ToastUtils.showToast(getApplicationContext(), "支付失败");
+                finish();
                 break;
             case -2:
+                ToastUtils.showToast(getApplicationContext(), "支付取消");
                 finish();
                 break;
             default:
                 break;
         }
-    }
-
-    private void onPaySuccess() {
-        icResult.setImageResource(R.drawable.ic_success);
-        tvResult.setText(getString(R.string.payment_suceess));
-    }
-
-    private void onPayFailure() {
-        icResult.setImageResource(R.drawable.ic_fail);
-        tvResult.setText(getString(R.string.payment_failed));
     }
 }

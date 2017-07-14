@@ -81,14 +81,14 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:background="@color/white"
-        android:gravity="left|center_vertical"
-        android:paddingLeft="15dp"
-        android:paddingRight="12dp">
+        android:gravity="left|center_vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="55dp"
+            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
             android:drawableLeft="@drawable/ic_alipay"
             android:drawablePadding="15dp"
             android:gravity="center"
@@ -102,6 +102,7 @@
             android:layout_height="19dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
             android:background="@drawable/payment_mode_selector"
             android:button="@null"
             android:checked="true"/>
@@ -114,14 +115,14 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:background="@color/white"
-        android:gravity="left|center_vertical"
-        android:paddingLeft="15dp"
-        android:paddingRight="12dp">
+        android:gravity="left|center_vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="55dp"
+            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
             android:drawableLeft="@drawable/ic_wx_pay"
             android:drawablePadding="15dp"
             android:gravity="center"
@@ -135,6 +136,7 @@
             android:layout_height="19dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
             android:background="@drawable/payment_mode_selector"
             android:button="@null"/>
     </RelativeLayout>
@@ -152,5 +154,4 @@
         android:text="@string/confirm_to_pay"
         android:textColor="@color/white"
         android:textSize="@dimen/font_size_large"/>
-
 </LinearLayout>

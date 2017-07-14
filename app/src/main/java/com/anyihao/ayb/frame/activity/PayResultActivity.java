@@ -42,7 +42,6 @@ public class PayResultActivity extends ABaseActivity {
     private String amount;
     private String money;
     private String expires;
-    private boolean paySucceed;
 
     @Override
     protected int getContentViewId() {
@@ -57,16 +56,13 @@ public class PayResultActivity extends ABaseActivity {
         amount = intent.getStringExtra("amount");
         money = intent.getStringExtra("money");
         expires = intent.getStringExtra("expires");
-        paySucceed = intent.getBooleanExtra("paySucceed", false);
     }
 
     @Override
     protected void initData() {
-        if (paySucceed) {
-            onPaySuccess();
-        } else {
-            onPayFailure();
-        }
+        toolbarTitleMid.setText(getString(R.string.pay_succeed));
+        icResult.setImageResource(R.drawable.ic_success);
+        tvResult.setText(getString(R.string.payment_suceess));
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -110,18 +106,5 @@ public class PayResultActivity extends ABaseActivity {
     @Override
     public void onFailure(String error, int page, Integer actionType) {
 
-    }
-
-
-    private void onPaySuccess() {
-        toolbarTitleMid.setText(getString(R.string.pay_succeed));
-        icResult.setImageResource(R.drawable.ic_success);
-        tvResult.setText(getString(R.string.payment_suceess));
-    }
-
-    private void onPayFailure() {
-        toolbarTitleMid.setText(getString(R.string.pay_failed));
-        icResult.setImageResource(R.drawable.ic_fail);
-        tvResult.setText(getString(R.string.payment_failed));
     }
 }

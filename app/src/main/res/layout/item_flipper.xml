@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="horizontal">
+
     <TextView
         android:id="@+id/tv_content"
         android:layout_width="match_parent"
-        android:gravity="center"
-        android:layout_gravity="center"
         android:layout_height="match_parent"
-        android:text="@string/advertisement"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:textColor="@color/toolbar_title_color"
-        android:textSize="@dimen/font_size_normal" />
+        android:textSize="@dimen/font_size_normal"/>
 </LinearLayout>

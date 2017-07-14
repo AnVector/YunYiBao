@@ -30,8 +30,10 @@ import com.anyihao.ayb.bean.WxOrderInfoBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.orhanobut.logger.Logger;
+import com.tencent.mm.opensdk.constants.Build;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -116,6 +118,10 @@ public class DepositActivity extends ABaseActivity {
         spannableString.setSpan(colorSpan2, 0, 2, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         tvCashPledge.setText(spannableString);
         getDepositInfo();
+        wxApi = WXAPIFactory.createWXAPI(this, null);
+        wxApi.registerApp(GlobalConsts.WX_APP_ID);
+        isWxPaySupported = wxApi.getWXAppSupportAPI() >= Build.PAY_SUPPORTED_SDK_INT;
+        isWxInstalled = wxApi.isWXAppSupportAPI();
     }
 
     @Override
@@ -244,6 +250,12 @@ public class DepositActivity extends ABaseActivity {
         if ("WXPAY".equals(topupType)) {
             actionType = 2;
         }
+
+        if (actionType == 2 && !isWxInstalled) {
+            ToastUtils.showToast(getApplicationContext(), "微信客户端未安装");
+            return;
+        }
+
         PresenterFactory.getInstance().createPresenter(this)
                 .execute(new Task.TaskBuilder()
                         .setTaskType(TaskType.Method.POST)

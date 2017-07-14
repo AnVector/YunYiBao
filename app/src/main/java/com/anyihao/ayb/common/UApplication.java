@@ -4,17 +4,21 @@ import android.app.DownloadManager;
 import android.content.IntentFilter;
 import android.support.multidex.MultiDexApplication;
 
+import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.anyihao.androidbase.utils.LogUtils;
+import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.androidbase.utils.ProcessUtils;
 import com.anyihao.ayb.BuildConfig;
-import com.anyihao.ayb.listener.LocationListener;
+import com.anyihao.ayb.constant.GlobalConsts;
 import com.franmontiel.persistentcookiejar.ClearableCookieJar;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 import com.library.http.okhttp.OkHttpUtils;
+import com.library.http.okhttp.callback.StringCallback;
 import com.library.http.okhttp.https.HttpsUtils;
 import com.library.http.okhttp.log.LoggerInterceptor;
 import com.orhanobut.logger.LogLevel;
@@ -26,12 +30,15 @@ import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
 
 import butterknife.ButterKnife;
+import okhttp3.Call;
 import okhttp3.OkHttpClient;
 
 /**
@@ -45,8 +52,6 @@ public class UApplication extends MultiDexApplication {
     private UBroadcastReceiver mUBroadcastReceiver;
     //声明AMapLocationClient类对象
     public AMapLocationClient mLocationClient = null;
-    //声明定位回调监听器
-    public AMapLocationListener mLocationListener = new LocationListener();
     //声明AMapLocationClientOption对象
     public AMapLocationClientOption mLocationOption = null;
 
@@ -83,7 +88,7 @@ public class UApplication extends MultiDexApplication {
         mLocationOption = new AMapLocationClientOption();
         //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy)
-                .setInterval(10000)//设置定位间隔,单位毫秒,默认为2000ms，最低1000ms。
+                .setInterval(600 * 1000)//设置定位间隔,单位毫秒,默认为2000ms，最低1000ms。
                 .setNeedAddress(true);//设置是否返回地址信息（默认返回地址信息）
         //初始化定位
         mLocationClient = new AMapLocationClient(getApplicationContext());
@@ -93,6 +98,67 @@ public class UApplication extends MultiDexApplication {
         mLocationClient.startLocation();
         //设置定位回调监听
         mLocationClient.setLocationListener(mLocationListener);
+    }
+
+    private AMapLocationListener mLocationListener = new AMapLocationListener() {
+        @Override
+        public void onLocationChanged(AMapLocation aMapLocation) {
+            if (aMapLocation != null) {
+                if (aMapLocation.getErrorCode() == 0) {
+                    if (PreferencesUtils.getBoolean(getApplicationContext(), "isLogin", false)) {
+                        sendLocationInfo(aMapLocation.getLatitude(), aMapLocation.getLongitude(),
+                                aMapLocation.getCity(), aMapLocation.getCityCode(), aMapLocation
+                                        .getProvince(), aMapLocation.getDistrict(), aMapLocation
+                                        .getAdCode(), aMapLocation.getStreet(), aMapLocation
+                                        .getStreet(), aMapLocation.getAddress());
+                    }
+
+                } else {
+                    //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
+                    Logger.d("AmapError", "location Error, ErrCode:"
+                            + aMapLocation.getErrorCode() + ", errInfo:"
+                            + aMapLocation.getErrorInfo());
+                }
+            }
+        }
+    };
+
+    private void sendLocationInfo(double latitude, double longtitude, String city, String
+            cityCode, String province, String district, String adcode, String street, String
+                                          number, String address) {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("uid", PreferencesUtils.getString(this, "uid", ""));
+        params.put("cmd", "LOCATION");
+        params.put("latitude", latitude + "");
+        params.put("longtitude", longtitude + "");
+        params.put("city", city);
+        params.put("citycode", cityCode);
+        params.put("province", province);
+        params.put("district", district);
+        params.put("adcode", adcode);
+        params.put("street", street);
+        params.put("number", number);
+        params.put("address", address);
+        OkHttpUtils
+                .post()
+                .url(GlobalConsts.PREFIX_URL)
+                .addHeader("Content-Type", "text/plain")
+                .params(params)
+                .tag("")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        LogUtils.e(e.toString());
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        LogUtils.e(response);
+                    }
+                });
+
     }
 
     private void initUShare() {

@@ -103,21 +103,14 @@ public class PayActivity extends ABaseActivity {
             intent.putExtra("amount", amount);
             intent.putExtra("money", money);
             intent.putExtra("expires", expires);
-            intent.putExtra("paySucceed", true);
             startActivity(intent);
             finish();
 //            ToastUtils.showToast(PayActivity.this, "支付成功");
         } else if (TextUtils.equals(resultStatus, "6001")) {
+            ToastUtils.showToast(PayActivity.this, "支付取消");
         } else {
             // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
-//            ToastUtils.showToast(PayActivity.this, "支付失败");
-            Intent intent = new Intent(PayActivity.this, PayResultActivity.class);
-            intent.putExtra("amount", amount);
-            intent.putExtra("money", money);
-            intent.putExtra("expires", expires);
-            intent.putExtra("paySucceed", false);
-            startActivity(intent);
-            finish();
+            ToastUtils.showToast(PayActivity.this, "支付失败");
         }
     }
 
@@ -137,7 +130,8 @@ public class PayActivity extends ABaseActivity {
         packageID = intent.getStringExtra("packageID");
         PreferencesUtils.putString(getApplicationContext(), "money", money);
         PreferencesUtils.putString(getApplicationContext(), "amount", amount);
-        PreferencesUtils.putString(getApplicationContext(), "expires", expires);
+        PreferencesUtils.putString(getApplicationContext(), "expires", expires.replace
+                ("全国流量，即时生效，", ""));
     }
 
     @Override
@@ -182,7 +176,25 @@ public class PayActivity extends ABaseActivity {
             }
         });
 
+        rlAliPay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rbtWx.setChecked(false);
+                rbtAlipay.setChecked(true);
+                topupType = "ALIPAY";
+            }
+        });
+
         rbtWx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rbtWx.setChecked(true);
+                rbtAlipay.setChecked(false);
+                topupType = "WXPAY";
+            }
+        });
+
+        rlWxPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 rbtWx.setChecked(true);
@@ -265,10 +277,11 @@ public class PayActivity extends ABaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        ToastUtils.showToast(getApplicationContext(), resultCode + "");
         if (resultCode == WXPayEntryActivity.RESULT_PAY_RESULT_CODE) {
             finish();
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

@@ -2,7 +2,6 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_deposite"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_background_color"
@@ -17,8 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="220dp"
         android:background="@color/white"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp">
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
 
         <TextView
             android:id="@+id/tv_cash_pledge"
@@ -38,6 +37,7 @@
             android:gravity="left|center_vertical"
             android:textColor="#FF1919"
             android:textSize="@dimen/font_size_normal_high"/>
+
         <View
             android:id="@+id/line"
             android:layout_width="match_parent"

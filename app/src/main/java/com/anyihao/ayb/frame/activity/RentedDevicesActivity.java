@@ -11,6 +11,7 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.RentedDeviceAdapter;
@@ -111,8 +112,6 @@ public class RentedDevicesActivity extends ABaseActivity {
                     .class);
             if (bean == null)
                 return;
-            ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast, R.id
-                    .tv_message);
             mData.clear();
             if (bean.getCode() == 200) {
                 mData.add(bean.getVid());
@@ -134,8 +133,14 @@ public class RentedDevicesActivity extends ABaseActivity {
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
+        if (StringUtils.isEmpty(error))
+            return;
         if (error.contains("ConnectException")) {
             ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
+        } else if (error.contains("404")) {
+            ToastUtils.showToast(getApplicationContext(), "未知异常");
+        } else {
+            ToastUtils.showToast(getApplicationContext(), error);
         }
     }
 }

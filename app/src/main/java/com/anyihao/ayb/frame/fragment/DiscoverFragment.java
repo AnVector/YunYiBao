@@ -39,6 +39,8 @@ import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.MyLocationStyle;
 import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
@@ -323,7 +325,15 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-
+        if (StringUtils.isEmpty(error))
+            return;
+        if (error.contains("ConnectException")) {
+            ToastUtils.showToast(mContext.getApplicationContext(), "网络连接失败，请检查网络设置");
+        } else if (error.contains("404")) {
+            ToastUtils.showToast(mContext.getApplicationContext(), "未知异常");
+        } else {
+            ToastUtils.showToast(mContext.getApplicationContext(), error);
+        }
     }
 
     @Override

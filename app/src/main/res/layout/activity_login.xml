@@ -32,8 +32,8 @@
             android:drawableRight="@drawable/edit_text_selector"
             android:hint="@string/user_name_hint"
             android:maxLines="1"
-            android:textColorHint="@color/light_gray"
             android:textColor="@color/user_account_color"
+            android:textColorHint="@color/light_gray"
             android:textCursorDrawable="@drawable/edittext_cursor_color"
             android:textSize="@dimen/font_size_fif"
             app:funcType="canClear"/>
@@ -67,8 +67,8 @@
                 android:hint="@string/password_hint"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:textColorHint="@color/light_gray"
                 android:textColor="@color/user_account_color"
+                android:textColorHint="@color/light_gray"
                 android:textCursorDrawable="@drawable/edittext_cursor_color"
                 android:textSize="@dimen/font_size_fif"
                 app:funcType="canClear"/>

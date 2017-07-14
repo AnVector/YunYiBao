@@ -3,6 +3,7 @@ package com.anyihao.ayb.frame.fragment;
 
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.wifi.ScanResult;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -34,6 +35,7 @@ import com.anyihao.ayb.bean.CertificationStatusBean;
 import com.anyihao.ayb.bean.ResultBean;
 import com.anyihao.ayb.bean.SsidPwdBean;
 import com.anyihao.ayb.common.PresenterFactory;
+import com.anyihao.ayb.common.WifiInfoManager;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.frame.activity.CertificationActivity;
 import com.anyihao.ayb.frame.activity.ConnectedDevicesActivity;
@@ -54,7 +56,7 @@ import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -111,7 +113,7 @@ public class HomeFragment extends ABaseFragment {
             "CYBWF_898602B11116C0068583", "CYBWF_898602B11116C0068551",
             "CYBWF_898602B11116C0068641", "CYBWF_898602B11116C0068593",
             "CYBWF_898602B11116C0068654", "CYBWF_898602B11116C0068692", ""};
-    private List<String> mData = Arrays.asList(array);
+    private List<ScanResult> mData = new ArrayList<>();
     private AnimationDrawable animationDrawable;
     private boolean isLogin;
 
@@ -128,12 +130,20 @@ public class HomeFragment extends ABaseFragment {
         recyclerview.setAdapter(mAdapter);
         recyclerview.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager
                 .VERTICAL, false));
+        mData.clear();
+        mData.addAll(getWifiList());
         mAdapter.add(0, mData.size(), mData);
         isLogin = PreferencesUtils.getBoolean(mContext.getApplicationContext(), "isLogin", false);
         if (isLogin) {
             getUserCertStatus();
         }
         getAdvertisement();
+    }
+
+    private List<ScanResult> getWifiList() {
+        WifiInfoManager.getInstance(mContext).openWifi();
+        WifiInfoManager.getInstance(mContext).startScan();
+        return WifiInfoManager.getInstance(mContext).getWifiList();
     }
 
 
@@ -244,8 +254,8 @@ public class HomeFragment extends ABaseFragment {
                     startActivityForLogin();
                     return;
                 }
-                if (o instanceof String) {
-                    mAlias = o.toString();
+                if (o instanceof ScanResult) {
+                    mAlias = ((ScanResult) o).SSID;
                     getSsidPwd(mAlias);
                 }
             }
@@ -284,7 +294,6 @@ public class HomeFragment extends ABaseFragment {
         params.put("cmd", "WIFIPWD");
         params.put("uid", PreferencesUtils.getString(mContext.getApplicationContext(), "uid", ""));
         params.put("aliasName", aliasName);
-
         postForm(params, 1, 2);
     }
 
@@ -476,6 +485,8 @@ public class HomeFragment extends ABaseFragment {
             ToastUtils.showToast(mContext.getApplicationContext(), "网络连接失败，请检查网络设置");
         } else if (error.contains("404")) {
             ToastUtils.showToast(mContext.getApplicationContext(), "未知异常");
+        } else {
+            ToastUtils.showToast(mContext.getApplicationContext(), error);
         }
     }
 

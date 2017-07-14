@@ -2,7 +2,8 @@ package com.anyihao.androidbase.manager;
 
 import android.app.Activity;
 import android.content.Context;
-import java.util.Stack;
+
+import java.util.Vector;
 
 /**
  * Created by Administrator on 2016/10/27 0027.
@@ -13,11 +14,11 @@ public class ActivityManager {
 
     // 定义一个私有的静态全局变量来保存该类的唯一实例
     private volatile static ActivityManager instance;
-    private Stack<Activity> activityStack;
+    private Vector<Activity> activityStack;
 
     // 构造函数必须是私有的 这样在外部便无法使用 new 来创建该类的实例
     private ActivityManager() {
-        activityStack = new Stack<>();
+        activityStack = new Vector<>();
     }
 
     /**
@@ -25,8 +26,8 @@ public class ActivityManager {
      */
     public static ActivityManager getInstance() {
         if (instance == null) {
-            synchronized (ActivityManager.class){
-                if(instance == null){
+            synchronized (ActivityManager.class) {
+                if (instance == null) {
                     instance = new ActivityManager();
                 }
             }
@@ -72,6 +73,7 @@ public class ActivityManager {
         for (Activity activity : activityStack) {
             if (activity.getClass().equals(cls)) {
                 finishActivity(activity);
+                return;
             }
         }
     }

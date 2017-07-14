@@ -13,7 +13,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@color/white">
 
@@ -73,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/tv_purchase_amount"
-            android:layout_marginLeft="11dp"
+            android:layout_marginLeft="6dp"
             android:layout_toRightOf="@id/tv_purchase_amount"
             android:gravity="center"
             android:textColor="@color/light_gray"
@@ -96,9 +96,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/tv_validity"
-            android:layout_marginLeft="11dp"
+            android:layout_marginLeft="6dp"
             android:layout_toRightOf="@id/tv_validity"
             android:gravity="center"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/font_size_thi"/>
+
+        <TextView
+            android:id="@+id/tv_fee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/line"
+            android:layout_below="@id/tv_validity"
+            android:layout_marginTop="12dp"
+            android:gravity="left|center_vertical"
+            android:text="@string/fee"
             android:textColor="@color/light_gray"
             android:textSize="@dimen/font_size_thi"/>
 
@@ -106,33 +118,24 @@
             android:id="@+id/tv_fee_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/tv_validity"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="15dp"
+            android:layout_alignTop="@id/tv_fee"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="-3dp"
+            android:layout_toRightOf="@id/tv_fee"
             android:gravity="center"
             android:textColor="@color/payment_fee_text_color"
             android:textSize="@dimen/font_size_normal_high"/>
 
-        <TextView
-            android:id="@+id/tv_fee"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/tv_validity"
-            android:layout_marginRight="11dp"
-            android:layout_toLeftOf="@id/tv_fee_value"
-            android:gravity="center"
-            android:text="@string/fee"
-            android:textColor="@color/light_gray"
-            android:textSize="@dimen/font_size_thi"/>
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_back"
             android:layout_width="161dp"
             android:layout_height="44dp"
             android:layout_alignLeft="@id/line"
-            android:layout_below="@id/tv_validity"
+            android:layout_below="@id/tv_fee"
+            android:layout_marginBottom="20dp"
             android:layout_marginTop="22dp"
-            android:background="@drawable/edit_text_bg"
+            android:background="@drawable/btn_back_bg"
             android:gravity="center"
             android:text="@string/back_to_main"
             android:textSize="@dimen/font_size_sev"/>

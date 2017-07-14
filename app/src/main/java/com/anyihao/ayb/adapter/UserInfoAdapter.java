@@ -1,6 +1,7 @@
 package com.anyihao.ayb.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.ProfileBean;
@@ -41,6 +42,7 @@ public class UserInfoAdapter extends RecyclerViewAdapter<ProfileBean> {
                 holder.setVisible(R.id.value, false);
                 break;
             case "押金退款":
+                holder.setTextColor(R.id.value, Color.parseColor("#ff1919"));
                 holder.setVisible(R.id.line, false);
                 holder.setText(R.id.value, profileBean.getValue());
                 break;
