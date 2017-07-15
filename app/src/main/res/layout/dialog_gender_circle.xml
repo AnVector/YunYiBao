@@ -17,7 +17,6 @@
             android:background="?android:attr/selectableItemBackground"
             android:clickable="true"
             android:gravity="center"
-            android:text="@string/male"
             android:textColor="#61abfc"
             android:textSize="@dimen/font_size_sev"/>
 
@@ -33,7 +32,6 @@
             android:background="?android:attr/selectableItemBackground"
             android:clickable="true"
             android:gravity="center"
-            android:text="@string/female"
             android:textColor="#61abfc"
             android:textSize="@dimen/font_size_sev"/>
     </LinearLayout>
@@ -54,7 +52,8 @@
             android:gravity="center"
             android:text="@string/cancel"
             android:textColor="#61abfc"
-            android:textSize="@dimen/font_size_sev"/>
+            android:textSize="@dimen/font_size_sev"
+            android:textStyle="bold"/>
     </LinearLayout>
 
 </LinearLayout>

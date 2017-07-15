@@ -89,7 +89,6 @@ public class MeActivity extends ABaseActivity {
     private String mPhoneNum;
     private TimePickerView mPvDate;
     private Dialog bottomDialog;
-    private View dialogContentView;
     private TextView tvMale;
     private TextView tvFemale;
     private TextView tvCancel;
@@ -98,6 +97,7 @@ public class MeActivity extends ABaseActivity {
     private String mGender;
     private String mZone;
     private static final int REQUEST_UPDATE_CODE = 0x0001;
+    private boolean isGender = true;
 
     @Override
     protected int getContentViewId() {
@@ -204,6 +204,12 @@ public class MeActivity extends ABaseActivity {
                 if (o instanceof ProfileBean) {
                     switch (((ProfileBean) o).getTitle()) {
                         case "头像":
+                            if (bottomDialog != null) {
+                                isGender = false;
+                                tvMale.setText(getString(R.string.from_album));
+                                tvFemale.setText(getString(R.string.photo));
+                                bottomDialog.show();
+                            }
                             break;
                         case "地区":
                             tvValue = (TextView) view.findViewById(R.id.value);
@@ -247,6 +253,9 @@ public class MeActivity extends ABaseActivity {
                         case "性别":
                             tvValue = (TextView) view.findViewById(R.id.value);
                             if (bottomDialog != null) {
+                                isGender = true;
+                                tvMale.setText(getString(R.string.male));
+                                tvFemale.setText(getString(R.string.female));
                                 bottomDialog.show();
                             }
                             break;
@@ -272,22 +281,28 @@ public class MeActivity extends ABaseActivity {
         tvMale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mGender = "男";
-                updateInfo(3, mGender);
-                if (bottomDialog != null) {
-                    bottomDialog.dismiss();
+                if (isGender) {
+                    mGender = "男";
+                    updateInfo(3, mGender);
+                    if (bottomDialog != null) {
+                        bottomDialog.dismiss();
+                    }
                 }
+
             }
         });
 
         tvFemale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mGender = "女";
-                updateInfo(3, mGender);
-                if (bottomDialog != null) {
-                    bottomDialog.dismiss();
+                if (isGender) {
+                    mGender = "女";
+                    updateInfo(3, mGender);
+                    if (bottomDialog != null) {
+                        bottomDialog.dismiss();
+                    }
                 }
+
             }
         });
 
@@ -498,17 +513,17 @@ public class MeActivity extends ABaseActivity {
 
     private void initBottomDialog() {
         bottomDialog = new Dialog(this, R.style.BottomDialog);
-        dialogContentView = LayoutInflater.from(this).inflate(R.layout.dialog_gender_circle, null);
-        tvMale = (TextView) dialogContentView.findViewById(R.id.tv_male);
-        tvFemale = (TextView) dialogContentView.findViewById(R.id.tv_female);
-        tvCancel = (TextView) dialogContentView.findViewById(R.id.tv_cancle);
-        bottomDialog.setContentView(dialogContentView);
-        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) dialogContentView
+        View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_gender_circle, null);
+        tvMale = (TextView) contentView.findViewById(R.id.tv_male);
+        tvFemale = (TextView) contentView.findViewById(R.id.tv_female);
+        tvCancel = (TextView) contentView.findViewById(R.id.tv_cancle);
+        bottomDialog.setContentView(contentView);
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) contentView
                 .getLayoutParams();
         params.width = getResources().getDisplayMetrics().widthPixels - DensityUtils.dp2px(this,
                 16f);
         params.bottomMargin = DensityUtils.dp2px(this, 8f);
-        dialogContentView.setLayoutParams(params);
+        contentView.setLayoutParams(params);
         if (bottomDialog.getWindow() != null) {
             bottomDialog.getWindow().setGravity(Gravity.BOTTOM);
             bottomDialog.getWindow().setWindowAnimations(R.style.BottomDialog_Animation);

@@ -2,6 +2,7 @@ package com.anyihao.ayb.frame.fragment;
 
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.wifi.ScanResult;
 import android.support.v7.widget.LinearLayoutManager;
@@ -47,6 +48,7 @@ import com.anyihao.ayb.frame.activity.RechargeActivity;
 import com.anyihao.ayb.frame.activity.RentedDevicesActivity;
 import com.anyihao.ayb.frame.activity.ScanActivity;
 import com.anyihao.ayb.listener.OnItemClickListener;
+import com.anyihao.ayb.ui.WaitingDots.DilatingDotsProgressBar;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.orhanobut.dialogplus.DialogPlus;
@@ -91,6 +93,10 @@ public class HomeFragment extends ABaseFragment {
     @BindView(R.id.iv_bell)
     ImageView ivBell;
     private static int REQUEST_LOGIN_CODE = 0x00003;
+    @BindView(R.id.progress)
+    DilatingDotsProgressBar progress;
+    @BindView(R.id.tv_data_amount)
+    TextView tvDataAmount;
     private WifiAdapter mAdapter;
     private String mPassword;
     private int mProgress;
@@ -133,11 +139,14 @@ public class HomeFragment extends ABaseFragment {
         mData.clear();
         mData.addAll(getWifiList());
         mAdapter.add(0, mData.size(), mData);
+        tvDataAmount.setText(String.format(mContext.getString(R.string.surplus_amount), "0"));
         isLogin = PreferencesUtils.getBoolean(mContext.getApplicationContext(), "isLogin", false);
         if (isLogin) {
             getUserCertStatus();
         }
         getAdvertisement();
+        progress.setDotColors(Color.parseColor("#d6d7dc"), Color.parseColor("#d6d7dc"));
+        progress.show(1000);
     }
 
     private List<ScanResult> getWifiList() {

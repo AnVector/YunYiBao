@@ -48,9 +48,6 @@ public class RechargeRecordAdapter extends UAdapter<DataBean> {
             DataBean content = mData.get((hasHeaderView() ? position - 1 : position));
             if (content == null) return;
             if ("WXPAY".equals(content.getTopupType())) {
-                ((RechargeRecordViewHolder) holder).tvMonth.setText("本月");
-                ((RechargeRecordViewHolder) holder).tvMonth.setVisibility(View.VISIBLE);
-                ((RechargeRecordViewHolder) holder).line.setVisibility(View.GONE);
                 ((RechargeRecordViewHolder) holder).tvDescription.setText("微信充值成功" + content
                         .getFlow() + "流量");
                 ((RechargeRecordViewHolder) holder).imgPayIcon.setImageResource(R.drawable
@@ -61,9 +58,12 @@ public class RechargeRecordAdapter extends UAdapter<DataBean> {
                 ((RechargeRecordViewHolder) holder).imgPayIcon.setImageResource(R.drawable
                         .ic_recharge_record_alipay);
             }
-            ((RechargeRecordViewHolder) holder).tvWeekday.setText(content.getPkgInfo());
-            ((RechargeRecordViewHolder) holder).tvTime.setText(content.getCrtTm());
-            ((RechargeRecordViewHolder) holder).tvPrice.setText(content.getAmount());
+            String[] date = content.getCrtTm().split(" ");
+            if (date.length == 2) {
+                ((RechargeRecordViewHolder) holder).tvWeekday.setText(date[0]);
+                ((RechargeRecordViewHolder) holder).tvTime.setText(date[1]);
+            }
+            ((RechargeRecordViewHolder) holder).tvPrice.setText("-" + content.getAmount() + "元");
 
         }
     }

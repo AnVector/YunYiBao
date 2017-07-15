@@ -237,7 +237,6 @@ public class RechargeRecordActivity extends ABaseActivity {
             if (bean.getCode() == 200) {
                 List<RechargeRecordListBean.DataBean> beans = bean.getData();
                 if (beans.size() > 0) {
-                    ToastUtils.showToast(getApplicationContext(), bean.getMsg());
                     mItems = beans;
                     if (isRefresh) {
                         onFireRefresh();
@@ -245,6 +244,8 @@ public class RechargeRecordActivity extends ABaseActivity {
                         onLoadMore();
                     }
                 }
+            } else {
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg());
             }
         }
 

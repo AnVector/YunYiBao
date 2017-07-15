@@ -1,7 +1,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
+             android:layout_marginBottom="49dp"
              android:background="@color/app_background_color"
              android:orientation="vertical"
              tools:context="com.anyihao.ayb.frame.fragment.HomeFragment">
@@ -45,38 +47,56 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="17dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/ic_connected"/>
+                    android:src="@drawable/ic_disconnected"/>
 
-                <TextView
-                    android:id="@+id/tv_ssid"
+                <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
-                    android:gravity="center"
-                    android:text="@string/company"
-                    android:textColor="@color/toolbar_title_color"
-                    android:textSize="@dimen/font_size_twenty_one"/>
+                    android:layout_marginTop="6dp">
+
+                    <TextView
+                        android:id="@+id/tv_ssid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textColor="@color/toolbar_title_color"
+                        android:textSize="@dimen/font_size_twenty_one"/>
+
+                    <com.anyihao.ayb.ui.WaitingDots.DilatingDotsProgressBar
+                        android:id="@+id/progress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:color="#5dc1ff"
+                        android:radius="3.5dp"
+                        app:dd_animationDuration="500"
+                        app:dd_endColor="#b1e1fe"
+                        app:dd_horizontalSpacing="8dp"
+                        app:dd_numDots="3"
+                        app:dd_scaleMultiplier="1.5"/>
+                </FrameLayout>
+
 
                 <TextView
                     android:id="@+id/tv_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="4dp"
                     android:gravity="center"
-                    android:text="@string/connected"
-                    android:textColor="@color/toolbar_title_color"
+                    android:text="@string/disconnected"
+                    android:textColor="@color/toolbar_register_color"
                     android:textSize="@dimen/font_size_normal"/>
             </LinearLayout>
 
             <TextView
+                android:id="@+id/tv_data_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="18dp"
                 android:gravity="center"
-                android:text="@string/surplus_amount"
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_size_fif"/>
 

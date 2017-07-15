@@ -68,7 +68,7 @@ public class WXPayEntryActivity extends ABaseActivity implements IWXAPIEventHand
 
     @Override
     protected void initData() {
-        wxApi = WXAPIFactory.createWXAPI(this, GlobalConsts.WX_APP_ID);
+        wxApi = WXAPIFactory.createWXAPI(getApplicationContext(), GlobalConsts.WX_APP_ID);
         wxApi.handleIntent(getIntent(), this);
         toolbarTitleMid.setText(getString(R.string.pay_succeed));
         toolbar.setNavigationIcon(R.drawable.ic_back);

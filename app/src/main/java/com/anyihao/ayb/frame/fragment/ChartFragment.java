@@ -176,7 +176,7 @@ public class ChartFragment extends ABaseFragment {
             e.add(new Entry(hour, value));
         }
 
-        mLineDataSet = new LineDataSet(e, "M/小时");
+        mLineDataSet = new LineDataSet(e, "小时");
         mLineDataSet.setLineWidth(1.0f);
         mLineDataSet.setDrawCircles(true);
         mLineDataSet.setCircleRadius(2.5f);
@@ -205,7 +205,7 @@ public class ChartFragment extends ABaseFragment {
             e.add(new Entry(day, value));
         }
 
-        mLineDataSet = new LineDataSet(e, "M/日");
+        mLineDataSet = new LineDataSet(e, "日");
         mLineDataSet.setLineWidth(1.0f);
         mLineDataSet.setDrawCircles(true);
         mLineDataSet.setCircleRadius(2.5f);

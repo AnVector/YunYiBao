@@ -55,6 +55,7 @@ public class RedEnvelopeActivity extends ABaseActivity {
     private String sendName;
     private String sendAvatar;
     private String flow;
+    private String crtTime;
     private String effectTime;
     private int status;
     private int keyId;
@@ -73,6 +74,7 @@ public class RedEnvelopeActivity extends ABaseActivity {
         sendName = intent.getStringExtra("sendName");
         sendAvatar = intent.getStringExtra("sendAvatar");
         flow = intent.getStringExtra("flow");
+        crtTime = intent.getStringExtra("crtTime");
         effectTime = intent.getStringExtra("effectTime");
         status = intent.getIntExtra("status", 0);
     }
@@ -110,8 +112,14 @@ public class RedEnvelopeActivity extends ABaseActivity {
         }
 
         tvEnvelopeValue.setText(flow);
-        tvUseExpires.setText(effectTime);
-        tvFrom.setText(sendName);
+        tvUseExpires.setText("使用期限："+getDate(crtTime) + "至" + getDate(effectTime));
+        tvFrom.setText(String.format(getString(R.string.fried_name), sendName));
+    }
+
+    private String getDate(String time) {
+        if (StringUtils.isEmpty(time) || time.length() < 10)
+            return "";
+        return time.substring(0, 10);
     }
 
     @Override

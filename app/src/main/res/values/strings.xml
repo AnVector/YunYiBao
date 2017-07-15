@@ -49,6 +49,8 @@
     <string name="profile_qr_hint">用云逸宝扫二维码，租赁设备</string>
     <string name="go_to_app">点击进入</string>
     <string name="qr_code_of_mine">我的二维码</string>
+    <string name="from_album">从相册选择</string>
+    <string name="photo">拍照</string>
 
     <!--Toolbar Title-->
     <string name="data_flow_charge">流量充值</string>
@@ -166,7 +168,7 @@
     <string name="refuse_to_auth">拒绝</string>
     <string name="agree_to_auth">授权</string>
     <string name="copy_password">复制密码</string>
-    <string name="surplus_amount">剩余：715.6MB</string>
+    <string name="surplus_amount">剩余：%1$sMB</string>
     <!--empty view-->
     <string name="no_network">亲，网络不给力啊&#8230;</string>
     <string name="no_message">暂无消息哦&#8230;</string>
@@ -295,7 +297,7 @@
     <string name="congratulations">恭喜获得流量红包一个！</string>
     <string name="unfold_it">拆开它</string>
     <string name="use_expires">使用期限：2017.05.05&#8211;2017.06.05</string>
-    <string name="fried_name">司航航的红包</string>
+    <string name="fried_name">%1$s的红包</string>
     <string name="already_saved">已存入余量</string>
     <string name="go_to_account">查看我的流量</string>
     <!--使用帮助-->

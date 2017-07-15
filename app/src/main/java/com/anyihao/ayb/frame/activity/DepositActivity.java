@@ -118,7 +118,7 @@ public class DepositActivity extends ABaseActivity {
         spannableString.setSpan(colorSpan2, 0, 2, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         tvCashPledge.setText(spannableString);
         getDepositInfo();
-        wxApi = WXAPIFactory.createWXAPI(this, null);
+        wxApi = WXAPIFactory.createWXAPI(getApplicationContext(), null);
         wxApi.registerApp(GlobalConsts.WX_APP_ID);
         isWxPaySupported = wxApi.getWXAppSupportAPI() >= Build.PAY_SUPPORTED_SDK_INT;
         isWxInstalled = wxApi.isWXAppSupportAPI();

@@ -154,6 +154,8 @@ public class PackageFragment extends ABaseFragment {
             return;
         if (error.contains("ConnectException")) {
             ToastUtils.showToast(mContext.getApplicationContext(), "网络连接失败，请检查网络设置");
+        } else if (error.contains("404")) {
+            ToastUtils.showToast(mContext.getApplicationContext(), "未知异常");
         } else {
             ToastUtils.showToast(mContext.getApplicationContext(), error);
         }

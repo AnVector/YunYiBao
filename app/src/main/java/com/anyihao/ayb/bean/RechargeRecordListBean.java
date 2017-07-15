@@ -38,7 +38,7 @@ public class RechargeRecordListBean implements Serializable {
 
     public class DataBean implements Serializable {
         private String idxOrderID;
-        private int amount;
+        private String amount;
         private String topupType;
         private String pkgType;
         private String pkgInfo;
@@ -52,14 +52,6 @@ public class RechargeRecordListBean implements Serializable {
 
         public void setIdxOrderID(String idxOrderID) {
             this.idxOrderID = idxOrderID;
-        }
-
-        public int getAmount() {
-            return amount;
-        }
-
-        public void setAmount(int amount) {
-            this.amount = amount;
         }
 
         public String getTopupType() {
@@ -108,6 +100,14 @@ public class RechargeRecordListBean implements Serializable {
 
         public void setFlow(String flow) {
             this.flow = flow;
+        }
+
+        public String getAmount() {
+            return amount;
+        }
+
+        public void setAmount(String amount) {
+            this.amount = amount;
         }
     }
 }

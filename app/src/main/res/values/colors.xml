@@ -13,7 +13,7 @@
     <color name="light_blue">#C4C4C4</color>
     <color name="line_color">#D6D7DC</color>
     <color name="user_account_color">#333333</color>
-    <color name="app_background_color">#F6F6F6</color>
+    <color name="app_background_color">#F5F5F9</color>
     <color name="toolbar_title_color">#2DA8F4</color>
     <color name="toolbar_register_color">#999999</color>
     <color name="content_bg_color">#F5F5F9</color>

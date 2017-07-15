@@ -143,6 +143,7 @@ public class EnvelopeFragment extends ABaseFragment {
                     intent.putExtra("sendName", ((DataBean) o).getSendName());
                     intent.putExtra("sendAvatar", ((DataBean) o).getSendAvatar());
                     intent.putExtra("flow", ((DataBean) o).getFlow());
+                    intent.putExtra("crtTime", ((DataBean) o).getCrtTm());
                     intent.putExtra("effectTime", ((DataBean) o).getEffecTm());
                     intent.putExtra("status", ((DataBean) o).getStatus());
                     startActivityForResult(intent, REQUEST_ENVELOPE_CODE);

@@ -38,7 +38,7 @@ public class DashboardView extends View {
     private int mSection = 10; // 值域（mMax-mMin）等分份数
     private int mPortion = 1; // 一个mSection等分份数
     private String mHeaderText = ""; // 表头
-    private int mCreditValue = 650; // 信用分
+    private int mCreditValue = 0; // 信用分
     private int mSolidCreditValue = mCreditValue; // 信用分(设定后不变)
     private int mSparkleWidth; // 亮点宽度
     private int mProgressWidth; // 进度圆弧宽度
@@ -384,82 +384,11 @@ public class DashboardView extends View {
     /**
      * 相对起始角度计算信用分所对应的角度大小
      */
-//    private float calculateRelativeAngleWithValue(int value) {
-//        float degreePerSection = 1f * mSweepAngle / mSection;
-//        if (value > 700) {
-//            return 8 * degreePerSection + 2 * degreePerSection / 250 * (value - 700);
-//        } else if (value > 650) {
-//            return 6 * degreePerSection + 2 * degreePerSection / 50 * (value - 650);
-//        } else if (value > 600) {
-//            return 4 * degreePerSection + 2 * degreePerSection / 50 * (value - 600);
-//        } else if (value > 550) {
-//            return 2 * degreePerSection + 2 * degreePerSection / 50 * (value - 550);
-//        } else {
-//            return 2 * degreePerSection / 200 * (value - 350);
-//        }
-//    }
-
-    /**
-     * 相对起始角度计算信用分所对应的角度大小
-     */
     private float calculateRelativeAngleWithValue(int value) {
         float degreePerSection = 1f * mSweepAngle / mSection;
-//        if (value > 700) {
-//            return 8 * degreePerSection + 2 * degreePerSection / 250 * (value - 700);
-//        } else if (value > 650) {
-//            return 6 * degreePerSection + 2 * degreePerSection / 50 * (value - 650);
-//        } else if (value > 600) {
-//            return 4 * degreePerSection + 2 * degreePerSection / 50 * (value - 600);
-//        } else if (value > 550) {
-//            return 2 * degreePerSection + 2 * degreePerSection / 50 * (value - 550);
-//        } else {
-//            return 2 * degreePerSection / 200 * (value - 350);
-//        }
         return degreePerSection * value / 10;
     }
 
-    /**
-     * 信用分对应信用描述
-     */
-//    private String calculateCreditDescription() {
-//        if (mSolidCreditValue > 700) {
-//            return "信用极好";
-//        } else if (mSolidCreditValue > 650) {
-//            return "信用优秀";
-//        } else if (mSolidCreditValue > 600) {
-//            return "信用良好";
-//        } else if (mSolidCreditValue > 550) {
-//            return "信用中等";
-//        }
-//        return "信用较差";
-//    }
-
-//    private SimpleDateFormat mDateFormat;
-
-//    private String getFormatTimeStr() {
-//        if (mDateFormat == null) {
-//            mDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.CHINA);
-//        }
-//        return String.format("评估时间:%s", mDateFormat.format(new Date()));
-//    }
-    public int getCreditValue() {
-        return mCreditValue;
-    }
-
-    /**
-     * 设置信用值
-     *
-     * @param creditValue 信用值
-     */
-    public void setCreditValue(int creditValue) {
-        if (mSolidCreditValue == creditValue || creditValue < mMin || creditValue > mMax) {
-            return;
-        }
-
-        mSolidCreditValue = creditValue;
-        mCreditValue = creditValue;
-        postInvalidate();
-    }
 
     /**
      * 设置信用值并播放动画

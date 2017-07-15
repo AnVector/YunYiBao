@@ -68,6 +68,10 @@ public class FlowAccountActivity extends ABaseActivity {
         recyclerview.setAdapter(mAdapter);
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager
                 .VERTICAL, false));
+        for (int i = 0; i < 3; i++) {
+            mData.add("0%");
+        }
+        mAdapter.add(0, mData.size(), mData);
         getFlowAccount();
     }
 
@@ -128,16 +132,13 @@ public class FlowAccountActivity extends ABaseActivity {
             if (bean == null)
                 return;
             if (bean.getCode() == 200) {
-                mData.add((float) (bean.getInitFlow() - bean.getInitUseFlow()) / (float) bean
-                        .getInitFlow() + "%");
-                mData.add((float) (bean.getBuyFlow() - bean.getBuyUseFlow()) / (float) bean
-                        .getBuyFlow() + "%");
-                mData.add((float) (bean.getTaskFlow() - bean.getTaskUseFlow()) / (float) bean
-                        .getTaskFlow() + "%");
-                dashboardView.setCreditValueWithAnim(bean.getTotalFlow() - bean.getTotalUseFlow()
-                        , bean.getTotalFlow() + "", (bean.getTotalFlow() - bean
-                                .getTotalUseFlow()) + "");
-                mAdapter.add(0, mData.size(), mData);
+                mData.set(0, bean.getInitUseFlow() / bean.getInitFlow() + "%");
+                mData.set(1, bean.getBuyUseFlow() / bean.getBuyFlow() + "%");
+                mData.set(2, bean.getTaskUseFlow() / bean.getTaskFlow() + "%");
+                dashboardView.setCreditValueWithAnim((int) ((bean.getTotalUseFlow() / bean
+                                .getTotalFlow() * 100))
+                        , bean.getTotalFlow() + "", bean.getTotalUseFlow() + "");
+                mAdapter.notifyDataSetChanged();
             } else {
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg());
             }

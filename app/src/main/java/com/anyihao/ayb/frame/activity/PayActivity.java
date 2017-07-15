@@ -151,7 +151,7 @@ public class PayActivity extends ABaseActivity {
         tvAmount.setText(String.format(tvAmount.getText().toString(), amount));
         tvValidity.setText(String.format(tvValidity.getText().toString(), expires.replace
                 ("全国流量，即时生效，", "")));
-        wxApi = WXAPIFactory.createWXAPI(this, null);
+        wxApi = WXAPIFactory.createWXAPI(getApplicationContext(), null);
         wxApi.registerApp(GlobalConsts.WX_APP_ID);
         isWxPaySupported = wxApi.getWXAppSupportAPI() >= Build.PAY_SUPPORTED_SDK_INT;
         isWxInstalled = wxApi.isWXAppSupportAPI();

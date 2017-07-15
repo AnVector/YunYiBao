@@ -24,7 +24,6 @@
         android:gravity="right|center_vertical"
         android:textColor="@color/light_gray"
         android:textSize="@dimen/font_size_small"/>
-
     <View
         android:id="@+id/line"
         style="@style/divider_line"/>

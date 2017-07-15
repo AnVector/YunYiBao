@@ -25,13 +25,15 @@ public class FlowAccountBean implements Serializable {
     private int code;
     private String msg;
     private int totalFlow;
-    private int totalUseFlow;
+    private double totalUseFlow;
     private int initFlow;
-    private int initUseFlow;
+    private double initUseFlow;
     private int buyFlow;
-    private int buyUseFlow;
+    private double buyUseFlow;
     private int taskFlow;
-    private int taskUseFlow;
+    private double taskUseFlow;
+    private int transferFlow;
+    private double transferUseFlow;
 
     public int getCode() {
         return code;
@@ -57,9 +59,6 @@ public class FlowAccountBean implements Serializable {
         this.totalFlow = totalFlow;
     }
 
-    public int getTotalUseFlow() {
-        return totalUseFlow;
-    }
 
     public void setTotalUseFlow(int totalUseFlow) {
         this.totalUseFlow = totalUseFlow;
@@ -73,9 +72,6 @@ public class FlowAccountBean implements Serializable {
         this.initFlow = initFlow;
     }
 
-    public int getInitUseFlow() {
-        return initUseFlow;
-    }
 
     public void setInitUseFlow(int initUseFlow) {
         this.initUseFlow = initUseFlow;
@@ -89,9 +85,6 @@ public class FlowAccountBean implements Serializable {
         this.buyFlow = buyFlow;
     }
 
-    public int getBuyUseFlow() {
-        return buyUseFlow;
-    }
 
     public void setBuyUseFlow(int buyUseFlow) {
         this.buyUseFlow = buyUseFlow;
@@ -105,11 +98,61 @@ public class FlowAccountBean implements Serializable {
         this.taskFlow = taskFlow;
     }
 
-    public int getTaskUseFlow() {
-        return taskUseFlow;
-    }
 
     public void setTaskUseFlow(int taskUseFlow) {
         this.taskUseFlow = taskUseFlow;
+    }
+
+
+    public void setTransferUseFlow(int transferUseFlow) {
+        this.transferUseFlow = transferUseFlow;
+    }
+
+    public int getTransferFlow() {
+        return transferFlow;
+    }
+
+    public void setTransferFlow(int transferFlow) {
+        this.transferFlow = transferFlow;
+    }
+
+    public double getTotalUseFlow() {
+        return totalUseFlow;
+    }
+
+    public void setTotalUseFlow(double totalUseFlow) {
+        this.totalUseFlow = totalUseFlow;
+    }
+
+    public double getInitUseFlow() {
+        return initUseFlow;
+    }
+
+    public void setInitUseFlow(double initUseFlow) {
+        this.initUseFlow = initUseFlow;
+    }
+
+    public double getBuyUseFlow() {
+        return buyUseFlow;
+    }
+
+    public void setBuyUseFlow(double buyUseFlow) {
+        this.buyUseFlow = buyUseFlow;
+    }
+
+    public double getTaskUseFlow() {
+        return taskUseFlow;
+    }
+
+    public void setTaskUseFlow(double taskUseFlow) {
+        this.taskUseFlow = taskUseFlow;
+    }
+
+    public double getTransferUseFlow() {
+        return transferUseFlow;
+    }
+
+    public void setTransferUseFlow(double transferUseFlow) {
+        this.transferUseFlow = transferUseFlow;
     }
 }
