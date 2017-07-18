@@ -42,6 +42,8 @@ public class PayResultActivity extends ABaseActivity {
     private String amount;
     private String money;
     private String expires;
+    public static final int RESULT_GO_TO_HOME_CODE = 0x0008;
+    public static final int RESULT_GO_TO_RECORD_CODE = 0x0009;
 
     @Override
     protected int getContentViewId() {
@@ -69,7 +71,7 @@ public class PayResultActivity extends ABaseActivity {
         }
         tvPurchaseValue.setText(amount);
         tvFeeValue.setText(money);
-        tvValidityValue.setText(expires);
+        tvValidityValue.setText(expires.replace("全国流量，即时生效，", ""));
     }
 
     @Override
@@ -77,6 +79,7 @@ public class PayResultActivity extends ABaseActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(RESULT_GO_TO_HOME_CODE);
                 finish();
             }
         });
@@ -93,6 +96,7 @@ public class PayResultActivity extends ABaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(PayResultActivity.this, RechargeRecordActivity.class);
                 startActivity(intent);
+                setResult(RESULT_GO_TO_RECORD_CODE);
                 finish();
             }
         });
@@ -100,11 +104,6 @@ public class PayResultActivity extends ABaseActivity {
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
-
-    }
-
-    @Override
-    public void onFailure(String error, int page, Integer actionType) {
 
     }
 }

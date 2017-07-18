@@ -72,6 +72,8 @@ public class PayActivity extends ABaseActivity {
     private String topupType = "ALIPAY";
 
     private static final int SDK_PAY_FLAG = 0x0001;
+    private static final int REQUEST_PAY_RESULT_CODE = 0x0007;
+    public static final int RESULT_PAY_CODE = 0x0010;
 
     Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -103,14 +105,13 @@ public class PayActivity extends ABaseActivity {
             intent.putExtra("amount", amount);
             intent.putExtra("money", money);
             intent.putExtra("expires", expires);
-            startActivity(intent);
-            finish();
+            startActivityForResult(intent, REQUEST_PAY_RESULT_CODE);
 //            ToastUtils.showToast(PayActivity.this, "支付成功");
         } else if (TextUtils.equals(resultStatus, "6001")) {
-            ToastUtils.showToast(PayActivity.this, "支付取消");
+            ToastUtils.showToast(getApplicationContext(), "支付取消");
         } else {
             // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
-            ToastUtils.showToast(PayActivity.this, "支付失败");
+            ToastUtils.showToast(getApplicationContext(), "支付失败");
         }
     }
 
@@ -128,6 +129,7 @@ public class PayActivity extends ABaseActivity {
         amount = intent.getStringExtra("amount");
         expires = intent.getStringExtra("expires");
         packageID = intent.getStringExtra("packageID");
+        PreferencesUtils.putString(getApplicationContext(), "payType", "common");
         PreferencesUtils.putString(getApplicationContext(), "money", money);
         PreferencesUtils.putString(getApplicationContext(), "amount", amount);
         PreferencesUtils.putString(getApplicationContext(), "expires", expires.replace
@@ -215,7 +217,7 @@ public class PayActivity extends ABaseActivity {
     private void payByWx(String appId, String partnerId, String prepayId, String packageValue,
                          String nonceStr, String timeStamp, String sign) {
         if (isWxPaySupported) {
-            ToastUtils.showToast(PayActivity.this, "订单获取中...");
+            ToastUtils.showToast(getApplicationContext(), "订单获取中...");
             PayReq request = new PayReq();
             request.appId = appId;
             request.partnerId = partnerId;
@@ -231,6 +233,7 @@ public class PayActivity extends ABaseActivity {
     private void payByAliPay(final String orderInfo) {
         if (StringUtils.isEmpty(orderInfo))
             return;
+        ToastUtils.showToast(getApplicationContext(), "订单获取中...");
         Runnable payRunnable = new Runnable() {
 
             @Override
@@ -277,9 +280,16 @@ public class PayActivity extends ABaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        ToastUtils.showToast(getApplicationContext(), resultCode + "");
         if (resultCode == WXPayEntryActivity.RESULT_PAY_RESULT_CODE) {
-            finish();
+            this.finish();
+        }
+
+        if (requestCode == REQUEST_PAY_RESULT_CODE) {
+            if (resultCode == PayResultActivity.RESULT_GO_TO_HOME_CODE || resultCode ==
+                    PayResultActivity.RESULT_GO_TO_RECORD_CODE) {
+                setResult(RESULT_PAY_CODE);
+                this.finish();
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -310,19 +320,6 @@ public class PayActivity extends ABaseActivity {
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg());
             }
 
-        }
-    }
-
-    @Override
-    public void onFailure(String error, int page, Integer actionType) {
-        if (StringUtils.isEmpty(error))
-            return;
-        if (error.contains("ConnectException")) {
-            ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
-        } else if (error.contains("404")) {
-            ToastUtils.showToast(getApplicationContext(), "未知异常");
-        } else {
-            ToastUtils.showToast(getApplicationContext(), error);
         }
     }
 }

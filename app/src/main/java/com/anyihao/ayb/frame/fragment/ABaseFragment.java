@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 
 import com.anyihao.androidbase.fragment.BKBaseFragment;
 import com.anyihao.androidbase.mvp.IView;
+import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.common.PresenterFactory;
 
 /**
@@ -16,5 +18,18 @@ public abstract class ABaseFragment extends BKBaseFragment implements IView<Inte
     public void onDestroy() {
         super.onDestroy();
         PresenterFactory.getInstance().remove(this);
+    }
+
+    @Override
+    public void onFailure(String error, int page, Integer actionType) {
+        if (StringUtils.isEmpty(error))
+            return;
+        if (error.contains("ConnectException")) {
+            ToastUtils.showToast(mContext.getApplicationContext(), "网络连接失败，请检查网络设置");
+        } else if (error.contains("404")) {
+            ToastUtils.showToast(mContext.getApplicationContext(), "未知异常");
+        } else {
+            ToastUtils.showToast(mContext.getApplicationContext(), error);
+        }
     }
 }

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="300dp"
               android:layout_height="wrap_content"
-              android:layout_marginTop="22dp"
+              android:layout_marginTop="16dp"
               android:orientation="vertical">
 
     <TextView
@@ -14,11 +14,18 @@
         android:textColor="@color/white"
         android:textSize="@dimen/font_size_normal"/>
 
-    <View
-        android:id="@+id/flow_data_view"
+    <SeekBar
+        android:id="@+id/seekBar"
         android:layout_width="match_parent"
         android:layout_height="14dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="15dp"/>
-
+        android:layout_marginTop="10dp"
+        android:background="@drawable/data_flow_bg"
+        android:gravity="center"
+        android:max="100"
+        android:paddingEnd="-0.1dp"
+        android:paddingStart="-0.1dp"
+        android:progressDrawable="@drawable/seekbar_bg1"
+        android:secondaryProgress="0"
+        android:thumb="@drawable/slide_thumb_normal"/>
 </LinearLayout>

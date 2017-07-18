@@ -62,6 +62,7 @@ public class RechargeActivity extends ABaseActivity {
     private String[] mTitleArray = new String[]{"超值包", "月包", "3天包", "日包", "季包"};
     private String[] mFlowTypes = new String[]{"VIP", "MONTH", "THREE", "DAY", "SEASON"};
     private List<String> mTitles = Arrays.asList(mTitleArray);
+    private static final int REQUEST_PAY_CODE = 0x0011;
 
     @Override
     protected int getContentViewId() {
@@ -138,7 +139,7 @@ public class RechargeActivity extends ABaseActivity {
                     intent.putExtra("amount", fragment.getAmount());
                     intent.putExtra("expires", fragment.getExpires());
                     intent.putExtra("packageID", fragment.getPackageID());
-                    startActivity(intent);
+                    startActivityForResult(intent, REQUEST_PAY_CODE);
                 }
             }
         });
@@ -157,6 +158,16 @@ public class RechargeActivity extends ABaseActivity {
         spannableString.setSpan(styleSpan, 7, spannableString.length(), Spanned
                 .SPAN_INCLUSIVE_EXCLUSIVE);
         tvFlow.setText(spannableString);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_PAY_CODE) {
+            if (resultCode == PayActivity.RESULT_PAY_CODE) {
+                this.finish();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -183,18 +194,5 @@ public class RechargeActivity extends ABaseActivity {
             return amount + "G";
         }
         return amount + "M";
-    }
-
-    @Override
-    public void onFailure(String error, int page, Integer actionType) {
-        if (StringUtils.isEmpty(error))
-            return;
-        if (error.contains("ConnectException")) {
-            ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
-        } else if (error.contains("404")) {
-            ToastUtils.showToast(getApplicationContext(), "未知异常");
-        } else {
-            ToastUtils.showToast(getApplicationContext(), error);
-        }
     }
 }

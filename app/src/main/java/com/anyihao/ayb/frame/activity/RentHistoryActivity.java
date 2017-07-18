@@ -116,10 +116,4 @@ public class RentHistoryActivity extends ABaseActivity {
             mAdapter.add(0, mData.size(), mData);
         }
     }
-
-    @Override
-    public void onFailure(String error, int page, Integer actionType) {
-        ToastUtils.showToast(getApplicationContext(), error, R.layout.toast,
-                R.id.tv_message);
-    }
 }

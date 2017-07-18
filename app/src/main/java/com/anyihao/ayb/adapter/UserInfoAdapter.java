@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 
 import com.anyihao.ayb.R;
-import com.anyihao.ayb.bean.ProfileBean;
+import com.anyihao.ayb.bean.KeyValueBean;
 
 import java.util.List;
 
@@ -12,17 +12,17 @@ import java.util.List;
  * Created by Admin on 2017/4/7.
  */
 
-public class UserInfoAdapter extends RecyclerViewAdapter<ProfileBean> {
+public class UserInfoAdapter extends RecyclerViewAdapter<KeyValueBean> {
 
-    public UserInfoAdapter(Context context, int layoutId, List<ProfileBean> datas) {
+    public UserInfoAdapter(Context context, int layoutId, List<KeyValueBean> datas) {
         super(context, layoutId, datas);
     }
 
     @Override
-    public void convert(ViewHolder holder, ProfileBean profileBean) {
-        if (profileBean == null)
+    public void convert(ViewHolder holder, KeyValueBean keyValueBean) {
+        if (keyValueBean == null)
             return;
-        String title = profileBean.getTitle();
+        String title = keyValueBean.getTitle();
         holder.setText(R.id.title, title);
         switch (title) {
             case "头像":
@@ -31,7 +31,7 @@ public class UserInfoAdapter extends RecyclerViewAdapter<ProfileBean> {
                 holder.setVisible(R.id.line, true);
                 holder.setVisible(R.id.img_profile, true);
                 holder.setVisible(R.id.img_code, false);
-                holder.displayCircleImage(R.id.img_profile, profileBean.getValue(), R.drawable
+                holder.displayCircleImage(R.id.img_profile, keyValueBean.getValue(), R.drawable
                         .user_profile);
                 break;
             case "我的二维码":
@@ -44,10 +44,10 @@ public class UserInfoAdapter extends RecyclerViewAdapter<ProfileBean> {
             case "押金退款":
                 holder.setTextColor(R.id.value, Color.parseColor("#ff1919"));
                 holder.setVisible(R.id.line, false);
-                holder.setText(R.id.value, profileBean.getValue());
+                holder.setText(R.id.value, keyValueBean.getValue());
                 break;
             default:
-                holder.setText(R.id.value, profileBean.getValue());
+                holder.setText(R.id.value, keyValueBean.getValue());
                 holder.setVisible(R.id.img_code, false);
                 holder.setVisible(R.id.img_profile, false);
                 break;

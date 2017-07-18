@@ -136,8 +136,6 @@ public class DepositActivity extends ABaseActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(DepositActivity.this, AuthenticationActivity.class);
-//                startActivityForResult(intent, REQUEST_DEPOSIT_CODE);
                 getOrderInfo();
 
             }
@@ -177,18 +175,21 @@ public class DepositActivity extends ABaseActivity {
         // 判断resultStatus 为9000则代表支付成功
         if (TextUtils.equals(resultStatus, "9000")) {
             // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
-//            ToastUtils.showToast(PayActivity.this, "支付成功");
+            Intent intent = new Intent(DepositActivity.this, AuthFinishActivity.class);
+            startActivityForResult(intent, REQUEST_DEPOSIT_CODE);
         } else if (TextUtils.equals(resultStatus, "6001")) {
+            ToastUtils.showToast(getApplicationContext(), "支付取消");
         } else {
             // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
-//            ToastUtils.showToast(PayActivity.this, "支付失败");
+            ToastUtils.showToast(getApplicationContext(), "支付失败");
         }
     }
 
     private void payByWx(String appId, String partnerId, String prepayId, String packageValue,
                          String nonceStr, String timeStamp, String sign) {
+        PreferencesUtils.putString(getApplicationContext(), "payType", "deposit");
         if (isWxPaySupported) {
-            ToastUtils.showToast(DepositActivity.this, "订单获取中...");
+            ToastUtils.showToast(getApplicationContext(), "订单获取中...");
             PayReq request = new PayReq();
             request.appId = appId;
             request.partnerId = partnerId;
@@ -204,6 +205,7 @@ public class DepositActivity extends ABaseActivity {
     private void payByAliPay(final String orderInfo) {
         if (StringUtils.isEmpty(orderInfo))
             return;
+        ToastUtils.showToast(getApplicationContext(), "订单获取中...");
         Runnable payRunnable = new Runnable() {
 
             @Override
@@ -219,7 +221,6 @@ public class DepositActivity extends ABaseActivity {
         };
         Thread payThread = new Thread(payRunnable);
         payThread.start();
-
     }
 
     private void getDepositInfo() {
@@ -270,9 +271,8 @@ public class DepositActivity extends ABaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_DEPOSIT_CODE) {
-            if (resultCode == AuthenticationActivity.RESULT_FINISH_CODE) {
-                Intent intent = new Intent();
-                setResult(RESULT_DEPOSIT_CODE, intent);
+            if (resultCode == AuthFinishActivity.RESULT_FINISH_CODE) {
+                setResult(RESULT_DEPOSIT_CODE);
                 finish();
             }
         }
@@ -292,11 +292,9 @@ public class DepositActivity extends ABaseActivity {
                 if (beans.size() > 0) {
                     DataBean dataBean = beans.get(0);
                     tvMoney.setText(dataBean.getPrice());
-                    tvCashPledgeHint.setText(dataBean.getPkgDesc());
+                    tvCashPledgeHint.setText(dataBean.getPkgDesc().replace("\\n", "\n"));
                     packageID = dataBean.getPackageID();
                     pkgType = dataBean.getPkgType();
-                } else {
-
                 }
             }
         }
@@ -325,19 +323,6 @@ public class DepositActivity extends ABaseActivity {
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg());
             }
 
-        }
-    }
-
-    @Override
-    public void onFailure(String error, int page, Integer actionType) {
-        if (StringUtils.isEmpty(error))
-            return;
-        if (error.contains("ConnectException")) {
-            ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
-        } else if (error.contains("404")) {
-            ToastUtils.showToast(getApplicationContext(), "未知异常");
-        } else {
-            ToastUtils.showToast(getApplicationContext(), error);
         }
     }
 }

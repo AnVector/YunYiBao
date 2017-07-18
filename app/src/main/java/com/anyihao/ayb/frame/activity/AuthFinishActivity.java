@@ -1,6 +1,5 @@
 package com.anyihao.ayb.frame.activity;
 
-import android.content.Intent;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -12,7 +11,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 
 import butterknife.BindView;
 
-public class AuthenticationActivity extends ABaseActivity {
+public class AuthFinishActivity extends ABaseActivity {
 
     @BindView(R.id.toolbar_title_mid)
     TextView toolbarTitleMid;
@@ -36,7 +35,7 @@ public class AuthenticationActivity extends ABaseActivity {
 
     @Override
     protected int getContentViewId() {
-        return R.layout.activity_authentication;
+        return R.layout.activity_auth_finish;
     }
 
     @Override
@@ -67,15 +66,14 @@ public class AuthenticationActivity extends ABaseActivity {
             @Override
             public void onClick(View v) {
 
-                IntentIntegrator integrator = new IntentIntegrator(AuthenticationActivity.this);
+                IntentIntegrator integrator = new IntentIntegrator(AuthFinishActivity.this);
                 integrator
                         .setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
                         .setOrientationLocked(false)//扫描方向固定
                         .setCaptureActivity(ScanActivity.class) //
                         // 设置自定义的activity是CustomActivity
                         .initiateScan(); // 初始化扫描
-                Intent intent = new Intent();
-                setResult(RESULT_FINISH_CODE, intent);
+                setResult(RESULT_FINISH_CODE);
                 finish();
             }
         });
@@ -84,11 +82,6 @@ public class AuthenticationActivity extends ABaseActivity {
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
-
-    }
-
-    @Override
-    public void onFailure(String error, int page, Integer actionType) {
 
     }
 }

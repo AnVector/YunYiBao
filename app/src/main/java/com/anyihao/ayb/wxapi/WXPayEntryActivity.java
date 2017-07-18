@@ -5,6 +5,8 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.anyihao.androidbase.manager.ActivityManager;
@@ -13,8 +15,13 @@ import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.frame.activity.ABaseActivity;
+import com.anyihao.ayb.frame.activity.CertificationActivity;
+import com.anyihao.ayb.frame.activity.DepositActivity;
 import com.anyihao.ayb.frame.activity.PayActivity;
+import com.anyihao.ayb.frame.activity.RechargeActivity;
 import com.anyihao.ayb.frame.activity.RechargeRecordActivity;
+import com.anyihao.ayb.frame.activity.ScanActivity;
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.orhanobut.logger.Logger;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
@@ -34,7 +41,6 @@ import butterknife.BindView;
  */
 public class WXPayEntryActivity extends ABaseActivity implements IWXAPIEventHandler {
 
-    private static final String TAG = WXPayEntryActivity.class.getSimpleName();
     @BindView(R.id.toolbar_title_mid)
     TextView toolbarTitleMid;
     @BindView(R.id.toolbar)
@@ -53,6 +59,14 @@ public class WXPayEntryActivity extends ABaseActivity implements IWXAPIEventHand
     AppCompatButton btnBack;
     @BindView(R.id.btn_to_recharge_record)
     AppCompatButton btnToRechargeRecord;
+    @BindView(R.id.rl_common)
+    RelativeLayout rlCommon;
+    @BindView(R.id.btn_submit)
+    AppCompatButton btnSubmit;
+    @BindView(R.id.ll_deposit)
+    LinearLayout llDeposit;
+    @BindView(R.id.tv_step_four)
+    TextView tvStepFour;
     private IWXAPI wxApi;
     public static final int RESULT_PAY_RESULT_CODE = 0x0007;
 
@@ -68,18 +82,13 @@ public class WXPayEntryActivity extends ABaseActivity implements IWXAPIEventHand
 
     @Override
     protected void initData() {
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+        toolbar.setNavigationIcon(R.drawable.ic_back);
         wxApi = WXAPIFactory.createWXAPI(getApplicationContext(), GlobalConsts.WX_APP_ID);
         wxApi.handleIntent(getIntent(), this);
-        toolbarTitleMid.setText(getString(R.string.pay_succeed));
-        toolbar.setNavigationIcon(R.drawable.ic_back);
-        icResult.setImageResource(R.drawable.ic_success);
-        tvResult.setText(getString(R.string.payment_suceess));
-        String amount = PreferencesUtils.getString(getApplicationContext(), "amount", "");
-        String money = PreferencesUtils.getString(getApplicationContext(), "money", "");
-        String expires = PreferencesUtils.getString(getApplicationContext(), "expires", "");
-        tvPurchaseValue.setText(amount);
-        tvFeeValue.setText(money);
-        tvValidityValue.setText(expires);
     }
 
     @Override
@@ -88,6 +97,7 @@ public class WXPayEntryActivity extends ABaseActivity implements IWXAPIEventHand
             @Override
             public void onClick(View v) {
                 ActivityManager.getInstance().finishActivity(PayActivity.class);
+                ActivityManager.getInstance().finishActivity(RechargeActivity.class);
                 finish();
             }
         });
@@ -105,6 +115,24 @@ public class WXPayEntryActivity extends ABaseActivity implements IWXAPIEventHand
                 Intent intent = new Intent(WXPayEntryActivity.this, RechargeRecordActivity.class);
                 startActivity(intent);
                 ActivityManager.getInstance().finishActivity(PayActivity.class);
+                ActivityManager.getInstance().finishActivity(RechargeActivity.class);
+                finish();
+            }
+        });
+
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                IntentIntegrator integrator = new IntentIntegrator(WXPayEntryActivity.this);
+                integrator
+                        .setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
+                        .setOrientationLocked(false)//扫描方向固定
+                        .setCaptureActivity(ScanActivity.class) //
+                        // 设置自定义的activity是CustomActivity
+                        .initiateScan(); // 初始化扫描
+                ActivityManager.getInstance().finishActivity(DepositActivity.class);
+                ActivityManager.getInstance().finishActivity(CertificationActivity.class);
                 finish();
             }
         });
@@ -138,6 +166,7 @@ public class WXPayEntryActivity extends ABaseActivity implements IWXAPIEventHand
         int errCode = baseResp.errCode;
         switch (errCode) {
             case 0:
+                onPaySuccess();
                 break;
             case -1:
                 ToastUtils.showToast(getApplicationContext(), "支付失败");
@@ -149,6 +178,28 @@ public class WXPayEntryActivity extends ABaseActivity implements IWXAPIEventHand
                 break;
             default:
                 break;
+        }
+    }
+
+    private void onPaySuccess() {
+        String payType = PreferencesUtils.getString(getApplicationContext(), "payType", "common");
+        if (payType.equals("common")) {
+            llDeposit.setVisibility(View.GONE);
+            rlCommon.setVisibility(View.VISIBLE);
+            toolbarTitleMid.setText(getString(R.string.pay_succeed));
+            icResult.setImageResource(R.drawable.ic_success);
+            tvResult.setText(getString(R.string.payment_suceess));
+            String amount = PreferencesUtils.getString(getApplicationContext(), "amount", "");
+            String money = PreferencesUtils.getString(getApplicationContext(), "money", "");
+            String expires = PreferencesUtils.getString(getApplicationContext(), "expires", "");
+            tvPurchaseValue.setText(amount);
+            tvFeeValue.setText(money);
+            tvValidityValue.setText(expires);
+        } else {
+            llDeposit.setVisibility(View.VISIBLE);
+            rlCommon.setVisibility(View.GONE);
+            toolbarTitleMid.setText(getString(R.string.finished));
+            tvStepFour.setBackground(getResources().getDrawable(R.drawable.ic_step_yes));
         }
     }
 }

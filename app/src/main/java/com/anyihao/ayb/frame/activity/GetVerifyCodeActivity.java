@@ -331,11 +331,6 @@ public class GetVerifyCodeActivity extends ABaseActivity {
     }
 
     @Override
-    public void onFailure(String error, int page, Integer actionType) {
-
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (mCountDownTimer == null)

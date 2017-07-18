@@ -18,7 +18,6 @@ import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.androidbase.utils.StringUtils;
-import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.MessageAdapter;
 import com.anyihao.ayb.bean.MessageBean;
@@ -167,6 +166,7 @@ public class MessageFragment extends ABaseFragment {
         ultimateRecyclerView.setRefreshing(false);
         //   ultimateRecyclerView.scrollBy(0, -50);
         layoutManager.scrollToPosition(0);
+        ultimateRecyclerView.reenableLoadmore();
 //        recyclerView.scrollVerticallyTo(0);
         //ultimateRecyclerView.setAdapter(simpleRecyclerViewAdapter);
         //simpleRecyclerViewAdapter.notifyDataSetChanged();
@@ -267,15 +267,7 @@ public class MessageFragment extends ABaseFragment {
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-        if (StringUtils.isEmpty(error))
-            return;
-        if (error.contains("ConnectException")) {
-            ToastUtils.showToast(mContext.getApplicationContext(), "网络连接失败，请检查网络设置");
-            ultimateRecyclerView.showEmptyView();
-        } else if (error.contains("404")) {
-            ToastUtils.showToast(mContext.getApplicationContext(), "未知异常");
-        } else {
-            ToastUtils.showToast(mContext.getApplicationContext(), error);
-        }
+        super.onFailure(error, page, actionType);
+        ultimateRecyclerView.showEmptyView();
     }
 }

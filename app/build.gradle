@@ -251,5 +251,4 @@ dependencies {
     //MPAndroidCharts
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.1.6'
-    compile files('libs/alipaySdk-20170710.jar')
 }

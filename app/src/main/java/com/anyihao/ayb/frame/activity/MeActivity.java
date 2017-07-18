@@ -22,11 +22,10 @@ import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.DensityUtils;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
-import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.UserInfoAdapter;
-import com.anyihao.ayb.bean.ProfileBean;
+import com.anyihao.ayb.bean.KeyValueBean;
 import com.anyihao.ayb.bean.ProvinceBean;
 import com.anyihao.ayb.bean.ResultBean;
 import com.anyihao.ayb.bean.UserInfoBean;
@@ -72,7 +71,7 @@ public class MeActivity extends ABaseActivity {
     @BindView(R.id.progressbar_circular)
     CircularProgressBar progressbarCircular;
     private UserInfoAdapter mAdapter;
-    private List<ProfileBean> mData = new LinkedList<>();
+    private List<KeyValueBean> mData = new LinkedList<>();
     private ArrayList<ProvinceBean> options1Items = new ArrayList<>();
     private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
     private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
@@ -201,8 +200,8 @@ public class MeActivity extends ABaseActivity {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-                if (o instanceof ProfileBean) {
-                    switch (((ProfileBean) o).getTitle()) {
+                if (o instanceof KeyValueBean) {
+                    switch (((KeyValueBean) o).getTitle()) {
                         case "头像":
                             if (bottomDialog != null) {
                                 isGender = false;
@@ -235,8 +234,8 @@ public class MeActivity extends ABaseActivity {
                             startActivity(intent1);
                             break;
                         case "押金退款":
-                            if ("未缴纳".equals(((ProfileBean) o).getValue())) {
-                                ToastUtils.showToast(getApplicationContext(), ((ProfileBean) o)
+                            if ("未缴纳".equals(((KeyValueBean) o).getValue())) {
+                                ToastUtils.showToast(getApplicationContext(), ((KeyValueBean) o)
                                         .getValue());
                                 return;
                             }
@@ -262,9 +261,9 @@ public class MeActivity extends ABaseActivity {
                         default:
                             Intent intent3 = new Intent(MeActivity.this, UpdateInfoActivity
                                     .class);
-                            intent3.putExtra(UpdateInfoActivity.INFORMATION_KEY, ((ProfileBean) o)
+                            intent3.putExtra(UpdateInfoActivity.INFORMATION_KEY, ((KeyValueBean) o)
                                     .getTitle());
-                            intent3.putExtra(UpdateInfoActivity.INFORMATION_VALUE, ((ProfileBean)
+                            intent3.putExtra(UpdateInfoActivity.INFORMATION_VALUE, ((KeyValueBean)
                                     o).getValue());
                             startActivityForResult(intent3, REQUEST_UPDATE_CODE);
                             break;
@@ -584,17 +583,17 @@ public class MeActivity extends ABaseActivity {
 
     }
 
-    private List<ProfileBean> convert2ProfileBean(UserInfoBean bean) {
-        List<ProfileBean> beans = new LinkedList<>();
-        beans.add(0, new ProfileBean().setTitle("头像").setValue(bean.getAvatar()));
-        beans.add(1, new ProfileBean().setTitle("昵称").setValue(bean.getNickname()));
-        beans.add(2, new ProfileBean().setTitle("我的二维码").setValue(""));
-        beans.add(3, new ProfileBean().setTitle("性别").setValue(bean.getSex()));
-        beans.add(4, new ProfileBean().setTitle("生日").setValue(bean.getBirthday()));
-        beans.add(5, new ProfileBean().setTitle("手机号码").setValue(bean.getPhoneNumber()));
-        beans.add(6, new ProfileBean().setTitle("邮箱").setValue(bean.getEmail()));
-        beans.add(7, new ProfileBean().setTitle("地区").setValue(bean.getArea()));
-        beans.add(8, new ProfileBean().setTitle("押金退款").setValue(bean.getDeposit()));
+    private List<KeyValueBean> convert2ProfileBean(UserInfoBean bean) {
+        List<KeyValueBean> beans = new LinkedList<>();
+        beans.add(0, new KeyValueBean().setTitle("头像").setValue(bean.getAvatar()));
+        beans.add(1, new KeyValueBean().setTitle("昵称").setValue(bean.getNickname()));
+        beans.add(2, new KeyValueBean().setTitle("我的二维码").setValue(""));
+        beans.add(3, new KeyValueBean().setTitle("性别").setValue(bean.getSex()));
+        beans.add(4, new KeyValueBean().setTitle("生日").setValue(bean.getBirthday()));
+        beans.add(5, new KeyValueBean().setTitle("手机号码").setValue(bean.getPhoneNumber()));
+        beans.add(6, new KeyValueBean().setTitle("邮箱").setValue(bean.getEmail()));
+        beans.add(7, new KeyValueBean().setTitle("地区").setValue(bean.getArea()));
+        beans.add(8, new KeyValueBean().setTitle("押金退款").setValue(bean.getDeposit()));
         return beans;
     }
 
@@ -602,14 +601,6 @@ public class MeActivity extends ABaseActivity {
     public void onFailure(String error, int page, Integer actionType) {
         ((CircularProgressDrawable) progressbarCircular.getIndeterminateDrawable()).stop();
         progressbarCircular.setVisibility(View.GONE);
-        if (StringUtils.isEmpty(error))
-            return;
-        if (error.contains("ConnectException")) {
-            ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
-        } else if (error.contains("404")) {
-            ToastUtils.showToast(getApplicationContext(), "未知异常");
-        } else {
-            ToastUtils.showToast(getApplicationContext(), error);
-        }
+        super.onFailure(error, page, actionType);
     }
 }

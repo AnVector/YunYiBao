@@ -2,36 +2,41 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_authentication"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_background_color"
     android:orientation="vertical"
-    tools:context="com.anyihao.ayb.frame.activity.AuthenticationActivity">
+    tools:context="com.anyihao.ayb.frame.activity.AuthFinishActivity">
+
     <include layout="@layout/toolbar_common"/>
+
     <include layout="@layout/authentication_procedure_layout"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="221dp"
-        android:orientation="vertical"
         android:background="@color/white"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
         <ImageView
+            android:id="@+id/imv_finished"
             android:layout_width="69dp"
             android:layout_height="69dp"
-            android:scaleType="centerCrop"
-            android:id="@+id/imv_finished"
             android:layout_marginTop="53dp"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_finished"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="@dimen/font_size_normal_high"
-            android:textColor="#71c746"
             android:layout_marginTop="30dp"
-            android:text="@string/authentication_finished_hint"/>
+            android:gravity="center"
+            android:text="@string/authentication_finished_hint"
+            android:textColor="#71c746"
+            android:textSize="@dimen/font_size_normal_high"/>
     </LinearLayout>
+
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_submit"
         android:layout_width="match_parent"

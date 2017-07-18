@@ -294,7 +294,7 @@ public class DashboardView extends View {
         mPaint.setTextSize(sp2px(44));
         mPaint.setTextAlign(Paint.Align.CENTER);
         String value = String.valueOf(mSolidCreditValue);
-        canvas.drawText(value + "%", mCenterX, mCenterY + dp2px(30), mPaint);
+        canvas.drawText(value + "%", mCenterX, mCenterY + dp2px(0), mPaint);
 
         /**
          * 画表头
@@ -308,14 +308,14 @@ public class DashboardView extends View {
          */
         mPaint.setAlpha(255);
         mPaint.setTextSize(sp2px(15));
-        canvas.drawText("可用：" + mAvailableFlow + "M", mCenterX, mCenterY + dp2px(55), mPaint);
+        canvas.drawText(mAvailableFlow, mCenterX, mCenterY + dp2px(35), mPaint);
 
         /**
          * 画评估时间
          */
         mPaint.setAlpha(160);
         mPaint.setTextSize(sp2px(12));
-        canvas.drawText("总：" + mTotalFlow + "M", mCenterX, mCenterY + dp2px(70), mPaint);
+        canvas.drawText(mTotalFlow, mCenterX, mCenterY + dp2px(55), mPaint);
     }
 
     private int dp2px(int dp) {
@@ -330,7 +330,7 @@ public class DashboardView extends View {
 
     private SweepGradient generateSweepGradient() {
         SweepGradient sweepGradient = new SweepGradient(mCenterX, mCenterY,
-                new int[]{Color.argb(0, 255, 255, 255), Color.argb(200, 255, 255, 255)},
+                new int[]{Color.argb(255, 255, 255, 255), Color.argb(255, 255, 255, 255)},
                 new float[]{0, calculateRelativeAngleWithValue(mCreditValue) / 360}
         );
         Matrix matrix = new Matrix();
@@ -342,7 +342,7 @@ public class DashboardView extends View {
 
     private RadialGradient generateRadialGradient(float x, float y) {
         return new RadialGradient(x, y, mSparkleWidth / 2f,
-                new int[]{Color.argb(255, 255, 255, 255), Color.argb(80, 255, 255, 255)},
+                new int[]{Color.argb(255, 255, 255, 255), Color.argb(125, 255, 255, 255)},
                 new float[]{0.4f, 1},
                 Shader.TileMode.CLAMP
         );

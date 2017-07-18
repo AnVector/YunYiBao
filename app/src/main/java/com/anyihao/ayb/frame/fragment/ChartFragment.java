@@ -10,8 +10,6 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
-import com.anyihao.androidbase.utils.StringUtils;
-import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.DailyUsageBean;
 import com.anyihao.ayb.bean.DailyUsageBean.DataBean;
@@ -154,8 +152,12 @@ public class ChartFragment extends ABaseFragment {
     }
 
     public void queryByTime(String time) {
-
         this.time = time;
+        if ("DAYFLOW".equals(cmd)) {
+            tvDate.setText(time.substring(5));
+        } else {
+            tvDate.setText(time);
+        }
         getFlowChart();
     }
 
@@ -221,8 +223,6 @@ public class ChartFragment extends ABaseFragment {
     }
 
     private void getFlowChart() {
-        if (StringUtils.isEmpty(time) || StringUtils.isEmpty(cmd))
-            return;
         int actionType = 0;
         Map<String, String> params = new HashMap<>();
         params.put("cmd", cmd);
@@ -233,7 +233,6 @@ public class ChartFragment extends ABaseFragment {
             params.put("month", time);
             actionType = 1;
         }
-
         postForm(params, 1, actionType);
     }
 
@@ -287,7 +286,7 @@ public class ChartFragment extends ABaseFragment {
                     mMonthBeans.addAll(beans);
                     generateMonthLine();
                 } else {
-//                    ToastUtils.showToast(mContext.getApplicationContext(), bean.getMsg());
+                    tvDataAmount.setText(getString(R.string.init_data_flow));
                     chart.clear();
                 }
             }
@@ -307,14 +306,6 @@ public class ChartFragment extends ABaseFragment {
     @Override
     public void onFailure(String error, int page, Integer actionType) {
         hideProgressBar();
-        if (StringUtils.isEmpty(error))
-            return;
-        if (error.contains("ConnectException")) {
-            ToastUtils.showToast(mContext.getApplicationContext(), "网络连接失败，请检查网络设置");
-        } else if (error.contains("404")) {
-            ToastUtils.showToast(mContext.getApplicationContext(), "未知异常");
-        } else {
-            ToastUtils.showToast(mContext.getApplicationContext(), error);
-        }
+        super.onFailure(error, page, actionType);
     }
 }

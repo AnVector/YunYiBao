@@ -169,7 +169,6 @@ public class DeviceManageActivity extends ABaseActivity {
                     mData.addAll(beans);
                     mAdapter.add(0, mData.size(), mData);
                 } else {
-                    ToastUtils.showToast(getApplicationContext(), "暂无授权设备");
                     icError.setImageDrawable(getResources().getDrawable(R.drawable.no_auth_device));
                     tvHint.setText("暂无授权设备");
                     rlEmpty.setVisibility(View.VISIBLE);
@@ -190,12 +189,6 @@ public class DeviceManageActivity extends ABaseActivity {
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg());
             }
         }
-    }
-
-    @Override
-    public void onFailure(String error, int page, Integer actionType) {
-
-
     }
 
     @Override

@@ -86,7 +86,6 @@ public class MeFragment extends ABaseFragment {
     private static int REQUEST_LOGIN_CODE = 0x00003;
     private boolean isLogin = false;
     private List<String> mData = new ArrayList<>();
-    private boolean showNetworkErr;
     private String mIntegral;
 
     @Override
@@ -371,20 +370,6 @@ public class MeFragment extends ABaseFragment {
             if (bean == null)
                 return;
             ToastUtils.showToast(mContext.getApplicationContext(), bean.getMsg());
-        }
-    }
-
-    @Override
-    public void onFailure(String error, int page, Integer actionType) {
-        if (StringUtils.isEmpty(error))
-            return;
-        if (error.contains("ConnectException") && !showNetworkErr) {
-            showNetworkErr = true;
-            ToastUtils.showToast(mContext.getApplicationContext(), "网络连接失败，请检查网络设置");
-        } else if (error.contains("404")) {
-            ToastUtils.showToast(mContext.getApplicationContext(), "未知异常");
-        } else {
-            ToastUtils.showToast(mContext.getApplicationContext(), error);
         }
     }
 }

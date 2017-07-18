@@ -99,7 +99,6 @@ public class MainFragmentActivity extends ABaseActivity {
                 mFragmentList);
         mViewPager.setAdapter(uFragmentPagerAdapter);
         mViewPager.setCurrentItem(0, true);
-        mViewPager.setOffscreenPageLimit(3);
         mCurrent = mRadioButtonDevice;
         changeIcon(mRadioButtonDevice, R.drawable.device_focused);
     }
@@ -274,11 +273,6 @@ public class MainFragmentActivity extends ABaseActivity {
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
-
-    }
-
-    @Override
-    public void onFailure(String error, int page, Integer actionType) {
 
     }
 }

@@ -240,9 +240,6 @@
         </service>
         <!-- 后台进程被杀死以后，无法收到系统发送的网络状态切换的广播 -->
         <receiver android:name=".common.UBroadcastReceiver">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
-            </intent-filter>
         </receiver>
 
         <activity
@@ -318,10 +315,6 @@
             android:excludeFromRecents="true"
             android:theme="@style/Theme.UMDefault"/>
         <activity
-            android:name=".frame.activity.ShareActivity"
-            android:launchMode="singleTop">
-        </activity>
-        <activity
             android:name=".frame.activity.PayActivity"
             android:launchMode="singleTop">
         </activity>
@@ -345,10 +338,6 @@
         </activity>
         <activity
             android:name=".frame.activity.ResetPwdActivity"
-            android:launchMode="singleTop">
-        </activity>
-        <activity
-            android:name=".frame.activity.BindDeviceActivity"
             android:launchMode="singleTop">
         </activity>
         <activity
@@ -393,10 +382,6 @@
         </activity>
         <activity
             android:name=".frame.activity.RechargeRecordActivity"
-            android:launchMode="singleTop">
-        </activity>
-        <activity
-            android:name=".frame.activity.BondDevicesActivity"
             android:launchMode="singleTop">
         </activity>
         <activity
@@ -496,7 +481,7 @@
             android:launchMode="singleTop">
         </activity>
         <activity
-            android:name=".frame.activity.AuthenticationActivity"
+            android:name=".frame.activity.AuthFinishActivity"
             android:launchMode="singleTop">
         </activity>
         <activity
@@ -515,6 +500,10 @@
         </activity>
         <activity
             android:name=".frame.activity.QRActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity
+            android:name=".frame.activity.PayResultActivity"
             android:launchMode="singleTop">
         </activity>
     </application>

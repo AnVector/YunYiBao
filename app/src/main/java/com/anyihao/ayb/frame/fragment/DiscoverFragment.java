@@ -32,7 +32,6 @@ import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.Projection;
 import com.amap.api.maps2d.UiSettings;
 import com.amap.api.maps2d.model.BitmapDescriptorFactory;
-import com.amap.api.maps2d.model.CameraPosition;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
@@ -45,12 +44,9 @@ import com.anyihao.ayb.R;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -70,15 +66,13 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     @BindView(R.id.fake_status_bar)
     View fakeStatusBar;
     private OnLocationChangedListener mListener;
-    //声明mLocationOption对象
-    private AMapLocationClientOption mLocationOption;
     //声明mlocationClient对象
     private AMapLocationClient mLocationClient;
     private UiSettings mUiSettings;
     private AMap mAmap;
-    private LatLng latlng;
     //标识，用于判断是否只显示一次定位信息和用户重新定位
     private boolean isFirstLoc = true;
+    private int i = 0;
     /**
      * 需要进行检测的权限数组
      */
@@ -100,27 +94,28 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         titleMid.setText(getString(R.string.service_location));
         toolbar.setNavigationIcon(null);
         fakeStatusBar.setBackgroundColor(mContext.getResources().getColor(R.color.white));
-        if (mAmap == null) {
-            mAmap = mMapView.getMap();
-        } else {
-            mAmap.clear();
-            mAmap = mMapView.getMap();
-        }
-
+        initAMap();
         initUiSettings();
         initLocationStyle();
-        //设置定位监听
-        mAmap.setLocationSource(this);
         initLocation();
         getMerchantList();
+    }
+
+    private void initAMap() {
+        if (mAmap != null) {
+            mAmap.clear();
+        }
+        mAmap = mMapView.getMap();
+        // 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
+        mAmap.setMyLocationEnabled(true);
+        //设置定位监听
+        mAmap.setLocationSource(this);
     }
 
     private void initUiSettings() {
         mUiSettings = mAmap.getUiSettings();
         // 是否显示定位按钮
         mUiSettings.setMyLocationButtonEnabled(true);
-        // 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
-        mAmap.setMyLocationEnabled(true);
         //设置地图logo显示位置
         mUiSettings.setLogoPosition(AMapOptions.LOGO_POSITION_BOTTOM_RIGHT);// 设置地图logo显示在右下方
         //设置地图是否可以手势滑动
@@ -134,10 +129,11 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     private void initLocationStyle() {
         //定位的小图标 默认是蓝点
         MyLocationStyle myLocationStyle = new MyLocationStyle();
-        myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromResource(R.drawable
-                .location_dot));
-        myLocationStyle.radiusFillColor(android.R.color.transparent);
-        myLocationStyle.strokeColor(android.R.color.transparent);
+//        myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromResource(R.drawable
+//                .location_dot));
+//        myLocationStyle.radiusFillColor(android.R.color.transparent);
+//        myLocationStyle.strokeColor(android.R.color.transparent);
+        myLocationStyle.showMyLocation(true);
         mAmap.setMyLocationStyle(myLocationStyle);
     }
 
@@ -146,32 +142,15 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         if (aMapLocation != null) {
             if (aMapLocation.getErrorCode() == 0) {
                 //定位成功回调信息，设置相关消息
-                aMapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见官方定位类型表
-                aMapLocation.getLatitude();//获取纬度
-                aMapLocation.getLongitude();//获取经度
-                aMapLocation.getAccuracy();//获取精度信息
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
-                Date date = new Date(aMapLocation.getTime());
-                df.format(date);//定位时间
-                aMapLocation.getAddress();
-                //地址，如果option中设置isNeedAddress为false，则没有此结果，网络定位结果中会有地址信息，GPS定位不返回地址信息。
-                aMapLocation.getCountry();//国家信息
-                aMapLocation.getProvince();//省信息
-                aMapLocation.getCity();//城市信息
-                aMapLocation.getDistrict();//城区信息
-                aMapLocation.getStreet();//街道信息
-                aMapLocation.getStreetNum();//街道门牌号信息
-                aMapLocation.getCityCode();//城市编码
-                aMapLocation.getAdCode();//地区编码
-                // 如果不设置标志位，此时再拖动地图时，它会不断将地图移动到当前的位置
-                if (isFirstLoc) {
+                if (isFirstLoc) {// 如果不设置标志位，此时再拖动地图时，它会不断将地图移动到当前的位置
                     //设置缩放级别
                     mAmap.moveCamera(CameraUpdateFactory.zoomTo(17));
                     //将地图移动到定位点
                     mAmap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(aMapLocation
                             .getLatitude(), aMapLocation.getLongitude())));
                     //点击定位按钮 能够将地图的中心移动到定位点
-                    mListener.onLocationChanged(aMapLocation);
+                    mListener.onLocationChanged(aMapLocation);//激活定位
+                    ToastUtils.showToast(mContext, "定位信息发生变化" + (i++));
                     //添加图钉
 //                    addMarkersToMap(generateMarkerOptions(aMapLocation));
                     //获取定位信息
@@ -183,8 +162,6 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
 //                    ToastUtils.showLongToast(mContext, buffer.toString());
                     isFirstLoc = false;
                 }
-
-
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
 //                Logger.d("AmapError", "location Error, ErrCode:"
@@ -220,15 +197,16 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     }
 
     private void initLocation() {
+        //声明mLocationOption对象
         //初始化定位参数
-        mLocationOption = new AMapLocationClientOption();
+        AMapLocationClientOption mLocationOption = new AMapLocationClientOption();
         mLocationClient = new AMapLocationClient(mContext);
         //设置定位监听
         mLocationClient.setLocationListener(this);
         //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
         //设置定位间隔,单位毫秒,默认为2000ms
-        mLocationOption.setInterval(2000);
+        mLocationOption.setInterval(5 * 1000);
         //设置是否返回地址信息（默认返回地址信息）
         mLocationOption.setNeedAddress(true);
         //设置是否只定位一次,默认为false
@@ -261,17 +239,6 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     @Override
     protected void initEvent() {
         mAmap.setOnMarkerClickListener(this);
-        mAmap.setOnCameraChangeListener(new AMap.OnCameraChangeListener() {
-            @Override
-            public void onCameraChange(CameraPosition cameraPosition) {
-
-            }
-
-            @Override
-            public void onCameraChangeFinish(CameraPosition cameraPosition) {
-
-            }
-        });
     }
 
     //激活定位
@@ -324,19 +291,6 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     }
 
     @Override
-    public void onFailure(String error, int page, Integer actionType) {
-        if (StringUtils.isEmpty(error))
-            return;
-        if (error.contains("ConnectException")) {
-            ToastUtils.showToast(mContext.getApplicationContext(), "网络连接失败，请检查网络设置");
-        } else if (error.contains("404")) {
-            ToastUtils.showToast(mContext.getApplicationContext(), "未知异常");
-        } else {
-            ToastUtils.showToast(mContext.getApplicationContext(), error);
-        }
-    }
-
-    @Override
     public boolean onMarkerClick(Marker marker) {
         if (mAmap != null) {
             jumpPoint(marker);
@@ -380,6 +334,10 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         super.onResume();
         if (isNeedCheck) {
             checkPermissions(needPermissions);
+        }
+        isFirstLoc = true;
+        if (mLocationClient != null) {
+            mLocationClient.startLocation();
         }
         if (mMapView == null)
             return;
@@ -425,7 +383,6 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     @Override
     public void onPause() {
         super.onPause();
-        deactivate();
         if (mMapView == null)
             return;
         mMapView.onPause();
@@ -446,6 +403,9 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         if (mMapView == null)
             return;
         mMapView.onDestroy();
+        if (mLocationClient != null) {
+            mLocationClient.onDestroy();
+        }
     }
 
     @Override
@@ -461,7 +421,7 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     }
 
     /**
-     * 检测是否说有的权限都已经授权
+     * 检测是否所有的权限都已经授权
      *
      * @param grantResults
      * @return

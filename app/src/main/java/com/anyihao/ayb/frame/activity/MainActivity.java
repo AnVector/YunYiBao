@@ -213,11 +213,6 @@ public class MainActivity extends ABaseActivity {
 
     }
 
-    @Override
-    public void onFailure(String error, int page, Integer actionType) {
-
-    }
-
     /**
      * H5页面按钮点击触发事件
      */

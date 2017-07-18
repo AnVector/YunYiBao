@@ -51,6 +51,7 @@
             android:layout_height="55dp"
             android:layout_below="@id/line"
             android:gravity="left|center_vertical"
+            android:lineSpacingMultiplier="1.5"
             android:maxLines="2"
             android:textColor="@color/light_gray"
             android:textSize="@dimen/font_size_small"/>

@@ -312,7 +312,6 @@ public class ReportActivity extends ABaseActivity {
     public void onFailure(String error, int page, Integer actionType) {
         ((CircularProgressDrawable) progressBar.getIndeterminateDrawable()).stop();
         tvLoadingHint.setVisibility(View.GONE);
-        ToastUtils.showLongToast(getApplicationContext(), "数据获取失败，请稍后重试！");
-//        recyclerView.showEmptyView();
+        super.onFailure(error, page, actionType);
     }
 }

@@ -242,16 +242,6 @@ public class AccountManageActivity extends ABaseActivity {
 
     }
 
-    @Override
-    public void onFailure(String error, int page, Integer actionType) {
-        if (StringUtils.isEmpty(error))
-            return;
-        if (error.contains("ConnectException")) {
-            ToastUtils.showToast(this, "网络连接失败，请检查网络设置");
-        }
-
-    }
-
     UMAuthListener authListener = new UMAuthListener() {
         @Override
         public void onStart(SHARE_MEDIA platform) {

@@ -35,7 +35,6 @@ public class ExchangeDetailsActivity extends ABaseActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         toolbarTitleMid.setText(getString(R.string.exchange_details));
-
     }
 
     @Override
@@ -50,11 +49,6 @@ public class ExchangeDetailsActivity extends ABaseActivity {
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
-
-    }
-
-    @Override
-    public void onFailure(String error, int page, Integer actionType) {
 
     }
 }

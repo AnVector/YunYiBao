@@ -8,6 +8,7 @@ import com.anyihao.androidbase.acitivity.BKBaseActivity;
 import com.anyihao.androidbase.mvp.IView;
 import com.anyihao.androidbase.utils.StatusBarUtil;
 import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.common.PresenterFactory;
 
 import java.lang.reflect.Field;
@@ -63,5 +64,18 @@ public abstract class ABaseActivity extends BKBaseActivity implements IView<Inte
     protected void onDestroy() {
         super.onDestroy();
         PresenterFactory.getInstance().remove(this);
+    }
+
+    @Override
+    public void onFailure(String error, int page, Integer actionType) {
+        if (StringUtils.isEmpty(error))
+            return;
+        if (error.contains("ConnectException")) {
+            ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
+        } else if (error.contains("404")) {
+            ToastUtils.showToast(getApplicationContext(), "未知异常");
+        } else {
+            ToastUtils.showToast(getApplicationContext(), error);
+        }
     }
 }

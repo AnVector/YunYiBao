@@ -103,9 +103,4 @@ public class GuideActivity extends ABaseActivity {
     public void onSuccess(String result, int page, Integer actionType) {
 
     }
-
-    @Override
-    public void onFailure(String error, int page, Integer actionType) {
-
-    }
 }

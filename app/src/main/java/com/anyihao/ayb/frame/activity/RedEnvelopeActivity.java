@@ -112,14 +112,14 @@ public class RedEnvelopeActivity extends ABaseActivity {
         }
 
         tvEnvelopeValue.setText(flow);
-        tvUseExpires.setText("使用期限："+getDate(crtTime) + "至" + getDate(effectTime));
+        tvUseExpires.setText("有效期：" + getDate(crtTime) + "-" + getDate(effectTime));
         tvFrom.setText(String.format(getString(R.string.fried_name), sendName));
     }
 
     private String getDate(String time) {
         if (StringUtils.isEmpty(time) || time.length() < 10)
             return "";
-        return time.substring(0, 10);
+        return time.substring(0, 10).replace("-", ".");
     }
 
     @Override
@@ -179,18 +179,5 @@ public class RedEnvelopeActivity extends ABaseActivity {
             }
         }
 
-    }
-
-    @Override
-    public void onFailure(String error, int page, Integer actionType) {
-        if (StringUtils.isEmpty(error))
-            return;
-        if (error.contains("ConnectException")) {
-            ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
-        } else if (error.contains("404")) {
-            ToastUtils.showToast(getApplicationContext(), "未知异常");
-        } else {
-            ToastUtils.showToast(getApplicationContext(), error);
-        }
     }
 }

@@ -60,20 +60,6 @@ public abstract class BaseFragment extends Fragment implements EasyPermissions.P
         return this.getClass().getSimpleName();
     }
 
-    protected void permissionsRequest(int requestCode, String decription, String... permissions) {
-        if (requestCode == -1 || permissions == null || permissions.length == 0 || getActivity()
-                == null)
-            return;
-        if (EasyPermissions.hasPermissions(getContext(), permissions)) {
-            // Have permission, do the thing!
-        } else {
-            // Request one permission
-            EasyPermissions.requestPermissions(this, decription,
-                    requestCode, permissions);
-        }
-
-    }
-
     @Override
     public void onResume() {
         super.onResume();

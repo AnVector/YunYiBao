@@ -2,13 +2,15 @@ package com.anyihao.ayb.common;
 
 import android.app.DownloadManager;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.support.multidex.MultiDexApplication;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.anyihao.androidbase.utils.LogUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.androidbase.utils.ProcessUtils;
 import com.anyihao.ayb.BuildConfig;
@@ -49,11 +51,21 @@ import okhttp3.OkHttpClient;
 public class UApplication extends MultiDexApplication {
 
     private final String TAG = UApplication.this.getClass().getSimpleName();
+    private static UApplication mInstance;
     private UBroadcastReceiver mUBroadcastReceiver;
-    //声明AMapLocationClient类对象
+    private NetworkStateReceiver mNetworkStateReceiver;
     public AMapLocationClient mLocationClient = null;
-    //声明AMapLocationClientOption对象
     public AMapLocationClientOption mLocationOption = null;
+    //表示是否连接
+    public boolean isConnected;
+    //    表示是否是移动网络
+    public boolean isMobile;
+    //    表示是否是WiFi
+    public boolean isWifi;
+    //    表示WiFi开关是否打开
+    public boolean isEnablaWifi;
+    //    表示移动网络数据是否打开
+    public boolean isEnableMobile;
 
     static {
         PlatformConfig.setQQZone("1105774848", "WmRdHTA5MG4bCO2F");//QQ
@@ -62,9 +74,14 @@ public class UApplication extends MultiDexApplication {
                 "http://sns.whalecloud.com/sina2/callback");//微博
     }
 
+    public static UApplication getInstance() {
+        return mInstance;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+        mInstance = this;
         init();
     }
 
@@ -74,6 +91,7 @@ public class UApplication extends MultiDexApplication {
             initUBroadcastReceiver();//在当前进程注册广播
             initOkHttpUtils();//初始化OkHttp配置
             initUAnalysis();//初始化友盟统计
+            initNetWorkStateReceiver();//注册网络状态变化广播
             GreenDaoManager.getInstance().init(this);//初始化GreenDao
         }
         initBugly();//初始化Bugly
@@ -150,12 +168,12 @@ public class UApplication extends MultiDexApplication {
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        LogUtils.e(e.toString());
+                        Logger.d(e.toString());
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.e(response);
+                        Logger.d(response);
                     }
                 });
 
@@ -232,6 +250,15 @@ public class UApplication extends MultiDexApplication {
         registerReceiver(mUBroadcastReceiver, filter);
     }
 
+    private void initNetWorkStateReceiver() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        filter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
+        filter.addAction("android.net.wifi.STATE_CHANGE");
+        mNetworkStateReceiver = new NetworkStateReceiver();
+        registerReceiver(mNetworkStateReceiver, filter);
+    }
+
     private void initLogger() {
         if (BuildConfig.DEBUG) {
             Logger.init(TAG)
@@ -248,14 +275,83 @@ public class UApplication extends MultiDexApplication {
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        if (newConfig.fontScale != 1)//非默认值
+            getResources();
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public Resources getResources() {
+        Resources res = super.getResources();
+        if (res.getConfiguration().fontScale != 1) {//非默认值
+            Configuration newConfig = new Configuration();
+            newConfig.setToDefaults();
+            //设置默认
+            res.updateConfiguration(newConfig, res.getDisplayMetrics());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                createConfigurationContext(newConfig);
+            } else {
+                res.updateConfiguration(newConfig, res.getDisplayMetrics());
+            }
+        }
+        return res;
+    }
+
+    @Override
     public void onTerminate() {
         super.onTerminate();
         if (mUBroadcastReceiver != null) {
             unregisterReceiver(mUBroadcastReceiver);
         }
+
+        if (mNetworkStateReceiver != null) {
+            unregisterReceiver(mNetworkStateReceiver);
+        }
+
         if (mLocationClient != null) {
             mLocationClient.stopLocation();//停止定位后，本地定位服务并不会被销毁
             mLocationClient.onDestroy();//销毁定位客户端，同时销毁本地定位服务。
         }
+    }
+
+    public boolean isConnected() {
+        return isWifi || isMobile;
+    }
+
+    public void setConnected(boolean connected) {
+        isConnected = connected;
+    }
+
+    public boolean isMobile() {
+        return isMobile;
+    }
+
+    public void setMobile(boolean mobile) {
+        isMobile = mobile;
+    }
+
+    public boolean isWifi() {
+        return isWifi;
+    }
+
+    public void setWifi(boolean wifi) {
+        isWifi = wifi;
+    }
+
+    public boolean isEnablaWifi() {
+        return isEnablaWifi;
+    }
+
+    public void setEnablaWifi(boolean enablaWifi) {
+        isEnablaWifi = enablaWifi;
+    }
+
+    public boolean isEnableMobile() {
+        return isEnableMobile;
+    }
+
+    public void setEnableMobile(boolean enableMobile) {
+        isEnableMobile = enableMobile;
     }
 }

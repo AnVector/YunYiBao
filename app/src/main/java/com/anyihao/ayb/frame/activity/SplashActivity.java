@@ -203,9 +203,4 @@ public class SplashActivity extends ABaseActivity {
             }
         }
     }
-
-    @Override
-    public void onFailure(String error, int page, Integer actionType) {
-
-    }
 }

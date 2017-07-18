@@ -101,11 +101,6 @@ public class ScanActivity extends ABaseActivity implements DecoratedBarcodeView.
     }
 
     @Override
-    public void onFailure(String error, int page, Integer actionType) {
-
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
         captureManager.onPause();

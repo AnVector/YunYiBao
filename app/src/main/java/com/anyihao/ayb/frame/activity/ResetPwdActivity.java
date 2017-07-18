@@ -141,12 +141,4 @@ public class ResetPwdActivity extends ABaseActivity {
         }
 
     }
-
-    @Override
-    public void onFailure(String error, int page, Integer actionType) {
-        if (actionType == 0) {
-            ToastUtils.showToast(getApplicationContext(), error, R.layout.toast,
-                    R.id.tv_message);
-        }
-    }
 }

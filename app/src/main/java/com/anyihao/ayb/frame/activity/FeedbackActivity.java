@@ -108,10 +108,4 @@ public class FeedbackActivity extends ABaseActivity {
         }
 
     }
-
-    @Override
-    public void onFailure(String error, int page, Integer actionType) {
-        ToastUtils.showToast(getApplicationContext(), error, R.layout.toast, R.id
-                .tv_message);
-    }
 }

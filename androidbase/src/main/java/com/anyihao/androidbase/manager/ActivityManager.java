@@ -69,7 +69,7 @@ public class ActivityManager {
     /**
      * 结束指定类名的Activity
      */
-    public void finishActivity(Class<?> cls) {
+    public synchronized void finishActivity(Class<?> cls) {
         for (Activity activity : activityStack) {
             if (activity.getClass().equals(cls)) {
                 finishActivity(activity);

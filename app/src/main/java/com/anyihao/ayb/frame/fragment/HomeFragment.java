@@ -1,13 +1,16 @@
 package com.anyihao.ayb.frame.fragment;
 
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.wifi.ScanResult;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -26,10 +29,9 @@ import com.anyihao.androidbase.utils.DensityUtils;
 import com.anyihao.androidbase.utils.DeviceUtils;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
-import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
-import com.anyihao.ayb.adapter.WifiAdapter;
+import com.anyihao.ayb.adapter.MainAdapter;
 import com.anyihao.ayb.bean.AdvertiseBean;
 import com.anyihao.ayb.bean.AdvertiseBean.DataBean;
 import com.anyihao.ayb.bean.CertificationStatusBean;
@@ -51,6 +53,9 @@ import com.anyihao.ayb.listener.OnItemClickListener;
 import com.anyihao.ayb.ui.WaitingDots.DilatingDotsProgressBar;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
+import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
+import com.marshalchen.ultimaterecyclerview.itemTouchHelper.SimpleItemTouchHelperCallback;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
 import com.orhanobut.dialogplus.OnCancelListener;
@@ -64,16 +69,15 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
-public class HomeFragment extends ABaseFragment {
-
+public class HomeFragment extends ABaseFragment implements EasyPermissions.PermissionCallbacks {
 
     @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.recyclerview)
-    RecyclerView recyclerview;
     @BindView(R.id.toolbar_help)
     TextView toolbarHelp;
     @BindView(R.id.tv_leasing)
@@ -92,33 +96,20 @@ public class HomeFragment extends ABaseFragment {
     ViewFlipper flipper;
     @BindView(R.id.iv_bell)
     ImageView ivBell;
-    private static int REQUEST_LOGIN_CODE = 0x00003;
+    private static int REQUEST_LOGIN_CODE = 0x0003;
+    private static final int RC_LOCATION_CONTACTS_PERM = 0x0004;
     @BindView(R.id.progress)
     DilatingDotsProgressBar progress;
     @BindView(R.id.tv_data_amount)
     TextView tvDataAmount;
-    private WifiAdapter mAdapter;
+    @BindView(R.id.ultimate_recycler_view)
+    UltimateRecyclerView mRecyclerView;
+    private MainAdapter mAdapter;
+    protected LinearLayoutManager layoutManager;
+    private ItemTouchHelper mItemTouchHelper;
     private String mPassword;
     private int mProgress;
     private String mAlias;
-    String[] array = new String[]{"CYBWF_898602B11116C0069502", "CYBWF_898602B11116C0069503",
-            "CYBWF_898602B11116C0069504", "CYBWF_898602B11116C0069505",
-            "CYBWF_898602B11116C0069506", "CYBWF_898602B11116C0069507",
-            "CYBWF_898602B11116C0069508", "CYBWF_898602B11116C0069509",
-            "CYBWF_898602B11116C0069510", "CYBWF_898602B11116C0069511",
-            "CYBWF_898602B11116C0069512", "CYBWF_898602B11116C0069513",
-            "CYBWF_898602B11116C0069514", "CYBWF_898602B11116C0069515",
-            "CYBWF_898602B11116C0069516", "CYBWF_898602B11116C0069517",
-            "CYBWF_898602B11116C0069518", "CYBWF_898602B11116C0069519",
-            "CYBWF_898602B11116C0069520", "CYBWF_898602B11116C0069521",
-            "CYBWF_898602B11116C0068625", "CYBWF_898602B11116C0068626",
-            "CYBWF_898602B11116C0068627", "CYBWF_898602B11116C0068628",
-            "CYBWF_898602B11116C0068629", "CYBWF_898602B11116C0068685",
-            "CYBWF_898602B11116C0068694", "CYBWF_898602B11116C0068656",
-            "CYBWF_898602B11116C0068635", "CYBWF_898602B11116C0068606",
-            "CYBWF_898602B11116C0068583", "CYBWF_898602B11116C0068551",
-            "CYBWF_898602B11116C0068641", "CYBWF_898602B11116C0068593",
-            "CYBWF_898602B11116C0068654", "CYBWF_898602B11116C0068692", ""};
     private List<ScanResult> mData = new ArrayList<>();
     private AnimationDrawable animationDrawable;
     private boolean isLogin;
@@ -132,13 +123,6 @@ public class HomeFragment extends ABaseFragment {
         toolbarTitle.setText(getString(R.string.app_name));
         toolbarHelp.setText(getString(R.string.help_center));
         toolbar.inflateMenu(R.menu.home_menu);
-        mAdapter = new WifiAdapter(mContext, R.layout.item_main);
-        recyclerview.setAdapter(mAdapter);
-        recyclerview.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager
-                .VERTICAL, false));
-        mData.clear();
-        mData.addAll(getWifiList());
-        mAdapter.add(0, mData.size(), mData);
         tvDataAmount.setText(String.format(mContext.getString(R.string.surplus_amount), "0"));
         isLogin = PreferencesUtils.getBoolean(mContext.getApplicationContext(), "isLogin", false);
         if (isLogin) {
@@ -147,6 +131,8 @@ public class HomeFragment extends ABaseFragment {
         getAdvertisement();
         progress.setDotColors(Color.parseColor("#d6d7dc"), Color.parseColor("#d6d7dc"));
         progress.show(1000);
+        permissionsRequest();
+        initUltimateRV();
     }
 
     private List<ScanResult> getWifiList() {
@@ -155,6 +141,38 @@ public class HomeFragment extends ABaseFragment {
         return WifiInfoManager.getInstance(mContext).getWifiList();
     }
 
+    @AfterPermissionGranted(RC_LOCATION_CONTACTS_PERM)
+    protected void permissionsRequest() {
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission
+                .ACCESS_COARSE_LOCATION};
+        if (EasyPermissions.hasPermissions(mContext, permissions)) {
+            mData.clear();
+            mData.addAll(getWifiList());
+        } else {
+            EasyPermissions.requestPermissions(this, "开启wifi",
+                    RC_LOCATION_CONTACTS_PERM, permissions);
+        }
+    }
+
+    private void initUltimateRV() {
+        mRecyclerView.setHasFixedSize(false);
+        mAdapter = new MainAdapter(mData, R.layout.item_main);
+        layoutManager = new LinearLayoutManager(mContext);
+        mRecyclerView.setLayoutManager(layoutManager);
+//        StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration
+//                (informationAdapter);
+//        ultimateRecyclerView.addItemDecoration(headersDecor);
+        //bug 设置加载更多动画会使添加的数据延迟显示
+//        mRecyclerView.setLoadMoreView(R.layout.custom_bottom_progressbar);
+//        recyclerView.setParallaxHeader(getLayoutInflater().inflate(R.layout
+//                .parallax_recyclerview_header, recyclerView.mRecyclerView, false));
+//        recyclerView.setRecylerViewBackgroundColor(Color.parseColor("#ffffff"));
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback
+                (mAdapter);
+        mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(mRecyclerView.mRecyclerView);
+        mRecyclerView.setAdapter(mAdapter);
+    }
 
     @Override
     protected void initEvent() {
@@ -274,6 +292,34 @@ public class HomeFragment extends ABaseFragment {
                 return false;
             }
         });
+
+        mRecyclerView.setOnParallaxScroll(new UltimateRecyclerView.OnParallaxScroll() {
+            @Override
+            public void onParallaxScroll(float percentage, float offset, View parallax) {
+            }
+        });
+        mAdapter.setOnDragStartListener(new UltimateViewAdapter.OnStartDragListener() {
+
+            @Override
+            public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+                mItemTouchHelper.startDrag(viewHolder);
+            }
+        });
+        mRecyclerView.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener
+                () {
+            @Override
+            public void onRefresh() {
+                updateWifiList();
+            }
+        });
+    }
+
+    private void updateWifiList() {
+        mData.clear();
+        mData.addAll(getWifiList());
+        mAdapter.notifyDataSetChanged();
+        mRecyclerView.setRefreshing(false);
+        layoutManager.scrollToPosition(0);
     }
 
     private void showAdvertisement(List<DataBean> advertisement) {
@@ -483,19 +529,6 @@ public class HomeFragment extends ABaseFragment {
                     showAdvertisement(beans);
                 }
             }
-        }
-    }
-
-    @Override
-    public void onFailure(String error, int page, Integer actionType) {
-        if (StringUtils.isEmpty(error))
-            return;
-        if (error.contains("ConnectException")) {
-            ToastUtils.showToast(mContext.getApplicationContext(), "网络连接失败，请检查网络设置");
-        } else if (error.contains("404")) {
-            ToastUtils.showToast(mContext.getApplicationContext(), "未知异常");
-        } else {
-            ToastUtils.showToast(mContext.getApplicationContext(), error);
         }
     }
 

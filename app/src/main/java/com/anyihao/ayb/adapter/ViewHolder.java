@@ -206,6 +206,12 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
+    public ViewHolder setProgressDrawable(int viewId, Drawable drawable) {
+        ProgressBar view = getView(viewId);
+        view.setProgressDrawable(drawable);
+        return this;
+    }
+
     public ViewHolder setProgress(int viewId, int progress, int max) {
         ProgressBar view = getView(viewId);
         view.setMax(max);

@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by Admin on 2017/7/12.
  */
 
-public class ProfileBean implements Serializable {
+public class KeyValueBean implements Serializable {
     private String title;
     private String value;
 
@@ -15,7 +15,7 @@ public class ProfileBean implements Serializable {
         return title;
     }
 
-    public ProfileBean setTitle(String title) {
+    public KeyValueBean setTitle(String title) {
         this.title = title;
         return this;
     }
@@ -24,7 +24,7 @@ public class ProfileBean implements Serializable {
         return value;
     }
 
-    public ProfileBean setValue(String value) {
+    public KeyValueBean setValue(String value) {
         this.value = value;
         return this;
     }

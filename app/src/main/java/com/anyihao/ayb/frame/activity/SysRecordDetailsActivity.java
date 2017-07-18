@@ -106,15 +106,4 @@ public class SysRecordDetailsActivity extends ABaseActivity {
         }
 
     }
-
-    @Override
-    public void onFailure(String error, int page, Integer actionType) {
-        if (StringUtils.isEmpty(error))
-            return;
-        if (error.contains("ConnectException")) {
-            ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
-        } else {
-            ToastUtils.showToast(getApplicationContext(), error);
-        }
-    }
 }

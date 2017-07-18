@@ -48,9 +48,8 @@ public class RechargeRecordActivity extends ABaseActivity {
     UltimateRecyclerView recyclerView;
     private static final int PAGE_SIZE = 10;
     private RechargeRecordAdapter mRechargeAdapter;
-    private TransferRecordAdapter mTransferAdapter;
     private LinearLayoutManager layoutManager;
-    private ItemTouchHelper mItemTouchHelper;
+//    private ItemTouchHelper mItemTouchHelper;
     private List<RechargeRecordListBean.DataBean> mRechargeData = new ArrayList<>();
     private List<TransferListBean.DataBean> mTransferData = new ArrayList<>();
     private List<DataBean> mItems;
@@ -105,9 +104,9 @@ public class RechargeRecordActivity extends ABaseActivity {
 //        recyclerView.setParallaxHeader(getLayoutInflater().inflate(R.layout
 //                .parallax_recyclerview_header, recyclerView.mRecyclerView, false));
 //        recyclerView.setRecylerViewBackgroundColor(Color.parseColor("#ffffff"));
-        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mRechargeAdapter);
-        mItemTouchHelper = new ItemTouchHelper(callback);
-        mItemTouchHelper.attachToRecyclerView(recyclerView.mRecyclerView);
+//        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mRechargeAdapter);
+//        mItemTouchHelper = new ItemTouchHelper(callback);
+//        mItemTouchHelper.attachToRecyclerView(recyclerView.mRecyclerView);
         recyclerView.reenableLoadmore();
         recyclerView.setAdapter(mRechargeAdapter);
         getRechargeRecord();
@@ -126,13 +125,13 @@ public class RechargeRecordActivity extends ABaseActivity {
             public void onParallaxScroll(float percentage, float offset, View parallax) {
             }
         });
-        mRechargeAdapter.setOnDragStartListener(new UltimateViewAdapter.OnStartDragListener() {
-
-            @Override
-            public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-                mItemTouchHelper.startDrag(viewHolder);
-            }
-        });
+//        mRechargeAdapter.setOnDragStartListener(new UltimateViewAdapter.OnStartDragListener() {
+//
+//            @Override
+//            public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+//                mItemTouchHelper.startDrag(viewHolder);
+//            }
+//        });
         recyclerView.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener
                 () {
             @Override
@@ -179,6 +178,7 @@ public class RechargeRecordActivity extends ABaseActivity {
         recyclerView.setRefreshing(false);
         //   ultimateRecyclerView.scrollBy(0, -50);
         layoutManager.scrollToPosition(0);
+        recyclerView.reenableLoadmore();
 //        recyclerView.scrollVerticallyTo(0);
         //ultimateRecyclerView.setAdapter(simpleRecyclerViewAdapter);
         //simpleRecyclerViewAdapter.notifyDataSetChanged();
@@ -249,18 +249,5 @@ public class RechargeRecordActivity extends ABaseActivity {
             }
         }
 
-    }
-
-    @Override
-    public void onFailure(String error, int page, Integer actionType) {
-        if (StringUtils.isEmpty(error))
-            return;
-        if (error.contains("ConnectException")) {
-            ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
-        } else if (error.contains("404")) {
-            ToastUtils.showToast(getApplicationContext(), "未知异常");
-        } else {
-            ToastUtils.showToast(getApplicationContext(), error);
-        }
     }
 }
