@@ -1,7 +1,9 @@
 package com.anyihao.ayb.frame.activity;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.Window;
 
 import com.anyihao.androidbase.acitivity.BKBaseActivity;
@@ -9,6 +11,7 @@ import com.anyihao.androidbase.mvp.IView;
 import com.anyihao.androidbase.utils.StatusBarUtil;
 import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
+import com.anyihao.ayb.R;
 import com.anyihao.ayb.common.PresenterFactory;
 
 import java.lang.reflect.Field;
@@ -59,6 +62,12 @@ public abstract class ABaseActivity extends BKBaseActivity implements IView<Inte
         }
     }
 
+    @Override
+    protected void setBackground() {
+        Resources res = getResources();
+        Drawable drawable = res.getDrawable(R.drawable.app_background);
+        this.getWindow().setBackgroundDrawable(drawable);
+    }
 
     @Override
     protected void onDestroy() {

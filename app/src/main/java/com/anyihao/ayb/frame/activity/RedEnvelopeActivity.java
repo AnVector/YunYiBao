@@ -178,6 +178,5 @@ public class RedEnvelopeActivity extends ABaseActivity {
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg());
             }
         }
-
     }
 }

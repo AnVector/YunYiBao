@@ -6,15 +6,12 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Window;
 
 import com.anyihao.androidbase.R;
 import com.anyihao.androidbase.manager.ActivityManager;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.List;
 
 import pub.devrel.easypermissions.EasyPermissions;
@@ -33,9 +30,21 @@ public abstract class BaseActivity extends AppCompatActivity implements EasyPerm
         init(savedInstanceState);
     }
 
+
+    /**
+     * 获取当前类名
+     *
+     * @return ClassName
+     */
     protected String getTag() {
         return this.getClass().getSimpleName();
     }
+
+
+    /**
+     * 设置背景
+     */
+    protected abstract void setBackground();
 
     /**
      * 获取布局文件Id
@@ -72,6 +81,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EasyPerm
     protected void init(Bundle savedInstanceState) {
         TAG = getTag();
         setContentView(getContentViewId());
+        setStatusBarTheme();
+        setBackground();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         ActivityManager.getInstance().addActivity(this);
         getExtraParams();
@@ -79,12 +90,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EasyPerm
         saveInstanceState(savedInstanceState);
         initData();
         initEvent();
-    }
-
-    @Override
-    public void setContentView(@LayoutRes int layoutResID) {
-        super.setContentView(layoutResID);
-        setStatusBarTheme();
     }
 
     protected void saveInstanceState(Bundle savedInstanceState) {

@@ -6,9 +6,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.anyihao.androidbase.utils.StatusBarUtil;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.MessageBean.DataBean;
+import com.anyihao.ayb.ui.CropCircleTransformation;
+import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
 
@@ -47,12 +48,15 @@ public class MessageDetailsActivity extends ABaseActivity {
 
         if (messageBean != null) {
             tvUserName.setText(messageBean.getSendName());
-//            ivUserProfile.setImageDrawable();
+            Glide.with(this)
+                    .load(messageBean.getSendAvatar())
+                    .crossFade()
+                    .bitmapTransform(new CropCircleTransformation(this))
+                    .placeholder(R.drawable.user_profile)
+                    .into(ivUserProfile);
             tvMessage.setText(messageBean.getMessage());
             tvDate.setText(messageBean.getCrtTm());
         }
-
-        toolbar.setBackgroundColor(getResources().getColor(R.color.app_background_color));
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -68,12 +72,6 @@ public class MessageDetailsActivity extends ABaseActivity {
                 onBackPressed();
             }
         });
-
-    }
-
-    @Override
-    protected void setStatusBarTheme() {
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.app_background_color), 0);
     }
 
     @Override

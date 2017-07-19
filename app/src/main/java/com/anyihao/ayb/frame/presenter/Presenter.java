@@ -35,10 +35,10 @@ public class Presenter extends PresenterCompat {
         for (Map.Entry<String, String> entry : params.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
-            Logger.e(key + "=" + value);
             if (key == null || value == null)
                 return;
         }
+        Logger.d(params);
         OkHttpUtils
                 .post()
                 .url(task.getUrl())

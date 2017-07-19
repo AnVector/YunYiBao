@@ -159,18 +159,6 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
         mAdapter = new MainAdapter(mData, R.layout.item_main);
         layoutManager = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(layoutManager);
-//        StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration
-//                (informationAdapter);
-//        ultimateRecyclerView.addItemDecoration(headersDecor);
-        //bug 设置加载更多动画会使添加的数据延迟显示
-//        mRecyclerView.setLoadMoreView(R.layout.custom_bottom_progressbar);
-//        recyclerView.setParallaxHeader(getLayoutInflater().inflate(R.layout
-//                .parallax_recyclerview_header, recyclerView.mRecyclerView, false));
-//        recyclerView.setRecylerViewBackgroundColor(Color.parseColor("#ffffff"));
-        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback
-                (mAdapter);
-        mItemTouchHelper = new ItemTouchHelper(callback);
-        mItemTouchHelper.attachToRecyclerView(mRecyclerView.mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -293,18 +281,6 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
             }
         });
 
-        mRecyclerView.setOnParallaxScroll(new UltimateRecyclerView.OnParallaxScroll() {
-            @Override
-            public void onParallaxScroll(float percentage, float offset, View parallax) {
-            }
-        });
-        mAdapter.setOnDragStartListener(new UltimateViewAdapter.OnStartDragListener() {
-
-            @Override
-            public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-                mItemTouchHelper.startDrag(viewHolder);
-            }
-        });
         mRecyclerView.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener
                 () {
             @Override

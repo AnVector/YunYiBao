@@ -19,4 +19,5 @@
     <dimen name="font_size_36">36sp</dimen>
     <dimen name="statusbar_view_height">0dp</dimen>
     <dimen name="friends_margin_bottom">65dp</dimen>
+    <dimen name="red_profile_margin_top">13dp</dimen>
 </resources>

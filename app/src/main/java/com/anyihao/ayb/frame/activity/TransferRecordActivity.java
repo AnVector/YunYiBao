@@ -2,7 +2,6 @@ package com.anyihao.ayb.frame.activity;
 
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
@@ -14,7 +13,6 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
-import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.TransferRecordAdapter;
@@ -24,8 +22,6 @@ import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.listener.OnItemClickListener;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
-import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
-import com.marshalchen.ultimaterecyclerview.itemTouchHelper.SimpleItemTouchHelperCallback;
 import com.marshalchen.ultimaterecyclerview.ui.emptyview.emptyViewOnShownListener;
 
 import java.util.ArrayList;
@@ -75,11 +71,6 @@ public class TransferRecordActivity extends ABaseActivity {
                 .item_recharge_record);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-//        StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration
-//                (informationAdapter);
-//        ultimateRecyclerView.addItemDecoration(headersDecor);
-        //bug 设置加载更多动画会使添加的数据延迟显示
-//        recyclerView.setLoadMoreView(R.layout.custom_bottom_progressbar);
         recyclerView.setEmptyView(R.layout.empty_view, UltimateRecyclerView
                 .EMPTY_CLEAR_ALL, new emptyViewOnShownListener() {
             @Override
@@ -90,19 +81,13 @@ public class TransferRecordActivity extends ABaseActivity {
                 if (imvError == null)
                     return;
                 imvError.setImageDrawable(getResources().getDrawable(R.drawable
-                        .ic_no_recharge_record));
+                        .ic_no_transfer_record));
                 TextView tvHint = (TextView) mView.findViewById(R.id.tv_hint);
                 if (tvHint == null)
                     return;
                 tvHint.setText("暂无转赠记录");
             }
         });
-//        recyclerView.setParallaxHeader(getLayoutInflater().inflate(R.layout
-//                .parallax_recyclerview_header, recyclerView.mRecyclerView, false));
-//        recyclerView.setRecylerViewBackgroundColor(Color.parseColor("#ffffff"));
-        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mTransferAdapter);
-        mItemTouchHelper = new ItemTouchHelper(callback);
-        mItemTouchHelper.attachToRecyclerView(recyclerView.mRecyclerView);
         recyclerView.reenableLoadmore();
         recyclerView.setAdapter(mTransferAdapter);
         getPresentRecord();
@@ -114,18 +99,6 @@ public class TransferRecordActivity extends ABaseActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
-            }
-        });
-        recyclerView.setOnParallaxScroll(new UltimateRecyclerView.OnParallaxScroll() {
-            @Override
-            public void onParallaxScroll(float percentage, float offset, View parallax) {
-            }
-        });
-        mTransferAdapter.setOnDragStartListener(new UltimateViewAdapter.OnStartDragListener() {
-
-            @Override
-            public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-                mItemTouchHelper.startDrag(viewHolder);
             }
         });
         recyclerView.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener
@@ -217,11 +190,6 @@ public class TransferRecordActivity extends ABaseActivity {
                     } else {
                         onLoadMore();
                     }
-                } else {
-                    if (page == 1) {
-                        ToastUtils.showToast(getApplicationContext(), "暂无转赠记录");
-                    }
-
                 }
             }
         }

@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.anyihao.ayb.R;
-import com.anyihao.ayb.bean.RechargeRecordListBean.DataBean;
+import com.anyihao.ayb.bean.RentHistoryListBean.DataBean;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
 
 import java.util.List;
@@ -16,9 +16,9 @@ import java.util.List;
  * Created by Admin on 2017/4/7.
  */
 
-public class SystemRecordAdapter extends UAdapter<DataBean> {
+public class RentHistoryAdapter extends UAdapter<DataBean> {
 
-    public SystemRecordAdapter(List<DataBean> data, int layoutId) {
+    public RentHistoryAdapter(List<DataBean> data, int layoutId) {
         super(data, layoutId);
     }
 
@@ -26,33 +26,31 @@ public class SystemRecordAdapter extends UAdapter<DataBean> {
     public UltimateRecyclerviewViewHolder onCreateViewHolder(ViewGroup parent) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(layoutId, parent, false);
-        return new SystemRecordViewHolder(v);
+        return new RentHistoryViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
 
         super.onBindViewHolder(holder, position);
-        if (bp && holder instanceof SystemRecordViewHolder) {
+        if (bp && holder instanceof RentHistoryViewHolder) {
             DataBean content = mData.get((hasHeaderView() ? position - 1 : position));
             if (content == null) return;
-            ((SystemRecordViewHolder) holder).tvTitle.setText(content.getPkgInfo());
-            ((SystemRecordViewHolder) holder).tvDate.setText(content.getCrtTm());
-            ((SystemRecordViewHolder) holder).tvValue.setText("+" + content.getFlow());
+            ((RentHistoryViewHolder) holder).tvTitle.setText(content.getVid());
+            ((RentHistoryViewHolder) holder).tvValue.setText(content.getStartTm() + "至" + content
+                    .getEndTm());
         }
     }
 
-    private class SystemRecordViewHolder extends UltimateRecyclerviewViewHolder {
+    private class RentHistoryViewHolder extends UltimateRecyclerviewViewHolder {
 
         public TextView tvTitle;
-        public TextView tvDate;
         public TextView tvValue;
 
-        public SystemRecordViewHolder(View itemView) {
+        public RentHistoryViewHolder(View itemView) {
             super(itemView);
-            tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
-            tvDate = (TextView) itemView.findViewById(R.id.tv_date);
-            tvValue = (TextView) itemView.findViewById(R.id.tv_value);
+            tvTitle = (TextView) itemView.findViewById(R.id.tv_device_num);
+            tvValue = (TextView) itemView.findViewById(R.id.tv_duration);
         }
     }
 

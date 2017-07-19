@@ -153,7 +153,7 @@ public class TaskFragment extends ABaseFragment {
     }
 
     private void setPoints(String txt) {
-        if (StringUtils.isEmpty(txt))
+        if (StringUtils.isEmpty(txt) || tvMyPoints == null)
             return;
         tvMyPoints.setText(txt);
         SpannableString spannableString = new SpannableString(txt);
@@ -363,25 +363,32 @@ public class TaskFragment extends ABaseFragment {
     private void setOnlineInfo(DataBean bean) {
         if (bean == null)
             return;
-        Glide.with(mContext)
-                .load(bean.getAvatar())
-                .crossFade()
-                .bitmapTransform(new CropCircleTransformation(mContext))
-                .placeholder(R.drawable.user_profile)
-                .into(ivUserProfile);
+        if (ivUserProfile != null) {
+            Glide.with(mContext)
+                    .load(bean.getAvatar())
+                    .crossFade()
+                    .bitmapTransform(new CropCircleTransformation(mContext))
+                    .placeholder(R.drawable.user_profile)
+                    .into(ivUserProfile);
+        }
+
         setPoints("我的积分：" + bean.getPoint() + "分");
         isSign = bean.getSignStatus();
-        if (isSign == 1) {
+        if (isSign == 1 && btnSignIn != null) {
             btnSignIn.setText("已签到");
         }
         updateSignHistory(bean.getDay());
     }
 
     private void setDefaultInfo() {
-        ivUserProfile.setImageDrawable(mContext.getResources().getDrawable(R.drawable
-                .user_profile));
+        if (ivUserProfile != null) {
+            ivUserProfile.setImageDrawable(mContext.getResources().getDrawable(R.drawable
+                    .user_profile));
+        }
         setPoints("我的积分：0分");
-        btnSignIn.setText("签到领积分");
+        if (btnSignIn != null) {
+            btnSignIn.setText("签到领积分");
+        }
         initDefaultWeek();
         mSignAdapter.remove(0, mWeekData.size());
         mSignAdapter.add(0, mWeekData.size(), mWeekData);
@@ -391,28 +398,54 @@ public class TaskFragment extends ABaseFragment {
         if (beans == null || beans.isEmpty())
             return;
         if (beans.size() == 4) {
-            Glide.with(mContext)
-                    .load(beans.get(0).getImage())
-                    .crossFade()
-                    .into(ivPointsExchange);
-            tvPointsExchangeHint.setText("可领取" + beans.get(0).getExContent() + "流量");
-            tvPoints.setText(beans.get(0).getIntegral() + "积分");
-            Glide.with(mContext)
-                    .load(beans.get(1).getImage())
-                    .crossFade()
-                    .into(ivAdvertisement);
-            Glide.with(mContext)
-                    .load(beans.get(2).getImage())
-                    .crossFade()
-                    .into(ivTicketLeft);
-            tvTicketLeftDesc.setText("可兑换" + beans.get(2).getExContent() + "流量");
-            tvTicketLeftHint.setText(beans.get(2).getIntegral() + "积分");
-            Glide.with(mContext)
-                    .load(beans.get(3).getImage())
-                    .crossFade()
-                    .into(ivTicketRight);
-            tvTicketRightDesc.setText("可兑换" + beans.get(3).getExContent() + "流量");
-            tvTicketRightHint.setText(beans.get(3).getIntegral() + "积分");
+            if (ivPointsExchange != null) {
+                Glide.with(mContext)
+                        .load(beans.get(0).getImage())
+                        .crossFade()
+                        .into(ivPointsExchange);
+            }
+
+            if (tvPointsExchangeHint != null) {
+                tvPointsExchangeHint.setText("可领取" + beans.get(0).getExContent() + "流量");
+            }
+
+            if (tvPoints != null) {
+                tvPoints.setText(beans.get(0).getIntegral() + "积分");
+            }
+
+            if (ivAdvertisement != null) {
+                Glide.with(mContext)
+                        .load(beans.get(1).getImage())
+                        .crossFade()
+                        .into(ivAdvertisement);
+            }
+
+            if (ivTicketLeft != null) {
+                Glide.with(mContext)
+                        .load(beans.get(2).getImage())
+                        .crossFade()
+                        .into(ivTicketLeft);
+            }
+
+            if (tvTicketLeftDesc != null) {
+                tvTicketLeftDesc.setText("可兑换" + beans.get(2).getExContent() + "流量");
+            }
+            if (tvTicketLeftHint != null) {
+                tvTicketLeftHint.setText(beans.get(2).getIntegral() + "积分");
+            }
+
+            if (ivTicketRight != null) {
+                Glide.with(mContext)
+                        .load(beans.get(3).getImage())
+                        .crossFade()
+                        .into(ivTicketRight);
+            }
+            if (tvTicketRightDesc != null) {
+                tvTicketRightDesc.setText("可兑换" + beans.get(3).getExContent() + "流量");
+            }
+            if (tvTicketRightHint != null) {
+                tvTicketRightHint.setText(beans.get(3).getIntegral() + "积分");
+            }
         }
 
     }

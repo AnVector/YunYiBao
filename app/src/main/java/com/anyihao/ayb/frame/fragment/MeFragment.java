@@ -351,17 +351,11 @@ public class MeFragment extends ABaseFragment {
             if (bean.getCode() == 200) {
                 isLogin = true;
                 mIntegral = bean.getIntegral();
-                tvGreeting.setText(String.format(mContext.getResources().getString(R.string
-                        .say_hello), bean.getNickname()));
-                Glide.with(this).load(bean.getAvatar())
-                        .bitmapTransform(new CropCircleTransformation(mContext))
-                        .placeholder(R.drawable.user_profile)
-                        .crossFade().into(icProfile);
+                setHeaderData(200, bean.getAvatar(), bean.getNickname());
             }
             if (bean.getCode() == 437) {
                 isLogin = false;
-                icProfile.setImageResource(R.drawable.user_profile);
-                tvGreeting.setText("未登录");
+                setHeaderData(437, null, null);
             }
         }
 
@@ -370,6 +364,22 @@ public class MeFragment extends ABaseFragment {
             if (bean == null)
                 return;
             ToastUtils.showToast(mContext.getApplicationContext(), bean.getMsg());
+        }
+    }
+
+    private void setHeaderData(int code, String url, String nickname) {
+        if(tvGreeting == null||icProfile == null)
+            return;
+        if (code == 200) {
+            tvGreeting.setText(String.format(mContext.getResources().getString(R.string
+                    .say_hello), nickname));
+            Glide.with(this).load(url)
+                    .bitmapTransform(new CropCircleTransformation(mContext))
+                    .placeholder(R.drawable.user_profile)
+                    .crossFade().into(icProfile);
+        } else {
+            icProfile.setImageResource(R.drawable.user_profile);
+            tvGreeting.setText("未登录");
         }
     }
 }

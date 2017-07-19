@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -16,7 +14,6 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
-import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.SystemRecordAdapter;
@@ -26,8 +23,6 @@ import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.listener.OnItemClickListener;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
-import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
-import com.marshalchen.ultimaterecyclerview.itemTouchHelper.SimpleItemTouchHelperCallback;
 import com.marshalchen.ultimaterecyclerview.ui.emptyview.emptyViewOnShownListener;
 
 import java.util.ArrayList;
@@ -49,7 +44,6 @@ public class SystemRecordActivity extends ABaseActivity {
     private SystemRecordAdapter mAdapter;
     private List<DataBean> mData = new ArrayList<>();
     private LinearLayoutManager layoutManager;
-    private ItemTouchHelper mItemTouchHelper;
     private List<DataBean> mItems;
     private int page = 1;
     private boolean isRefresh;
@@ -75,9 +69,6 @@ public class SystemRecordActivity extends ABaseActivity {
         mAdapter = new SystemRecordAdapter(mData, R.layout.item_system_record);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-//        StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration
-//                (informationAdapter);
-//        ultimateRecyclerView.addItemDecoration(headersDecor);
         //bug 设置加载更多动画会使添加的数据延迟显示
 //        recyclerView.setLoadMoreView(R.layout.custom_bottom_progressbar);
         recyclerView.setEmptyView(R.layout.empty_view, UltimateRecyclerView
@@ -87,27 +78,20 @@ public class SystemRecordActivity extends ABaseActivity {
                 if (mView == null)
                     return;
                 ImageView imvError = (ImageView) mView.findViewById(R.id.ic_error);
-                if (imvError == null)
-                    return;
-                imvError.setImageDrawable(getResources().getDrawable(R.drawable
-                        .ic_no_recharge_record));
+                if (imvError != null) {
+                    imvError.setImageDrawable(getResources().getDrawable(R.drawable
+                            .ic_no_system_record));
+                }
                 TextView tvHint = (TextView) mView.findViewById(R.id.tv_hint);
-                if (tvHint == null)
-                    return;
-                tvHint.setText("暂无赠送记录");
+                if (tvHint != null) {
+                    tvHint.setText("暂无系统赠送记录");
+                }
             }
         });
-//        recyclerView.setParallaxHeader(getLayoutInflater().inflate(R.layout
-//                .parallax_recyclerview_header, recyclerView.mRecyclerView, false));
         recyclerView.setRecylerViewBackgroundColor(Color.parseColor("#ffffff"));
-        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback
-                (mAdapter);
-        mItemTouchHelper = new ItemTouchHelper(callback);
-        mItemTouchHelper.attachToRecyclerView(recyclerView.mRecyclerView);
         recyclerView.reenableLoadmore();
         recyclerView.setAdapter(mAdapter);
         getSystemRecord();
-
     }
 
     @Override
@@ -117,19 +101,6 @@ public class SystemRecordActivity extends ABaseActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
-            }
-        });
-
-        recyclerView.setOnParallaxScroll(new UltimateRecyclerView.OnParallaxScroll() {
-            @Override
-            public void onParallaxScroll(float percentage, float offset, View parallax) {
-            }
-        });
-        mAdapter.setOnDragStartListener(new UltimateViewAdapter.OnStartDragListener() {
-
-            @Override
-            public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-                mItemTouchHelper.startDrag(viewHolder);
             }
         });
         recyclerView.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener

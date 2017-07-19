@@ -8,7 +8,8 @@ import android.net.NetworkInfo;
 import android.net.NetworkInfo.State;
 import android.net.wifi.WifiManager;
 import android.os.Parcelable;
-import android.util.Log;
+
+import com.orhanobut.logger.Logger;
 
 /**
  * 网络改变监控广播
@@ -17,19 +18,15 @@ import android.util.Log;
  * 然后对相应的界面进行相应的操作，并将 状态 保存在我们的APP里面
  * <p>
  * <p>
- * Created by xujun
  */
 public class NetworkStateReceiver extends BroadcastReceiver {
-
-    private static final String TAG = "xujun";
-    public static final String TAG1 = "xxx";
 
     @Override
     public void onReceive(Context context, Intent intent) {
         // 这个监听wifi的打开与关闭，与wifi的连接无关
         if (WifiManager.WIFI_STATE_CHANGED_ACTION.equals(intent.getAction())) {
             int wifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, 0);
-            Log.e(TAG1, "wifiState" + wifiState);
+            Logger.d("wifiState=" + wifiState);
             switch (wifiState) {
                 case WifiManager.WIFI_STATE_DISABLED:
                     UApplication.getInstance().setEnablaWifi(false);
@@ -60,7 +57,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
                 NetworkInfo networkInfo = (NetworkInfo) parcelableExtra;
                 State state = networkInfo.getState();
                 boolean isConnected = state == State.CONNECTED;// 当然，这边可以更精确的确定状态
-                Log.e(TAG1, "isConnected" + isConnected);
+                Logger.d("isConnected=" + isConnected);
                 if (isConnected) {
                     UApplication.getInstance().setWifi(true);
                 } else {
@@ -74,7 +71,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
         if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
             ConnectivityManager manager = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
-            Log.i(TAG1, "CONNECTIVITY_ACTION");
+            Logger.d("CONNECTIVITY_ACTION");
 
             NetworkInfo activeNetwork = manager.getActiveNetworkInfo();
             if (activeNetwork != null) { // connected to the internet
@@ -83,29 +80,29 @@ public class NetworkStateReceiver extends BroadcastReceiver {
                         // connected to wifi
                         UApplication.getInstance().setMobile(false);
                         UApplication.getInstance().setWifi(true);
-                        Log.e(TAG, "当前WiFi连接可用 ");
+                        Logger.d("当前WiFi连接可用 ");
                     } else if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
                         // connected to the mobile provider's data plan
                         UApplication.getInstance().setMobile(true);
                         UApplication.getInstance().setWifi(false);
-                        Log.e(TAG, "当前移动网络连接可用 ");
+                        Logger.d("当前移动网络连接可用 ");
                     }
                 } else {
-                    Log.e(TAG, "当前没有网络连接，请确保你已经打开网络 ");
+                    Logger.d("当前没有网络连接，请确保你已经打开网络 ");
                     UApplication.getInstance().setWifi(false);
                     UApplication.getInstance().setMobile(false);
                 }
 
 
-                Log.e(TAG1, "info.getTypeName()" + activeNetwork.getTypeName());
-                Log.e(TAG1, "getSubtypeName()" + activeNetwork.getSubtypeName());
-                Log.e(TAG1, "getState()" + activeNetwork.getState());
-                Log.e(TAG1, "getDetailedState()"
+                Logger.d("info.getTypeName()=" + activeNetwork.getTypeName());
+                Logger.d("getSubtypeName()=" + activeNetwork.getSubtypeName());
+                Logger.d("getState()=" + activeNetwork.getState());
+                Logger.d("getDetailedState()="
                         + activeNetwork.getDetailedState().name());
-                Log.e(TAG1, "getDetailedState()" + activeNetwork.getExtraInfo());
-                Log.e(TAG1, "getType()" + activeNetwork.getType());
+                Logger.d("getDetailedState()=" + activeNetwork.getExtraInfo());
+                Logger.d("getType()=" + activeNetwork.getType());
             } else {   // not connected to the internet
-                Log.e(TAG, "当前没有网络连接，请确保你已经打开网络 ");
+                Logger.d("当前没有网络连接，请确保你已经打开网络 ");
                 UApplication.getInstance().setWifi(false);
                 UApplication.getInstance().setMobile(false);
             }

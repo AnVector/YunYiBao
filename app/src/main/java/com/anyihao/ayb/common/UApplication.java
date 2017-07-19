@@ -7,24 +7,23 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.support.multidex.MultiDexApplication;
 
-import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.androidbase.utils.ProcessUtils;
 import com.anyihao.ayb.BuildConfig;
-import com.anyihao.ayb.constant.GlobalConsts;
+import com.anyihao.ayb.listener.LocationListener;
 import com.franmontiel.persistentcookiejar.ClearableCookieJar;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 import com.library.http.okhttp.OkHttpUtils;
-import com.library.http.okhttp.callback.StringCallback;
 import com.library.http.okhttp.https.HttpsUtils;
 import com.library.http.okhttp.log.LoggerInterceptor;
-import com.orhanobut.logger.LogLevel;
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
+import com.orhanobut.logger.PrettyFormatStrategy;
 import com.squareup.leakcanary.LeakCanary;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.analytics.MobclickAgent;
@@ -32,15 +31,12 @@ import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
 
 import butterknife.ButterKnife;
-import okhttp3.Call;
 import okhttp3.OkHttpClient;
 
 /**
@@ -54,6 +50,7 @@ public class UApplication extends MultiDexApplication {
     private static UApplication mInstance;
     private UBroadcastReceiver mUBroadcastReceiver;
     private NetworkStateReceiver mNetworkStateReceiver;
+    private AMapLocationListener mLocationListener = null;
     public AMapLocationClient mLocationClient = null;
     public AMapLocationClientOption mLocationOption = null;
     //表示是否连接
@@ -102,6 +99,7 @@ public class UApplication extends MultiDexApplication {
     }
 
     private void initAMapLocation() {
+        mLocationListener = new LocationListener();
         //初始化AMapLocationClientOption对象
         mLocationOption = new AMapLocationClientOption();
         //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
@@ -116,67 +114,6 @@ public class UApplication extends MultiDexApplication {
         mLocationClient.startLocation();
         //设置定位回调监听
         mLocationClient.setLocationListener(mLocationListener);
-    }
-
-    private AMapLocationListener mLocationListener = new AMapLocationListener() {
-        @Override
-        public void onLocationChanged(AMapLocation aMapLocation) {
-            if (aMapLocation != null) {
-                if (aMapLocation.getErrorCode() == 0) {
-                    if (PreferencesUtils.getBoolean(getApplicationContext(), "isLogin", false)) {
-                        sendLocationInfo(aMapLocation.getLatitude(), aMapLocation.getLongitude(),
-                                aMapLocation.getCity(), aMapLocation.getCityCode(), aMapLocation
-                                        .getProvince(), aMapLocation.getDistrict(), aMapLocation
-                                        .getAdCode(), aMapLocation.getStreet(), aMapLocation
-                                        .getStreet(), aMapLocation.getAddress());
-                    }
-
-                } else {
-                    //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
-                    Logger.d("AmapError", "location Error, ErrCode:"
-                            + aMapLocation.getErrorCode() + ", errInfo:"
-                            + aMapLocation.getErrorInfo());
-                }
-            }
-        }
-    };
-
-    private void sendLocationInfo(double latitude, double longtitude, String city, String
-            cityCode, String province, String district, String adcode, String street, String
-                                          number, String address) {
-
-        Map<String, String> params = new HashMap<>();
-        params.put("uid", PreferencesUtils.getString(this, "uid", ""));
-        params.put("cmd", "LOCATION");
-        params.put("latitude", latitude + "");
-        params.put("longtitude", longtitude + "");
-        params.put("city", city);
-        params.put("citycode", cityCode);
-        params.put("province", province);
-        params.put("district", district);
-        params.put("adcode", adcode);
-        params.put("street", street);
-        params.put("number", number);
-        params.put("address", address);
-        OkHttpUtils
-                .post()
-                .url(GlobalConsts.PREFIX_URL)
-                .addHeader("Content-Type", "text/plain")
-                .params(params)
-                .tag("")
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        Logger.d(e.toString());
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        Logger.d(response);
-                    }
-                });
-
     }
 
     private void initUShare() {
@@ -194,7 +131,7 @@ public class UApplication extends MultiDexApplication {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(60000L, TimeUnit.MILLISECONDS)
                 .readTimeout(60000L, TimeUnit.MILLISECONDS)
-                .addInterceptor(new LoggerInterceptor("TAG", true))
+                .addInterceptor(new LoggerInterceptor("OKHttp", true))
                 .cookieJar(cookieJar1)
                 .hostnameVerifier(new HostnameVerifier() {
                     @Override
@@ -260,18 +197,20 @@ public class UApplication extends MultiDexApplication {
     }
 
     private void initLogger() {
-        if (BuildConfig.DEBUG) {
-            Logger.init(TAG)
-                    .logLevel(LogLevel.FULL)//Note:Use LogLevel.NONE for the release version.
-                    .methodCount(2)
-                    .methodOffset(5);
-        } else {
-            Logger.init(TAG)
-                    .logLevel(LogLevel.NONE)//Note:Use LogLevel.NONE for the release version.
-                    .methodCount(2)
-                    .methodOffset(5);
-        }
 
+        FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()
+                .showThreadInfo(true)  // (Optional) Whether to show thread info or not. Default
+                // true
+                .methodCount(0)         // (Optional) How many method line to show. Default 2
+                .methodOffset(3)        // (Optional) Skips some method invokes in stack trace.
+                .tag("IEBox")   // (Optional) Custom tag for each log. Default PRETTY_LOGGER
+                .build();
+        Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy){
+            @Override
+            public boolean isLoggable(int priority, String tag) {
+                return BuildConfig.DEBUG;
+            }
+        });
     }
 
     @Override

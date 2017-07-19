@@ -181,8 +181,9 @@ public class MessageFragment extends ABaseFragment {
     }
 
     private void onLoadNoData() {
-//        ToastUtils.showToast(mContext.getApplicationContext(), "暂无消息");
-        ultimateRecyclerView.showEmptyView();
+        if (ultimateRecyclerView != null) {
+            ultimateRecyclerView.showEmptyView();
+        }
     }
 
     private void getMessage() {

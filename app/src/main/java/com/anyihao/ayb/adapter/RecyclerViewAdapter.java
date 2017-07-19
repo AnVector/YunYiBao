@@ -101,7 +101,10 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<ViewHo
                 public void onClick(View v) {
                     if (mOnItemClickListener != null) {
                         int position = getPosition(viewHolder);
-                        mOnItemClickListener.onItemClick(parent, v, mDatas.get(position), position);
+                        if (position < mDatas.size() && position >= 0) {
+                            mOnItemClickListener.onItemClick(parent, v, mDatas.get(position),
+                                    position);
+                        }
                     }
                 }
             });
@@ -111,8 +114,10 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<ViewHo
                 public boolean onLongClick(View v) {
                     if (mOnItemClickListener != null) {
                         int position = getPosition(viewHolder);
-                        return mOnItemClickListener.onItemLongClick(parent, v, mDatas.get
-                                (position), position);
+                        if (position < mDatas.size() && position >= 0) {
+                            return mOnItemClickListener.onItemLongClick(parent, v, mDatas.get
+                                    (position), position);
+                        }
                     }
                     return false;
                 }
@@ -125,8 +130,10 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<ViewHo
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (mOnItemFocusChangeListener != null) {
                         int position = getPosition(viewHolder);
-                        mOnItemFocusChangeListener.onItemFocusChanged(parent, v, mDatas.get
-                                (position), position, hasFocus);
+                        if (position < mDatas.size() && position >= 0) {
+                            mOnItemFocusChangeListener.onItemFocusChanged(parent, v, mDatas.get
+                                    (position), position, hasFocus);
+                        }
                     }
                 }
             });

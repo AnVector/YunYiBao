@@ -3,9 +3,7 @@ package com.anyihao.ayb.frame.activity;
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,11 +13,9 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
-import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.RechargeRecordAdapter;
-import com.anyihao.ayb.adapter.TransferRecordAdapter;
 import com.anyihao.ayb.bean.RechargeRecordListBean;
 import com.anyihao.ayb.bean.RechargeRecordListBean.DataBean;
 import com.anyihao.ayb.bean.TransferListBean;
@@ -27,8 +23,8 @@ import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.listener.OnItemClickListener;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
-import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
-import com.marshalchen.ultimaterecyclerview.itemTouchHelper.SimpleItemTouchHelperCallback;
+import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview
+        .StickyRecyclerHeadersDecoration;
 import com.marshalchen.ultimaterecyclerview.ui.emptyview.emptyViewOnShownListener;
 
 import java.util.ArrayList;
@@ -49,7 +45,7 @@ public class RechargeRecordActivity extends ABaseActivity {
     private static final int PAGE_SIZE = 10;
     private RechargeRecordAdapter mRechargeAdapter;
     private LinearLayoutManager layoutManager;
-//    private ItemTouchHelper mItemTouchHelper;
+    //    private ItemTouchHelper mItemTouchHelper;
     private List<RechargeRecordListBean.DataBean> mRechargeData = new ArrayList<>();
     private List<TransferListBean.DataBean> mTransferData = new ArrayList<>();
     private List<DataBean> mItems;
@@ -79,11 +75,11 @@ public class RechargeRecordActivity extends ABaseActivity {
                 .item_recharge_record);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-//        StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration
-//                (informationAdapter);
-//        ultimateRecyclerView.addItemDecoration(headersDecor);
+        StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration
+                (mRechargeAdapter);
+        recyclerView.addItemDecoration(headersDecor);
         //bug 设置加载更多动画会使添加的数据延迟显示
-//        recyclerView.setLoadMoreView(R.layout.custom_bottom_progressbar);
+        recyclerView.setLoadMoreView(R.layout.custom_bottom_progressbar);
         recyclerView.setEmptyView(R.layout.empty_view, UltimateRecyclerView
                 .EMPTY_CLEAR_ALL, new emptyViewOnShownListener() {
             @Override
@@ -158,7 +154,10 @@ public class RechargeRecordActivity extends ABaseActivity {
                     Intent intent = new Intent(RechargeRecordActivity.this,
                             RechargeRecordDetailsActivity
                                     .class);
-                    intent.putExtra("idxOrderID", ((DataBean) o).getIdxOrderID());
+                    intent.putExtra("fee", ((DataBean) o).getAmount());
+                    intent.putExtra("crtTime", ((DataBean) o).getCrtTm());
+                    intent.putExtra("flow", ((DataBean) o).getFlow());
+                    intent.putExtra("payType", ((DataBean) o).getTopupType());
                     startActivity(intent);
                 }
             }

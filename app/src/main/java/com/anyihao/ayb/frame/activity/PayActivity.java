@@ -132,8 +132,12 @@ public class PayActivity extends ABaseActivity {
         PreferencesUtils.putString(getApplicationContext(), "payType", "common");
         PreferencesUtils.putString(getApplicationContext(), "money", money);
         PreferencesUtils.putString(getApplicationContext(), "amount", amount);
+        if (expires == null) {
+            expires = "";
+        }
         PreferencesUtils.putString(getApplicationContext(), "expires", expires.replace
                 ("全国流量，即时生效，", ""));
+
     }
 
     @Override
@@ -319,7 +323,6 @@ public class PayActivity extends ABaseActivity {
             } else {
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg());
             }
-
         }
     }
 }

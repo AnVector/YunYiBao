@@ -25,7 +25,6 @@
         android:max="100"
         android:paddingEnd="-0.1dp"
         android:paddingStart="-0.1dp"
-        android:progressDrawable="@drawable/seekbar_bg1"
         android:secondaryProgress="0"
         android:thumb="@drawable/slide_thumb_normal"/>
 </LinearLayout>

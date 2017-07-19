@@ -3,10 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_bribery_money"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_background_color"
     android:orientation="vertical"
     tools:context="com.anyihao.ayb.frame.activity.BriberyMoneyActivity">
 
@@ -105,6 +103,7 @@
         android:maxLines="1"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
+        android:textColorHint="@color/light_gray"
         android:textCursorDrawable="@drawable/edittext_cursor_color"
         android:textSize="@dimen/font_size_small"
         app:funcType="canClear"/>

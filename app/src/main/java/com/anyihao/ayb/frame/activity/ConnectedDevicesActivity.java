@@ -180,4 +180,15 @@ public class ConnectedDevicesActivity extends ABaseActivity {
     public void onSuccess(String result, int page, Integer actionType) {
 
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (bottomDialog == null)
+            return;
+        if (bottomDialog.isShowing()) {
+            bottomDialog.dismiss();
+            bottomDialog = null;
+        }
+    }
 }

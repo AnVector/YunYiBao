@@ -55,7 +55,7 @@
     <!--Toolbar Title-->
     <string name="data_flow_charge">流量充值</string>
     <string name="me">我的</string>
-    <string name="message">我的消息</string>
+    <string name="message_of_mine">我的消息</string>
     <string name="linker_num">WIFI连接数</string>
     <string name="linked_devices">已连接设备</string>
     <string name="pay_succeed">支付成功</string>
@@ -75,7 +75,6 @@
     <string name="set_login_pwd">设置登录密码</string>
     <string name="pay">支付</string>
     <string name="device_list">设备列表</string>
-    <string name="scan">扫描</string>
     <string name="service_location">设备服务点</string>
     <string name="transfer_record">转赠记录</string>
 
@@ -169,6 +168,7 @@
     <string name="agree_to_auth">授权</string>
     <string name="copy_password">复制密码</string>
     <string name="surplus_amount">剩余：%1$sMB</string>
+    <string name="message">消息</string>
     <!--empty view-->
     <string name="no_network">亲，网络不给力啊&#8230;</string>
     <string name="no_message">暂无消息哦&#8230;</string>

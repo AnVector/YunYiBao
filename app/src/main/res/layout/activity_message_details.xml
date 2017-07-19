@@ -2,10 +2,8 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_message_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/content_bg_color"
     android:orientation="vertical"
     tools:context="com.anyihao.ayb.frame.activity.MessageDetailsActivity">
 
@@ -23,8 +21,7 @@
             android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/user_profile"/>
+            android:scaleType="centerCrop"/>
 
         <TextView
             android:id="@+id/tv_user_name"

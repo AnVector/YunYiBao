@@ -54,7 +54,7 @@ public class MessageActivity extends ABaseActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
-        titleMid.setText(getString(R.string.message));
+        titleMid.setText(getString(R.string.message_of_mine));
     }
 
     private void initViewPager() {
