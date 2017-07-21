@@ -141,6 +141,10 @@ public class WifiInfoManager {
         return (mWifiInfo == null) ? "NULL" : mWifiInfo.getBSSID();
     }
 
+    public String getSSid() {
+        return (mWifiInfo == null) ? "NULL" : mWifiInfo.getSSID();
+    }
+
     // 得到IP地址
     public int getIPAddress() {
         return (mWifiInfo == null) ? 0 : mWifiInfo.getIpAddress();

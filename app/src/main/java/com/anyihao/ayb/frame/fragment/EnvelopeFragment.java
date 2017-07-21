@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -27,8 +25,6 @@ import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.frame.activity.RedEnvelopeActivity;
 import com.anyihao.ayb.listener.OnItemClickListener;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
-import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
-import com.marshalchen.ultimaterecyclerview.itemTouchHelper.SimpleItemTouchHelperCallback;
 import com.marshalchen.ultimaterecyclerview.ui.emptyview.emptyViewOnShownListener;
 
 import java.util.HashMap;
@@ -44,33 +40,32 @@ public class EnvelopeFragment extends ABaseFragment {
     UltimateRecyclerView ultimateRecyclerView;
     private EnvelopeAdapter mAdapter;
     protected LinearLayoutManager layoutManager;
-    private ItemTouchHelper mItemTouchHelper;
     private List<DataBean> mData = new LinkedList<>();
-    private List<DataBean> mEnvelopeMsg;
     private String type;
     private int page = 1;
-    private static final int PAGE_SIZE = 8;
+    private static final int PAGE_SIZE = 10;
     private boolean isRefresh;
-
+    private boolean isInited = false;
     private static final int REQUEST_ENVELOPE_CODE = 0x0001;
 
     @Override
     protected void initData() {
-
         Bundle bundle = getArguments();
         if (bundle != null) {
             type = bundle.getString("type");
-            getMessage();
+            if (!isInited) {
+                isInited = true;
+                getMessage();
+            }
         }
+        initUltimateRV();
+    }
 
+    private void initUltimateRV() {
         ultimateRecyclerView.setHasFixedSize(false);
         mAdapter = new EnvelopeAdapter(mData, R.layout.item_message);
         layoutManager = new LinearLayoutManager(getContext());
         ultimateRecyclerView.setLayoutManager(layoutManager);
-//        StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration
-//                (informationAdapter);
-//        ultimateRecyclerView.addItemDecoration(headersDecor);
-        //bug 设置加载更多动画会使添加的数据延迟显示
         ultimateRecyclerView.setLoadMoreView(R.layout.custom_bottom_progressbar);
         ultimateRecyclerView.setEmptyView(R.layout.empty_view, UltimateRecyclerView
                 .EMPTY_CLEAR_ALL, new emptyViewOnShownListener() {
@@ -79,41 +74,22 @@ public class EnvelopeFragment extends ABaseFragment {
                 if (mView == null)
                     return;
                 ImageView imvError = (ImageView) mView.findViewById(R.id.ic_error);
-                if (imvError == null)
-                    return;
-                imvError.setImageDrawable(getResources().getDrawable(R.drawable
-                        .ic_no_message));
                 TextView tvHint = (TextView) mView.findViewById(R.id.tv_hint);
-                if (tvHint == null)
-                    return;
-                tvHint.setText("暂无消息");
+                if (imvError != null) {
+                    imvError.setImageDrawable(getResources().getDrawable(R.drawable
+                            .ic_no_message));
+                }
+                if (tvHint != null) {
+                    tvHint.setText("暂无红包消息");
+                }
             }
         });
-//        recyclerView.setParallaxHeader(getLayoutInflater().inflate(R.layout
-//                .parallax_recyclerview_header, recyclerView.mRecyclerView, false));
-//        recyclerView.setRecylerViewBackgroundColor(Color.parseColor("#ffffff"));
-        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback
-                (mAdapter);
-        mItemTouchHelper = new ItemTouchHelper(callback);
-        mItemTouchHelper.attachToRecyclerView(ultimateRecyclerView.mRecyclerView);
         ultimateRecyclerView.reenableLoadmore();
         ultimateRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
     protected void initEvent() {
-        ultimateRecyclerView.setOnParallaxScroll(new UltimateRecyclerView.OnParallaxScroll() {
-            @Override
-            public void onParallaxScroll(float percentage, float offset, View parallax) {
-            }
-        });
-        mAdapter.setOnDragStartListener(new UltimateViewAdapter.OnStartDragListener() {
-
-            @Override
-            public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-                mItemTouchHelper.startDrag(viewHolder);
-            }
-        });
         ultimateRecyclerView.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener
                 () {
             @Override
@@ -152,7 +128,6 @@ public class EnvelopeFragment extends ABaseFragment {
 
             @Override
             public boolean onItemLongClick(ViewGroup parent, View view, Object o, int position) {
-
                 return false;
             }
         });
@@ -171,27 +146,25 @@ public class EnvelopeFragment extends ABaseFragment {
 
     }
 
-    private void onFireRefresh() {
+    private void onFireRefresh(List<DataBean> beans) {
         mAdapter.removeAllInternal(mData);
-        mAdapter.insert(mEnvelopeMsg);
+        mAdapter.insert(beans);
         ultimateRecyclerView.setRefreshing(false);
-        //   ultimateRecyclerView.scrollBy(0, -50);
         layoutManager.scrollToPosition(0);
-//        recyclerView.scrollVerticallyTo(0);
-        //ultimateRecyclerView.setAdapter(simpleRecyclerViewAdapter);
-        //simpleRecyclerViewAdapter.notifyDataSetChanged();
-//        ultimateRecyclerView.disableLoadmore();
+        ultimateRecyclerView.reenableLoadmore();
     }
 
-    private void onLoadMore() {
-        mAdapter.insert(mEnvelopeMsg);
-        if (mEnvelopeMsg.size() < PAGE_SIZE) {
+    private void onLoadMore(List<DataBean> beans) {
+        mAdapter.insert(beans);
+        if (beans.size() < PAGE_SIZE) {
             ultimateRecyclerView.disableLoadmore();
         }
     }
 
     private void onLoadNoData() {
-        ToastUtils.showToast(mContext.getApplicationContext(), "暂无消息");
+        if (ultimateRecyclerView == null)
+            return;
+        isInited = false;
         ultimateRecyclerView.showEmptyView();
     }
 
@@ -230,21 +203,25 @@ public class EnvelopeFragment extends ABaseFragment {
                 return;
             if (bean.getCode() == 200) {
                 List<DataBean> beans = bean.getData();
+                if (beans == null)
+                    return;
                 if (beans.size() > 0) {
-                    mEnvelopeMsg = beans;
                     if (isRefresh) {
-                        onFireRefresh();
+                        onFireRefresh(beans);
                     } else {
-                        onLoadMore();
+                        onLoadMore(beans);
                     }
                 } else {
                     if (page == 1) {
                         onLoadNoData();
                     }
-
+                }
+            } else {
+                ToastUtils.showToast(mContext.getApplicationContext(), bean.getMsg());
+                if (page == 1) {
+                    onLoadNoData();
                 }
             }
-
         }
     }
 }

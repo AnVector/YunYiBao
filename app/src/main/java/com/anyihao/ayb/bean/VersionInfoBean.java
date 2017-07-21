@@ -12,10 +12,33 @@ public class VersionInfoBean implements Serializable {
 
     private int code;
     private String msg;
-    private String var;
-    private String varContent;
-    private String telephone;
-    private String verLink;
+    private String version;
+    private String verUpCon;
+    private String downloadLink;
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getVerUpCon() {
+        return verUpCon;
+    }
+
+    public void setVerUpCon(String verUpCon) {
+        this.verUpCon = verUpCon;
+    }
+
+    public String getDownloadLink() {
+        return downloadLink;
+    }
+
+    public void setDownloadLink(String downloadLink) {
+        this.downloadLink = downloadLink;
+    }
 
     public int getCode() {
         return code;
@@ -31,37 +54,5 @@ public class VersionInfoBean implements Serializable {
 
     public void setMsg(String msg) {
         this.msg = msg;
-    }
-
-    public String getVar() {
-        return var;
-    }
-
-    public void setVar(String var) {
-        this.var = var;
-    }
-
-    public String getVarContent() {
-        return varContent;
-    }
-
-    public void setVarContent(String varContent) {
-        this.varContent = varContent;
-    }
-
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
-    public String getVerLink() {
-        return verLink;
-    }
-
-    public void setVerLink(String verLink) {
-        this.verLink = verLink;
     }
 }

@@ -24,6 +24,8 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <!-- 允许应用读取外部存储 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <!--拨打电话-->
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
     <!-- 用于写入缓存数据到扩展存储卡 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_LOGS"/>
@@ -129,6 +131,17 @@
                 <category android:name="com.anyihao.ayb"/>
             </intent-filter>
         </activity>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.anyihao.ayb.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths_public">
+            </meta-data>
+        </provider>
         <!-- Required  SDK核心功能 -->
         <service
             android:name="cn.jpush.android.service.DownloadService"

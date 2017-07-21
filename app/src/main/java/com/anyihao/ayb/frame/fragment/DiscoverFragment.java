@@ -2,8 +2,7 @@ package com.anyihao.ayb.frame.fragment;
 
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -17,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.Interpolator;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
@@ -38,11 +38,14 @@ import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.MyLocationStyle;
 import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
-import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
+import com.anyihao.ayb.bean.MerchantListBean;
+import com.anyihao.ayb.bean.MerchantListBean.DataBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
+import com.anyihao.ayb.frame.activity.RadarActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,6 +53,7 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.Unbinder;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,6 +69,9 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     MapView mMapView;
     @BindView(R.id.fake_status_bar)
     View fakeStatusBar;
+    @BindView(R.id.imv_my_location)
+    ImageView imvMyLocation;
+    Unbinder unbinder;
     private OnLocationChangedListener mListener;
     //声明mlocationClient对象
     private AMapLocationClient mLocationClient;
@@ -72,7 +79,6 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     private AMap mAmap;
     //标识，用于判断是否只显示一次定位信息和用户重新定位
     private boolean isFirstLoc = true;
-    private int i = 0;
     /**
      * 需要进行检测的权限数组
      */
@@ -106,33 +112,35 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
             mAmap.clear();
         }
         mAmap = mMapView.getMap();
-        // 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
-        mAmap.setMyLocationEnabled(true);
         //设置定位监听
         mAmap.setLocationSource(this);
+        // 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
+        mAmap.setMyLocationEnabled(true);
+        mAmap.setMyLocationType(AMap.MAP_TYPE_NORMAL);
     }
 
     private void initUiSettings() {
         mUiSettings = mAmap.getUiSettings();
         // 是否显示定位按钮
-        mUiSettings.setMyLocationButtonEnabled(true);
+        mUiSettings.setMyLocationButtonEnabled(false);
         //设置地图logo显示位置
         mUiSettings.setLogoPosition(AMapOptions.LOGO_POSITION_BOTTOM_RIGHT);// 设置地图logo显示在右下方
         //设置地图是否可以手势滑动
         mUiSettings.setScrollGesturesEnabled(true);
         //设置地图是否可以手势缩放大小
         mUiSettings.setZoomGesturesEnabled(true);
-//        mUiSettings.setZoomControlsEnabled(false);
         mUiSettings.setZoomControlsEnabled(false);
     }
 
     private void initLocationStyle() {
-        //定位的小图标 默认是蓝点
         MyLocationStyle myLocationStyle = new MyLocationStyle();
-//        myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromResource(R.drawable
-//                .location_dot));
-//        myLocationStyle.radiusFillColor(android.R.color.transparent);
-//        myLocationStyle.strokeColor(android.R.color.transparent);
+        myLocationStyle.myLocationIcon(BitmapDescriptorFactory.defaultMarker());
+        myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
+        myLocationStyle.strokeColor(android.R.color.transparent);
+        myLocationStyle.radiusFillColor(android.R.color.transparent);
+        myLocationStyle.strokeWidth(0);
+        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW);
+        //连续定位、且将视角移动到地图中心点，定位蓝点跟随设备移动。（1秒1次定位）
         myLocationStyle.showMyLocation(true);
         mAmap.setMyLocationStyle(myLocationStyle);
     }
@@ -148,52 +156,30 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
                     //将地图移动到定位点
                     mAmap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(aMapLocation
                             .getLatitude(), aMapLocation.getLongitude())));
-                    //点击定位按钮 能够将地图的中心移动到定位点
-                    mListener.onLocationChanged(aMapLocation);//激活定位
-                    ToastUtils.showToast(mContext, "定位信息发生变化" + (i++));
-                    //添加图钉
-//                    addMarkersToMap(generateMarkerOptions(aMapLocation));
-                    //获取定位信息
-//                    StringBuffer buffer = new StringBuffer();
-//                    buffer.append(aMapLocation.getCountry() + "" + aMapLocation.getProvince() +
-//                            "" + aMapLocation.getCity() + "" + aMapLocation.getProvince() + "" +
-//                            aMapLocation.getDistrict() + "" + aMapLocation.getStreet() + "" +
-//                            aMapLocation.getStreetNum());
-//                    ToastUtils.showLongToast(mContext, buffer.toString());
                     isFirstLoc = false;
                 }
+                mListener.onLocationChanged(aMapLocation);
             } else {
-                //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
 //                Logger.d("AmapError", "location Error, ErrCode:"
 //                        + aMapLocation.getErrorCode() + ", errInfo:"
 //                        + aMapLocation.getErrorInfo());
-//                ToastUtils.showLongToast(getContext(),"定位失败");
             }
         }
     }
 
-    //自定义一个图钉，并且设置图标，当我们点击图钉时，显示设置的信息
-    private MarkerOptions generateMarkerOptions(AMapLocation amapLocation) {
-        if (amapLocation == null)
-            return null;
-        //设置图钉选项
-        MarkerOptions options = new MarkerOptions();
-        options.icon(BitmapDescriptorFactory.fromResource(R.drawable.location_dot))//图标
-                .position(new LatLng(amapLocation.getLatitude(), amapLocation.getLongitude()))
-                .draggable(false)
-                .visible(true)
-                .period(60);//设置多少帧刷新一次图片资源
-//        StringBuffer buffer = new StringBuffer();
-//        buffer.append(amapLocation.getCountry())
-//                .append(amapLocation.getProvince())
-//                .append(amapLocation.getCity())
-//                .append(amapLocation.getDistrict())
-//                .append(amapLocation.getStreet())
-//                .append(amapLocation.getStreetNum());
-//        //标题
-//        options.title(buffer.toString());
-        return options;
-
+    //自定义一个图钉
+    private void generateMarkerOptions(List<DataBean> beans) {
+        MarkerOptions options;
+        for (DataBean bean : beans) {
+            options = new MarkerOptions();
+            //设置图钉选项
+            options.icon(BitmapDescriptorFactory.fromResource(R.drawable.location_dot))//图标
+                    .position(new LatLng(bean.getLatitude(), bean.getLongitude()))
+                    .draggable(false)
+                    .visible(true)
+                    .period(60);//设置多少帧刷新一次图片资源
+            mAmap.addMarker(options).setObject(bean);
+        }
     }
 
     private void initLocation() {
@@ -206,7 +192,7 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
         //设置定位间隔,单位毫秒,默认为2000ms
-        mLocationOption.setInterval(5 * 1000);
+        mLocationOption.setInterval(2 * 1000);
         //设置是否返回地址信息（默认返回地址信息）
         mLocationOption.setNeedAddress(true);
         //设置是否只定位一次,默认为false
@@ -224,21 +210,23 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
         //启动定位
         mLocationClient.startLocation();
-//        addMarkersToMap(generateMarkerOptions(mLocationClient.getLastKnownLocation()));
-    }
-
-    /**
-     * 在地图上添加marker
-     */
-    private void addMarkersToMap(MarkerOptions markerOption) {
-        if (markerOption == null)
-            return;
-        mAmap.addMarker(markerOption);
+//      addMarkersToMap(generateMarkerOptions(mLocationClient.getLastKnownLocation()));
     }
 
     @Override
     protected void initEvent() {
         mAmap.setOnMarkerClickListener(this);
+
+        imvMyLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAmap.moveCamera(CameraUpdateFactory.zoomTo(17));
+                //将地图移动到定位点
+                mAmap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(mLocationClient
+                        .getLastKnownLocation()
+                        .getLatitude(), mLocationClient.getLastKnownLocation().getLongitude())));
+            }
+        });
     }
 
     //激活定位
@@ -276,24 +264,34 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
-//        if (actionType == 0) {
-//            MerchantListBean bean = GsonUtils.getInstance().transitionToBean(result,
-//                    MerchantListBean.class);
-//            if (bean == null)
-//                return;
-//            if (bean.getCode() == 200) {
-//                ToastUtils.showToast(mContext.getApplicationContext(), "附近商家信息获取成功");
-//            } else {
-//                ToastUtils.showToast(mContext.getApplicationContext(), "附近商家信息获取失败");
-//            }
-//        }
+        if (actionType == 0) {
+            MerchantListBean bean = GsonUtils.getInstance().transitionToBean(result,
+                    MerchantListBean.class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                List<DataBean> beans = bean.getData();
+                if (beans.size() > 0) {
+                    generateMarkerOptions(beans);
+                }
+            }
+        }
 
     }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
         if (mAmap != null) {
-            jumpPoint(marker);
+//            jumpPoint(marker);
+            if (marker.getObject() instanceof DataBean) {
+                DataBean bean = (DataBean) marker.getObject();
+                Intent intent = new Intent(mContext, RadarActivity.class);
+                intent.putExtra("shopAddr", bean.getShopAddr());
+                intent.putExtra("shopName", bean.getShopName());
+                intent.putExtra("contact", bean.getContact());
+                startActivity(intent);
+            }
+
         }
         return true;
     }
@@ -414,7 +412,6 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSON_REQUESTCODE) {
             if (!verifyPermissions(grantResults)) {
-                showMissingPermissionDialog();
                 isNeedCheck = false;
             }
         }
@@ -434,37 +431,6 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
             }
         }
         return true;
-    }
-
-    /**
-     * 显示提示信息
-     *
-     * @since 2.5.0
-     */
-    private void showMissingPermissionDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("通知");
-        builder.setMessage("消息");
-        // 拒绝, 退出应用
-        builder.setNegativeButton(R.string.cancel,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-//                        finish();
-                    }
-                });
-
-        builder.setPositiveButton("设置",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-//                        startAppSettings();
-                    }
-                });
-
-        builder.setCancelable(false);
-
-        builder.show();
     }
 
     private void getMerchantList() {

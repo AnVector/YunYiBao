@@ -4,10 +4,10 @@
     <item
         android:drawable="@drawable/ic_bell_01"
         android:duration="300"/>
-    <item
-        android:drawable="@drawable/ic_bell_02"
-        android:duration="300"/>
-    <item
-        android:drawable="@drawable/ic_bell_03"
-        android:duration="300"/>
+    <!--<item-->
+        <!--android:drawable="@drawable/ic_bell_02"-->
+        <!--android:duration="300"/>-->
+    <!--<item-->
+        <!--android:drawable="@drawable/ic_bell_03"-->
+        <!--android:duration="300"/>-->
 </animation-list>

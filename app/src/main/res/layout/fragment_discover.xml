@@ -13,9 +13,23 @@
     <include
         layout="@layout/toolbar_common"/>
 
-    <com.amap.api.maps2d.MapView
-        android:id="@+id/map"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="49dp"/>
+        android:layout_marginBottom="49dp">
+
+        <com.amap.api.maps2d.MapView
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            android:id="@+id/imv_my_location"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_gravity="left|bottom"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_my_location"/>
+    </FrameLayout>
+
 </LinearLayout>

@@ -93,7 +93,7 @@ public class UAdapter<T> extends UltimateViewAdapter {
                 @Override
                 public void onClick(View v) {
                     if (mOnItemClickListener != null) {
-                        if (index > 0 && index < mData.size()) {
+                        if (index >= 0 && index < mData.size()) {
                             mOnItemClickListener.onItemClick((ViewGroup) v.getParent(), v, mData.get
                                     (index), index);
                         }

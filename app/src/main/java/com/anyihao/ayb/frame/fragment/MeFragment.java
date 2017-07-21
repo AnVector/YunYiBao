@@ -95,11 +95,6 @@ public class MeFragment extends ABaseFragment {
 
     @Override
     protected void initData() {
-//        ((AppCompatActivity) mContext).setSupportActionBar(toolbar);
-//        ActionBar actionBar = ((AppCompatActivity) mContext).getSupportActionBar();
-//        if (null != actionBar) {
-//            actionBar.setDisplayShowTitleEnabled(false);
-//        }
         for (int i = 0; i < 9; i++) {
             mData.add(i, "");
         }

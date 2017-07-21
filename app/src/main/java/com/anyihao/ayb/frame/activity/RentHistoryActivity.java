@@ -41,7 +41,6 @@ public class RentHistoryActivity extends ABaseActivity {
     private RentHistoryAdapter mAdapter;
     private LinearLayoutManager layoutManager;
     private List<DataBean> mData = new ArrayList<>();
-    private List<DataBean> mItems;
     private int page = 1;
     private boolean isRefresh;
 
@@ -73,7 +72,7 @@ public class RentHistoryActivity extends ABaseActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         //bug 设置加载更多动画会使添加的数据延迟显示
-//        recyclerView.setLoadMoreView(R.layout.custom_bottom_progressbar);
+        recyclerView.setLoadMoreView(R.layout.custom_bottom_progressbar);
         recyclerView.setEmptyView(R.layout.empty_view, UltimateRecyclerView
                 .EMPTY_CLEAR_ALL, new emptyViewOnShownListener() {
             @Override
@@ -81,11 +80,11 @@ public class RentHistoryActivity extends ABaseActivity {
                 if (mView == null)
                     return;
                 ImageView imvError = (ImageView) mView.findViewById(R.id.ic_error);
+                TextView tvHint = (TextView) mView.findViewById(R.id.tv_hint);
                 if (imvError != null) {
                     imvError.setImageDrawable(getResources().getDrawable(R.drawable
                             .ic_no_rent_record));
                 }
-                TextView tvHint = (TextView) mView.findViewById(R.id.tv_hint);
                 if (tvHint != null) {
                     tvHint.setText("暂无租赁记录");
                 }
@@ -124,17 +123,24 @@ public class RentHistoryActivity extends ABaseActivity {
         });
     }
 
-    private void onFireRefresh() {
+    private void onFireRefresh(List<DataBean> beans) {
         mAdapter.removeAllInternal(mData);
-        mAdapter.insert(mItems);
+        mAdapter.insert(beans);
         recyclerView.setRefreshing(false);
         layoutManager.scrollToPosition(0);
+        recyclerView.reenableLoadmore();
     }
 
-    private void onLoadMore() {
-        mAdapter.insert(mItems);
-        if (mItems.size() < PAGE_SIZE) {
+    private void onLoadMore(List<DataBean> beans) {
+        mAdapter.insert(beans);
+        if (beans.size() < PAGE_SIZE) {
             recyclerView.disableLoadmore();
+        }
+    }
+
+    private void onLoadNoData() {
+        if (recyclerView != null) {
+            recyclerView.showEmptyView();
         }
     }
 
@@ -163,16 +169,24 @@ public class RentHistoryActivity extends ABaseActivity {
                 return;
             if (bean.getCode() == 200) {
                 List<DataBean> beans = bean.getData();
+                if (beans == null)
+                    return;
                 if (beans.size() > 0) {
-                    mItems = beans;
                     if (isRefresh) {
-                        onFireRefresh();
+                        onFireRefresh(beans);
                     } else {
-                        onLoadMore();
+                        onLoadMore(beans);
+                    }
+                } else {
+                    if (page == 1) {
+                        onLoadNoData();
                     }
                 }
             } else {
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg());
+                if (page == 1) {
+                    onLoadNoData();
+                }
             }
         }
     }

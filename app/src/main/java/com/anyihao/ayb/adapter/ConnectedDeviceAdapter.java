@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.anyihao.ayb.R;
+import com.anyihao.ayb.bean.ConnectedUserBean.DataBean;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
 
 import java.util.List;
@@ -17,9 +18,9 @@ import java.util.List;
  * email:looper@126.com
  */
 
-public class ConnectedDeviceAdapter extends UAdapter<String> {
+public class ConnectedDeviceAdapter extends UAdapter<DataBean> {
 
-    public ConnectedDeviceAdapter(List<String> data, int layoutId) {
+    public ConnectedDeviceAdapter(List<DataBean> data, int layoutId) {
         super(data, layoutId);
     }
 
@@ -35,18 +36,14 @@ public class ConnectedDeviceAdapter extends UAdapter<String> {
 
         super.onBindViewHolder(holder, position);
         if (bp && holder instanceof ConnectedDeviceListViewHolder) {
-            String content = mData.get((hasHeaderView() ? position - 1 : position));
+            DataBean content = mData.get((hasHeaderView() ? position - 1 : position));
             if (content == null) return;
             if (position == 0) {
                 ((ConnectedDeviceListViewHolder) holder).space.setVisibility(View.VISIBLE);
                 ((ConnectedDeviceListViewHolder) holder).line.setVisibility(View.GONE);
             }
-            ((ConnectedDeviceListViewHolder) holder).tvUserName.setText(content);
-            if (position % 2 == 0) {
-                ((ConnectedDeviceListViewHolder) holder).tvOnlineDevice.setText("iPad在线");
-            } else {
-                ((ConnectedDeviceListViewHolder) holder).tvOnlineDevice.setText("手机在线");
-            }
+            ((ConnectedDeviceListViewHolder) holder).tvUserName.setText(content.getNickname());
+            ((ConnectedDeviceListViewHolder) holder).tvOnlineDevice.setText(content.getDevice());
         }
     }
 

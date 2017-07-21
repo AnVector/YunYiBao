@@ -1,5 +1,6 @@
 package com.anyihao.ayb.frame.activity;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -59,6 +60,8 @@ import java.util.Map;
 import butterknife.BindView;
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 import fr.castorflex.android.circularprogressbar.CircularProgressDrawable;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
 public class MeActivity extends ABaseActivity {
 
@@ -95,8 +98,11 @@ public class MeActivity extends ABaseActivity {
     private String mNickName;
     private String mGender;
     private String mZone;
-    private static final int REQUEST_UPDATE_CODE = 0x0001;
+    private static final int REQUEST_UPDATE_CODE = 0x0004;
+    private static final int RC_CAMERA_PERM = 0x0005;
+    private static final int REQUEST_CODE_CHOOSE = 0x0006;
     private boolean isGender = true;
+    private String depositMoney;
 
     @Override
     protected int getContentViewId() {
@@ -203,12 +209,12 @@ public class MeActivity extends ABaseActivity {
                 if (o instanceof KeyValueBean) {
                     switch (((KeyValueBean) o).getTitle()) {
                         case "头像":
-                            if (bottomDialog != null) {
-                                isGender = false;
-                                tvMale.setText(getString(R.string.from_album));
-                                tvFemale.setText(getString(R.string.photo));
-                                bottomDialog.show();
-                            }
+//                            if (bottomDialog != null) {
+//                                isGender = false;
+//                                tvMale.setText(getString(R.string.from_album));
+//                                tvFemale.setText(getString(R.string.photo));
+//                                bottomDialog.show();
+//                            }
                             break;
                         case "地区":
                             tvValue = (TextView) view.findViewById(R.id.value);
@@ -234,12 +240,15 @@ public class MeActivity extends ABaseActivity {
                             startActivity(intent1);
                             break;
                         case "押金退款":
+                            tvValue = (TextView) view.findViewById(R.id.value);
                             if ("未缴纳".equals(((KeyValueBean) o).getValue())) {
                                 ToastUtils.showToast(getApplicationContext(), ((KeyValueBean) o)
                                         .getValue());
                                 return;
+                            } else {
+                                depositMoney = ((KeyValueBean) o).getValue();
+                                showConfirmDialog();
                             }
-                            showConfirmDialog();
                             break;
                         case "手机号码":
                             Intent intent2 = new Intent(MeActivity.this, GetVerifyCodeActivity
@@ -286,6 +295,8 @@ public class MeActivity extends ABaseActivity {
                     if (bottomDialog != null) {
                         bottomDialog.dismiss();
                     }
+                } else {
+                    permissionsRequest();
                 }
 
             }
@@ -300,6 +311,8 @@ public class MeActivity extends ABaseActivity {
                     if (bottomDialog != null) {
                         bottomDialog.dismiss();
                     }
+                } else {
+
                 }
 
             }
@@ -313,7 +326,30 @@ public class MeActivity extends ABaseActivity {
                 }
             }
         });
+    }
 
+    @AfterPermissionGranted(RC_CAMERA_PERM)
+    protected void permissionsRequest() {
+        String[] permissions = {Manifest.permission.CAMERA, Manifest.permission
+                .WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+        if (EasyPermissions.hasPermissions(this, permissions)) {
+//            Matisse.from(this)
+//                    .choose(MimeType.allOf())
+//                    .countable(true)
+//                    .capture(true)
+//                    .captureStrategy(
+//                            new CaptureStrategy(true, "com.zhihu.matisse.sample.fileprovider"))
+//                    .maxSelectable(9)
+//                    .gridExpectedSize(
+//                            getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
+//                    .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+//                    .thumbnailScale(0.85f)
+//                    .imageEngine(new GlideEngine())
+//                    .forResult(REQUEST_CODE_CHOOSE);
+        } else {
+            EasyPermissions.requestPermissions(this, "打开摄像头",
+                    RC_CAMERA_PERM, permissions);
+        }
     }
 
     private void getUserInfo() {
@@ -323,14 +359,7 @@ public class MeActivity extends ABaseActivity {
         params.put("cmd", "PERSON");
         params.put("uid", uid);
         params.put("userType", userType);
-        PresenterFactory.getInstance().createPresenter(this)
-                .execute(new Task.TaskBuilder()
-                        .setTaskType(TaskType.Method.POST)
-                        .setUrl(GlobalConsts.PREFIX_URL)
-                        .setParams(params)
-                        .setPage(1)
-                        .setActionType(0)
-                        .createTask());
+        postForm(params, 1, 0);
     }
 
     private void updateInfo(int actionType, String info) {
@@ -346,14 +375,24 @@ public class MeActivity extends ABaseActivity {
         } else {
             params.put("sex", info);
         }
-        PresenterFactory.getInstance().createPresenter(this)
-                .execute(new Task.TaskBuilder()
-                        .setTaskType(TaskType.Method.POST)
-                        .setUrl(GlobalConsts.PREFIX_URL)
-                        .setParams(params)
-                        .setPage(1)
-                        .setActionType(actionType)
-                        .createTask());
+        postForm(params, 1, actionType);
+    }
+
+    private void deposit() {
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "DEPOSIT");
+        params.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
+        postForm(params, 1, 4);
+    }
+
+    private void postForm(Map<String, String> params, int page, int actionType) {
+        PresenterFactory.getInstance().createPresenter(this).execute(new Task.TaskBuilder()
+                .setTaskType(TaskType.Method.POST)
+                .setUrl(GlobalConsts.PREFIX_URL)
+                .setParams(params)
+                .setPage(page)
+                .setActionType(actionType)
+                .createTask());
     }
 
     private void initCity() {//解析数据
@@ -477,7 +516,7 @@ public class MeActivity extends ABaseActivity {
         TextView tvTitle = (TextView) holder.getInflatedView().findViewById(R.id.dia_title);
         Button btnLeft = (Button) holder.getInflatedView().findViewById(R.id.btn_cancel);
         Button btnRight = (Button) holder.getInflatedView().findViewById(R.id.btn_ok);
-        tvTitle.setText(getString(R.string.refund_deposit_hint));
+        tvTitle.setText(String.format(getString(R.string.refund_deposit_hint), depositMoney));
         btnLeft.setText(getString(R.string.deposit_confirm));
         btnRight.setText(getString(R.string.deposit_cancel));
         OnClickListener clickListener = new OnClickListener() {
@@ -485,6 +524,7 @@ public class MeActivity extends ABaseActivity {
             public void onClick(DialogPlus dialog, View view) {
                 switch (view.getId()) {
                     case R.id.btn_cancel:
+                        deposit();
                         dialog.dismiss();
                         break;
                     case R.id.btn_ok:
@@ -495,7 +535,6 @@ public class MeActivity extends ABaseActivity {
                 }
             }
         };
-
 
         final DialogPlus dialog = DialogPlus.newDialog(this)
                 .setContentHolder(holder)
@@ -508,7 +547,6 @@ public class MeActivity extends ABaseActivity {
                 .create();
         dialog.show();
     }
-
 
     private void initBottomDialog() {
         bottomDialog = new Dialog(this, R.style.BottomDialog);
@@ -568,19 +606,24 @@ public class MeActivity extends ABaseActivity {
             if (bean.getCode() == 200) {
                 if (tvValue == null)
                     return;
-                if (actionType == 1) {
-                    tvValue.setText(mArea);
-                } else if (actionType == 2) {
-                    tvValue.setText(mDate);
-                } else {
-                    tvValue.setText(mGender);
+                switch (actionType) {
+                    case 1:
+                        tvValue.setText(mArea);
+                        break;
+                    case 2:
+                        tvValue.setText(mDate);
+                        break;
+                    case 3:
+                        tvValue.setText(mGender);
+                        break;
+                    case 4:
+                        tvValue.setText("未缴纳");
+                        break;
+                    default:
+                        break;
                 }
-
             }
-
         }
-
-
     }
 
     private List<KeyValueBean> convert2ProfileBean(UserInfoBean bean) {

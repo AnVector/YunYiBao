@@ -70,7 +70,6 @@
 -dontwarn okhttp3.**
 -keep class okhttp3.**{*;}
 
-
 #okio
 -dontwarn okio.**
 -keep class okio.**{*;}
@@ -132,6 +131,10 @@
   **[] $VALUES;
   public *;
 }
+
+#picasso
+-dontwarn com.squareup.picasso.**
+
 ### greenDAO 3
 -keepclassmembers class * extends org.greenrobot.greendao.AbstractDao {
 public static java.lang.String TABLENAME;

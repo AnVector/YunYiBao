@@ -10,14 +10,23 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.RadioButton;
 
 import com.anyihao.androidbase.manager.ActivityManager;
+import com.anyihao.androidbase.mvp.Task;
+import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.AppUtils;
+import com.anyihao.androidbase.utils.GsonUtils;
+import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.androidbase.utils.StatusBarUtil;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.UFragmentPagerAdapter;
+import com.anyihao.ayb.bean.VersionInfoBean;
+import com.anyihao.ayb.common.PresenterFactory;
+import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.frame.fragment.DiscoverFragment;
 import com.anyihao.ayb.frame.fragment.HomeFragment;
 import com.anyihao.ayb.frame.fragment.MeFragment;
@@ -26,7 +35,9 @@ import com.anyihao.ayb.ui.CustomViewPager;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -50,6 +61,8 @@ public class MainFragmentActivity extends ABaseActivity {
     private UFragmentPagerAdapter uFragmentPagerAdapter;
     private DownloadManager mDownloadManager;
     private RadioButton mCurrent;
+    private String versionName;
+    private String downloadUrl;
 
     private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -78,12 +91,20 @@ public class MainFragmentActivity extends ABaseActivity {
     @Override
     protected void initData() {
         initViewPager();
-        if (checkUpdate()) {
-            String downloadUrl = "http://gdown.baidu" +
-                    ".com/data/wisegame/55dc62995fe9ba82/jinritoutiao_448.apk";
-            downloadApkFile(downloadUrl);
-        }
+        getUpdateVersion();
+    }
 
+    private void getUpdateVersion() {
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "VERCTRL");
+        params.put("ver", AppUtils.getAppVersionName(this));
+        PresenterFactory.getInstance().createPresenter(this).execute(new Task.TaskBuilder()
+                .setTaskType(TaskType.Method.POST)
+                .setUrl(GlobalConsts.PREFIX_URL)
+                .setParams(params)
+                .setPage(1)
+                .setActionType(1)
+                .createTask());
     }
 
     private void initViewPager() {
@@ -117,8 +138,8 @@ public class MainFragmentActivity extends ABaseActivity {
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
         //设置通知栏标题
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
-        request.setTitle("今日头条");
-        request.setDescription("今日头条正在下载");
+        request.setTitle("云逸宝");
+        request.setDescription("云逸宝正在下载");
         request.setAllowedOverRoaming(false);
         //设置文件存放目录
         request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS,
@@ -132,8 +153,24 @@ public class MainFragmentActivity extends ABaseActivity {
         return downloadArray[index];
     }
 
+    private void versionUpdate() {
+        if (checkUpdate()) {
+            boolean isDownloading = PreferencesUtils.getBoolean(getApplicationContext(),
+                    "isDownloading", false);
+            if (!TextUtils.isEmpty(downloadUrl) && !isDownloading) {
+                downloadApkFile(downloadUrl);
+                PreferencesUtils.putBoolean(getApplicationContext(), "isDownloading",
+                        true);
+            }
+        }
+    }
+
     private boolean checkUpdate() {
-        return false;
+        if (TextUtils.isEmpty(versionName))
+            return false;
+        String latestVersion = versionName.replace(".", "");
+        String currentVersion = AppUtils.getAppVersionName(this).replace(".", "");
+        return latestVersion.compareTo(currentVersion) > 0;
     }
 
     private void deleteOldApkFile(String path) {
@@ -142,6 +179,7 @@ public class MainFragmentActivity extends ABaseActivity {
             file.delete();
         }
     }
+
 
     @Override
     protected void initEvent() {
@@ -273,6 +311,16 @@ public class MainFragmentActivity extends ABaseActivity {
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
-
+        if (actionType == 1) {
+            VersionInfoBean bean = GsonUtils.getInstance().transitionToBean(result,
+                    VersionInfoBean.class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                versionName = bean.getVersion();
+                downloadUrl = bean.getDownloadLink();
+                versionUpdate();
+            }
+        }
     }
 }

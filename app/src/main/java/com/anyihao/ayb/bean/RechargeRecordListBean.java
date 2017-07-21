@@ -45,6 +45,7 @@ public class RechargeRecordListBean implements Serializable {
         private String flow;
         private String crtTm;
         private String status;
+        private String effecTm;
 
         public String getIdxOrderID() {
             return idxOrderID;
@@ -108,6 +109,15 @@ public class RechargeRecordListBean implements Serializable {
 
         public void setAmount(String amount) {
             this.amount = amount;
+        }
+
+
+        public String getEffecTm() {
+            return effecTm;
+        }
+
+        public void setEffecTm(String effecTm) {
+            this.effecTm = effecTm;
         }
     }
 }

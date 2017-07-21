@@ -116,7 +116,7 @@
 
     <!--radar-->
     <string name="call_the_seller">呼叫商家</string>
-    <string name="radar">雷达</string>
+    <string name="radar">附近商家</string>
     <string name="shop">店铺名称</string>
     <string name="contact">联系方式</string>
     <!--task-->
@@ -167,7 +167,7 @@
     <string name="refuse_to_auth">拒绝</string>
     <string name="agree_to_auth">授权</string>
     <string name="copy_password">复制密码</string>
-    <string name="surplus_amount">剩余：%1$sMB</string>
+    <string name="surplus_amount">剩余：%1$s</string>
     <string name="message">消息</string>
     <!--empty view-->
     <string name="no_network">亲，网络不给力啊&#8230;</string>
@@ -237,7 +237,7 @@
     <!--my credit-->
     <string name="my_points">我的积分</string>
     <!--connected devices-->
-    <string name="connected_devices_hint">发现4台设备接入当前WIFI</string>
+    <string name="connected_devices_hint">有%1$d台设备接入当前WIFI</string>
     <string name="menu_hint">去和心仪的人打个招呼吧，用红包打招呼收到回应的机会会更上一层楼哦~~</string>
     <string name="say_hi">打招呼</string>
     <string name="bribery_money">发红包</string>
@@ -309,7 +309,7 @@
     <string name="get_data">获取流量</string>
     <string name="invite_code_input_hint">请输入邀请码/兑换码</string>
     <!--押金退还确认框-->
-    <string name="refund_deposit_hint">本次可退还押金：¥298</string>
+    <string name="refund_deposit_hint">本次可退还押金：%1$s</string>
     <string name="deposit_cancel">再想想</string>
     <string name="deposit_confirm">退押金</string>
     <!--账号解绑确认框-->

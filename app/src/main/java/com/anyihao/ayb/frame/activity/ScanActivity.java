@@ -1,6 +1,5 @@
 package com.anyihao.ayb.frame.activity;
 
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -27,10 +26,7 @@ public class ScanActivity extends ABaseActivity implements DecoratedBarcodeView.
     Toolbar toolbar;
     @BindView(R.id.zxing_barcode_scanner)
     DecoratedBarcodeView barcodeScanner;
-    // 实现相关接口
-    // 添加一个按钮用来控制闪光灯，同时添加两个按钮表示其他功能，先用Toast表示
     private CaptureManager captureManager;
-    private boolean isLightOn = false;
 
     @Override
     protected int getContentViewId() {
@@ -52,23 +48,6 @@ public class ScanActivity extends ABaseActivity implements DecoratedBarcodeView.
         toolbarTitleMid.setText(getString(R.string.QR_code));
         toolbarTitleMid.setTextColor(Color.parseColor("#FFFFFF"));
         toolbar.setBackgroundColor(Color.parseColor("#000000"));
-        // 如果没有闪光灯功能，就去掉相关按钮
-//        if (!hasFlash()) {
-//        }
-        //重要代码，初始化捕获
-
-        //选择闪关灯
-//        swichLight.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (isLightOn) {
-//                    barcodeScanner.setTorchOff();
-//                } else {
-//                    barcodeScanner.setTorchOn();
-//                }
-//            }
-//        });
-
     }
 
     @Override
@@ -129,22 +108,13 @@ public class ScanActivity extends ABaseActivity implements DecoratedBarcodeView.
         return barcodeScanner.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
     }
 
-    // torch 手电筒
     @Override
     public void onTorchOn() {
-//        ToastUtils.showShortToast(this, "torch on");
-        isLightOn = true;
+
     }
 
     @Override
     public void onTorchOff() {
-//        ToastUtils.showShortToast(this, "torch off");
-        isLightOn = false;
-    }
 
-    // 判断是否有闪光灯功能
-    private boolean hasFlash() {
-        return getApplicationContext().getPackageManager()
-                .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
     }
 }

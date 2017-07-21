@@ -14,7 +14,7 @@ def static String releaseVName() {
 
 //定义versionCode
 def static int releaseVCode() {
-    return 1
+    return 2
 }
 
 def gitVersionCode() {
@@ -251,4 +251,5 @@ dependencies {
     //MPAndroidCharts
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.1.6'
+//    compile 'com.zhihu.android:matisse:0.4.3'
 }

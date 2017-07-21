@@ -44,7 +44,6 @@ public class SystemRecordActivity extends ABaseActivity {
     private SystemRecordAdapter mAdapter;
     private List<DataBean> mData = new ArrayList<>();
     private LinearLayoutManager layoutManager;
-    private List<DataBean> mItems;
     private int page = 1;
     private boolean isRefresh;
 
@@ -65,12 +64,17 @@ public class SystemRecordActivity extends ABaseActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         toolbarTitleMid.setText(getString(R.string.system_gift_record));
+        initUltimateRV();
+        getSystemRecord();
+    }
+
+    private void initUltimateRV() {
         recyclerView.setHasFixedSize(false);
         mAdapter = new SystemRecordAdapter(mData, R.layout.item_system_record);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         //bug 设置加载更多动画会使添加的数据延迟显示
-//        recyclerView.setLoadMoreView(R.layout.custom_bottom_progressbar);
+        recyclerView.setLoadMoreView(R.layout.custom_bottom_progressbar);
         recyclerView.setEmptyView(R.layout.empty_view, UltimateRecyclerView
                 .EMPTY_CLEAR_ALL, new emptyViewOnShownListener() {
             @Override
@@ -78,11 +82,11 @@ public class SystemRecordActivity extends ABaseActivity {
                 if (mView == null)
                     return;
                 ImageView imvError = (ImageView) mView.findViewById(R.id.ic_error);
+                TextView tvHint = (TextView) mView.findViewById(R.id.tv_hint);
                 if (imvError != null) {
                     imvError.setImageDrawable(getResources().getDrawable(R.drawable
                             .ic_no_system_record));
                 }
-                TextView tvHint = (TextView) mView.findViewById(R.id.tv_hint);
                 if (tvHint != null) {
                     tvHint.setText("暂无系统赠送记录");
                 }
@@ -91,7 +95,6 @@ public class SystemRecordActivity extends ABaseActivity {
         recyclerView.setRecylerViewBackgroundColor(Color.parseColor("#ffffff"));
         recyclerView.reenableLoadmore();
         recyclerView.setAdapter(mAdapter);
-        getSystemRecord();
     }
 
     @Override
@@ -141,23 +144,25 @@ public class SystemRecordActivity extends ABaseActivity {
 
     }
 
-    private void onFireRefresh() {
+    private void onFireRefresh(List<DataBean> beans) {
         mAdapter.removeAllInternal(mData);
-        mAdapter.insert(mItems);
+        mAdapter.insert(beans);
         recyclerView.setRefreshing(false);
-        //   ultimateRecyclerView.scrollBy(0, -50);
         layoutManager.scrollToPosition(0);
-//        recyclerView.scrollVerticallyTo(0);
-        //ultimateRecyclerView.setAdapter(simpleRecyclerViewAdapter);
-        //simpleRecyclerViewAdapter.notifyDataSetChanged();
-//        ultimateRecyclerView.disableLoadmore();
+        recyclerView.reenableLoadmore();
     }
 
-    private void onLoadMore() {
-        mAdapter.insert(mItems);
-        if (mItems.size() < PAGE_SIZE) {
+    private void onLoadMore(List<DataBean> beans) {
+        mAdapter.insert(beans);
+        if (beans.size() < PAGE_SIZE) {
             recyclerView.disableLoadmore();
         }
+    }
+
+    private void onLoadNoData() {
+        if (recyclerView == null)
+            return;
+        recyclerView.showEmptyView();
     }
 
     private void getSystemRecord() {
@@ -187,16 +192,24 @@ public class SystemRecordActivity extends ABaseActivity {
                 return;
             if (bean.getCode() == 200) {
                 List<DataBean> beans = bean.getData();
+                if (beans == null)
+                    return;
                 if (beans.size() > 0) {
-                    mItems = beans;
                     if (isRefresh) {
-                        onFireRefresh();
+                        onFireRefresh(beans);
                     } else {
-                        onLoadMore();
+                        onLoadMore(beans);
+                    }
+                } else {
+                    if (page == 1) {
+                        onLoadNoData();
                     }
                 }
             } else {
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg());
+                if (page == 1) {
+                    onLoadNoData();
+                }
             }
         }
     }

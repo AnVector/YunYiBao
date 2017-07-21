@@ -18,7 +18,6 @@ import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.RechargeRecordAdapter;
 import com.anyihao.ayb.bean.RechargeRecordListBean;
 import com.anyihao.ayb.bean.RechargeRecordListBean.DataBean;
-import com.anyihao.ayb.bean.TransferListBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.listener.OnItemClickListener;
@@ -45,13 +44,9 @@ public class RechargeRecordActivity extends ABaseActivity {
     private static final int PAGE_SIZE = 10;
     private RechargeRecordAdapter mRechargeAdapter;
     private LinearLayoutManager layoutManager;
-    //    private ItemTouchHelper mItemTouchHelper;
     private List<RechargeRecordListBean.DataBean> mRechargeData = new ArrayList<>();
-    private List<TransferListBean.DataBean> mTransferData = new ArrayList<>();
-    private List<DataBean> mItems;
     private int page = 1;
     private boolean isRefresh;
-
 
     @Override
     protected int getContentViewId() {
@@ -69,6 +64,11 @@ public class RechargeRecordActivity extends ABaseActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
+        initUltimateRV();
+        getRechargeRecord();
+    }
+
+    private void initUltimateRV() {
         titleMid.setText(getString(R.string.recharge_record));
         recyclerView.setHasFixedSize(false);
         mRechargeAdapter = new RechargeRecordAdapter(mRechargeData, R.layout
@@ -87,25 +87,18 @@ public class RechargeRecordActivity extends ABaseActivity {
                 if (mView == null)
                     return;
                 ImageView imvError = (ImageView) mView.findViewById(R.id.ic_error);
-                if (imvError == null)
-                    return;
-                imvError.setImageDrawable(getResources().getDrawable(R.drawable
-                        .ic_no_recharge_record));
                 TextView tvHint = (TextView) mView.findViewById(R.id.tv_hint);
-                if (tvHint == null)
-                    return;
-                tvHint.setText("暂无充值记录");
+                if (imvError != null) {
+                    imvError.setImageDrawable(getResources().getDrawable(R.drawable
+                            .ic_no_recharge_record));
+                }
+                if (tvHint != null) {
+                    tvHint.setText("暂无充值记录");
+                }
             }
         });
-//        recyclerView.setParallaxHeader(getLayoutInflater().inflate(R.layout
-//                .parallax_recyclerview_header, recyclerView.mRecyclerView, false));
-//        recyclerView.setRecylerViewBackgroundColor(Color.parseColor("#ffffff"));
-//        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mRechargeAdapter);
-//        mItemTouchHelper = new ItemTouchHelper(callback);
-//        mItemTouchHelper.attachToRecyclerView(recyclerView.mRecyclerView);
         recyclerView.reenableLoadmore();
         recyclerView.setAdapter(mRechargeAdapter);
-        getRechargeRecord();
     }
 
     @Override
@@ -121,13 +114,6 @@ public class RechargeRecordActivity extends ABaseActivity {
             public void onParallaxScroll(float percentage, float offset, View parallax) {
             }
         });
-//        mRechargeAdapter.setOnDragStartListener(new UltimateViewAdapter.OnStartDragListener() {
-//
-//            @Override
-//            public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-//                mItemTouchHelper.startDrag(viewHolder);
-//            }
-//        });
         recyclerView.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener
                 () {
             @Override
@@ -156,8 +142,10 @@ public class RechargeRecordActivity extends ABaseActivity {
                                     .class);
                     intent.putExtra("fee", ((DataBean) o).getAmount());
                     intent.putExtra("crtTime", ((DataBean) o).getCrtTm());
+                    intent.putExtra("effectTm", ((DataBean) o).getEffecTm());
                     intent.putExtra("flow", ((DataBean) o).getFlow());
                     intent.putExtra("payType", ((DataBean) o).getTopupType());
+                    intent.putExtra("idxOrderID", ((DataBean) o).getIdxOrderID());
                     startActivity(intent);
                 }
             }
@@ -171,24 +159,25 @@ public class RechargeRecordActivity extends ABaseActivity {
 
     }
 
-    private void onFireRefresh() {
+    private void onFireRefresh(List<DataBean> beans) {
         mRechargeAdapter.removeAllInternal(mRechargeData);
-        mRechargeAdapter.insert(mItems);
+        mRechargeAdapter.insert(beans);
         recyclerView.setRefreshing(false);
-        //   ultimateRecyclerView.scrollBy(0, -50);
         layoutManager.scrollToPosition(0);
         recyclerView.reenableLoadmore();
-//        recyclerView.scrollVerticallyTo(0);
-        //ultimateRecyclerView.setAdapter(simpleRecyclerViewAdapter);
-        //simpleRecyclerViewAdapter.notifyDataSetChanged();
-//        ultimateRecyclerView.disableLoadmore();
     }
 
-    private void onLoadMore() {
-        mRechargeAdapter.insert(mItems);
-        if (mItems.size() < PAGE_SIZE) {
+    private void onLoadMore(List<DataBean> beans) {
+        mRechargeAdapter.insert(beans);
+        if (beans.size() < PAGE_SIZE) {
             recyclerView.disableLoadmore();
         }
+    }
+
+    private void onLoadNoData() {
+        if (recyclerView == null)
+            return;
+        recyclerView.showEmptyView();
     }
 
     private void getRechargeRecord() {
@@ -209,23 +198,6 @@ public class RechargeRecordActivity extends ABaseActivity {
                 .createTask());
     }
 
-    private void getPresentRecord() {
-
-        Map<String, String> params = new HashMap<>();
-        params.put("cmd", "TRANSFER");
-        params.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
-        params.put("page", page + "");
-        params.put("pagesize", PAGE_SIZE + "");
-
-        PresenterFactory.getInstance().createPresenter(this).execute(new Task.TaskBuilder()
-                .setTaskType(TaskType.Method.POST)
-                .setParams(params)
-                .setPage(page)
-                .setActionType(1)
-                .setUrl(GlobalConsts.PREFIX_URL)
-                .createTask());
-    }
-
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
         if (actionType == 0) {
@@ -234,19 +206,26 @@ public class RechargeRecordActivity extends ABaseActivity {
             if (bean == null)
                 return;
             if (bean.getCode() == 200) {
-                List<RechargeRecordListBean.DataBean> beans = bean.getData();
+                List<DataBean> beans = bean.getData();
+                if (beans == null)
+                    return;
                 if (beans.size() > 0) {
-                    mItems = beans;
                     if (isRefresh) {
-                        onFireRefresh();
+                        onFireRefresh(beans);
                     } else {
-                        onLoadMore();
+                        onLoadMore(beans);
+                    }
+                } else {
+                    if (page == 1) {
+                        onLoadNoData();
                     }
                 }
             } else {
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg());
+                if (page == 1) {
+                    onLoadNoData();
+                }
             }
         }
-
     }
 }

@@ -9,12 +9,14 @@ import android.widget.TextView;
 
 import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
+import com.anyihao.androidbase.utils.AppUtils;
 import com.anyihao.androidbase.utils.DeviceUtils;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.androidbase.utils.StatusBarUtil;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.ResultBean;
+import com.anyihao.ayb.bean.VersionInfoBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.orhanobut.logger.Logger;
@@ -38,7 +40,7 @@ public class SplashActivity extends ABaseActivity {
     private String mTimeHint;
     private byte mTimeLeft;
     private CountDownTimer mCountDownTimer;
-//    private ComponentName mDefault;
+    //    private ComponentName mDefault;
 //    private ComponentName mNewCN;
 //    private PackageManager mPackageManager;
 
@@ -159,6 +161,8 @@ public class SplashActivity extends ABaseActivity {
                 .createTask());
     }
 
+
+
     private void handleGoHome() {
         Intent intent = new Intent(SplashActivity.this, MainFragmentActivity.class);
         startActivity(intent);
@@ -193,7 +197,7 @@ public class SplashActivity extends ABaseActivity {
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
-        if (actionType == 1) {
+        if (actionType == 0) {
             ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean.class);
             if (bean == null)
                 return;

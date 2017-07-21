@@ -1,9 +1,9 @@
 package com.anyihao.ayb.frame.activity;
 
+import android.graphics.Color;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -42,9 +42,7 @@ public class TransferRecordActivity extends ABaseActivity {
     private static final int PAGE_SIZE = 20;
     private TransferRecordAdapter mTransferAdapter;
     private LinearLayoutManager layoutManager;
-    private ItemTouchHelper mItemTouchHelper;
     private List<TransferListBean.DataBean> mTransferData = new ArrayList<>();
-    private List<DataBean> mItems;
     private int page = 1;
     private boolean isRefresh;
 
@@ -66,11 +64,17 @@ public class TransferRecordActivity extends ABaseActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         titleMid.setText(getString(R.string.transfer_record));
+        initUltimateRV();
+        getPresentRecord();
+    }
+
+    private void initUltimateRV() {
         recyclerView.setHasFixedSize(false);
         mTransferAdapter = new TransferRecordAdapter(mTransferData, R.layout
                 .item_recharge_record);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLoadMoreView(R.layout.custom_bottom_progressbar);
         recyclerView.setEmptyView(R.layout.empty_view, UltimateRecyclerView
                 .EMPTY_CLEAR_ALL, new emptyViewOnShownListener() {
             @Override
@@ -78,19 +82,19 @@ public class TransferRecordActivity extends ABaseActivity {
                 if (mView == null)
                     return;
                 ImageView imvError = (ImageView) mView.findViewById(R.id.ic_error);
-                if (imvError == null)
-                    return;
-                imvError.setImageDrawable(getResources().getDrawable(R.drawable
-                        .ic_no_transfer_record));
                 TextView tvHint = (TextView) mView.findViewById(R.id.tv_hint);
-                if (tvHint == null)
-                    return;
-                tvHint.setText("暂无转赠记录");
+                if (imvError != null) {
+                    imvError.setImageDrawable(getResources().getDrawable(R.drawable
+                            .ic_no_transfer_record));
+                }
+                if (tvHint != null) {
+                    tvHint.setText("暂无转赠记录");
+                }
             }
         });
+        recyclerView.setRecylerViewBackgroundColor(Color.parseColor("#ffffff"));
         recyclerView.reenableLoadmore();
         recyclerView.setAdapter(mTransferAdapter);
-        getPresentRecord();
     }
 
     @Override
@@ -137,23 +141,26 @@ public class TransferRecordActivity extends ABaseActivity {
 
     }
 
-    private void onFireRefresh() {
+    private void onFireRefresh(List<DataBean> beans) {
         mTransferAdapter.removeAllInternal(mTransferData);
-        mTransferAdapter.insert(mItems);
+        mTransferAdapter.insert(beans);
         recyclerView.setRefreshing(false);
-        //   ultimateRecyclerView.scrollBy(0, -50);
         layoutManager.scrollToPosition(0);
-//        recyclerView.scrollVerticallyTo(0);
-        //ultimateRecyclerView.setAdapter(simpleRecyclerViewAdapter);
-        //simpleRecyclerViewAdapter.notifyDataSetChanged();
-//        ultimateRecyclerView.disableLoadmore();
+        recyclerView.reenableLoadmore();
     }
 
-    private void onLoadMore() {
-        mTransferAdapter.insert(mItems);
-        if (mItems.size() < PAGE_SIZE) {
+    private void onLoadMore(List<DataBean> beans) {
+        mTransferAdapter.insert(beans);
+        if (beans.size() < PAGE_SIZE) {
             recyclerView.disableLoadmore();
         }
+    }
+
+    private void onLoadNoData() {
+        if (recyclerView == null)
+            return;
+        recyclerView.showEmptyView();
+
     }
 
     private void getPresentRecord() {
@@ -182,17 +189,25 @@ public class TransferRecordActivity extends ABaseActivity {
                 return;
             if (bean.getCode() == 200) {
                 List<DataBean> beans = bean.getData();
+                if (beans == null)
+                    return;
                 if (beans.size() > 0) {
-                    ToastUtils.showToast(getApplicationContext(), bean.getMsg());
-                    mItems = beans;
                     if (isRefresh) {
-                        onFireRefresh();
+                        onFireRefresh(beans);
                     } else {
-                        onLoadMore();
+                        onLoadMore(beans);
                     }
+                } else {
+                    if (page == 1) {
+                        onLoadNoData();
+                    }
+                }
+            } else {
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg());
+                if (page == 1) {
+                    onLoadNoData();
                 }
             }
         }
-
     }
 }

@@ -34,8 +34,10 @@ public class RechargeRecordDetailsActivity extends ABaseActivity {
     private List<KeyValueBean> mData = new LinkedList<>();
     private String fee;
     private String crtTime;
+    private String effectTm;
     private String flow;
     private String payType;
+    private String idxOrderID;
 
     @Override
     protected int getContentViewId() {
@@ -49,8 +51,10 @@ public class RechargeRecordDetailsActivity extends ABaseActivity {
             return;
         fee = intent.getStringExtra("fee");
         crtTime = intent.getStringExtra("crtTime");
+        effectTm = intent.getStringExtra("effectTm");
         flow = intent.getStringExtra("flow");
         payType = intent.getStringExtra("payType");
+        idxOrderID = intent.getStringExtra("idxOrderID");
         if ("WXPAY".equals(payType)) {
             payType = "微信支付";
         } else {
@@ -96,9 +100,9 @@ public class RechargeRecordDetailsActivity extends ABaseActivity {
     private List<KeyValueBean> convert2KeyValueBean() {
         List<KeyValueBean> beans = new LinkedList<>();
         beans.add(0, new KeyValueBean().setTitle("流量充值").setValue(flow));
-        beans.add(1, new KeyValueBean().setTitle("截止日期").setValue("--"));
+        beans.add(1, new KeyValueBean().setTitle("截止日期").setValue(effectTm));
         beans.add(2, new KeyValueBean().setTitle("付款方式").setValue(payType));
-        beans.add(3, new KeyValueBean().setTitle("流水号").setValue("--"));
+        beans.add(3, new KeyValueBean().setTitle("流水号").setValue(idxOrderID));
         beans.add(4, new KeyValueBean().setTitle("支付时间").setValue(crtTime));
         return beans;
     }
