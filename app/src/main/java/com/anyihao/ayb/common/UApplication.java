@@ -199,16 +199,15 @@ public class UApplication extends MultiDexApplication {
     private void initLogger() {
 
         FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()
-                .showThreadInfo(true)  // (Optional) Whether to show thread info or not. Default
-                // true
+                .showThreadInfo(true)  // (Optional) Whether to show thread info or not.
                 .methodCount(0)         // (Optional) How many method line to show. Default 2
                 .methodOffset(3)        // (Optional) Skips some method invokes in stack trace.
                 .tag("IEBox")   // (Optional) Custom tag for each log. Default PRETTY_LOGGER
                 .build();
-        Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy){
+        Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy) {
             @Override
             public boolean isLoggable(int priority, String tag) {
-                return BuildConfig.DEBUG;
+                return true;
             }
         });
     }

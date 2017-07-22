@@ -14,7 +14,7 @@ def static String releaseVName() {
 
 //定义versionCode
 def static int releaseVCode() {
-    return 2
+    return 1
 }
 
 def gitVersionCode() {

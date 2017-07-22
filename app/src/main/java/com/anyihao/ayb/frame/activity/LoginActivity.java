@@ -309,6 +309,10 @@ public class LoginActivity extends ABaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         UMShareAPI.get(this).release();
+        if (progressbarCircular != null) {
+            progressbarCircular.progressiveStop();
+            progressbarCircular = null;
+        }
     }
 
     @Override

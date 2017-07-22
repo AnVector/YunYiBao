@@ -1,10 +1,7 @@
 package com.anyihao.ayb.frame.activity;
 
 import android.app.DownloadManager;
-import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -19,7 +16,6 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.AppUtils;
 import com.anyihao.androidbase.utils.GsonUtils;
-import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.androidbase.utils.StatusBarUtil;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
@@ -32,8 +28,9 @@ import com.anyihao.ayb.frame.fragment.HomeFragment;
 import com.anyihao.ayb.frame.fragment.MeFragment;
 import com.anyihao.ayb.frame.fragment.TaskFragment;
 import com.anyihao.ayb.ui.CustomViewPager;
+import com.anyihao.ayb.utils.UpdateConfig;
+import com.anyihao.ayb.utils.Updater;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,10 +56,7 @@ public class MainFragmentActivity extends ABaseActivity {
     CustomViewPager mViewPager;
     private List<Fragment> mFragmentList = new ArrayList<>();
     private UFragmentPagerAdapter uFragmentPagerAdapter;
-    private DownloadManager mDownloadManager;
     private RadioButton mCurrent;
-    private String versionName;
-    private String downloadUrl;
 
     private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -125,26 +119,17 @@ public class MainFragmentActivity extends ABaseActivity {
     }
 
     private void downloadApkFile(String downloadUrl) {
-        mDownloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-        String apkFileName = renameApkFile(downloadUrl);
-        String apkFilePath = Environment
-                .getExternalStorageDirectory() + "/Android/data/" +
-                getPackageName() + "/files/" + Environment
-                .DIRECTORY_DOWNLOADS + "/" + apkFileName;
-        deleteOldApkFile(apkFilePath);
-        DownloadManager.Request request =
-                new DownloadManager.Request(Uri.parse(downloadUrl));
-        //设置WIFI网络下载
-        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
-        //设置通知栏标题
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
-        request.setTitle("云逸宝");
-        request.setDescription("云逸宝正在下载");
-        request.setAllowedOverRoaming(false);
-        //设置文件存放目录
-        request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS,
-                apkFileName);
-        mDownloadManager.enqueue(request);
+        UpdateConfig config = new UpdateConfig.Builder(getApplicationContext())
+                .setTitle(getString(R.string.app_name))
+                .setDescription(getString(R.string.download_hint))
+                .setFileUrl(downloadUrl)
+                .setCanMediaScanner(true)
+                .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
+                .setAllowedOverRoaming(false)
+                .setFilename(renameApkFile(downloadUrl))
+                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+                .build();
+        Updater.getInstance().download(config);
     }
 
     private String renameApkFile(String downloadUrl) {
@@ -153,33 +138,19 @@ public class MainFragmentActivity extends ABaseActivity {
         return downloadArray[index];
     }
 
-    private void versionUpdate() {
-        if (checkUpdate()) {
-            boolean isDownloading = PreferencesUtils.getBoolean(getApplicationContext(),
-                    "isDownloading", false);
-            if (!TextUtils.isEmpty(downloadUrl) && !isDownloading) {
-                downloadApkFile(downloadUrl);
-                PreferencesUtils.putBoolean(getApplicationContext(), "isDownloading",
-                        true);
-            }
+    private void versionUpdate(String versionName, String downloadUrl) {
+        if (TextUtils.isEmpty(versionName) || TextUtils.isEmpty(downloadUrl))
+            return;
+        if (checkUpdate(versionName)) {
+            downloadApkFile(downloadUrl);
         }
     }
 
-    private boolean checkUpdate() {
-        if (TextUtils.isEmpty(versionName))
-            return false;
+    private boolean checkUpdate(String versionName) {
         String latestVersion = versionName.replace(".", "");
         String currentVersion = AppUtils.getAppVersionName(this).replace(".", "");
         return latestVersion.compareTo(currentVersion) > 0;
     }
-
-    private void deleteOldApkFile(String path) {
-        File file = new File(path);
-        if (file.exists()) {
-            file.delete();
-        }
-    }
-
 
     @Override
     protected void initEvent() {
@@ -317,9 +288,7 @@ public class MainFragmentActivity extends ABaseActivity {
             if (bean == null)
                 return;
             if (bean.getCode() == 200) {
-                versionName = bean.getVersion();
-                downloadUrl = bean.getDownloadLink();
-                versionUpdate();
+                versionUpdate(bean.getVersion(), bean.getDownloadLink());
             }
         }
     }

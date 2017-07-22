@@ -9,6 +9,7 @@
     <string name="wifi_ssid">AYB-100151</string>
     <string name="attached">已绑定</string>
     <string name="bg_proc">开启后台进程</string>
+    <string name="download_hint">安逸宝正在下载</string>
 
     <string name="bat_power">电量：%1$d</string>
     <string name="con_count">连接数：%1$d</string>

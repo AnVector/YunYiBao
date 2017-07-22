@@ -139,7 +139,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths_public">
+                android:resource="@xml/file_paths_private">
             </meta-data>
         </provider>
         <!-- Required  SDK核心功能 -->

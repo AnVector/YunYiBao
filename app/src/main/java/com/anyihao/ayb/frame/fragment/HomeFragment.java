@@ -248,7 +248,6 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                 tvStatus.setText("已连接");
                 tvStatus.setTextColor(Color.parseColor("#2DA8F4"));
             }
-
         }
     }
 

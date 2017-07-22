@@ -16,6 +16,6 @@
   -->
 <paths>
     <external-path
-        name="my_images"
-        path="Android/data/com.anyihao.ayb/files/Pictures"/>
+        name="my_app"
+        path="Android/data/com.anyihao.ayb/files/Download"/>
 </paths>
