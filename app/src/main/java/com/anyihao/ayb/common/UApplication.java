@@ -10,6 +10,7 @@ import android.support.multidex.MultiDexApplication;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.androidbase.utils.ProcessUtils;
 import com.anyihao.ayb.BuildConfig;
 import com.anyihao.ayb.listener.LocationListener;
@@ -31,12 +32,18 @@ import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
 
 import butterknife.ButterKnife;
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.data.JPushLocalNotification;
 import okhttp3.OkHttpClient;
 
 /**
@@ -89,13 +96,13 @@ public class UApplication extends MultiDexApplication {
             initOkHttpUtils();//初始化OkHttp配置
             initUAnalysis();//初始化友盟统计
             initNetWorkStateReceiver();//注册网络状态变化广播
-            GreenDaoManager.getInstance().init(this);//初始化GreenDao
         }
         initBugly();//初始化Bugly
         initLeakCanary();//初始化LeakCanary
         initButterKnife();//初始化ButterKnife
         initLogger();//初始化Logger
         initAMapLocation();//初始化高德定位
+        initJPush();//初始化极光推送
     }
 
     private void initAMapLocation() {
@@ -119,6 +126,14 @@ public class UApplication extends MultiDexApplication {
     private void initUShare() {
         Config.DEBUG = true;
         UMShareAPI.get(this);
+    }
+
+    private void initJPush() {
+        JPushInterface.setDebugMode(BuildConfig.DEBUG);    // 设置开启日志,发布时请关闭日志
+        JPushInterface.init(this);            // 初始化 JPush
+        if (PreferencesUtils.getBoolean(this, "isLogin", false)) {
+            JPushInterface.setAlias(this, -1, PreferencesUtils.getString(this, "uid", ""));
+        }
     }
 
     private void initOkHttpUtils() {

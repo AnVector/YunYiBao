@@ -6,15 +6,19 @@ import android.content.SharedPreferences;
 public class SpUtils {
 
     private SharedPreferences sp;
-    private static SpUtils instance;
+    private volatile static SpUtils instance;
 
     private SpUtils(Context context) {
         sp = context.getSharedPreferences("download_sp", Context.MODE_PRIVATE);
     }
 
-    public static synchronized SpUtils getInstance(Context context) {
+    public static SpUtils getInstance(Context context) {
         if (instance == null) {
-            instance = new SpUtils(context.getApplicationContext());
+            synchronized (SpUtils.class) {
+                if (null == instance) {
+                    instance = new SpUtils(context.getApplicationContext());
+                }
+            }
         }
         return instance;
     }

@@ -68,7 +68,6 @@ public class MessageFragment extends ABaseFragment {
         mAdapter = new MessageAdapter(mData, R.layout.item_message);
         layoutManager = new LinearLayoutManager(mContext);
         ultimateRecyclerView.setLayoutManager(layoutManager);
-        //bug 设置加载更多动画会使添加的数据延迟显示
         ultimateRecyclerView.setLoadMoreView(R.layout.custom_bottom_progressbar);
         ultimateRecyclerView.setEmptyView(R.layout.empty_view, UltimateRecyclerView
                 .EMPTY_CLEAR_ALL, new emptyViewOnShownListener() {

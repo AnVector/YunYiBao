@@ -10,6 +10,7 @@
     <string name="attached">已绑定</string>
     <string name="bg_proc">开启后台进程</string>
     <string name="download_hint">安逸宝正在下载</string>
+    <string name="IEBox">IeBox</string>
 
     <string name="bat_power">电量：%1$d</string>
     <string name="con_count">连接数：%1$d</string>
@@ -319,10 +320,12 @@
     <string name="sign_principle">1：连续签到7天，即可额外获得15积分奖励\n2：连续签到记录在第8天开始时将清零重新计算\n3：如果中断签到，连续签到记录也将清零\n4：本活动最终解释权归翰隆所有</string>
     <string name="got_it">我知道了</string>
     <string name="mac_address_release_hint">是否解除授权？</string>
+    <string name="device_return_dialog_hint">是否确认用户归还设备</string>
 
     <!--rented devices-->
     <string name="rented_devices">我的设备</string>
     <string name="rented_history">租赁记录</string>
+    <string name="rent_details">租赁详情</string>
 
     <!--QR Scan-->
     <string name="QR_code">二维码</string>
@@ -354,6 +357,15 @@
     <string name="scan_result">扫码结果</string>
     <string name="device_no">设备编号</string>
     <!--Flow Account-->
+
+    <!--查看Mac地址帮助-->
+    <string name="check_mac_address">查看Mac地址</string>
+    <string name="question_zero">1：如何获取本机的Mac地址？</string>
+    <string name="answer_zero">点击复制本机Mac地址</string>
+    <string name="question_one">2：如何查看电脑的Mac地址？</string>
+    <string name="answer_one">以Windows 7为例，点击“开始”菜单，在“搜索程序和文件”输入框，输入“cmd”（会找到进入dos命令的cmd程序)，然后点击回车，弹出命令符窗口，输入“ipconfig/all”，然后进行回车，就会看到一连串的返回信息。回车后，弹出命令符窗口，输入“ipconfig/all”，然后进行回车，就会看到一连串的返回信息。在返回信息中，找到“本地连接”其中的物理地址（Physical Address），即为本机的mac地址。</string>
+    <string name="question_two">3：如何查看Pad的Mac地址？</string>
+    <string name="answer_two">选择【设置】-【关于】-【状态信息】-【WLAN MAC地址】即可查看。</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">Sign in</string>

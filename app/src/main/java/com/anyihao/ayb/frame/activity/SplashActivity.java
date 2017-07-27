@@ -9,14 +9,12 @@ import android.widget.TextView;
 
 import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
-import com.anyihao.androidbase.utils.AppUtils;
 import com.anyihao.androidbase.utils.DeviceUtils;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.androidbase.utils.StatusBarUtil;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.ResultBean;
-import com.anyihao.ayb.bean.VersionInfoBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.orhanobut.logger.Logger;
@@ -149,7 +147,7 @@ public class SplashActivity extends ABaseActivity {
         params.put("cmd", "AUTHORIZEADD");
         params.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
         params.put("mac", DeviceUtils.getMacAddress(this));
-        params.put("remarks", "POHONE");
+        params.put("remarks", "PHONE");
         params.put("addStatus", "1");
 
         PresenterFactory.getInstance().createPresenter(this).execute(new Task.TaskBuilder()
@@ -160,7 +158,6 @@ public class SplashActivity extends ABaseActivity {
                 .setUrl(GlobalConsts.PREFIX_URL)
                 .createTask());
     }
-
 
 
     private void handleGoHome() {
@@ -205,6 +202,14 @@ public class SplashActivity extends ABaseActivity {
 //                ToastUtils.showToast(getApplicationContext(), "授权成功");
                 Logger.d("授权成功");
             }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mCountDownTimer!=null){
+            mCountDownTimer.cancel();
         }
     }
 }

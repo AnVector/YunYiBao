@@ -1,12 +1,12 @@
 package com.anyihao.ayb.frame.activity;
 
+import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.anyihao.ayb.R;
@@ -19,7 +19,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
-import info.hoang8f.android.segmented.SegmentedGroup;
 
 public class MerchantPrivilegeActivity extends ABaseActivity {
 
@@ -31,15 +30,11 @@ public class MerchantPrivilegeActivity extends ABaseActivity {
     Toolbar toolbar;
     @BindView(R.id.viewpager)
     ViewPager viewpager;
-    @BindView(R.id.rbt_un)
-    RadioButton rbtUn;
-    @BindView(R.id.rbt_al)
-    RadioButton rbtAl;
-    @BindView(R.id.segmented)
-    SegmentedGroup segmented;
+    @BindView(R.id.tab_layout)
+    TabLayout tabLayout;
     private UTabAdapter mTabAdapter;
     private List<Fragment> mFragments = new ArrayList<>();
-    private String[] mTitleArray = new String[]{"未租设备", "已租设备"};
+    private String[] mTitleArray = new String[]{"待取设备", "已租设备", "未租设备"};
     private List<String> mTitles = Arrays.asList(mTitleArray);
 
     @Override
@@ -62,18 +57,29 @@ public class MerchantPrivilegeActivity extends ABaseActivity {
         toolbarTitleMid.setText(getString(R.string.merchat_privilege));
         toolbarTitleRight.setText(getString(R.string.direction_for_use));
         toolbarTitleRight.setTextColor(getResources().getColor(R.color.light_gray));
-
+        tabLayout.setupWithViewPager(viewpager);
     }
 
     private void initViewPager() {
-        NotRentFragment fragment1 = new NotRentFragment();
+        Bundle bundle;
+        RentedFragment fragment1 = new RentedFragment();
+        bundle = new Bundle();
+        bundle.putString("status", "2");
+        fragment1.setArguments(bundle);
         RentedFragment fragment2 = new RentedFragment();
+        bundle = new Bundle();
+        bundle.putString("status", "1");
+        fragment2.setArguments(bundle);
+        NotRentFragment fragment3 = new NotRentFragment();
+        bundle = new Bundle();
+        bundle.putString("status", "0");
+        fragment3.setArguments(bundle);
         mFragments.add(fragment1);
         mFragments.add(fragment2);
+        mFragments.add(fragment3);
         mTabAdapter = new UTabAdapter(getSupportFragmentManager(), mFragments, mTitles);
         viewpager.setAdapter(mTabAdapter);
         viewpager.setCurrentItem(0, true);
-        rbtUn.setChecked(true);
     }
 
     @Override
@@ -90,21 +96,6 @@ public class MerchantPrivilegeActivity extends ABaseActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 return true;
-            }
-        });
-        segmented.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.rbt_un:
-                        viewpager.setCurrentItem(0, true);
-                        break;
-                    case R.id.rbt_al:
-                        viewpager.setCurrentItem(1, true);
-                        break;
-                    default:
-                        break;
-                }
             }
         });
     }

@@ -11,7 +11,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
         android:background="@color/white">
@@ -54,8 +54,8 @@
             android:layout_alignParentRight="true"
             android:layout_alignTop="@id/tv_shop"
             android:layout_marginRight="47dp"
-            android:text="@string/contact"
             android:gravity="right|center_vertical"
+            android:text="@string/contact"
             android:textColor="@color/light_gray"
             android:textSize="@dimen/font_size_small"/>
 
@@ -87,6 +87,7 @@
             android:layout_height="44dp"
             android:layout_below="@id/tv_shop_name"
             android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="24dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:layout_marginTop="18dp"

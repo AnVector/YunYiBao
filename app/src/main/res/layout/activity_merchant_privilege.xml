@@ -1,48 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.anyihao.ayb.frame.activity.MerchantPrivilegeActivity">
 
     <include layout="@layout/toolbar_common"/>
 
-    <info.hoang8f.android.segmented.SegmentedGroup
-        android:id="@+id/segmented"
-        android:layout_width="325dp"
-        android:layout_height="32dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="14dp"
-        android:layout_marginTop="14dp"
-        android:orientation="horizontal"
-        segmentedgroup:sc_border_width="1dp"
-        segmentedgroup:sc_corner_radius="3dp"
-        segmentedgroup:sc_tint_color="@color/toolbar_title_color">
-
-        <RadioButton
-            android:id="@+id/rbt_un"
-            style="@style/RadioButton"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/unrented_devices"/>
-
-        <RadioButton
-            android:id="@+id/rbt_al"
-            style="@style/RadioButton"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/renting_devices"/>
-    </info.hoang8f.android.segmented.SegmentedGroup>
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        app:tabIndicatorColor="@color/toolbar_title_color"
+        app:tabIndicatorHeight="1.5dp"
+        app:tabSelectedTextColor="@color/toolbar_title_color">
+    </android.support.design.widget.TabLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"/>
-
 </LinearLayout>

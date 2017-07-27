@@ -24,8 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@id/wifi_icon"
-        android:src="@drawable/wifi_status_connected"/>
+        android:layout_alignTop="@id/wifi_icon"/>
 
     <TextView
         android:id="@+id/wifi_attached"

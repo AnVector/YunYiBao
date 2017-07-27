@@ -100,20 +100,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EasyPerm
 
     }
 
-    protected void permissionsRequest(int requestCode, String description, String... permissions) {
-        if (requestCode == -1 || permissions == null || permissions.length == 0)
-            return;
-        if (EasyPermissions.hasPermissions(this, permissions)) {
-            // Already have permission, do the thing
-            // ...
-            Logger.d(TAG, "permissionsRequest: " + permissions.length);
-        } else {
-            // Do not have permissions, request them now
-            EasyPermissions.requestPermissions(this, description,
-                    requestCode, permissions);
-        }
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {

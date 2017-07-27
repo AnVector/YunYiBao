@@ -1,10 +1,12 @@
 package com.anyihao.ayb.frame.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -35,6 +37,7 @@ public class MessageActivity extends ABaseActivity {
     private String[] mTitleArray = new String[]{"红包消息", "个人消息", "系统消息"};
     private String[] mMessageArray = new String[]{"PERSON", "SYSTEM"};
     private List<String> mTitles = Arrays.asList(mTitleArray);
+    private int index = 0;
 
     @Override
     protected int getContentViewId() {
@@ -43,7 +46,13 @@ public class MessageActivity extends ABaseActivity {
 
     @Override
     protected void getExtraParams() {
-
+        Intent intent = getIntent();
+        if (intent == null)
+            return;
+        String action = intent.getStringExtra("action");
+        if (!TextUtils.isEmpty(action)) {
+            index = intent.getIntExtra("index", 0);
+        }
     }
 
     @Override
@@ -76,7 +85,7 @@ public class MessageActivity extends ABaseActivity {
 
         mTabAdapter = new UTabAdapter(getSupportFragmentManager(), mFragments, mTitles);
         viewpager.setAdapter(mTabAdapter);
-        viewpager.setCurrentItem(0, true);
+        viewpager.setCurrentItem(index, true);
     }
 
     @Override

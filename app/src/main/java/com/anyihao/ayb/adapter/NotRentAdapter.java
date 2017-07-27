@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.anyihao.ayb.R;
+import com.anyihao.ayb.bean.NotRentBean.DataBean;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
 
 import java.util.List;
@@ -17,9 +18,9 @@ import java.util.List;
  * email:looper@126.com
  */
 
-public class NotRentAdapter extends UAdapter<String> {
+public class NotRentAdapter extends UAdapter<DataBean> {
 
-    public NotRentAdapter(List<String> data, int layoutId) {
+    public NotRentAdapter(List<DataBean> data, int layoutId) {
         super(data, layoutId);
     }
 
@@ -35,9 +36,9 @@ public class NotRentAdapter extends UAdapter<String> {
 
         super.onBindViewHolder(holder, position);
         if (bp && holder instanceof NotRentViewHolder) {
-            String content = mData.get((hasHeaderView() ? position - 1 : position));
+            DataBean content = mData.get((hasHeaderView() ? position - 1 : position));
             if (content == null) return;
-            ((NotRentViewHolder) holder).tvDevice.setText(content);
+            ((NotRentViewHolder) holder).tvDevice.setText("设备编号：" + content.getPrintId());
         }
     }
 

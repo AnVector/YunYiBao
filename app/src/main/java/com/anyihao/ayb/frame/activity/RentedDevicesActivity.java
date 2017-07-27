@@ -2,8 +2,8 @@ package com.anyihao.ayb.frame.activity;
 
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -11,13 +11,15 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
-import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.RentedDeviceAdapter;
+import com.anyihao.ayb.bean.KeyValueBean;
+import com.anyihao.ayb.bean.RentDetailsBean;
 import com.anyihao.ayb.bean.RentDeviceBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
+import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -34,10 +36,11 @@ public class RentedDevicesActivity extends ABaseActivity {
     TextView toolbarTitleRight;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.recyclerview)
-    RecyclerView recyclerview;
+    @BindView(R.id.ultimate_recycler_view)
+    UltimateRecyclerView recyclerview;
     private RentedDeviceAdapter mAdapter;
-    private List<String> mData = new LinkedList<>();
+    private List<KeyValueBean> mData = new LinkedList<>();
+    private String keyId;
 
     @Override
     protected int getContentViewId() {
@@ -46,7 +49,10 @@ public class RentedDevicesActivity extends ABaseActivity {
 
     @Override
     protected void getExtraParams() {
-
+        Intent intent = getIntent();
+        if (intent == null)
+            return;
+        keyId = intent.getStringExtra("keyId");
     }
 
     @Override
@@ -55,13 +61,37 @@ public class RentedDevicesActivity extends ABaseActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
-        toolbarTitleMid.setText(getString(R.string.rented_devices));
-        toolbarTitleRight.setText(getString(R.string.rented_history));
-        mAdapter = new RentedDeviceAdapter(this, R.layout.item_rented_devices);
+        if (TextUtils.isEmpty(keyId)) {
+            toolbarTitleMid.setText(getString(R.string.rented_devices));
+            toolbarTitleRight.setText(getString(R.string.rented_history));
+            getRentedDevice();
+        } else {
+            toolbarTitleMid.setText(getString(R.string.rent_details));
+            getRentDetails();
+        }
+        initUltimateRV();
+
+    }
+
+    private void initUltimateRV() {
+        recyclerview.setHasFixedSize(false);
+        mAdapter = new RentedDeviceAdapter(mData, R.layout
+                .item_rented_devices);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerview.setLayoutManager(layoutManager);
+//        recyclerview.setParallaxHeader(getLayoutInflater().inflate(R.layout
+//                .parallax_recyclerview_header, recyclerview.mRecyclerView, false));
+        recyclerview.setNormalHeader(getLayoutInflater().inflate(R.layout
+                .parallax_recyclerview_header, recyclerview.mRecyclerView, false));
+//        recyclerview.setOnParallaxScroll(new UltimateRecyclerView.OnParallaxScroll() {
+//            @Override
+//            public void onParallaxScroll(float percentage, float offset, View parallax) {
+//                Drawable c = toolbar.getBackground();
+//                c.setAlpha(255);
+//                toolbar.setBackgroundDrawable(c);
+//            }
+//        });
         recyclerview.setAdapter(mAdapter);
-        recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager
-                .VERTICAL, false));
-        getRentedDevice();
     }
 
     @Override
@@ -72,14 +102,6 @@ public class RentedDevicesActivity extends ABaseActivity {
                 onBackPressed();
             }
         });
-//        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                Intent intent = new Intent(RentedDevicesActivity.this, RentHistoryActivity.class);
-//                startActivity(intent);
-//                return true;
-//            }
-//        });
         toolbarTitleRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,7 +109,6 @@ public class RentedDevicesActivity extends ABaseActivity {
                 startActivity(intent);
             }
         });
-
     }
 
     private void getRentedDevice() {
@@ -104,6 +125,55 @@ public class RentedDevicesActivity extends ABaseActivity {
                 .createTask());
     }
 
+    private void getRentDetails() {
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "RENT");
+        params.put("merchantId", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
+        params.put("keyId", keyId);
+
+        PresenterFactory.getInstance().createPresenter(this).execute(new Task.TaskBuilder()
+                .setTaskType(TaskType.Method.POST)
+                .setUrl(GlobalConsts.PREFIX_URL)
+                .setParams(params)
+                .setPage(1)
+                .setActionType(1)
+                .createTask());
+    }
+
+    private List<KeyValueBean> generateKeyValueBean(RentDeviceBean bean) {
+        List<KeyValueBean> beans = new LinkedList<>();
+        if (bean != null) {
+            beans.add(0, new KeyValueBean().setTitle("设备编号").setValue(bean.getVid()));
+            beans.add(1, new KeyValueBean().setTitle("设备版本").setValue(bean.getVidVer()));
+            beans.add(2, new KeyValueBean().setTitle("设备状态").setValue(bean.getVidStatus()));
+            beans.add(3, new KeyValueBean().setTitle("租赁时间").setValue(bean.getLeaseTime()));
+            beans.add(4, new KeyValueBean().setTitle("商家名称").setValue(bean.getShopName()));
+            beans.add(5, new KeyValueBean().setTitle("商家地址").setValue(bean.getShopAddr()));
+            beans.add(6, new KeyValueBean().setTitle("商家联系方式").setValue(bean.getContact()));
+        } else {
+            beans.add(0, new KeyValueBean().setTitle("设备编号").setValue("--"));
+            beans.add(1, new KeyValueBean().setTitle("设备版本").setValue("--"));
+            beans.add(2, new KeyValueBean().setTitle("设备状态").setValue("--"));
+            beans.add(3, new KeyValueBean().setTitle("租赁时间").setValue("--"));
+            beans.add(4, new KeyValueBean().setTitle("商家名称").setValue("--"));
+            beans.add(5, new KeyValueBean().setTitle("商家地址").setValue("--"));
+            beans.add(6, new KeyValueBean().setTitle("商家联系方式").setValue("--"));
+        }
+        return beans;
+    }
+
+
+    private List<KeyValueBean> generateRentDetailsBean(RentDetailsBean bean) {
+        List<KeyValueBean> beans = new LinkedList<>();
+        beans.add(0, new KeyValueBean().setTitle("设备编号").setValue(bean.getVid()));
+        beans.add(1, new KeyValueBean().setTitle("租赁用户").setValue(bean.getLendNickname()));
+        beans.add(2, new KeyValueBean().setTitle("用户联系方式").setValue(bean.getLendPhoneNumber()));
+        beans.add(3, new KeyValueBean().setTitle("租赁时间").setValue(bean.getLendTm()));
+        beans.add(4, new KeyValueBean().setTitle("租赁状态").setValue(bean.getStatus()));
+        return beans;
+    }
+
+
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
 
@@ -112,22 +182,28 @@ public class RentedDevicesActivity extends ABaseActivity {
                     .class);
             if (bean == null)
                 return;
-            mData.clear();
+            List<KeyValueBean> beans;
             if (bean.getCode() == 200) {
-                mData.add(bean.getVid());
-                mData.add(bean.getVidVer());
-                mData.add(bean.getVidStatus());
-                mData.add(bean.getLeaseTime());
-                mData.add(bean.getShopName());
-                mData.add(bean.getShopAddr());
-                mData.add(bean.getContact());
+                beans = generateKeyValueBean(bean);
             } else {
-                for (int i = 0; i < 7; i++) {
-                    mData.add("--");
-                }
+                beans = generateKeyValueBean(null);
             }
-            mAdapter.add(0, mData.size(), mData);
+            mAdapter.insert(beans);
         }
 
+        if (actionType == 1) {
+            RentDetailsBean bean = GsonUtils.getInstance().transitionToBean(result,
+                    RentDetailsBean.class);
+            if (bean == null)
+                return;
+            List<KeyValueBean> beans;
+            if (bean.getCode() == 200) {
+                beans = generateRentDetailsBean(bean);
+                mAdapter.insert(beans);
+            } else {
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg());
+            }
+
+        }
     }
 }

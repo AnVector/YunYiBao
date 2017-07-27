@@ -11,6 +11,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.view.View;
@@ -63,6 +64,7 @@ public class RechargeActivity extends ABaseActivity {
     private String[] mFlowTypes = new String[]{"VIP", "MONTH", "THREE", "DAY", "SEASON"};
     private List<String> mTitles = Arrays.asList(mTitleArray);
     private static final int REQUEST_PAY_CODE = 0x0011;
+    private int index = 0;
 
     @Override
     protected int getContentViewId() {
@@ -71,7 +73,13 @@ public class RechargeActivity extends ABaseActivity {
 
     @Override
     protected void getExtraParams() {
-
+        Intent intent = getIntent();
+        if(intent == null)
+            return;
+        String action = intent.getStringExtra("action");
+        if(!TextUtils.isEmpty(action)){
+            index = intent.getIntExtra("index", 0);
+        }
     }
 
     @Override
@@ -97,7 +105,9 @@ public class RechargeActivity extends ABaseActivity {
         }
         mTabAdapter = new UTabAdapter(getSupportFragmentManager(), mFragments, mTitles);
         mViewpager.setAdapter(mTabAdapter);
-        mViewpager.setCurrentItem(0, true);
+        if(index < mFragments.size()){
+            mViewpager.setCurrentItem(index, true);
+        }
     }
 
     private void getUserInfo() {

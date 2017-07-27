@@ -32,10 +32,10 @@
         android:layout_height="25dp"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@id/tv_user"
-        android:background="@drawable/button_bg"
+        android:background="@drawable/return_button_bg"
         android:gravity="center"
         android:text="@string/confirm_to_return"
-        android:textColor="@color/white"
+        android:textColor="@color/toolbar_title_color"
         android:textSize="@dimen/font_size_small"/>
 
     <TextView

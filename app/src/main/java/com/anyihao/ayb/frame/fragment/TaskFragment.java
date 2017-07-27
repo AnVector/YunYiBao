@@ -128,11 +128,13 @@ public class TaskFragment extends ABaseFragment {
         fakeStatusBar.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         isLogin = PreferencesUtils.getBoolean(mContext.getApplicationContext(), "isLogin", false);
         mNormalAdapter = new NormalAdapter(mContext, R.layout.item_task_ad);
+        recyclerviewBottom.setNestedScrollingEnabled(false);
         recyclerviewBottom.setAdapter(mNormalAdapter);
         recyclerviewBottom.setLayoutManager(new GridLayoutManager(mContext, 2,
                 GridLayoutManager.VERTICAL, false));
 
         mLendAdapter = new LendAdapter(mContext, R.layout.item_task_ad);
+        recyclerviewMiddle.setNestedScrollingEnabled(false);
         recyclerviewMiddle.setAdapter(mLendAdapter);
         recyclerviewMiddle.setLayoutManager(new GridLayoutManager(mContext, 2,
                 GridLayoutManager.VERTICAL, false));

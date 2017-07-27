@@ -103,7 +103,7 @@ public class AddAuthDeviceActivity extends ABaseActivity {
                 }
                 switch (id) {
                     case R.id.rbt_phone:
-                        mRemark = "POHONE";
+                        mRemark = "PHONE";
                         break;
                     case R.id.rbt_pad:
                         mRemark = "PAD";
@@ -118,6 +118,14 @@ public class AddAuthDeviceActivity extends ABaseActivity {
                         break;
                 }
                 addAuthorizedDevice();
+            }
+        });
+
+        tvHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AddAuthDeviceActivity.this, MacInstructionActivity.class);
+                startActivity(intent);
             }
         });
 

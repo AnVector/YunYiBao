@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.anyihao.ayb.R;
+import com.anyihao.ayb.bean.RentedBean.DataBean;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
 
 import java.util.List;
@@ -18,9 +19,17 @@ import java.util.List;
  * email:looper@126.com
  */
 
-public class RentedAdapter extends UAdapter<String> {
+public class RentedAdapter extends UAdapter<DataBean> {
 
-    public RentedAdapter(List<String> data, int layoutId) {
+    private OnItemButtonClickListener mOnItemButtonClickListener;
+
+
+    public void setmOnItemButtonClickListener(OnItemButtonClickListener
+                                                      mOnItemButtonClickListener) {
+        this.mOnItemButtonClickListener = mOnItemButtonClickListener;
+    }
+
+    public RentedAdapter(List<DataBean> data, int layoutId) {
         super(data, layoutId);
     }
 
@@ -31,18 +40,34 @@ public class RentedAdapter extends UAdapter<String> {
         return new RentedViewHolder(v);
     }
 
+    public interface OnItemButtonClickListener {
+        void onItemButtonClick(ViewGroup parent, View view, DataBean bean, int position);
+    }
+
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-//        ((InformationViewHolder)holder).tvId.setText(position);
         super.onBindViewHolder(holder, position);
         if (holder instanceof RentedViewHolder) {
-            String content = mData.get((hasHeaderView() ? position - 1 : position));
+            final int index = (hasHeaderView() ? position - 1 : position);
+            DataBean content = mData.get(index);
             if (content == null) return;
-            ((RentedViewHolder) holder).tvDevice.setText(content);
-            ((RentedViewHolder) holder).tvUser.setText("用户：打快板的妹妹");
-            ((RentedViewHolder) holder).tvDate.setText("2017-05-13");
+            ((RentedViewHolder) holder).tvDevice.setText(content.getPrintId());
+            ((RentedViewHolder) holder).tvUser.setText("用户：" + content.getNickname());
+            ((RentedViewHolder) holder).tvDate.setText(content.getOutTm());
+            ((RentedViewHolder) holder).btnReturn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mOnItemButtonClickListener != null) {
+                        if (index < 0 || index >= mData.size())
+                            return;
+                        mOnItemButtonClickListener.onItemButtonClick((ViewGroup) v.getParent(),
+                                v, mData.get
+                                        (index), index);
+                    }
+                }
+            });
         }
     }
 

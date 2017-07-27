@@ -11,71 +11,12 @@
         android:id="@+id/fake_status_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/statusbar_view_height"/>
-
     <include
         layout="@layout/toolbar"/>
 
-    <RelativeLayout
-        android:id="@+id/rl_profile"
-        android:layout_width="match_parent"
-        android:layout_height="85dp"
-        android:layout_gravity="center_vertical"
+    <com.marshalchen.ultimaterecyclerview.UltimateRecyclerView
+        android:id="@+id/ultimate_recycler_view"
         android:layout_marginTop="10dp"
-        android:background="@color/white"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp">
-
-        <ImageView
-            android:id="@+id/ic_profile"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/user_profile"/>
-
-        <TextView
-            android:id="@+id/greeting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="24dp"
-            android:layout_toRightOf="@id/ic_profile"
-            android:gravity="right|center_vertical"
-            android:text="@string/not_login"
-            android:textSize="@dimen/font_size_sev"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/greeting"
-            android:layout_below="@id/greeting"
-            android:layout_marginTop="6dp"
-            android:gravity="right|center_vertical"
-            android:text="@string/about_me"
-            android:textSize="@dimen/font_size_thi"/>
-
-        <ImageButton
-            android:id="@+id/btn_more"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@null"
-            android:src="@drawable/ic_right"/>
-
-        <ImageView
-            android:layout_width="29dp"
-            android:layout_height="29dp"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/btn_more"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_qr_code"/>
-    </RelativeLayout>
-
-    <View style="@style/divider_line"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 </LinearLayout>

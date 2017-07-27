@@ -64,12 +64,12 @@ public class RechargeRecordActivity extends ABaseActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
+        titleMid.setText(getString(R.string.recharge_record));
         initUltimateRV();
         getRechargeRecord();
     }
 
     private void initUltimateRV() {
-        titleMid.setText(getString(R.string.recharge_record));
         recyclerView.setHasFixedSize(false);
         mRechargeAdapter = new RechargeRecordAdapter(mRechargeData, R.layout
                 .item_recharge_record);

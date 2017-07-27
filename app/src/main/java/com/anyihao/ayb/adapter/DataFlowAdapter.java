@@ -30,6 +30,11 @@ public class DataFlowAdapter extends RecyclerViewAdapter<DataBean> {
         }
         holder.setText(R.id.tv_data_amount, dataBean.getFlow());
         holder.setText(R.id.tv_price, dataBean.getPrice());
+        if(dataBean.getActivity() == 9){
+            holder.setVisible(R.id.imv_promotion, true);
+        }else {
+            holder.setVisible(R.id.imv_promotion, false);
+        }
     }
 
     private void setFocusView(View view) {

@@ -1,51 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.anyihao.ayb.frame.activity.CreditActivity">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/points_bg"/>
+    <!--<View-->
+        <!--android:id="@+id/fake_status_bar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="@dimen/statusbar_view_height"/>-->
 
-    <LinearLayout
-        android:id="@+id/ll_header"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+    <include layout="@layout/toolbar"/>
 
-        <View
-            android:id="@+id/fake_status_bar"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/statusbar_view_height"/>
-
-        <include layout="@layout/toolbar"/>
-
-        <com.chaychan.viewlib.NumberRunningTextView
-            android:id="@+id/tv_points"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="35dp"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="60sp"
-            app:frameNum="60"
-            app:runWhenChange="false"
-            app:textType="num"/>
-    </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerview"
+    <com.marshalchen.ultimaterecyclerview.UltimateRecyclerView
+        android:id="@+id/ultimate_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ll_header"
-        android:layout_centerHorizontal="true"
         android:background="@color/white"/>
-</RelativeLayout>
+</LinearLayout>

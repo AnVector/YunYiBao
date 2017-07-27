@@ -251,9 +251,14 @@ public static final ** CREATOR;
 ### JPush
 -dontwarn cn.jpush.**
 -keep class cn.jpush.** { *; }
+-keep class * extends cn.jpush.android.helpers.JPushMessageReceiver { *; }
 
 -dontwarn cn.jiguang.**
 -keep class cn.jiguang.** { *; }
+
+-dontwarn com.google.**
+-keep class com.google.gson.** {*;}
+-keep class com.google.protobuf.** {*;}
 
 #---------------------------------3.默认保留区---------------------------------
 # 保持以下类不被混淆

@@ -128,12 +128,12 @@ public class RdoCashRatioAdapter extends UltimateViewAdapter {
 
     @Override
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
-        TextView tvStart = (TextView) holder.itemView.findViewById(R.id.tv_start_time);
-        TextView tvEnd = (TextView) holder.itemView.findViewById(R.id.tv_end_time);
-        if (tvStart == null || tvEnd == null)
-            return;
-        tvStart.setText("起始时间："+startTime);
-        tvEnd.setText("截止时间："+endTime);
+//        TextView tvStart = (TextView) holder.itemView.findViewById(R.id.tv_start_time);
+//        TextView tvEnd = (TextView) holder.itemView.findViewById(R.id.tv_end_time);
+//        if (tvStart == null || tvEnd == null)
+//            return;
+//        tvStart.setText("起始时间："+startTime);
+//        tvEnd.setText("截止时间："+endTime);
     }
 
     public void setOnDragStartListener(OnStartDragListener dragStartListener) {

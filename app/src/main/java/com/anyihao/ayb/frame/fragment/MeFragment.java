@@ -4,7 +4,6 @@ package com.anyihao.ayb.frame.fragment;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.anyihao.androidbase.mvp.Task;
@@ -26,6 +24,7 @@ import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.MeAdapter;
+import com.anyihao.ayb.bean.KeyValueBean;
 import com.anyihao.ayb.bean.ResultBean;
 import com.anyihao.ayb.bean.UserLevelBean;
 import com.anyihao.ayb.common.PresenterFactory;
@@ -46,46 +45,43 @@ import com.anyihao.ayb.listener.OnItemClickListener;
 import com.anyihao.ayb.ui.CropCircleTransformation;
 import com.bumptech.glide.Glide;
 import com.chaychan.viewlib.PowerfulEditText;
+import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
-import com.orhanobut.dialogplus.OnCancelListener;
 import com.orhanobut.dialogplus.OnClickListener;
-import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.Unbinder;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MeFragment extends ABaseFragment {
 
-    @BindView(R.id.recyclerview)
-    RecyclerView mRecyclerview;
-    @BindView(R.id.greeting)
-    TextView tvGreeting;
     @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.fake_status_bar)
     View fakeStatusBar;
-    @BindView(R.id.rl_profile)
-    RelativeLayout rlProfile;
-    @BindView(R.id.ic_profile)
-    ImageView icProfile;
-    Unbinder unbinder;
+    @BindView(R.id.toolbar_help)
+    TextView toolbarHelp;
+    @BindView(R.id.ultimate_recycler_view)
+    UltimateRecyclerView recyclerView;
+    private TextView tvGreeting;
+    private ImageView icProfile;
+    private View rlHeader;
     private MeAdapter mAdapter;
     private static int REQUEST_SETTINGS_CODE = 0x00001;
     private static int REQUEST_LOGIN_CODE = 0x00003;
     private boolean isLogin = false;
-    private List<String> mData = new ArrayList<>();
+    private List<KeyValueBean> mData = new ArrayList<>();
     private String mIntegral;
 
     @Override
@@ -95,26 +91,32 @@ public class MeFragment extends ABaseFragment {
 
     @Override
     protected void initData() {
-        for (int i = 0; i < 9; i++) {
-            mData.add(i, "");
-        }
         fakeStatusBar.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         toolbar.inflateMenu(R.menu.toolbar_menu);
         toolbarTitle.setText(mContext.getString(R.string.me));
-        mRecyclerview.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager
-                .VERTICAL, false));
-        mAdapter = new MeAdapter(mContext, R.layout.item_me, mData);
-        mRecyclerview.setAdapter(mAdapter);
+        initUltimateRV();
         getUserInfo();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (isLogin == PreferencesUtils.getBoolean(mContext.getApplicationContext(),
-                "isLogin", false))
-            return;
-        getUserInfo();
+    private void initUltimateRV() {
+        recyclerView.setHasFixedSize(false);
+        mAdapter = new MeAdapter(mData, R.layout.item_me);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
+        recyclerView.setLayoutManager(layoutManager);
+
+        if (getActivity() != null) {
+            rlHeader = getActivity().getLayoutInflater().inflate(R.layout
+                    .view_me_header_layout, recyclerView.mRecyclerView, false);
+            icProfile = (ImageView) rlHeader.findViewById(R.id.ic_profile);
+            tvGreeting = (TextView) rlHeader.findViewById(R.id.tv_greeting);
+            recyclerView.setNormalHeader(rlHeader);
+        }else {
+            ToastUtils.showToast(mContext.getApplicationContext(), "哈哈");
+        }
+        recyclerView.setAdapter(mAdapter);
+        mData.clear();
+        mData.addAll(generateKeyValueBean(null));
+        mAdapter.notifyDataSetChanged();
     }
 
     private void getUserInfo() {
@@ -147,6 +149,7 @@ public class MeFragment extends ABaseFragment {
                         .createTask());
     }
 
+
     @Override
     protected void initEvent() {
 
@@ -163,13 +166,13 @@ public class MeFragment extends ABaseFragment {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-                if (view.getTag() instanceof String) {
-                    if (!isLogin) {
-                        startActivityForLogin();
-                        return;
-                    }
+                if (!isLogin) {
+                    startActivityForLogin();
+                    return;
+                }
+                if (o instanceof KeyValueBean) {
                     Intent intent;
-                    switch (view.getTag().toString()) {
+                    switch (((KeyValueBean) o).getTitle()) {
                         case "我的流量":
                             intent = new Intent(mContext, FlowAccountActivity.class);
                             startActivity(intent);
@@ -222,7 +225,7 @@ public class MeFragment extends ABaseFragment {
             }
         });
 
-        rlProfile.setOnClickListener(new View.OnClickListener() {
+        rlHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isLogin) {
@@ -242,11 +245,6 @@ public class MeFragment extends ABaseFragment {
     private void startActivityForLogin() {
         Intent intent = new Intent(mContext, LoginActivity.class);
         startActivityForResult(intent, REQUEST_LOGIN_CODE);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -283,7 +281,6 @@ public class MeFragment extends ABaseFragment {
                                 dialog.dismiss();
                             }
                         }
-
                         break;
                     default:
                         break;
@@ -291,25 +288,9 @@ public class MeFragment extends ABaseFragment {
             }
         };
 
-        OnDismissListener dismissListener = new OnDismissListener() {
-            @Override
-            public void onDismiss(DialogPlus dialog) {
-//                ToastUtils.showLongToast(mContext, "dismiss");
-            }
-        };
-
-        OnCancelListener cancelListener = new OnCancelListener() {
-            @Override
-            public void onCancel(DialogPlus dialog) {
-//                ToastUtils.showLongToast(mContext, "cancel");
-            }
-        };
-
         final DialogPlus dialog = DialogPlus.newDialog(mContext)
                 .setContentHolder(holder)
                 .setGravity(Gravity.CENTER)
-                .setOnDismissListener(dismissListener)
-                .setOnCancelListener(cancelListener)
                 .setCancelable(true)
                 .setOnClickListener(clickListener)
                 .setContentHeight(DensityUtils.dp2px(mContext, 195))
@@ -319,6 +300,32 @@ public class MeFragment extends ABaseFragment {
         dialog.show();
     }
 
+    private List<KeyValueBean> generateKeyValueBean(UserLevelBean bean) {
+        List<KeyValueBean> beans = new LinkedList<>();
+        String flow = "";
+        String integral = "";
+        String identity = "";
+        if (bean != null) {
+            flow = bean.getFlow();
+            integral = bean.getIntegral();
+            identity = bean.getIdentity();
+        }
+        beans.add(0, new KeyValueBean().setTitle("我的流量").setValue(flow));
+        beans.add(1, new KeyValueBean().setTitle("流量商城"));
+        beans.add(2, new KeyValueBean().setTitle("流量报表"));
+        beans.add(3, new KeyValueBean().setTitle("充值记录"));
+        beans.add(4, new KeyValueBean().setTitle("邀请好友"));
+        beans.add(5, new KeyValueBean().setTitle("输入邀请码"));
+        beans.add(6, new KeyValueBean().setTitle("系统赠送记录"));
+        beans.add(7, new KeyValueBean().setTitle("我的积分").setValue(integral));
+        beans.add(8, new KeyValueBean().setTitle("商家特权"));
+        beans.add(9, new KeyValueBean().setTitle("授权设备管理"));
+        if (!"BUSINESS".equals(identity)) {
+            beans.remove(8);
+        }
+        return beans;
+    }
+
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
         if (actionType == 0) {
@@ -326,23 +333,9 @@ public class MeFragment extends ABaseFragment {
                     .class);
             if (bean == null)
                 return;
-            int k = mData.size();
             mData.clear();
-            mAdapter.remove(0, k);
-            int count = 9;
-            if ("BUSINESS".equals(bean.getIdentity())) {
-                count = 10;
-            }
-            for (int i = 0; i < count; i++) {
-                if (i == 0) {
-                    mData.add(0, bean.getFlow());
-                } else if (i == 7) {
-                    mData.add(7, bean.getIntegral());
-                } else {
-                    mData.add(i, "");
-                }
-            }
-            mAdapter.add(0, mData.size(), mData);
+            mData.addAll(generateKeyValueBean(bean));
+            mAdapter.notifyDataSetChanged();
             if (bean.getCode() == 200) {
                 isLogin = true;
                 mIntegral = bean.getIntegral();
@@ -363,7 +356,7 @@ public class MeFragment extends ABaseFragment {
     }
 
     private void setHeaderData(int code, String url, String nickname) {
-        if(tvGreeting == null||icProfile == null)
+        if (tvGreeting == null || icProfile == null)
             return;
         if (code == 200) {
             tvGreeting.setText(String.format(mContext.getResources().getString(R.string

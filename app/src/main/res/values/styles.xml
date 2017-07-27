@@ -101,6 +101,7 @@
     </style>
 
     <style name="divider_line">
+        <item name="android:id">@+id/line</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0.6dp</item>
         <item name="android:layout_marginLeft">15dp</item>

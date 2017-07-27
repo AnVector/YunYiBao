@@ -4,7 +4,7 @@
                 android:layout_height="60dp">
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -14,11 +14,11 @@
         android:textSize="@dimen/font_size_normal_high"/>
 
     <TextView
-        android:id="@+id/date"
+        android:id="@+id/tv_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/title"
-        android:layout_below="@id/title"
+        android:layout_alignLeft="@id/tv_title"
+        android:layout_below="@id/tv_title"
         android:layout_marginTop="5dp"
         android:gravity="center"
         android:textColor="@color/light_gray"

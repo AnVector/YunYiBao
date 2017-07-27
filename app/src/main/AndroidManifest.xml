@@ -24,27 +24,13 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <!-- 允许应用读取外部存储 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <!--拨打电话-->
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
     <!-- 用于写入缓存数据到扩展存储卡 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_LOGS"/>
     <uses-permission android:name="com.anyihao.ayb.permission.ACCESS_POLLING_SERVICE"/>
+
     <!-- JPush Required -->
     <uses-permission android:name="com.anyihao.ayb.permission.JPUSH_MESSAGE"/>
-
-    <!-- 高德地图权限申请 -->
-    <!-- 用于进行网络定位 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <!-- 用于访问GPS定位 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <!-- 用于申请调用A-GPS模块 -->
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
-    <!-- 用于申请获取蓝牙信息进行室内定位 -->
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-
-    <!-- JPush 权限申请 -->
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT"/>
     <!-- 允许应用在手机屏幕关闭后后台进程仍然运行 -->
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
@@ -55,8 +41,20 @@
     <!-- 允许应用挂载/卸载 外部文件系统 -->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
 
+    <!-- amap required -->
+    <!-- 用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!-- 用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <!-- 用于申请调用A-GPS模块 -->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
+    <!-- 用于申请获取蓝牙信息进行室内定位 -->
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+
     <!-- Optional for location -->
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/> <!-- 用于开启 debug 版本的应用在6.0 系统上 层叠窗口权限 -->
+    <!-- 用于开启 debug 版本的应用在6.0 系统上 层叠窗口权限 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.GET_TASKS"/>
 
     <application
@@ -108,7 +106,7 @@
             android:value="developer-default"/>
         <meta-data
             android:name="JPUSH_APPKEY"
-            android:value="您应用的Appkey"/> <!-- 值来自开发者平台取得的AppKey -->
+            android:value="94123a05f5e3adb926020174"/> <!-- 值来自开发者平台取得的AppKey -->
 
 
         <!-- Rich push 核心功能 since 2.0.6 -->
@@ -153,6 +151,7 @@
         <!-- 可配置android:process参数将PushService放在其他进程中 -->
         <service
             android:name="cn.jpush.android.service.PushService"
+            android:exported="false"
             android:process=":mult">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.REGISTER"/>
@@ -178,7 +177,8 @@
         <!-- Required SDK核心功能 -->
         <receiver
             android:name="cn.jpush.android.service.PushReceiver"
-            android:enabled="true">
+            android:enabled="true"
+            android:exported="false">
             <intent-filter android:priority="1000">
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY"/> <!-- Required  显示通知栏 -->
                 <category android:name="com.anyihao.ayb"/>
@@ -200,6 +200,21 @@
         <receiver
             android:name="cn.jpush.android.service.AlarmReceiver"
             android:exported="false"/>
+
+        <!-- User defined.  For test only  用户自定义的广播接收器 -->
+        <receiver
+            android:name=".common.JPushReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTRATION"/> <!-- Required  用户注册SDK的intent -->
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED"/> <!-- Required  用户接收SDK消息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED"/> <!-- Required  用户接收SDK通知栏信息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED"/> <!-- Required  用户打开自定义通知栏的intent -->
+                <action android:name="cn.jpush.android.intent.CONNECTION"/> <!-- 接收网络变化 连接/断开 since 1.6.3 -->
+                <category android:name="com.anyihao.ayb"/>
+            </intent-filter>
+        </receiver>
 
         <activity
             android:name=".frame.activity.SplashActivity"
@@ -519,5 +534,8 @@
             android:name=".frame.activity.RentHistoryActivity"
             android:launchMode="singleTop">
         </activity>
+        <activity android:name=".frame.activity.MacInstructionActivity">
+        </activity>
     </application>
+
 </manifest>

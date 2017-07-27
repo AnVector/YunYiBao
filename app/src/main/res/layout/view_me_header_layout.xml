@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_profile"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:gravity="center_vertical">
+
+    <ImageView
+        android:id="@+id/ic_profile"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="8dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/user_profile"/>
+
+    <TextView
+        android:id="@+id/tv_greeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/ic_profile"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@id/ic_profile"
+        android:gravity="right|center_vertical"
+        android:text="@string/not_login"
+        android:textSize="@dimen/font_size_sev"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv_greeting"
+        android:layout_below="@id/tv_greeting"
+        android:layout_marginTop="6dp"
+        android:gravity="right|center_vertical"
+        android:text="@string/about_me"
+        android:textSize="@dimen/font_size_thi"/>
+
+    <ImageButton
+        android:id="@+id/btn_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dp"
+        android:background="@null"
+        android:src="@drawable/ic_right"/>
+
+    <ImageView
+        android:layout_width="29dp"
+        android:layout_height="29dp"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@id/btn_more"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_qr_code"/>
+
+    <View
+        style="@style/divider_line"
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>
