@@ -35,6 +35,7 @@ import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,19 +79,28 @@ public class DepositActivity extends ABaseActivity {
     private IWXAPI wxApi;
     private boolean isWxPaySupported;
     private boolean isWxInstalled = true;
+    private final UHandler mHandler = new UHandler(this);
 
-    Handler mHandler = new Handler() {
+    private static class UHandler extends Handler {
+        private final WeakReference<DepositActivity> mActivity;
+
+        private UHandler(DepositActivity activity) {
+            this.mActivity = new WeakReference<>(activity);
+        }
+
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case SDK_PAY_FLAG:
-                    handleAlipayResult((Map<String, String>) msg.obj);
+                    if (mActivity.get() != null) {
+                        mActivity.get().handleAlipayResult((Map<String, String>) msg.obj);
+                    }
                     break;
                 default:
                     break;
             }
         }
 
-    };
+    }
 
     @Override
     protected int getContentViewId() {

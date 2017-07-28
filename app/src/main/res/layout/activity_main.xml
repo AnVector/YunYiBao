@@ -21,14 +21,12 @@
             android:id="@+id/red"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="升级固件版本"/>
+            android:layout_weight="1"/>
 
         <Button
             android:id="@+id/color"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="查看固件版本"/>
+            android:layout_weight="1"/>
     </LinearLayout>
 </RelativeLayout>

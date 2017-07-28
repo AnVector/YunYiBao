@@ -23,6 +23,7 @@ import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.chaychan.viewlib.PowerfulEditText;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,16 +58,28 @@ public class GetVerifyCodeActivity extends ABaseActivity {
     private String verifyCode;
     private String appId;
     private String userType;
+    private UHandler mHandler = new UHandler(this);
 
-    private Handler mHandler = new Handler() {
+    private static class UHandler extends Handler{
+
+        private WeakReference<GetVerifyCodeActivity> mActivity;
+
+        private UHandler(GetVerifyCodeActivity activity) {
+            this.mActivity = new WeakReference<>(activity);
+        }
+
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case TIMER_TICK:
-                    handleTimerTick();
+                    if(mActivity.get()!=null){
+                        mActivity.get().handleTimerTick();
+                    }
                     break;
                 case TIMER_TICK_FINISHED:
-                    handleTimerTickFinished();
+                    if(mActivity.get()!=null){
+                        mActivity.get().handleTimerTickFinished();
+                    }
                     break;
                 default:
                     break;

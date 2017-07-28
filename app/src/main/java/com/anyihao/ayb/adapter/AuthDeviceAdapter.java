@@ -35,10 +35,12 @@ public class AuthDeviceAdapter extends RecyclerViewAdapter<DataBean> {
 
         if (isFoucusEnabled(viewType)) {
             viewHolder.itemView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @SuppressWarnings("unchecked")
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (mOnItemFocusChangeListener != null) {
                         int position = getPosition(viewHolder);
+                        //noinspection unchecked
                         mOnItemFocusChangeListener.onItemFocusChanged(parent, v, mDatas.get
                                 (position), position, hasFocus);
                     }
@@ -51,10 +53,12 @@ public class AuthDeviceAdapter extends RecyclerViewAdapter<DataBean> {
             if (btn == null)
                 return;
             btn.setOnClickListener(new View.OnClickListener() {
+                @SuppressWarnings("unchecked")
                 @Override
                 public void onClick(View v) {
                     if (mOnItemClickListener != null) {
                         int position = getPosition(viewHolder);
+                        //noinspection unchecked
                         mOnItemClickListener.onItemClick(parent, v, mDatas.get(position),
                                 position);
                     }
@@ -62,10 +66,12 @@ public class AuthDeviceAdapter extends RecyclerViewAdapter<DataBean> {
             });
 
             btn.setOnLongClickListener(new View.OnLongClickListener() {
+                @SuppressWarnings("unchecked")
                 @Override
                 public boolean onLongClick(View v) {
                     if (mOnItemClickListener != null) {
                         int position = getPosition(viewHolder);
+                        //noinspection unchecked
                         return mOnItemClickListener.onItemLongClick(parent, v, mDatas.get
                                 (position), position);
                     }

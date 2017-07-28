@@ -115,6 +115,7 @@ public class HttpsUtils
                 } catch (IOException e)
 
                 {
+                    e.printStackTrace();
                 }
             }
             TrustManagerFactory trustManagerFactory = null;

@@ -10,12 +10,8 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 /**
  * Created by Jaeger on 16/2/14.

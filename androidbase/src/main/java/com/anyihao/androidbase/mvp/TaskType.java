@@ -9,18 +9,18 @@ package com.anyihao.androidbase.mvp;
 public interface TaskType {
 
     interface Method {
-        public static final String GET = "GET";
-        public static final String POST = "POST";
-        public static final String PUT = "PUT";
-        public static final String HEAD = "HEAD";
-        public static final String DELETE = "DELETE";
-        public static final String PATCH = "PATCH";
+        String GET = "GET";
+        String POST = "POST";
+        String PUT = "PUT";
+        String HEAD = "HEAD";
+        String DELETE = "DELETE";
+        String PATCH = "PATCH";
     }
 
     interface Local {
-        public static final String INSERT = "INSERT";
-        public static final String SELECT = "SELECT";
-        public static final String UPDATE = "UPDATE";
-        public static final String DELETE = "CRUD_DELETE";
+        String INSERT = "INSERT";
+        String SELECT = "SELECT";
+        String UPDATE = "UPDATE";
+        String DELETE = "CRUD_DELETE";
     }
 }

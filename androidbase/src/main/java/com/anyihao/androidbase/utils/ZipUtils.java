@@ -91,6 +91,9 @@ public class ZipUtils {
                 if (!zipFile(resFile, "", zos, comment)) return false;
             }
             return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         } finally {
             if (zos != null) {
                 zos.finish();
@@ -123,7 +126,8 @@ public class ZipUtils {
      */
     public static boolean zipFile(String resFilePath, String zipFilePath, String comment)
             throws IOException {
-        return zipFile(FileUtils.getFileByPath(resFilePath), FileUtils.getFileByPath(zipFilePath), comment);
+        return zipFile(FileUtils.getFileByPath(resFilePath), FileUtils.getFileByPath(zipFilePath)
+                , comment);
     }
 
     /**
@@ -172,9 +176,11 @@ public class ZipUtils {
      * @return {@code true}: 压缩成功<br>{@code false}: 压缩失败
      * @throws IOException IO错误时抛出
      */
-    private static boolean zipFile(File resFile, String rootPath, ZipOutputStream zos, String comment)
+    private static boolean zipFile(File resFile, String rootPath, ZipOutputStream zos, String
+            comment)
             throws IOException {
-        rootPath = rootPath + (StringUtils.isSpace(rootPath) ? "" : File.separator) + resFile.getName();
+        rootPath = rootPath + (StringUtils.isSpace(rootPath) ? "" : File.separator) + resFile
+                .getName();
         if (resFile.isDirectory()) {
             File[] fileList = resFile.listFiles();
             // 如果是空文件夹那么创建它，我把'/'换为File.separator测试就不成功，eggPain
@@ -249,7 +255,8 @@ public class ZipUtils {
      */
     public static boolean unzipFile(String zipFilePath, String destDirPath)
             throws IOException {
-        return unzipFile(FileUtils.getFileByPath(zipFilePath), FileUtils.getFileByPath(destDirPath));
+        return unzipFile(FileUtils.getFileByPath(zipFilePath), FileUtils.getFileByPath
+                (destDirPath));
     }
 
     /**
@@ -274,7 +281,8 @@ public class ZipUtils {
      * @return 返回带有关键字的文件链表
      * @throws IOException IO错误时抛出
      */
-    public static List<File> unzipFileByKeyword(String zipFilePath, String destDirPath, String keyword)
+    public static List<File> unzipFileByKeyword(String zipFilePath, String destDirPath, String
+            keyword)
             throws IOException {
         return unzipFileByKeyword(FileUtils.getFileByPath(zipFilePath),
                 FileUtils.getFileByPath(destDirPath), keyword);
@@ -298,7 +306,8 @@ public class ZipUtils {
         while (entries.hasMoreElements()) {
             ZipEntry entry = ((ZipEntry) entries.nextElement());
             String entryName = entry.getName();
-            if (StringUtils.isEmpty(keyword) || FileUtils.getFileName(entryName).toLowerCase().contains(keyword.toLowerCase())) {
+            if (StringUtils.isEmpty(keyword) || FileUtils.getFileName(entryName).toLowerCase()
+                    .contains(keyword.toLowerCase())) {
                 String filePath = destDir + File.separator + entryName;
                 File file = new File(filePath);
                 files.add(file);

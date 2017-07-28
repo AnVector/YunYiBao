@@ -32,7 +32,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.marshalchen.ultimaterecyclerview.R;
-import com.marshalchen.ultimaterecyclerview.URLogs;
 
 import java.util.List;
 

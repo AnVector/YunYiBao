@@ -171,6 +171,7 @@
     <string name="copy_password">复制密码</string>
     <string name="surplus_amount">剩余：%1$s</string>
     <string name="message">消息</string>
+    <string name="no_available_wifi">附近暂无可用WIFI</string>
     <!--empty view-->
     <string name="no_network">亲，网络不给力啊&#8230;</string>
     <string name="no_message">暂无消息哦&#8230;</string>

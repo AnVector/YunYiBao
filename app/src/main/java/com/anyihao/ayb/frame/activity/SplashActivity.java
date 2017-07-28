@@ -19,6 +19,7 @@ import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.orhanobut.logger.Logger;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,31 +39,44 @@ public class SplashActivity extends ABaseActivity {
     private String mTimeHint;
     private byte mTimeLeft;
     private CountDownTimer mCountDownTimer;
+    private UHandler mHandler = new UHandler(this);
     //    private ComponentName mDefault;
 //    private ComponentName mNewCN;
 //    private PackageManager mPackageManager;
 
-    private Handler mHandler = new Handler() {
+    private static class UHandler extends Handler {
+        private WeakReference<SplashActivity> mActivity;
+
+        private UHandler(SplashActivity activity) {
+            this.mActivity = new WeakReference<>(activity);
+        }
+
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case GO_HOME:
-                    handleGoHome();
-                    break;
-                case GO_GUIDE:
-                    handleGoGuide();
-                    break;
-                case TIMER_TICK:
-                    handleTimerTick();
-                    break;
-                case TIMER_TICK_FINISHED:
-                    handleTimerTickFinished();
-                    break;
-                default:
-                    break;
+            SplashActivity activity = mActivity.get();
+            if (activity != null) {
+                switch (msg.what) {
+                    case GO_HOME:
+                        activity.handleGoHome();
+                        break;
+                    case GO_GUIDE:
+                        activity.handleGoGuide();
+                        break;
+                    case TIMER_TICK:
+                        activity.handleTimerTick();
+                        break;
+                    case TIMER_TICK_FINISHED:
+                        activity.handleTimerTickFinished();
+                        break;
+                    default:
+                        break;
+                }
             }
+
         }
-    };
+    }
+
+    ;
 
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
@@ -208,7 +222,7 @@ public class SplashActivity extends ABaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mCountDownTimer!=null){
+        if (mCountDownTimer != null) {
             mCountDownTimer.cancel();
         }
     }

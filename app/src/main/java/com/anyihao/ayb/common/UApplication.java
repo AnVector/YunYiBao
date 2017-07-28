@@ -32,10 +32,6 @@ import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
@@ -43,7 +39,6 @@ import javax.net.ssl.SSLSession;
 
 import butterknife.ButterKnife;
 import cn.jpush.android.api.JPushInterface;
-import cn.jpush.android.data.JPushLocalNotification;
 import okhttp3.OkHttpClient;
 
 /**
@@ -130,7 +125,7 @@ public class UApplication extends MultiDexApplication {
 
     private void initJPush() {
         JPushInterface.setDebugMode(BuildConfig.DEBUG);    // 设置开启日志,发布时请关闭日志
-        JPushInterface.init(this);            // 初始化 JPush
+        JPushInterface.init(this);   // 初始化 JPush
         if (PreferencesUtils.getBoolean(this, "isLogin", false)) {
             JPushInterface.setAlias(this, -1, PreferencesUtils.getString(this, "uid", ""));
         }

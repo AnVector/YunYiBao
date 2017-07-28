@@ -29,6 +29,7 @@ import com.anyihao.ayb.common.PollingService;
 import com.anyihao.ayb.common.PresenterFactory;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import butterknife.BindView;
@@ -66,16 +67,27 @@ public class MainActivity extends ABaseActivity {
     private static final int NETWORK_DISCONNECTED = 10002;
     private IWifiInfoManager mWifiInfoManager;
     private boolean mIsBound = false;
+    private UHandler mHandler = new UHandler(this);
 
-    private Handler mHandler = new Handler() {
+    private static class UHandler extends Handler {
+        private WeakReference<MainActivity> mActivity;
+
+        private UHandler(MainActivity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+
         @Override
         public void dispatchMessage(Message msg) {
             switch (msg.what) {
                 case NETWORK_CHANGED:
-                    ToastUtils.showLongToast(MainActivity.this, "msg.obj=" + msg.obj.toString());
+                    if(mActivity.get()!=null){
+                        ToastUtils.showToast(mActivity.get().getApplicationContext(), "msg.obj=" + msg.obj.toString());
+                    }
                     break;
                 case NETWORK_DISCONNECTED:
-                    ToastUtils.showLongToast(MainActivity.this, "安逸宝WIFI设备连接已断开");
+                    if(mActivity.get()!=null){
+                        ToastUtils.showToast(mActivity.get().getApplicationContext(), "安逸宝WIFI设备连接已断开");
+                    }
                     break;
                 default:
                     super.dispatchMessage(msg);

@@ -189,6 +189,7 @@ public class ImageUtils
             }
         } catch (Exception e)
         {
+            e.printStackTrace();
         }
         return value;
 

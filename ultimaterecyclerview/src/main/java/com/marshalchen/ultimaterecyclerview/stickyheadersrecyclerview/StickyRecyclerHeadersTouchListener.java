@@ -6,9 +6,6 @@ import android.view.MotionEvent;
 import android.view.SoundEffectConstants;
 import android.view.View;
 
-import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.*;
-import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
-
 public class StickyRecyclerHeadersTouchListener implements RecyclerView.OnItemTouchListener {
   private final GestureDetector mTapDetector;
   private final RecyclerView mRecyclerView;
@@ -16,7 +13,7 @@ public class StickyRecyclerHeadersTouchListener implements RecyclerView.OnItemTo
   private OnHeaderClickListener mOnHeaderClickListener;
 
   public interface OnHeaderClickListener {
-    public void onHeaderClick(View header, int position, long headerId);
+    void onHeaderClick(View header, int position, long headerId);
   }
 
   public StickyRecyclerHeadersTouchListener(final RecyclerView recyclerView,

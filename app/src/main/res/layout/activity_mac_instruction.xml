@@ -66,6 +66,7 @@
         android:layout_height="wrap_content"
         android:gravity="left|center_vertical"
         android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         android:textColor="@color/pay_title_text_color"
         android:textSize="@dimen/font_size_normal"
         android:text="@string/answer_two"/>

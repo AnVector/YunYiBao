@@ -13,7 +13,8 @@ import android.view.View;
 public class ScrollSmoothLineaerLayoutManager extends LinearLayoutManager {
     private final int duration;
 
-    public ScrollSmoothLineaerLayoutManager(Context context, int orientation, boolean reverseLayout, int duration) {
+    public ScrollSmoothLineaerLayoutManager(Context context, int orientation, boolean
+            reverseLayout, int duration) {
         super(context, orientation, reverseLayout);
         this.duration = duration;
     }
@@ -27,7 +28,7 @@ public class ScrollSmoothLineaerLayoutManager extends LinearLayoutManager {
         try {
             super.onLayoutChildren(recycler, state);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -42,7 +43,8 @@ public class ScrollSmoothLineaerLayoutManager extends LinearLayoutManager {
     }
 
     @Override
-    public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
+    public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int
+            position) {
         View firstVisibleChild = recyclerView.getChildAt(0);
         int itemHeight = firstVisibleChild.getHeight();
         int currentPosition = recyclerView.getChildLayoutPosition(firstVisibleChild);
@@ -50,7 +52,8 @@ public class ScrollSmoothLineaerLayoutManager extends LinearLayoutManager {
         if (distanceInPixels == 0) {
             distanceInPixels = (int) Math.abs(firstVisibleChild.getY());
         }
-        SmoothScroller smoothScroller = new SmoothScroller(recyclerView.getContext(), distanceInPixels, duration);
+        SmoothScroller smoothScroller = new SmoothScroller(recyclerView.getContext(),
+                distanceInPixels, duration);
         smoothScroller.setTargetPosition(position);
         startSmoothScroll(smoothScroller);
     }
@@ -63,7 +66,8 @@ public class ScrollSmoothLineaerLayoutManager extends LinearLayoutManager {
         public SmoothScroller(Context context, int distanceInPixels, int duration) {
             super(context);
             this.distanceInPixels = distanceInPixels;
-            float millisecondsPerPx = calculateSpeedPerPixel(context.getResources().getDisplayMetrics());
+            float millisecondsPerPx = calculateSpeedPerPixel(context.getResources()
+                    .getDisplayMetrics());
             this.duration = distanceInPixels < TARGET_SEEK_SCROLL_DISTANCE_PX ?
                     (int) (Math.abs(distanceInPixels) * millisecondsPerPx) : duration;
         }

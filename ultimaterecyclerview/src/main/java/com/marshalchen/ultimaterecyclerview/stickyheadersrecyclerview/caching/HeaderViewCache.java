@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
-import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.caching.*;
 import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.util.OrientationProvider;
 
 /**

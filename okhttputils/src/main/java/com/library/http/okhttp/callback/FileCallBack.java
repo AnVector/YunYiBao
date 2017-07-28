@@ -85,12 +85,14 @@ public abstract class FileCallBack extends Callback<File>
                 if (is != null) is.close();
             } catch (IOException e)
             {
+                e.printStackTrace();
             }
             try
             {
                 if (fos != null) fos.close();
             } catch (IOException e)
             {
+                e.printStackTrace();
             }
 
         }

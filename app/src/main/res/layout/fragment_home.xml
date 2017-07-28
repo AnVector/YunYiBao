@@ -32,17 +32,17 @@
             <include layout="@layout/toolbar"/>
 
             <FrameLayout
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="-35dp"
                 android:layout_width="240dp"
-                android:layout_height="240dp">
+                android:layout_height="240dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="-35dp">
 
                 <com.anyihao.ayb.ui.WSCircleRotate
                     android:id="@+id/load_rotate"
-                    android:layout_gravity="center"
-                    android:visibility="gone"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:visibility="gone"/>
 
                 <LinearLayout
                     android:id="@+id/network_ll"
@@ -111,8 +111,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:gravity="center"
                 android:layout_marginTop="-30dp"
+                android:gravity="center"
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_size_fif"/>
 
@@ -185,6 +185,7 @@
         <com.marshalchen.ultimaterecyclerview.UltimateRecyclerView
             android:id="@+id/ultimate_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            app:recyclerviewScrollbars="vertical"/>
     </LinearLayout>
 </FrameLayout>

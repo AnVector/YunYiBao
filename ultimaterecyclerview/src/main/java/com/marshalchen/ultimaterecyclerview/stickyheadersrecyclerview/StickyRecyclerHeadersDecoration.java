@@ -7,13 +7,13 @@ import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.View;
 
-import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.*;
-import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.HeaderPositionCalculator;
 import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.caching.HeaderProvider;
 import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.caching.HeaderViewCache;
-import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.calculation.DimensionCalculator;
+import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.calculation
+        .DimensionCalculator;
 import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.rendering.HeaderRenderer;
-import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.util.LinearLayoutOrientationProvider;
+import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.util
+        .LinearLayoutOrientationProvider;
 import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.util.OrientationProvider;
 
 public class StickyRecyclerHeadersDecoration extends RecyclerView.ItemDecoration {

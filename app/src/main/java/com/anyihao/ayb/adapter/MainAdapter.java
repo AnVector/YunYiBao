@@ -35,7 +35,6 @@ public class MainAdapter extends UAdapter<WifiInfoBean> {
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
 
-//        ((InformationViewHolder)holder).tvId.setText(position);
         super.onBindViewHolder(holder, position);
         if (bp && holder instanceof MainViewHolder) {
             WifiInfoBean content = mData.get((hasHeaderView() ? position - 1 : position));
@@ -46,21 +45,8 @@ public class MainAdapter extends UAdapter<WifiInfoBean> {
             } else {
                 ((MainViewHolder) holder).mIcConnect.setVisibility(View.GONE);
             }
-//            changeLeftIcon(((MainViewHolder) holder).tvTitle, ((MainViewHolder) holder)
-//                    .getContext(), R.drawable.ic_wifi_left);
-
         }
     }
-
-//    private void changeLeftIcon(TextView tv, Context context, int drawableId) {
-//        Drawable lefeIcon;
-//        Resources res = context.getResources();
-//        lefeIcon = res.getDrawable(drawableId);
-//        //调用setCompoundDrawables时，必须调用Drawable.setBounds()方法,否则图片不显示
-//        lefeIcon.setBounds(0, 0, lefeIcon.getMinimumWidth(), lefeIcon.getMinimumHeight());
-//        tv.setCompoundDrawablePadding(19);
-//        tv.setCompoundDrawables(lefeIcon, null, null, null); //设置左图标
-//    }
 
     private class MainViewHolder extends UltimateRecyclerviewViewHolder {
 

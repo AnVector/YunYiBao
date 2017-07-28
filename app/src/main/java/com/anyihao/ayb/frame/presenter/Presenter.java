@@ -50,11 +50,12 @@ public class Presenter extends PresenterCompat {
                     @Override
                     public void onError(Call call, final Exception e, int id) {
                         LogUtils.e(e.toString());
-                        if (mHandler != null && getView() != null) {
+                        final IView view = getView();
+                        if (mHandler != null && view != null) {
                             mHandler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    getView().onFailure(e.toString(), task.getPage(), task
+                                    view.onFailure(e.toString(), task.getPage(), task
                                             .getActionType());
                                 }
                             });
@@ -63,11 +64,12 @@ public class Presenter extends PresenterCompat {
 
                     @Override
                     public void onResponse(final String response, int id) {
-                        if (mHandler != null && getView() != null) {
+                        final IView view = getView();
+                        if (mHandler != null && view != null) {
                             mHandler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    getView().onSuccess(response, task.getPage(), task
+                                    view.onSuccess(response, task.getPage(), task
                                             .getActionType());
                                 }
                             });

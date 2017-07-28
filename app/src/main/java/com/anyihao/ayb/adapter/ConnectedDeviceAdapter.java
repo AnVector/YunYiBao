@@ -1,13 +1,17 @@
 package com.anyihao.ayb.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.ConnectedUserBean.DataBean;
+import com.anyihao.ayb.ui.CropCircleTransformation;
+import com.bumptech.glide.Glide;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
 
 import java.util.List;
@@ -42,8 +46,20 @@ public class ConnectedDeviceAdapter extends UAdapter<DataBean> {
                 ((ConnectedDeviceListViewHolder) holder).space.setVisibility(View.VISIBLE);
                 ((ConnectedDeviceListViewHolder) holder).line.setVisibility(View.GONE);
             }
+            Context context = ((ConnectedDeviceListViewHolder) holder).getContext();
+            if (context != null) {
+                Glide.with(context)
+                        .load(content.getAvatar())
+                        .crossFade()
+                        .bitmapTransform(new CropCircleTransformation(context))
+                        .placeholder(R.drawable.user_profile)
+                        .into(((ConnectedDeviceListViewHolder) holder).mImageView);
+            }
             ((ConnectedDeviceListViewHolder) holder).tvUserName.setText(content.getNickname());
             ((ConnectedDeviceListViewHolder) holder).tvOnlineDevice.setText(content.getDevice());
+            if (position == mData.size() - 1) {
+                ((ConnectedDeviceListViewHolder) holder).line.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -51,6 +67,7 @@ public class ConnectedDeviceAdapter extends UAdapter<DataBean> {
 
         public TextView tvUserName;
         public TextView tvOnlineDevice;
+        public ImageView mImageView;
         public View line;
         public View space;
 
@@ -58,6 +75,7 @@ public class ConnectedDeviceAdapter extends UAdapter<DataBean> {
             super(itemView);
             tvUserName = (TextView) itemView.findViewById(R.id.tv_user_name);
             tvOnlineDevice = (TextView) itemView.findViewById(R.id.tv_online_device);
+            mImageView = (ImageView) itemView.findViewById(R.id.iv_user_profile);
             line = itemView.findViewById(R.id.line);
             space = itemView.findViewById(R.id.space);
         }

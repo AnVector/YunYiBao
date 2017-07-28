@@ -4,7 +4,6 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
 import okhttp3.Headers;
 import okhttp3.Interceptor;

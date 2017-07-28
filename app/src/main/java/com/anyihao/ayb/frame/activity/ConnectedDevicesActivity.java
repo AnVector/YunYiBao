@@ -133,7 +133,9 @@ public class ConnectedDevicesActivity extends ABaseActivity {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-                phoneNum = o.toString();
+                if (o instanceof DataBean) {
+                    phoneNum = ((DataBean) o).getPhoneNumber();
+                }
                 if (bottomDialog != null) {
                     bottomDialog.show();
                 }

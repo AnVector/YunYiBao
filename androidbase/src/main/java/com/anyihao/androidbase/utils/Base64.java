@@ -229,7 +229,7 @@ public class Base64 {
 	 * little faster.
 	 * @return A BASE64 encoded array. Never <code>null</code>.
 	 */
-	public final static String encodeToString(byte[] sArr, boolean lineSep)
+	public static String encodeToString(byte[] sArr, boolean lineSep)
 	{
 		// Reuse char[] since we can't create a String incrementally anyway and StringBuffer/Builder would be slower.
 		return new String(encodeToChar(sArr, lineSep));
@@ -242,7 +242,7 @@ public class Base64 {
 	 * little faster.
 	 * @return A BASE64 encoded array. Never <code>null</code>.
 	 */
-	public final static char[] encodeToChar(byte[] sArr, boolean lineSep)
+	public static char[] encodeToChar(byte[] sArr, boolean lineSep)
 	{
 		// Check special case
 		int sLen = sArr != null ? sArr.length : 0;

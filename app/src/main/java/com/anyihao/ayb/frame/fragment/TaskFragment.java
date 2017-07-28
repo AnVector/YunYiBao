@@ -44,9 +44,7 @@ import com.anyihao.ayb.ui.CropCircleTransformation;
 import com.bumptech.glide.Glide;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
-import com.orhanobut.dialogplus.OnCancelListener;
 import com.orhanobut.dialogplus.OnClickListener;
-import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
 
 import java.util.ArrayList;
@@ -279,25 +277,9 @@ public class TaskFragment extends ABaseFragment {
             }
         };
 
-        OnDismissListener dismissListener = new OnDismissListener() {
-            @Override
-            public void onDismiss(DialogPlus dialog) {
-//                ToastUtils.showLongToast(getActivity(), "dismiss");
-            }
-        };
-
-        OnCancelListener cancelListener = new OnCancelListener() {
-            @Override
-            public void onCancel(DialogPlus dialog) {
-//                ToastUtils.showLongToast(getActivity(), "cancel");
-            }
-        };
-
         final DialogPlus dialog = DialogPlus.newDialog(getActivity())
                 .setContentHolder(holder)
                 .setGravity(Gravity.CENTER)
-                .setOnDismissListener(dismissListener)
-                .setOnCancelListener(cancelListener)
                 .setCancelable(true)
                 .setOnClickListener(clickListener)
                 .setContentWidth(ViewGroup.LayoutParams.WRAP_CONTENT)

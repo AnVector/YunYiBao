@@ -68,7 +68,7 @@ public class JPushReceiver extends BroadcastReceiver {
                 Logger.d("[MyReceiver] Unhandled intent - " + intent.getAction());
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 

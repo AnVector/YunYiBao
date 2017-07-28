@@ -35,6 +35,7 @@ import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,24 +71,32 @@ public class PayActivity extends ABaseActivity {
     private String expires;
     private String packageID;
     private String topupType = "ALIPAY";
+    private UHandler mHandler = new UHandler(this);
 
     private static final int SDK_PAY_FLAG = 0x0001;
     private static final int REQUEST_PAY_RESULT_CODE = 0x0007;
     public static final int RESULT_PAY_CODE = 0x0010;
 
-    Handler mHandler = new Handler() {
+    private static class UHandler extends Handler {
+        private WeakReference<PayActivity> mActivity;
+
+        private UHandler(PayActivity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case SDK_PAY_FLAG:
-                    handleAlipayResult((Map<String, String>) msg.obj);
+                    if (mActivity.get() != null) {
+                        mActivity.get().handleAlipayResult((Map<String, String>) msg.obj);
+                    }
                     break;
                 default:
                     break;
             }
         }
 
-    };
-
+    }
     private void handleAlipayResult(Map<String, String> result) {
         if (result == null)
             return;

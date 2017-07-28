@@ -19,7 +19,6 @@
         android:visibility="gone"/>
 
     <View
-        android:id="@+id/line"
         style="@style/divider_line"/>
 
     <RelativeLayout

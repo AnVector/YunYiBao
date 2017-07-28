@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.anyihao.ayb.R;
-import com.anyihao.ayb.ui.pagetransformer.DepthPageTransformer;
 
 import butterknife.BindView;
 

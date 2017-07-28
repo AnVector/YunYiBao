@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewStub;
 
-import com.marshalchen.ultimaterecyclerview.ui.VerticalSwipeRefreshLayout;
 import com.marshalchen.ultimaterecyclerview.ui.floatingactionbutton.FloatingActionButton;
 
 import in.srain.cube.views.ptr.PtrFrameLayout;

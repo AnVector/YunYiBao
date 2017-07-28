@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
 /**
@@ -46,6 +45,7 @@ public class WSCircleRotate extends View {
     private static final int DEFAULT_BALL_RADIUS = 4;
 
     private static final float DEFAULT_BALL_START_ANGLE = -0.25f * DEGREE_360;
+
     public WSCircleRotate(Context context) {
         this(context, null);
     }
@@ -102,7 +102,8 @@ public class WSCircleRotate extends View {
         centerY = h / 2;
 
         //处理padding情况
-        mRadius = (int) (Math.min(centerX - getPaddingLeft(), centerX - getPaddingRight()) * RADIUS_RATIO);
+        mRadius = (int) (Math.min(centerX - getPaddingLeft(), centerX - getPaddingRight()) *
+                RADIUS_RATIO);
 
     }
 
@@ -118,10 +119,12 @@ public class WSCircleRotate extends View {
 
         mBallPaint.setAlpha(ALPHA_255);
         mBallPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        ballX = centerX + mRadius * (float) Math.cos(Math.toRadians(DEFAULT_BALL_START_ANGLE + mValueAnimator * DEGREE_360));
-        ballY = centerY + mRadius * (float) Math.sin(Math.toRadians(DEFAULT_BALL_START_ANGLE + mValueAnimator * DEGREE_360));
+        ballX = centerX + mRadius * (float) Math.cos(Math.toRadians(DEFAULT_BALL_START_ANGLE +
+                mValueAnimator * DEGREE_360));
+        ballY = centerY + mRadius * (float) Math.sin(Math.toRadians(DEFAULT_BALL_START_ANGLE +
+                mValueAnimator * DEGREE_360));
 
-        canvas.drawCircle(ballX,ballY,dip2px(DEFAULT_BALL_RADIUS), mBallPaint);
+        canvas.drawCircle(ballX, ballY, dip2px(DEFAULT_BALL_RADIUS), mBallPaint);
     }
 
 
@@ -147,8 +150,8 @@ public class WSCircleRotate extends View {
         });
     }
 
-    public void stopAnimator(){
-        if(animator!=null){
+    public void stopAnimator() {
+        if (animator != null && animator.isRunning()) {
             animator.end();
         }
     }

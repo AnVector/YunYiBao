@@ -26,6 +26,7 @@ import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.chaychan.viewlib.PowerfulEditText;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,22 +58,35 @@ public class SetPwdActivity extends ABaseActivity {
     private String verifyCode;
     private String setPwd;
     private String checkPwd;
+    private UHandler mHandler = new UHandler(this);
 
-    private Handler mHandler = new Handler() {
+    private static class UHandler extends Handler {
+        private WeakReference<SetPwdActivity> mActivity;
+
+        private UHandler(SetPwdActivity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case TIMER_TICK:
-                    handleTimerTick();
+                    if (mActivity.get() != null) {
+                        mActivity.get().handleTimerTick();
+                    }
                     break;
                 case TIMER_TICK_FINISHED:
-                    handleTimerTickFinished();
+                    if (mActivity.get() != null) {
+                        mActivity.get().handleTimerTickFinished();
+                    }
                     break;
                 default:
                     break;
             }
         }
-    };
+    }
+
+    ;
 
     @Override
     protected int getContentViewId() {

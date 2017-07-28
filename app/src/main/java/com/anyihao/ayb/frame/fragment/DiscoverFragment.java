@@ -39,7 +39,6 @@ import com.amap.api.maps2d.model.MyLocationStyle;
 import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
-import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.MerchantListBean;
 import com.anyihao.ayb.bean.MerchantListBean.DataBean;

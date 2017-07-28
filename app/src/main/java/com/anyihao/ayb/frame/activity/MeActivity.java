@@ -46,6 +46,7 @@ import org.json.JSONArray;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -103,6 +104,7 @@ public class MeActivity extends ABaseActivity {
     private static final int REQUEST_CODE_CHOOSE = 0x0006;
     private boolean isGender = true;
     private String depositMoney;
+    private UHandler mHandler = new UHandler(this);
 
     @Override
     protected int getContentViewId() {
@@ -118,32 +120,42 @@ public class MeActivity extends ABaseActivity {
         userType = intent.getStringExtra("userType");
     }
 
-    private Handler mHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MSG_LOAD_DATA:
-                    if (thread == null) {//如果已创建就不再重新创建子线程了
-                        thread = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // 写子线程中的操作,解析省市区数据
-                                initCity();
-                            }
-                        });
-                        thread.start();
-                    }
-                    break;
-                case MSG_LOAD_SUCCESS:
-                    isLoaded = true;
-                    break;
-                case MSG_LOAD_FAILED:
-                    isLoaded = false;
-                    break;
-                default:
-                    break;
-            }
+    private static class UHandler extends Handler {
+        private WeakReference<MeActivity> mActivity;
+
+        private UHandler(MeActivity activity) {
+            this.mActivity = new WeakReference<>(activity);
         }
-    };
+
+        public void handleMessage(Message msg) {
+            final MeActivity activity = mActivity.get();
+            if (mActivity != null) {
+                switch (msg.what) {
+                    case MSG_LOAD_DATA:
+                        if (activity.thread == null) {//如果已创建就不再重新创建子线程了
+                            activity.thread = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // 写子线程中的操作,解析省市区数据
+                                    activity.initCity();
+                                }
+                            });
+                            activity.thread.start();
+                        }
+                        break;
+                    case MSG_LOAD_SUCCESS:
+                        activity.isLoaded = true;
+                        break;
+                    case MSG_LOAD_FAILED:
+                        activity.isLoaded = false;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+        }
+    }
 
     @Override
     protected void initData() {

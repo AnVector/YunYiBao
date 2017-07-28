@@ -3,8 +3,6 @@ package com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.util;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.util.*;
-
 /**
  * OrientationProvider for ReyclerViews who use a LinearLayoutManager
  */

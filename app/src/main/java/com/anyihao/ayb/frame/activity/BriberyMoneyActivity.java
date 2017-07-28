@@ -3,6 +3,7 @@ package com.anyihao.ayb.frame.activity;
 import android.content.Intent;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -11,7 +12,6 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
-import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.ResultBean;
@@ -69,7 +69,7 @@ public class BriberyMoneyActivity extends ABaseActivity {
         toolbarTitleRight.setTextColor(getResources().getColor(R.color.light_gray));
 
         if (type == 0) {
-            if (!StringUtils.isEmpty(phoneNum)) {
+            if (!TextUtils.isEmpty(phoneNum)) {
                 edtUserName.setText(phoneNum);
             }
         }
@@ -96,15 +96,15 @@ public class BriberyMoneyActivity extends ABaseActivity {
                 String userName = edtUserName.getText().toString().trim();
                 String data = edtDataAmount.getText().toString().trim();
                 String remark = edtRemark.getText().toString().trim();
-                if (StringUtils.isEmpty(userName)) {
+                if (TextUtils.isEmpty(userName)) {
                     ToastUtils.showToast(getApplicationContext(), "请输入手机号");
                     return;
                 }
-                if (StringUtils.isEmpty(data)) {
+                if (TextUtils.isEmpty(data)) {
                     ToastUtils.showToast(getApplicationContext(), "请输入要转赠的流量值");
                     return;
                 }
-                if (StringUtils.isEmpty(remark)) {
+                if (TextUtils.isEmpty(remark)) {
                     remark = "";
                 }
                 present(userName, data, remark);
@@ -152,6 +152,5 @@ public class BriberyMoneyActivity extends ABaseActivity {
                 finish();
             }
         }
-
     }
 }

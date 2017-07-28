@@ -11,7 +11,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
-import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Parcelable;
 import android.provider.Settings;
@@ -61,6 +60,7 @@ import com.anyihao.ayb.frame.activity.MessageActivity;
 import com.anyihao.ayb.frame.activity.RechargeActivity;
 import com.anyihao.ayb.frame.activity.RentedDevicesActivity;
 import com.anyihao.ayb.frame.activity.ScanActivity;
+import com.anyihao.ayb.frame.activity.WebActivity;
 import com.anyihao.ayb.listener.OnItemClickListener;
 import com.anyihao.ayb.ui.WSCircleRotate;
 import com.anyihao.ayb.ui.WaitingDots.DilatingDotsProgressBar;
@@ -80,7 +80,6 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -125,9 +124,8 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
     protected LinearLayoutManager layoutManager;
     private String mPassword;
     private int mProgress;
-    private String mAlias;
     private List<WifiInfoBean> mData = new ArrayList<>();
-    private NetWorkReceiver mNetworkReceiver;
+    private UNetWorkReceiver mNetworkReceiver;
     private boolean isLogin;
     private String aliasName;
     private boolean isConnected;
@@ -136,11 +134,12 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
     private CountDownTimer mCountDownTimer;
 
 
-    private class NetWorkReceiver extends BroadcastReceiver {
+    private class UNetWorkReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
             // 这个监听wifi的打开与关闭，与wifi的连接无关
-            if (WifiManager.WIFI_STATE_CHANGED_ACTION.equals(intent.getAction())) {
+            if (WifiManager.WIFI_STATE_CHANGED_ACTION.equals(action)) {
                 int wifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, 0);
                 switch (wifiState) {
                     case WifiManager.WIFI_STATE_DISABLED:
@@ -156,15 +155,13 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                         break;
                     default:
                         break;
-
-
                 }
             }
             // 这个监听wifi的连接状态即是否连上了一个有效无线路由，当上边广播的状态是WifiManager
             // .WIFI_STATE_DISABLING，和WIFI_STATE_DISABLED的时候，根本不会接到这个广播。
             // 在上边广播接到广播是WifiManager.WIFI_STATE_ENABLED状态的同时也会接到这个广播，
             // 当然刚打开wifi肯定还没有连接到有效的无线
-            if (WifiManager.NETWORK_STATE_CHANGED_ACTION.equals(intent.getAction())) {
+            if (WifiManager.NETWORK_STATE_CHANGED_ACTION.equals(action)) {
                 Parcelable parcelableExtra = intent
                         .getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
                 if (null != parcelableExtra) {
@@ -180,7 +177,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
             // 这个监听网络连接的设置，包括wifi和移动数据的打开和关闭。.
             // 最好用的还是这个监听。wifi如果打开，关闭，以及连接上可用的连接都会接到监听。见log
             // 这个广播的最大弊端是比上边两个广播的反应要慢，如果只是要监听wifi，我觉得还是用上边两个配合比较合适
-            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
+            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(action)) {
                 ConnectivityManager manager = (ConnectivityManager) context
                         .getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo activeNetwork = manager.getActiveNetworkInfo();
@@ -224,13 +221,13 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
         progress.setDotColor(Color.parseColor("#d6d7dc"));
         progress.show();
         getUserInfo();
-        if(loading){
+        if (loading) {
             startAnimation();
         }
     }
 
-    private void initTimer(){
-        mCountDownTimer = new CountDownTimer(120*1000, 10*1000) {
+    private void initTimer() {
+        mCountDownTimer = new CountDownTimer(120 * 1000, 10 * 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 getSsidPwd();
@@ -245,10 +242,12 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
         };
     }
 
-    private void startAnimation(){
+    private void startAnimation() {
         progress.setDotColors(Color.parseColor("#5dc1ff"), Color.parseColor("#b1e1fe"));
-        progress.show();
-        progress.setVisibility(View.VISIBLE);
+        if (progress != null) {
+            progress.show();
+            progress.setVisibility(View.VISIBLE);
+        }
         imvWifi.setImageDrawable(mContext.getResources().getDrawable(R.drawable
                 .ic_connecting));
         tvStatus.setText("设备连网中");
@@ -258,29 +257,56 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
         loadRotate.startAnimator();
     }
 
-    private void setConnectSuccess(){
+    private void setConnectSuccess(String ssid) {
         isConnected = true;
-        progress.hide();
-        progress.setVisibility(View.GONE);
-        loadRotate.setVisibility(View.GONE);
-        imvWifi.setImageDrawable(mContext.getResources().getDrawable(R.drawable
-                .ic_connected));
-        tvSsid.setText(mContext.getString(R.string.IEBox));
-        tvStatus.setText("已连接");
-        tvStatus.setTextColor(Color.parseColor("#2DA8F4"));
+        aliasName = ssid.replace("\"", "");
+        if (progress != null) {
+            progress.hide();
+            progress.setVisibility(View.GONE);
+        }
+        if (loadRotate != null) {
+            loadRotate.setVisibility(View.GONE);
+        }
+        if (imvWifi != null) {
+            imvWifi.setImageDrawable(mContext.getResources().getDrawable(R.drawable
+                    .ic_connected));
+        }
+        if (tvSsid != null) {
+            tvSsid.setText(mContext.getString(R.string.IEBox));
+            tvSsid.setVisibility(View.VISIBLE);
+        }
+        if (tvStatus != null) {
+            tvStatus.setText("已连接");
+            tvStatus.setTextColor(Color.parseColor("#2DA8F4"));
+        }
+
     }
 
-    private void resetConnection(){
+    private void resetConnection() {
         isConnected = false;
-        progress.setDotColor(Color.parseColor("#d6d7dc"));
-        progress.show();
-        loadRotate.stopAnimator();
-        loadRotate.setVisibility(View.GONE);
-        imvWifi.setImageDrawable(mContext.getResources().getDrawable(R.drawable
-                .ic_disconnected));
-        tvSsid.setVisibility(View.INVISIBLE);
-        tvStatus.setText("未连接");
-        tvStatus.setTextColor(Color.parseColor("#999999"));
+        if (progress != null) {
+            progress.setDotColor(Color.parseColor("#d6d7dc"));
+            progress.show();
+        }
+        if (loadRotate != null) {
+            loadRotate.stopAnimator();
+            loadRotate.setVisibility(View.GONE);
+        }
+
+        if (imvWifi != null) {
+            imvWifi.setImageDrawable(mContext.getResources().getDrawable(R.drawable
+                    .ic_disconnected));
+        }
+
+        if (tvSsid != null) {
+            tvSsid.setVisibility(View.INVISIBLE);
+        }
+
+        if (tvStatus != null) {
+            tvStatus.setText("未连接");
+            tvStatus.setTextColor(Color.parseColor("#999999"));
+        }
+
     }
 
     private List<WifiInfoBean> getIWifiList() {
@@ -299,7 +325,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
             if (ele.SSID.toUpperCase().contains("IEBOX")) {
                 bean = new WifiInfoBean();
                 bean.setSsid(ele.SSID);
-                if (!TextUtils.isEmpty(ssid) && ssid.contains(ele.SSID)) {
+                if (!TextUtils.isEmpty(ssid) && ssid.replace("\"", "").equals(ele.SSID)) {
                     bean.setConnected(true);
                 } else {
                     bean.setConnected(false);
@@ -316,10 +342,12 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                 .ACCESS_COARSE_LOCATION};
         if (EasyPermissions.hasPermissions(mContext, permissions)) {
             mWifiList = getIWifiList();
-            if (mWifiList != null&&!mWifiList.isEmpty()) {
-                mData.clear();
-                mData.addAll(mWifiList);
+            mAdapter.removeAllInternal(mData);
+            if (mWifiList != null && !mWifiList.isEmpty()) {
+                mAdapter.insert(mWifiList);
                 mAdapter.notifyDataSetChanged();
+            } else {
+                mRecyclerView.showEmptyView();
             }
             getConnectWifi();
         } else {
@@ -331,20 +359,39 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
     private void getConnectWifi() {
         String ssid = WifiInfoManager.getInstance(mContext).getSSid();
         if (!TextUtils.isEmpty(ssid)) {
-            if (ssid.contains("IeBox")) {
-                setConnectSuccess();
+            if (ssid.toUpperCase().contains("IEBOX")) {
+                setConnectSuccess(ssid);
+            } else {
+                resetConnection();
             }
+            updateWifiList();
+        }
+    }
+
+    private void updateWifiList() {
+        if (mRecyclerView == null)
+            return;
+        mWifiList = getIWifiList();
+        mAdapter.removeAllInternal(mData);
+        if (mWifiList != null && !mWifiList.isEmpty()) {
+            mAdapter.insert(mWifiList);
+            mAdapter.notifyDataSetChanged();
+            mRecyclerView.setRefreshing(false);
+            layoutManager.scrollToPosition(0);
+            mRecyclerView.hideEmptyView();
+        } else {
+            mAdapter.notifyDataSetChanged();
+            mRecyclerView.setRefreshing(false);
+            layoutManager.scrollToPosition(0);
+            mRecyclerView.showEmptyView();
         }
     }
 
     private void wifiClosed() {
-        isConnected = true;
-        imvWifi.setImageDrawable(mContext.getResources().getDrawable(R.drawable
-                .ic_disconnected));
-        tvSsid.setVisibility(View.GONE);
-        progress.show();
-        tvStatus.setText("未连接");
-        tvStatus.setTextColor(Color.parseColor("#999999"));
+        resetConnection();
+        mData.clear();
+        mAdapter.notifyDataSetChanged();
+        mRecyclerView.showEmptyView();
     }
 
     private void initNetWorkStateReceiver() {
@@ -352,7 +399,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
         filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
         filter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
         filter.addAction("android.net.wifi.STATE_CHANGE");
-        mNetworkReceiver = new NetWorkReceiver();
+        mNetworkReceiver = new UNetWorkReceiver();
         mContext.registerReceiver(mNetworkReceiver, filter);
     }
 
@@ -360,6 +407,8 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
         mRecyclerView.setHasFixedSize(false);
         mAdapter = new MainAdapter(mData, R.layout.item_main);
         layoutManager = new LinearLayoutManager(mContext);
+        mRecyclerView.setEmptyView(R.layout.main_empty_view, UltimateRecyclerView
+                .EMPTY_CLEAR_ALL);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -475,9 +524,9 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                     return;
                 }
                 if (o instanceof WifiInfoBean) {
-                    if(loading){
+                    if (loading) {
                         ToastUtils.showToast(mContext.getApplicationContext(), "设备连网中，请稍后重试");
-                    }else {
+                    } else {
                         aliasName = ((WifiInfoBean) o).getSsid();
                         getSsidPwd();
                     }
@@ -500,17 +549,6 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
         });
     }
 
-    private void updateWifiList() {
-        mWifiList = getIWifiList();
-        if (mWifiList != null&&!mWifiList.isEmpty()) {
-            mData.clear();
-            mData.addAll(mWifiList);
-            mAdapter.notifyDataSetChanged();
-            mRecyclerView.setRefreshing(false);
-            layoutManager.scrollToPosition(0);
-        }
-    }
-
     private void showAdvertisement(List<DataBean> advertisement) {
         for (int i = 0; i < advertisement.size(); i++) {
             View ll_content = View.inflate(mContext, R.layout.item_flipper, null);
@@ -520,7 +558,23 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                 public void onClick(View v) {
                     Object object = v.getTag();
                     if (object instanceof DataBean) {
-//                        ToastUtils.showToast(mContext, "" + ((DataBean) object).getType());
+                        String type = ((DataBean) object).getType();
+                        if (!TextUtils.isEmpty(type)) {
+                            switch (type) {
+                                case "URL":
+                                    Intent intent = new Intent(mContext, WebActivity.class);
+                                    intent.putExtra("url", ((DataBean) object).getLinkUrl());
+                                    intent.putExtra("title", ((DataBean) object).getTitle());
+                                    startActivity(intent);
+                                    break;
+                                case "PAY":
+                                    break;
+                                case "SHR":
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
                     }
                 }
             });
@@ -534,7 +588,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
 
 
     private void getSsidPwd() {
-        if(TextUtils.isEmpty(aliasName))
+        if (TextUtils.isEmpty(aliasName))
             return;
         Map<String, String> params = new HashMap<>();
         params.put("cmd", "WIFIPWD");
@@ -618,7 +672,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
             TextView tvPassword = (TextView) holder.getInflatedView().findViewById(R.id
                     .tv_password);
             tvCopy.setText(getString(R.string.copy_password));
-            tvPassword.setText("密码获取成功，选择相应的WIFI热点名称，点击进入" + mAlias + "，长按密码框，粘贴密码即可上网");
+            tvPassword.setText("密码获取成功，选择相应的WIFI热点名称，点击进入" + aliasName + "，长按密码框，粘贴密码即可上网");
         } else {
             TextView tvTitle = (TextView) holder.getInflatedView().findViewById(R.id.dia_title);
             Button btnLeft = (Button) holder.getInflatedView().findViewById(R.id.btn_cancel);
@@ -696,7 +750,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                 case 200://WIFI密码获取成功
                     mPassword = bean.getPassword();
                     onGetPwdSuccess();
-                    if(loading){
+                    if (loading) {
                         resetConnection();
                         loading = false;
                     }
@@ -705,7 +759,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                     onGetPwdFailure();
                     break;
                 case 500:
-                    if(mCountDownTimer!=null&&!loading){
+                    if (mCountDownTimer != null && !loading) {
                         mCountDownTimer.start();
                         startAnimation();
                         loading = true;
@@ -802,13 +856,12 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
 
 
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onDestroy() {
+        super.onDestroy();
         if (mNetworkReceiver != null) {
             mContext.unregisterReceiver(mNetworkReceiver);
         }
-
-        if(mCountDownTimer!=null){
+        if (mCountDownTimer != null) {
             ToastUtils.showToast(mContext.getApplicationContext(), "CountDownTimer canceled");
             mCountDownTimer.cancel();
         }

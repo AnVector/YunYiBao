@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
-import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.QuestionsAdapter;

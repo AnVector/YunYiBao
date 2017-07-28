@@ -1,10 +1,7 @@
 package com.marshalchen.ultimaterecyclerview.ui.header;
 
-import android.widget.RelativeLayout;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Rect;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
