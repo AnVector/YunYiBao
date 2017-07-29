@@ -658,4 +658,12 @@ public class MeActivity extends ABaseActivity {
         progressbarCircular.setVisibility(View.GONE);
         super.onFailure(error, page, actionType);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mHandler!=null){
+            mHandler.removeCallbacksAndMessages(null);
+        }
+    }
 }

@@ -397,9 +397,9 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     public void onDestroy() {
         super.onDestroy();
         mAmap = null;
-        if (mMapView == null)
-            return;
-        mMapView.onDestroy();
+        if (mMapView != null){
+            mMapView.onDestroy();
+        }
         if (mLocationClient != null) {
             mLocationClient.onDestroy();
         }

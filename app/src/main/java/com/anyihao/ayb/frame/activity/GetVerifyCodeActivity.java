@@ -346,8 +346,12 @@ public class GetVerifyCodeActivity extends ABaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mCountDownTimer == null)
-            return;
-        mCountDownTimer.cancel();
+        if (mCountDownTimer != null){
+            mCountDownTimer.cancel();
+        }
+        if(mHandler!=null){
+            mHandler.removeCallbacksAndMessages(null);
+        }
+
     }
 }

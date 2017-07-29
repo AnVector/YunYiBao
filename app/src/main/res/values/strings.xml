@@ -1,5 +1,4 @@
 <resources>
-    <string name="company">翰隆科技</string>
     <string name="app_name">云逸宝</string>
     <string name="timer_seconds">跳过&#160;%1$ds</string>
     <string name="home">首页</string>
@@ -42,8 +41,6 @@
     <string name="recharge_record">充值记录</string>
     <string name="invite_friends">邀请好友</string>
     <string name="help_center">使用帮助</string>
-    <string name="data_flow_exchange">我要兑换</string>
-    <string name="exchange_flow">兑换流量</string>
     <string name="exchange_flow_hint">请输入邀请码/兑换码</string>
     <string name="ok">确定</string>
     <string name="male">男</string>
@@ -201,10 +198,7 @@
     <string name="device_on">已开启</string>
     <string name="device_off">未开启</string>
     <!--connected device list-->
-    <string name="device_of_mine">本机</string>
-    <string name="device_of_unknown">未知设备</string>
     <string name="cancle">取消</string>
-    <string name="defriend">拉黑用户</string>
     <string name="init_data_flow">0M</string>
 
     <!--RdoCash ratio-->
@@ -215,10 +209,6 @@
     <string name="percent">占比</string>
     <string name="total">合计</string>
     <string name="search">查询</string>
-    <string name="picker_time">时间选择器</string>
-    <string name="picker_province">条件选择器</string>
-    <string name="picker_custom_time">时间选择器自定义布局</string>
-    <string name="picker_custom_province">条件选择器自定义布局</string>
     <string name="start_time">起始时间：</string>
     <string name="end_time">截止时间：</string>
     <string name="channel">渠道:</string>
@@ -227,7 +217,6 @@
     <string name="client_id_hint">请输入客户端编号</string>
     <string name="type_of_service">业务类型：</string>
     <string name="loading">正在加载中，请稍后&#8230;</string>
-    <string name="no_data">暂无消息&#8230;</string>
     <string name="all_channel">全部</string>
     <string name="AEE_channel">AEE</string>
     <string name="except_AEE_channel">非AEE</string>
@@ -247,7 +236,6 @@
     <string name="cancel">取消</string>
     <!--Authorization device-->
     <string name="authorization_device">授权设备</string>
-    <string name="no_authorization_device">暂无授权设备</string>
     <string name="add_authorization_device">添加授权设备</string>
     <string name="unbind_auth_device">解除授权</string>
     <!--say hi-->
@@ -262,7 +250,6 @@
     <string name="gift_history">转赠记录</string>
     <string name="data_amount_hint">请输入转赠的流量（10M的倍数）</string>
     <!--QR scan-->
-    <string name="manual_input_validation_code">手动输入验证码</string>
     <string name="invite_code_hint">您的邀请码为：</string>
 
     <!--about us-->
@@ -275,14 +262,11 @@
     <!--system record details-->
     <string name="record_details">记录详情</string>
     <string name="system_gift">系统赠送</string>
-    <string name="data_gift">赠送流量</string>
     <string name="expires">截止日期</string>
     <string name="gift_time">赠送时间</string>
     <!--merchat privilege-->
     <string name="merchat_privilege">商家特权</string>
     <string name="direction_for_use">使用说明</string>
-    <string name="unrented_devices">未租设备</string>
-    <string name="renting_devices">已租设备</string>
     <string name="confirm_to_return">确认归还</string>
     <!--add auth device-->
     <string name="add_auth_device">添加授权设备</string>
@@ -299,7 +283,6 @@
     <string name="red_envelope">红包</string>
     <string name="congratulations">恭喜获得流量红包一个！</string>
     <string name="unfold_it">拆开它</string>
-    <string name="use_expires">使用期限：2017.05.05&#8211;2017.06.05</string>
     <string name="fried_name">%1$s的红包</string>
     <string name="already_saved">已存入余量</string>
     <string name="go_to_account">查看我的流量</string>
@@ -333,11 +316,8 @@
     <string name="QR_scan_hint">对准二维码，将会自动扫描</string>
     <!--exchange details-->
     <string name="describe_content">开启网络，点击相应的WIFI获取上网密码，获取密码前，请确保已绑定上网设备（手机、Pad、笔记本电脑）的Mac地址</string>
-    <string name="exchange_method">兑换方法：</string>
     <string name="exchange">兑换</string>
     <string name="exchange_details">兑换详情</string>
-    <!--rent history-->
-    <string name="rent_history">租赁记录</string>
     <!--certification-->
     <string name="mobile_certification">手机验证</string>
     <string name="user_certification">实名认证</string>
@@ -346,10 +326,6 @@
     <string name="name_input_hint">请输入您的姓名</string>
     <string name="identification_input_hint">请输入身份证号</string>
     <string name="authentication">实名认证</string>
-    <!--deposite-->
-    <string name="cash_pledge">押金（可退还）</string>
-    <string name="cash_pledge_hint">首次缴纳押金赠送1G全国流量，7天有效。\n租赁设备不产生费用（不限时长），退还押金需扣除2元手续费</string>
-    <string name="deposit_hint">首次租赁赠送1G流量</string>
     <!--authentication finished-->
     <string name="authentication_finished_hint">认证成功，赠您1G流量，7天有效</string>
     <string name="surf_the_internet">去上网</string>
@@ -367,27 +343,5 @@
     <string name="answer_one">以Windows 7为例，点击“开始”菜单，在“搜索程序和文件”输入框，输入“cmd”（会找到进入dos命令的cmd程序)，然后点击回车，弹出命令符窗口，输入“ipconfig/all”，然后进行回车，就会看到一连串的返回信息。回车后，弹出命令符窗口，输入“ipconfig/all”，然后进行回车，就会看到一连串的返回信息。在返回信息中，找到“本地连接”其中的物理地址（Physical Address），即为本机的mac地址。</string>
     <string name="question_two">3：如何查看Pad的Mac地址？</string>
     <string name="answer_two">选择【设置】-【关于】-【状态信息】-【WLAN MAC地址】即可查看。</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_login">Sign in</string>
-
-
-    <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">Contacts permissions are needed for providing email
-        completions.</string>
     <string name="progress_on_loading">加载中&#8230;</string>
-    <string name="delete_toolbar">delete</string>
-    <string name="add_toolbar">add</string>
-    <string name="empty_view_hint">No data here - This is the custom empty view</string>
-    <!--微信支付-->
-    <string name="pay_by_wx_title">通过微信支付</string>
-    <string name="pay_by_wxap">服务器端签名微信支付</string>
 </resources>

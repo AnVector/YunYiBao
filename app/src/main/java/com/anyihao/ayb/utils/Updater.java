@@ -18,7 +18,7 @@ public class Updater {
      */
     private static final int STATUS_UN_FIND = -1;
 
-    private static Updater instance;
+    private volatile static Updater instance;
 
     private Updater() {
         //

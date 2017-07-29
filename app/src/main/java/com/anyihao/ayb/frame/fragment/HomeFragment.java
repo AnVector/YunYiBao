@@ -133,7 +133,6 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
     private boolean loading;
     private CountDownTimer mCountDownTimer;
 
-
     private class UNetWorkReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -157,10 +156,6 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                         break;
                 }
             }
-            // 这个监听wifi的连接状态即是否连上了一个有效无线路由，当上边广播的状态是WifiManager
-            // .WIFI_STATE_DISABLING，和WIFI_STATE_DISABLED的时候，根本不会接到这个广播。
-            // 在上边广播接到广播是WifiManager.WIFI_STATE_ENABLED状态的同时也会接到这个广播，
-            // 当然刚打开wifi肯定还没有连接到有效的无线
             if (WifiManager.NETWORK_STATE_CHANGED_ACTION.equals(action)) {
                 Parcelable parcelableExtra = intent
                         .getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
@@ -174,9 +169,6 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                     }
                 }
             }
-            // 这个监听网络连接的设置，包括wifi和移动数据的打开和关闭。.
-            // 最好用的还是这个监听。wifi如果打开，关闭，以及连接上可用的连接都会接到监听。见log
-            // 这个广播的最大弊端是比上边两个广播的反应要慢，如果只是要监听wifi，我觉得还是用上边两个配合比较合适
             if (ConnectivityManager.CONNECTIVITY_ACTION.equals(action)) {
                 ConnectivityManager manager = (ConnectivityManager) context
                         .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -228,6 +220,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
 
     private void initTimer() {
         mCountDownTimer = new CountDownTimer(120 * 1000, 10 * 1000) {
+
             @Override
             public void onTick(long millisUntilFinished) {
                 getSsidPwd();
@@ -235,14 +228,17 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
 
             @Override
             public void onFinish() {
-                resetConnection();
                 loading = false;
+                stopAnimation();
                 ToastUtils.showToast(mContext.getApplicationContext(), "设备上卡超时，请稍后重试");
             }
         };
     }
 
     private void startAnimation() {
+        if (mCountDownTimer != null) {
+            mCountDownTimer.start();
+        }
         progress.setDotColors(Color.parseColor("#5dc1ff"), Color.parseColor("#b1e1fe"));
         if (progress != null) {
             progress.show();
@@ -282,7 +278,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
 
     }
 
-    private void resetConnection() {
+    private void stopAnimation() {
         isConnected = false;
         if (progress != null) {
             progress.setDotColor(Color.parseColor("#d6d7dc"));
@@ -307,6 +303,9 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
             tvStatus.setTextColor(Color.parseColor("#999999"));
         }
 
+        if (mCountDownTimer != null && loading) {
+            mCountDownTimer.cancel();
+        }
     }
 
     private List<WifiInfoBean> getIWifiList() {
@@ -317,6 +316,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
         String ssid = WifiInfoManager.getInstance(mContext).getSSid();
         if (results == null || results.isEmpty())
             return null;
+//        Logger.d(results);
         List<WifiInfoBean> list = new ArrayList<>();
         WifiInfoBean bean;
         for (ScanResult ele : results) {
@@ -362,7 +362,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
             if (ssid.toUpperCase().contains("IEBOX")) {
                 setConnectSuccess(ssid);
             } else {
-                resetConnection();
+                stopAnimation();
             }
             updateWifiList();
         }
@@ -388,7 +388,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
     }
 
     private void wifiClosed() {
-        resetConnection();
+        stopAnimation();
         mData.clear();
         mAdapter.notifyDataSetChanged();
         mRecyclerView.showEmptyView();
@@ -651,7 +651,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
         params.put("cmd", "AUTHORIZEADD");
         params.put("uid", PreferencesUtils.getString(mContext.getApplicationContext(), "uid", ""));
         params.put("mac", DeviceUtils.getMacAddress(mContext));
-        params.put("remarks", "POHONE");
+        params.put("remarks", "PHONE");
         params.put("addStatus", "1");
         postForm(params, 1, 1);
     }
@@ -738,6 +738,8 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                 return;
             if (bean.getCode() == 200) {
                 ToastUtils.showToast(mContext.getApplicationContext(), "授权成功");
+            }else {
+                ToastUtils.showToast(mContext.getApplicationContext(), bean.getMsg());
             }
         }
 
@@ -751,7 +753,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                     mPassword = bean.getPassword();
                     onGetPwdSuccess();
                     if (loading) {
-                        resetConnection();
+                        stopAnimation();
                         loading = false;
                     }
                     break;
@@ -759,8 +761,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                     onGetPwdFailure();
                     break;
                 case 500:
-                    if (mCountDownTimer != null && !loading) {
-                        mCountDownTimer.start();
+                    if (!loading) {
                         startAnimation();
                         loading = true;
                     }
@@ -862,7 +863,6 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
             mContext.unregisterReceiver(mNetworkReceiver);
         }
         if (mCountDownTimer != null) {
-            ToastUtils.showToast(mContext.getApplicationContext(), "CountDownTimer canceled");
             mCountDownTimer.cancel();
         }
     }

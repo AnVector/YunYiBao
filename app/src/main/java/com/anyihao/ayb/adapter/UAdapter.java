@@ -21,7 +21,7 @@ public class UAdapter<T> extends UltimateViewAdapter {
     protected int layoutId = -1;
     protected int headerId = -1;
     protected boolean bp;
-    private OnItemClickListener mOnItemClickListener;
+    protected OnItemClickListener mOnItemClickListener;
 
 
     public UAdapter(List<T> data) {

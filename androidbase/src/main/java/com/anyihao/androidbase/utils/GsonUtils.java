@@ -30,26 +30,26 @@ public class GsonUtils {
         return singleton;
     }
 
-    public <T> T transitionToBean(String jsonString,Class<T> T){
-        return (T) gson.fromJson(jsonString, T);
+    public <T> T transitionToBean(String jsonString, Class<T> T) {
+        return gson.fromJson(jsonString, T);
     }
 
-    public String transitionToString(Object obj){
+    public String transitionToString(Object obj) {
         return gson.toJson(obj);
     }
 
-    public <T> List<T> transitionToList(String jsonString, Class<T> cls){
-        return  gson.fromJson(jsonString, new TypeToken<List<T>>() {
+    public <T> List<T> transitionToList(String jsonString, Class<T> cls) {
+        return gson.fromJson(jsonString, new TypeToken<List<T>>() {
         }.getType());
     }
 
-    public <T> List<Map<String, T>> transitionToListMaps(String jsonString){
+    public <T> List<Map<String, T>> transitionToListMaps(String jsonString) {
         return gson.fromJson(jsonString,
                 new TypeToken<List<Map<String, T>>>() {
                 }.getType());
     }
 
-    public <T> Map<String, T> transitionToMaps(String jsonString){
+    public <T> Map<String, T> transitionToMaps(String jsonString) {
 
         return gson.fromJson(jsonString, new TypeToken<Map<String, T>>() {
         }.getType());

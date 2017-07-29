@@ -14,7 +14,7 @@ def static String releaseVName() {
 
 //定义versionCode
 def static int releaseVCode() {
-    return 1
+    return 7
 }
 
 def gitVersionCode() {
@@ -113,6 +113,7 @@ android {
         htmlReport true
         // 写入报告的路径，它是可选的（默认为构建目录下的 lint-results.html ）
         htmlOutput file("lint-report.html")
+        disable 'TypographyFractions','TypographyQuotes'
     }
 
 
@@ -280,4 +281,6 @@ dependencies {
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.1.6'
     //JSBridge
     compile 'com.github.lzyzsd:jsbridge:1.0.4'
+    compile project(':okhttputils')
+    compile project(':ultimaterecyclerview')
 }

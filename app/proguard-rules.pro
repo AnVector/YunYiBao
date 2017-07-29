@@ -389,6 +389,7 @@ public static final ** CREATOR;
 -keepattributes *Annotation*,InnerClasses
 #保护反射
 -keepattributes EnclosingMethod
+-keepattributes InnerClasses
 #保护签名
 -keepattributes Signature
 #抛出异常时保留代码行号

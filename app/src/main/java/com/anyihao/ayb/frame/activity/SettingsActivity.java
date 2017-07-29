@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import cn.jpush.android.api.JPushInterface;
 
 public class SettingsActivity extends ABaseActivity {
 
@@ -233,25 +234,9 @@ public class SettingsActivity extends ABaseActivity {
             }
         };
 
-        OnDismissListener dismissListener = new OnDismissListener() {
-            @Override
-            public void onDismiss(DialogPlus dialog) {
-//                ToastUtils.showLongToast(getActivity(), "dismiss");
-            }
-        };
-
-        OnCancelListener cancelListener = new OnCancelListener() {
-            @Override
-            public void onCancel(DialogPlus dialog) {
-//                ToastUtils.showLongToast(getActivity(), "cancel");
-            }
-        };
-
         final DialogPlus dialog = DialogPlus.newDialog(this)
                 .setContentHolder(holder)
                 .setGravity(Gravity.CENTER)
-                .setOnDismissListener(dismissListener)
-                .setOnCancelListener(cancelListener)
                 .setCancelable(true)
                 .setInAnimation(R.anim.fade_in_center)
                 .setOutAnimation(R.anim.fade_out_center)
@@ -271,6 +256,7 @@ public class SettingsActivity extends ABaseActivity {
                 return;
             if (bean.getCode() == 200) {
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg());
+                JPushInterface.deleteAlias(this, -1);
                 PreferencesUtils.putString(getApplicationContext(), "uid", "");
                 PreferencesUtils.putString(getApplicationContext(), "userType", "");
                 PreferencesUtils.putBoolean(getApplicationContext(), "isLogin", false);

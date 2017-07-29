@@ -225,5 +225,8 @@ public class SplashActivity extends ABaseActivity {
         if (mCountDownTimer != null) {
             mCountDownTimer.cancel();
         }
+        if(mHandler!=null){
+            mHandler.removeCallbacksAndMessages(null);
+        }
     }
 }

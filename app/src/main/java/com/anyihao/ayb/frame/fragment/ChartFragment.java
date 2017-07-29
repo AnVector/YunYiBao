@@ -54,7 +54,6 @@ public class ChartFragment extends ABaseFragment {
     LineChart chart;
     @BindView(R.id.progressbar_circular)
     CircularProgressBar progressbarCircular;
-    private Typeface mTf;
     private String cmd;
     private String time;
     private LineDataSet mLineDataSet;
@@ -82,7 +81,6 @@ public class ChartFragment extends ABaseFragment {
     }
 
     private void initChart() {
-        mTf = Typeface.createFromAsset(getContext().getAssets(), "fonts/OpenSans-Regular.ttf");
         chart.getDescription().setEnabled(false);
         chart.setDrawGridBackground(false);
         chart.setTouchEnabled(true);
@@ -92,7 +90,6 @@ public class ChartFragment extends ABaseFragment {
         chart.setNoDataTextColor(Color.parseColor("#b5b5b5"));
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setTypeface(mTf);
         xAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
         xAxis.setAvoidFirstLastClipping(true);
         xAxis.setDrawLabels(true);
@@ -107,7 +104,6 @@ public class ChartFragment extends ABaseFragment {
 //        xAxis.setAxisLineColor(Color.parseColor("#F5F5F5"));
 
         YAxis leftAxis = chart.getAxisLeft();
-        leftAxis.setTypeface(mTf);
         leftAxis.setLabelCount(3, false);
         leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
         leftAxis.setDrawGridLines(false);
@@ -118,7 +114,6 @@ public class ChartFragment extends ABaseFragment {
         leftAxis.setTextSize(10f);
 
         YAxis rightAxis = chart.getAxisRight();
-        rightAxis.setTypeface(mTf);
         rightAxis.setLabelCount(3, false);
         rightAxis.setDrawGridLines(false);
         rightAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)

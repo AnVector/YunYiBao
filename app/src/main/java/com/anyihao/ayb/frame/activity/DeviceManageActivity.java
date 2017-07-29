@@ -3,7 +3,6 @@ package com.anyihao.ayb.frame.activity;
 import android.content.Intent;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.anyihao.androidbase.mvp.Task;
@@ -28,9 +26,10 @@ import com.anyihao.ayb.bean.ResultBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.listener.OnItemClickListener;
+import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
+import com.marshalchen.ultimaterecyclerview.ui.emptyview.emptyViewOnShownListener;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
-import com.orhanobut.dialogplus.OnCancelListener;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
@@ -48,18 +47,13 @@ public class DeviceManageActivity extends ABaseActivity {
     TextView toolbarTitleMid;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.recyclerview)
-    RecyclerView recyclerview;
     @BindView(R.id.btn_add_auth_device)
     AppCompatButton btnAddAuthDevice;
-    @BindView(R.id.ic_error)
-    ImageView icError;
-    @BindView(R.id.tv_hint)
-    TextView tvHint;
     @BindView(R.id.toolbar_title_right)
     TextView toolbarTitleRight;
-    @BindView(R.id.rl_empty)
-    LinearLayout rlEmpty;
+    protected LinearLayoutManager layoutManager;
+    @BindView(R.id.ultimate_recycler_view)
+    UltimateRecyclerView recyclerView;
     private AuthDeviceAdapter mAdapter;
     private List<DataBean> mData = new ArrayList<>();
     public static final int REQUEST_ADD_AUTH_DEVICE_CODE = 0X00006;
@@ -82,12 +76,33 @@ public class DeviceManageActivity extends ABaseActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         toolbarTitleMid.setText(getString(R.string.authorization_device));
-        mAdapter = new AuthDeviceAdapter(this, R.layout.item_auth_device);
-        recyclerview.setAdapter(mAdapter);
-        recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager
-                .VERTICAL, false));
-        rlEmpty.setVisibility(View.GONE);
+        initUltimateRV();
         getAuthorizedDevices();
+    }
+
+    private void initUltimateRV() {
+        mAdapter = new AuthDeviceAdapter(mData, R.layout.item_auth_device);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        mAdapter.setEmptyViewPolicy(UltimateRecyclerView.EMPTY_SHOW_LOADMORE_ONLY);
+        recyclerView.setEmptyView(R.layout.empty_view, UltimateRecyclerView
+                .EMPTY_CLEAR_ALL, new emptyViewOnShownListener() {
+            @Override
+            public void onEmptyViewShow(View mView) {
+                if (mView == null)
+                    return;
+                ImageView imvError = (ImageView) mView.findViewById(R.id.ic_error);
+                TextView tvHint = (TextView) mView.findViewById(R.id.tv_hint);
+                if (imvError != null) {
+                    imvError.setImageDrawable(getResources().getDrawable(R.drawable
+                            .ic_no_binding_devices));
+                }
+                if (tvHint != null) {
+                    tvHint.setText("暂无授权设备");
+                }
+            }
+        });
+        recyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -123,6 +138,11 @@ public class DeviceManageActivity extends ABaseActivity {
 
     }
 
+    private void refresh(List<DataBean> beans){
+        mAdapter.removeAllInternal(mData);
+        mAdapter.insert(beans);
+    }
+
     private void getAuthorizedDevices() {
         Map<String, String> params = new HashMap<>();
         params.put("cmd", "AUTHORIZELIST");
@@ -154,7 +174,6 @@ public class DeviceManageActivity extends ABaseActivity {
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
-
         if (actionType == 0) {
             AuthorizedDeviceListBean bean = GsonUtils.getInstance().transitionToBean(result,
                     AuthorizedDeviceListBean.class);
@@ -162,17 +181,13 @@ public class DeviceManageActivity extends ABaseActivity {
                 return;
             if (bean.getCode() == 200) {
                 List<DataBean> beans = bean.getData();
-                mAdapter.remove(0, mData.size());
-                mData.clear();
                 if (beans.size() > 0) {
-                    mData.addAll(beans);
-                    mAdapter.add(0, mData.size(), mData);
-                } else {
-                    icError.setImageDrawable(getResources().getDrawable(R.drawable.no_auth_device));
-                    tvHint.setText("暂无授权设备");
-                    rlEmpty.setVisibility(View.VISIBLE);
+                    refresh(beans);
+                }else {
+                    recyclerView.showEmptyView();
                 }
             } else {
+                recyclerView.showEmptyView();
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg());
             }
         }
@@ -230,22 +245,13 @@ public class DeviceManageActivity extends ABaseActivity {
         OnDismissListener dismissListener = new OnDismissListener() {
             @Override
             public void onDismiss(DialogPlus dialog) {
-//                ToastUtils.showLongToast(getActivity(), "dismiss");
-            }
-        };
-
-        OnCancelListener cancelListener = new OnCancelListener() {
-            @Override
-            public void onCancel(DialogPlus dialog) {
-//                ToastUtils.showLongToast(getActivity(), "cancel");
             }
         };
 
         final DialogPlus dialog = DialogPlus.newDialog(this)
                 .setContentHolder(holder)
-                .setGravity(Gravity.CENTER)
                 .setOnDismissListener(dismissListener)
-                .setOnCancelListener(cancelListener)
+                .setGravity(Gravity.CENTER)
                 .setCancelable(true)
                 .setOnClickListener(clickListener)
                 .setContentHeight(DensityUtils.dp2px(this, 195))

@@ -80,13 +80,15 @@ public class MainActivity extends ABaseActivity {
         public void dispatchMessage(Message msg) {
             switch (msg.what) {
                 case NETWORK_CHANGED:
-                    if(mActivity.get()!=null){
-                        ToastUtils.showToast(mActivity.get().getApplicationContext(), "msg.obj=" + msg.obj.toString());
+                    if (mActivity.get() != null) {
+                        ToastUtils.showToast(mActivity.get().getApplicationContext(), "msg.obj="
+                                + msg.obj.toString());
                     }
                     break;
                 case NETWORK_DISCONNECTED:
-                    if(mActivity.get()!=null){
-                        ToastUtils.showToast(mActivity.get().getApplicationContext(), "安逸宝WIFI设备连接已断开");
+                    if (mActivity.get() != null) {
+                        ToastUtils.showToast(mActivity.get().getApplicationContext(),
+                                "安逸宝WIFI设备连接已断开");
                     }
                     break;
                 default:
@@ -94,7 +96,9 @@ public class MainActivity extends ABaseActivity {
                     break;
             }
         }
-    };
+    }
+
+    ;
     private IBinder.DeathRecipient mDeathRecipient = new IBinder.DeathRecipient() {
         @Override
         public void binderDied() {
@@ -181,12 +185,7 @@ public class MainActivity extends ABaseActivity {
         ButtonClick click = new ButtonClick();
         //这里添加JS的交互事件，这样H5就可以调用原生的代码
         mWebview.addJavascriptInterface(click, click.toString());
-        mWebview.loadUrl("file:///android_asset/android&h5Text0.html"); //加载assets文件中的H5页面
-
-//        ((ActivityPresenter)PresenterFactory.getInstance().createPresenter(this)).getData
-// ("http://192.168.1.102:8080/file_list.json?dir=vdg",0,0);
-//        ((ActivityPresenter)PresenterFactory.getInstance().createPresenter(this)).getData
-// ("http://192.168.1.102:8080/vad",0,0);
+//        mWebview.loadUrl("file:///android_asset/android&h5Text0.html"); //加载assets文件中的H5页面
     }
 
     @Override
@@ -211,10 +210,10 @@ public class MainActivity extends ABaseActivity {
                 if (file.exists()) {
                     PresenterFactory.getInstance().createPresenter(MainActivity.this)
                             .execute(new Task.TaskBuilder().setTaskType(TaskType.Method.PUT)
-                            .setUrl("http://192.168.1.102:8080/vad")
-                            .setFile(file)
-                            .setPage(1)
-                            .createTask());
+                                    .setUrl("http://192.168.1.102:8080/vad")
+                                    .setFile(file)
+                                    .setPage(1)
+                                    .createTask());
                 }
             }
         });
@@ -273,6 +272,9 @@ public class MainActivity extends ABaseActivity {
         }
         if (mIsBound) {
             unbindService(mWifiManagerConnection);
+        }
+        if(mHandler!=null){
+            mHandler.removeCallbacksAndMessages(null);
         }
         super.onDestroy();
     }

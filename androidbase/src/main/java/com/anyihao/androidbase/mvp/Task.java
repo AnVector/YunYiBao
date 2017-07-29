@@ -136,7 +136,7 @@ public class Task implements Serializable {
 
     public static class TaskBuilder {
         @NonNull
-        private String taskType;
+        private String taskType = TaskType.Method.POST;
         @Nullable
         private String url = null;
         @Nullable
@@ -145,7 +145,7 @@ public class Task implements Serializable {
         @Nullable
         private File file = null;
         @NonNull
-        private Object actionType;
+        private Object actionType = 0;
         @Nullable
         private Map<String, String> params;
 

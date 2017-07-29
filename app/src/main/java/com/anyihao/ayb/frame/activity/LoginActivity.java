@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
+import cn.jpush.android.api.JPushInterface;
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 import fr.castorflex.android.circularprogressbar.CircularProgressDrawable;
 
@@ -160,7 +161,7 @@ public class LoginActivity extends ABaseActivity {
 
     private void loginByMobile() {
         if (!validate()) {
-            onLoginFailed("请输入用户名或密码");
+           ToastUtils.showToast(getApplicationContext(), "请输入用户名或密码");
             return;
         }
         btnLogin.setEnabled(false);
@@ -255,34 +256,22 @@ public class LoginActivity extends ABaseActivity {
         }
     }
 
-    private void onLoginFailed(String message) {
-        btnLogin.setEnabled(true);
-        if (StringUtils.isEmpty(message))
-            return;
-        if (message.contains("ConnectException")) {
-            ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
-        } else if (message.contains("404")) {
-            ToastUtils.showToast(getApplicationContext(), "未知异常");
-        } else {
-            ToastUtils.showToast(getApplicationContext(), message);
-        }
-    }
-
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
         ((CircularProgressDrawable) progressbarCircular.getIndeterminateDrawable()).stop();
         progressbarCircular.setVisibility(View.GONE);
+        btnLogin.setEnabled(true);
         LoginBean bean = GsonUtils.getInstance().transitionToBean(result, LoginBean
                 .class);
         if (bean == null)
             return;
         if (bean.getCode() == 200) {
             if (bean.getBindStatus() == 1) {
-                btnLogin.setEnabled(true);
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg());
                 PreferencesUtils.putString(getApplicationContext(), "uid", bean.getUid());
                 PreferencesUtils.putString(getApplicationContext(), "userType", bean.getUserType());
                 PreferencesUtils.putBoolean(getApplicationContext(), "isLogin", true);
+                JPushInterface.setAlias(this, -1, bean.getUid());
                 finish();
             } else {
                 Intent intent = new Intent(LoginActivity.this, GetVerifyCodeActivity.class);
@@ -294,7 +283,7 @@ public class LoginActivity extends ABaseActivity {
             }
 
         } else {
-            onLoginFailed(bean.getMsg());
+            ToastUtils.showToast(getApplicationContext(), bean.getMsg());
         }
     }
 
@@ -302,7 +291,8 @@ public class LoginActivity extends ABaseActivity {
     public void onFailure(String error, int page, Integer actionType) {
         ((CircularProgressDrawable) progressbarCircular.getIndeterminateDrawable()).stop();
         progressbarCircular.setVisibility(View.GONE);
-        onLoginFailed(error);
+        btnLogin.setEnabled(true);
+        super.onFailure(error, page, actionType);
     }
 
     @Override

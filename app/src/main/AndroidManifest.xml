@@ -381,10 +381,6 @@
             android:launchMode="singleTop">
         </activity>
         <activity
-            android:name=".frame.activity.ModifyDeviceInfoActivity"
-            android:launchMode="singleTop">
-        </activity>
-        <activity
             android:name=".frame.activity.FeedbackActivity"
             android:launchMode="singleTop">
         </activity>

@@ -75,7 +75,7 @@ public class CustomViewfinderView extends ViewfinderView {
         } else {
             //  paint.setAlpha(SCANNER_ALPHA[scannerAlpha]);
             //  scannerAlpha = (scannerAlpha + 1) % SCANNER_ALPHA.length;
-            int middle = frame.height() / 2 + frame.top;
+//            int middle = frame.height() / 2 + frame.top;
             laserLinePosition = laserLinePosition + 5;
             if (laserLinePosition > frame.height()) {
                 laserLinePosition = 0;

@@ -107,7 +107,7 @@ public class CreditActivity extends ABaseActivity {
         tvPoints = (NumberRunningTextView) headerView.findViewById(R.id.tv_points);
         if (tvPoints != null) {
             Typeface fontFace = Typeface.createFromAsset(getAssets(),
-                    "fonts/W13.TTF");
+                    "fonts/W13.ttc");
             tvPoints.setTypeface(fontFace);
             tvPoints.setContent(mCredit);
         }

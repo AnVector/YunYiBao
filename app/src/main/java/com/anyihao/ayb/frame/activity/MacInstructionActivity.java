@@ -61,8 +61,8 @@ public class MacInstructionActivity extends ABaseActivity {
         tvAnswer0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClipboardUtils.copyText(MacInstructionActivity.this, DeviceUtils.getMacAddress(MacInstructionActivity.this));
-                ToastUtils.showToast(MacInstructionActivity.this, "Mac地址复制成功");
+                ClipboardUtils.copyText(getApplicationContext(), DeviceUtils.getMacAddress(getApplicationContext()));
+                ToastUtils.showToast(getApplicationContext(), "Mac地址复制成功");
             }
         });
     }

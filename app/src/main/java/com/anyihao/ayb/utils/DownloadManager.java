@@ -11,7 +11,7 @@ import android.os.Environment;
  */
 public class DownloadManager {
 
-    private static DownloadManager instance;
+    private volatile static DownloadManager instance;
 
     private android.app.DownloadManager mDownloadManager;
 

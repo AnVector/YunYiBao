@@ -122,7 +122,7 @@ public class WifiInfoManager {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < mWifiList.size(); i++) {
             stringBuilder
-                    .append("Index_" + (i + 1) + ":");
+                    .append("Index_").append(i + 1).append(":");
             // 将ScanResult信息转换成一个字符串包
             // 其中把包括：BSSID、SSID、capabilities、frequency、level
             stringBuilder.append((mWifiList.get(i)).toString());
