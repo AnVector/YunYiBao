@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:paddingBottom="32dp">
+        android:layout_marginBottom="32dp">
 
         <LinearLayout
             android:id="@+id/share_to_ll"
@@ -121,9 +121,9 @@
         android:id="@+id/ll_middle"
         android:layout_width="215dp"
         android:layout_height="106dp"
-        android:layout_above="@id/rl_bottom"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="38dp"
+        android:layout_marginBottom="170dp"
         android:background="@drawable/card_bg"
         android:orientation="vertical">
 
@@ -153,11 +153,14 @@
 
     <TextView
         android:id="@+id/tv_remind"
-        android:layout_width="wrap_content"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_above="@id/ll_middle"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/friends_margin_bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="32dp"
+        android:layout_marginBottom="322dp"
+        android:background="@drawable/remind_bg"
         android:gravity="center"
         android:rotation="-5"
         android:text="@string/remind_words"

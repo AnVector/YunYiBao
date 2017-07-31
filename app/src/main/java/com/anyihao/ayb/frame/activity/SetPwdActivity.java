@@ -86,8 +86,6 @@ public class SetPwdActivity extends ABaseActivity {
         }
     }
 
-    ;
-
     @Override
     protected int getContentViewId() {
         return R.layout.activity_set_pwd;
@@ -249,7 +247,13 @@ public class SetPwdActivity extends ABaseActivity {
         tvTimeTicker.setTextSize(16f);
         tvTimeTicker.setEnabled(true);
         tvTimeTicker.setTextColor(Color.parseColor("#2DA8F4"));
-//        tvTimeTicker.setBackground(null);
+    }
+
+    private void onVerificationFinished() {
+        if (mCountDownTimer != null) {
+            mCountDownTimer.cancel();
+        }
+        handleTimerTickFinished();
     }
 
     @Override
@@ -272,6 +276,7 @@ public class SetPwdActivity extends ABaseActivity {
                     .class);
             if (bean == null)
                 return;
+            onVerificationFinished();
             if (bean.getCode() == 200) {
                 register();
             } else {
@@ -300,10 +305,10 @@ public class SetPwdActivity extends ABaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mCountDownTimer != null){
+        if (mCountDownTimer != null) {
             mCountDownTimer.cancel();
         }
-        if(mHandler!=null){
+        if (mHandler != null) {
             mHandler.removeCallbacksAndMessages(null);
         }
     }

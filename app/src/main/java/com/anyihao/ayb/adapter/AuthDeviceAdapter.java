@@ -1,18 +1,14 @@
 package com.anyihao.ayb.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.anyihao.ayb.R;
-import com.anyihao.ayb.bean.AuthorizedDeviceListBean;
 import com.anyihao.ayb.bean.AuthorizedDeviceListBean.DataBean;
-import com.anyihao.ayb.bean.ConnectedUserBean;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
 
 import java.util.List;
@@ -50,7 +46,8 @@ public class AuthDeviceAdapter extends UAdapter<DataBean> {
             if (content == null) return;
             ((AuthDeviceViewHolder) holder).tvMacAddress.setText(content.getMac());
 
-            ((AuthDeviceViewHolder) holder).btnRelease.setOnClickListener(new View.OnClickListener() {
+            ((AuthDeviceViewHolder) holder).btnRelease.setOnClickListener(new View
+                    .OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mOnItemClickListener != null) {
@@ -75,7 +72,7 @@ public class AuthDeviceAdapter extends UAdapter<DataBean> {
             super(itemView);
             tvMacAddress = (TextView) itemView.findViewById(R.id.tv_device);
             btnRelease = (Button) itemView.findViewById(R.id.btn_release_auth);
-            line = itemView.findViewById(R.id.line);
+            line = itemView.findViewById(R.id.divider_line);
         }
     }
 }

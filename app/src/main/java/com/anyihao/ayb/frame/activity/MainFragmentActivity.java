@@ -97,7 +97,7 @@ public class MainFragmentActivity extends ABaseActivity {
                 .setUrl(GlobalConsts.PREFIX_URL)
                 .setParams(params)
                 .setPage(1)
-                .setActionType(1)
+                .setActionType(0)
                 .createTask());
     }
 
@@ -282,7 +282,7 @@ public class MainFragmentActivity extends ABaseActivity {
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
-        if (actionType == 1) {
+        if (actionType == 0) {
             VersionInfoBean bean = GsonUtils.getInstance().transitionToBean(result,
                     VersionInfoBean.class);
             if (bean == null)

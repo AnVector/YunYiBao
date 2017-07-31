@@ -60,7 +60,7 @@ public class GetVerifyCodeActivity extends ABaseActivity {
     private String userType;
     private UHandler mHandler = new UHandler(this);
 
-    private static class UHandler extends Handler{
+    private static class UHandler extends Handler {
 
         private WeakReference<GetVerifyCodeActivity> mActivity;
 
@@ -72,12 +72,12 @@ public class GetVerifyCodeActivity extends ABaseActivity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case TIMER_TICK:
-                    if(mActivity.get()!=null){
+                    if (mActivity.get() != null) {
                         mActivity.get().handleTimerTick();
                     }
                     break;
                 case TIMER_TICK_FINISHED:
-                    if(mActivity.get()!=null){
+                    if (mActivity.get() != null) {
                         mActivity.get().handleTimerTickFinished();
                     }
                     break;
@@ -85,7 +85,7 @@ public class GetVerifyCodeActivity extends ABaseActivity {
                     break;
             }
         }
-    };
+    }
 
     @Override
     protected int getContentViewId() {
@@ -243,7 +243,13 @@ public class GetVerifyCodeActivity extends ABaseActivity {
         tvTimeTicker.setTextSize(16f);
         tvTimeTicker.setEnabled(true);
         tvTimeTicker.setTextColor(Color.parseColor("#2DA8F4"));
-//        tvTimeTicker.setBackground(null);
+    }
+
+    private void onVerificationFinished() {
+        if (mCountDownTimer != null) {
+            mCountDownTimer.cancel();
+        }
+        handleTimerTickFinished();
     }
 
     @Override
@@ -270,6 +276,7 @@ public class GetVerifyCodeActivity extends ABaseActivity {
                 Intent intent;
                 switch (action) {
                     case "ORIGINAL":
+                        onVerificationFinished();
                         intent = new Intent(GetVerifyCodeActivity.this, GetVerifyCodeActivity
                                 .class);
                         intent.putExtra("action", "REBIND");
@@ -278,12 +285,14 @@ public class GetVerifyCodeActivity extends ABaseActivity {
                         startActivityForResult(intent, REQUEST_CODE);
                         break;
                     case "MODIFYPWD":
+                        onVerificationFinished();
                         intent = new Intent(GetVerifyCodeActivity.this, ResetPwdActivity
                                 .class);
                         intent.putExtra("phoneNo", phoneNum);
                         startActivityForResult(intent, REQUEST_CODE);
                         break;
                     case "REBIND":
+                        onVerificationFinished();
                         ToastUtils.showToast(getApplicationContext(), "新手机号绑定成功");
                         intent = new Intent();
                         intent.putExtra("result", 1);
@@ -291,12 +300,15 @@ public class GetVerifyCodeActivity extends ABaseActivity {
                         finish();
                         break;
                     case "BIND":
+                        onVerificationFinished();
                         bindMobile();
+                        break;
                     default:
                         break;
                 }
 
             } else {
+                onVerificationFinished();
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg());
             }
         }
@@ -346,12 +358,11 @@ public class GetVerifyCodeActivity extends ABaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mCountDownTimer != null){
+        if (mCountDownTimer != null) {
             mCountDownTimer.cancel();
         }
-        if(mHandler!=null){
+        if (mHandler != null) {
             mHandler.removeCallbacksAndMessages(null);
         }
-
     }
 }

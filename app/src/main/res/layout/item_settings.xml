@@ -8,11 +8,12 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_gravity="center_vertical"
+        android:background="@color/white"
         android:paddingLeft="15dp"
         android:paddingRight="15dp">
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -29,7 +30,7 @@
             android:src="@drawable/ic_right"/>
 
         <TextView
-            android:id="@+id/value"
+            android:id="@+id/tv_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -42,13 +43,11 @@
     </RelativeLayout>
 
     <View
-        android:id="@+id/line"
         style="@style/divider_line"/>
 
-    <View
+    <Space
         android:id="@+id/space"
         android:layout_width="match_parent"
         android:layout_height="15dp"
-        android:background="@color/app_background_color"
         android:visibility="gone"/>
 </LinearLayout>

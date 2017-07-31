@@ -8,11 +8,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.TransferListBean.DataBean;
 import com.anyihao.ayb.ui.CropCircleTransformation;
 import com.bumptech.glide.Glide;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
+import com.orhanobut.logger.Logger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,12 +31,6 @@ import java.util.Locale;
 
 public class TransferRecordAdapter extends UAdapter<DataBean> {
 
-    private Date mDate = new Date();
-    private String mCurrent;
-
-    {
-        mCurrent = getCurrentDate(mDate);
-    }
 
     public TransferRecordAdapter(List<DataBean> data, int layoutId) {
         super(data, layoutId);
@@ -64,23 +60,18 @@ public class TransferRecordAdapter extends UAdapter<DataBean> {
             if (content == null) return;
             Context context = ((TransferRecordViewHolder) holder).getContext();
             if (content.getCrtTm() != null) {
-                String[] arr = content.getCrtTm().split(" ");
-                if (arr.length > 0) {
-                    ((TransferRecordViewHolder) holder).tvWeekday.setText(getWeekOfDate
-                            (convertToDate(arr[0])));
-                    ((TransferRecordViewHolder) holder).tvTime.setText(arr[1]);
-                    String month = arr[0].substring(0, 7);
-                    if (!month.equals(mCurrent)) {
-                        ((TransferRecordViewHolder) holder).tvMonth.setText(month);
-                        ((TransferRecordViewHolder) holder).tvMonth.setVisibility(View.VISIBLE);
-                        ((TransferRecordViewHolder) holder).line.setVisibility(View.GONE);
-                        mCurrent = month;
-                    }
+                String[] date = content.getCrtTm().split(" ");
+                String week = null;
+                if (date[0].length() > 5) {
+                    week = getWeekOfDate(date[0]);
+                    ((TransferRecordViewHolder) holder).tvTime.setText(date[0].substring(5));
                 }
-
+                if (week != null) {
+                    ((TransferRecordViewHolder) holder).tvWeekday.setText(week);
+                }
             }
-            ((TransferRecordViewHolder) holder).tvDescription.setText(content
-                    .getNickname() + "-转流量");
+            ((TransferRecordViewHolder) holder).tvDescription.setText("向" + content
+                    .getNickname() + content.getTransferType());
             ((TransferRecordViewHolder) holder).tvPrice.setText("-" + content.getFlow());
             if (context != null) {
                 Glide.with(context)
@@ -93,6 +84,26 @@ public class TransferRecordAdapter extends UAdapter<DataBean> {
         }
     }
 
+    @Override
+    public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.stick_header_item, parent, false);
+        return new RecyclerView.ViewHolder(view) {
+        };
+    }
+
+    @Override
+    public void onBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        TextView textView = (TextView) viewHolder.itemView.findViewById(R.id.stick_text);
+        textView.setText(generateHeaderContent(position));
+    }
+
+    @Override
+    public long generateHeaderId(int position) {
+        Logger.d(position + " = " + getItemId(position));
+        return getItemId(position);
+    }
+
     /**
      * 获取指定日期是星期几
      * 参数为null时表示获取当前日期是星期几
@@ -100,20 +111,9 @@ public class TransferRecordAdapter extends UAdapter<DataBean> {
      * @param date
      * @return
      */
-    private String getWeekOfDate(Date date) {
-        if (date == null)
+    private String getWeekOfDate(String date) {
+        if (StringUtils.isEmpty(date))
             return null;
-        String[] weekOfDays = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        int w = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-        if (w < 0) {
-            w = 0;
-        }
-        return weekOfDays[w];
-    }
-
-    private Date convertToDate(String date) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
         Date d = null;
         try {
@@ -121,14 +121,56 @@ public class TransferRecordAdapter extends UAdapter<DataBean> {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return d;
+        if (d == null)
+            return null;
+        String[] weekOfDays = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(d);
+        int w = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        if (w < 0) {
+            w = 0;
+        }
+        return weekOfDays[w];
     }
 
-    private String getCurrentDate(Date date) {
-        if (date == null)
-            return null;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM", Locale.CHINA);
-        return dateFormat.format(date);
+    public long getItemId(int position) {
+        if (customHeaderView != null)
+            position--;
+        String date = "";
+        if (position >= 0 && position < mData.size()) {
+            date = mData.get(position).getCrtTm().substring(0, 6);
+        }
+        return (long) date.hashCode();
+    }
+
+    private String getNowMonth() {
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM", Locale.CHINA);
+        return sdf.format(date);
+    }
+
+    private String getNowYear() {
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy", Locale.CHINA);
+        return sdf.format(date);
+    }
+
+    private String generateHeaderContent(int position) {
+        if (customHeaderView != null)
+            position--;
+        String date = "";
+        if (position >= 0 && position < mData.size()) {
+            date = mData.get(position).getCrtTm().substring(0, 7);
+            if (date.equals(getNowMonth())) {
+                return "本月";
+            }
+            date = mData.get(position).getCrtTm().substring(0, 4);
+            if (date.equals(getNowYear())) {
+                return mData.get(position).getCrtTm().substring(4, 7) + "月";
+            }
+            return mData.get(position).getCrtTm().substring(0, 7);
+        }
+        return date;
     }
 
 

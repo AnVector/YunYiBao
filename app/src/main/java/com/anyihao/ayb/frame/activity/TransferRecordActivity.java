@@ -22,6 +22,8 @@ import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.listener.OnItemClickListener;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
+import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview
+        .StickyRecyclerHeadersDecoration;
 import com.marshalchen.ultimaterecyclerview.ui.emptyview.emptyViewOnShownListener;
 
 import java.util.ArrayList;
@@ -74,6 +76,9 @@ public class TransferRecordActivity extends ABaseActivity {
                 .item_recharge_record);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+        StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration
+                (mTransferAdapter);
+        recyclerView.addItemDecoration(headersDecor);
         recyclerView.setLoadMoreView(R.layout.custom_bottom_progressbar);
         recyclerView.setEmptyView(R.layout.empty_view, UltimateRecyclerView
                 .EMPTY_CLEAR_ALL, new emptyViewOnShownListener() {

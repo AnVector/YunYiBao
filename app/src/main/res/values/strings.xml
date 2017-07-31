@@ -55,27 +55,20 @@
     <string name="data_flow_charge">流量充值</string>
     <string name="me">我的</string>
     <string name="message_of_mine">我的消息</string>
-    <string name="linker_num">WIFI连接数</string>
-    <string name="linked_devices">已连接设备</string>
     <string name="pay_succeed">支付成功</string>
-    <string name="pay_failed">支付失败</string>
-    <string name="nick_name">昵称</string>
-    <string name="modify_device_info">修改设备信息</string>
     <string name="common_questions">常见问题</string>
     <string name="message_details">消息详情</string>
     <string name="recharge_record_details">充值记录详情</string>
     <string name="feedback">反馈</string>
     <string name="settings">设置</string>
-    <string name="device_num">设备编号</string>
-    <string name="retrieve_pwd">找回密码</string>
     <string name="reset_pwd">设置新密码</string>
-    <string name="verify_original_phone">验证原手机</string>
     <string name="register_by_phone">手机注册</string>
     <string name="set_login_pwd">设置登录密码</string>
     <string name="pay">支付</string>
-    <string name="device_list">设备列表</string>
     <string name="service_location">设备服务点</string>
     <string name="transfer_record">转赠记录</string>
+    <string name="summary">简介：</string>
+    <string name="device_no_hint">设备编号：%1$s</string>
 
     <!--user register-->
     <string name="phone_num_input_hint">请填写注册手机号</string>
@@ -86,7 +79,7 @@
     <string name="set_pwd">设置密码：</string>
     <string name="confirm_pwd">确认密码：</string>
     <string name="set_pwd_input_hint">6&#8211;16位字母、数字组合</string>
-    <string name="confirm_pwd_input_hint">确认新密码</string>
+    <string name="confirm_pwd_input_hint">确认密码</string>
     <string name="re_get_after_60s">&#160;%1$ds后重新获取</string>
 
     <!--retrieve password-->
@@ -98,17 +91,11 @@
     <string name="bind_the_phone">绑定手机</string>
 
     <!--bind device-->
-    <string name="device_bind_input_hint">请输入设备编号</string>
     <string name="confirm">确认</string>
-    <string name="bind_device">绑定设备</string>
 
     <!--messages details-->
 
     <!--settings-->
-    <string name="change_pwd">修改密码</string>
-    <string name="change_phone">修改手机</string>
-    <string name="suggestion">意见反馈</string>
-    <string name="contact_us">客服热线</string>
     <string name="logout">退出登录</string>
     <string name="not_login">未登录</string>
     <string name="logout_prompt">确认要退出登录么？</string>
@@ -125,7 +112,6 @@
     <string name="donate_data">转赠流量</string>
     <string name="lease_zone">租赁用户专区</string>
     <string name="normal_zone">普通用户专区</string>
-    <string name="signed">已签到</string>
 
     <!--modify self info-->
     <string name="save">保存</string>
@@ -140,28 +126,22 @@
     <string name="submit_feedback">提交</string>
 
     <!--recharge record details-->
-    <string name="price">-4.00</string>
     <string name="pay_success">交易成功</string>
 
     <!--payment result-->
     <string name="payment_suceess">恭喜，流量购买成功！</string>
-    <string name="payment_failed">对不起，流量购买失败！如有疑问可以联系我们的客服解决哦~~</string>
     <string name="purchase_amount">充值量：</string>
     <string name="period_of_validity">有效期：</string>
     <string name="fee">费用：</string>
     <string name="back_to_main">返回首页</string>
-    <string name="fee_value">&#165;99.00</string>
     <string name="goto_recharge_record">进入充值记录</string>
 
     <!--home-->
     <string name="connected">已连接</string>
     <string name="disconnected">未连接</string>
     <string name="power_of_battery">设备电量</string>
-    <string name="binding_devices">绑定设备数</string>
-    <string name="connected_devices_amount">WIFI连接数</string>
     <string name="leasing_equipment">租赁设备</string>
     <string name="my_devices">我的设备</string>
-    <string name="advertisement">流量大减价，一律两元！一律两元！</string>
     <string name="no_authenticate_device_hint">您没有授权任何设备，请先授权设备再连接</string>
     <string name="refuse_to_auth">拒绝</string>
     <string name="agree_to_auth">授权</string>
@@ -169,11 +149,6 @@
     <string name="surplus_amount">剩余：%1$s</string>
     <string name="message">消息</string>
     <string name="no_available_wifi">附近暂无可用WIFI</string>
-    <!--empty view-->
-    <string name="no_network">亲，网络不给力啊&#8230;</string>
-    <string name="no_message">暂无消息哦&#8230;</string>
-    <string name="no_recharge_record">您还没有充值记录&#8230;</string>
-    <string name="no_binding_devices">您还没有绑定的设备&#8230;</string>
 
     <!--pay page-->
     <string name="order_details">订单详情</string>
@@ -193,10 +168,6 @@
     <string name="recharge_nick_name">昵称：%1$s</string>
     <string name="data_available">当前剩余流量：%1$s</string>
 
-    <!--bond device list-->
-    <string name="device_name">AYM-100201</string>
-    <string name="device_on">已开启</string>
-    <string name="device_off">未开启</string>
     <!--connected device list-->
     <string name="cancle">取消</string>
     <string name="init_data_flow">0M</string>

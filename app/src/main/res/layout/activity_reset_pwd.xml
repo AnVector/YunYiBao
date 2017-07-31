@@ -83,7 +83,7 @@
             android:background="@null"
             android:drawableRight="@drawable/edit_text_selector"
             android:gravity="left|center_vertical"
-            android:hint="@string/new_pwd_hint"
+            android:hint="@string/confirm_pwd_input_hint"
             android:inputType="textPassword"
             android:maxLines="1"
             android:paddingRight="15dp"

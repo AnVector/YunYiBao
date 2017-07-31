@@ -3,12 +3,13 @@ package com.anyihao.ayb.adapter;
 import android.content.Context;
 
 import com.anyihao.ayb.R;
+import com.anyihao.ayb.bean.KeyValueBean;
 
 /**
  * Created by Admin on 2017/4/7.
  */
 
-public class AboutUsAdapter extends RecyclerViewAdapter<String> {
+public class AboutUsAdapter extends RecyclerViewAdapter<KeyValueBean> {
 
 
     public AboutUsAdapter(Context context, int layoutId) {
@@ -16,24 +17,13 @@ public class AboutUsAdapter extends RecyclerViewAdapter<String> {
     }
 
     @Override
-    public void convert(ViewHolder holder, String s) {
-        holder.setText(R.id.title, s);
-        switch (s) {
-            case "当前版本":
-                holder.setText(R.id.value, "V2.0.0");
-                break;
-            case "客服电话":
-                holder.setText(R.id.value, "0571-7598279");
-                break;
-            case "微信公众号":
-                holder.setText(R.id.value, "云逸宝WIFI");
-                break;
-            case "官方网站":
-                holder.setText(R.id.value, "www.aybwifi.com");
-                holder.setVisible(R.id.line, false);
-                break;
-            default:
-                break;
+    public void convert(ViewHolder holder, KeyValueBean bean) {
+        if(bean == null)
+            return;
+        holder.setText(R.id.tv_title, bean.getTitle());
+        holder.setText(R.id.tv_value, bean.getValue());
+        if(holder.getLayoutPosition() == mDatas.size() -1){
+            holder.setVisible(R.id.divider_line, false);
         }
     }
 }

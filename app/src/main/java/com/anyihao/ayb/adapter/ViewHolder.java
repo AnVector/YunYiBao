@@ -42,7 +42,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         mContext = context;
         mConvertView = itemView;
         mPosition = position;
-        mViews = new SparseArray<View>();
+        mViews = new SparseArray<>();
         mConvertView.setTag(this);
 
     }

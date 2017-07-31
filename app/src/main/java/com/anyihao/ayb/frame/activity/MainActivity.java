@@ -98,7 +98,6 @@ public class MainActivity extends ABaseActivity {
         }
     }
 
-    ;
     private IBinder.DeathRecipient mDeathRecipient = new IBinder.DeathRecipient() {
         @Override
         public void binderDied() {
@@ -190,7 +189,7 @@ public class MainActivity extends ABaseActivity {
 
     @Override
     protected void initEvent() {
-        mColorBtn.setText("bindService");
+        mColorBtn.setText("");
         mColorBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

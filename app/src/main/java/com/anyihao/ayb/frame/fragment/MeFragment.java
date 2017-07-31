@@ -93,6 +93,11 @@ public class MeFragment extends ABaseFragment {
         toolbar.inflateMenu(R.menu.toolbar_menu);
         toolbarTitle.setText(mContext.getString(R.string.me));
         initUltimateRV();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         getUserInfo();
     }
 
@@ -108,7 +113,7 @@ public class MeFragment extends ABaseFragment {
             icProfile = (ImageView) rlHeader.findViewById(R.id.ic_profile);
             tvGreeting = (TextView) rlHeader.findViewById(R.id.tv_greeting);
             recyclerView.setNormalHeader(rlHeader);
-        }else {
+        } else {
             ToastUtils.showToast(mContext.getApplicationContext(), "哈哈");
         }
         recyclerView.setAdapter(mAdapter);

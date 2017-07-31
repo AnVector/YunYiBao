@@ -9,12 +9,12 @@ def static releaseTime() {
 
 //定义versionName
 def static String releaseVName() {
-    return "2.0.0"
+    return "2.0.1"
 }
 
 //定义versionCode
 def static int releaseVCode() {
-    return 7
+    return 8
 }
 
 def gitVersionCode() {

@@ -142,8 +142,8 @@ public class TaskFragment extends ABaseFragment {
         recyclerview.setAdapter(mSignAdapter);
         recyclerview.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager
                 .HORIZONTAL, false));
-        getTaskList();
     }
+
 
     private void initDefaultWeek() {
         mWeekData.clear();
@@ -296,10 +296,7 @@ public class TaskFragment extends ABaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (isLogin != PreferencesUtils.getBoolean(mContext.getApplicationContext(), "isLogin",
-                false)) {
-            getTaskList();
-        }
+        getTaskList();
     }
 
     @Override

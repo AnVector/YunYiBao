@@ -76,7 +76,7 @@ public class ConnectedDeviceAdapter extends UAdapter<DataBean> {
             tvUserName = (TextView) itemView.findViewById(R.id.tv_user_name);
             tvOnlineDevice = (TextView) itemView.findViewById(R.id.tv_online_device);
             mImageView = (ImageView) itemView.findViewById(R.id.iv_user_profile);
-            line = itemView.findViewById(R.id.line);
+            line = itemView.findViewById(R.id.divider_line);
             space = itemView.findViewById(R.id.space);
         }
     }

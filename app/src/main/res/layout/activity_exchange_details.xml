@@ -52,7 +52,7 @@
                     android:layout_gravity="center_horizontal"
                     android:gravity="left|center_vertical"
                     android:maxLines="1"
-                    android:text="简介："
+                    android:text="@string/summary"
                     android:textColor="@color/user_account_color"
                     android:textSize="@dimen/font_size_fif"/>
 
@@ -81,7 +81,7 @@
                     android:layout_gravity="center_horizontal"
                     android:gravity="left|center_vertical"
                     android:maxLines="1"
-                    android:text="简介："
+                    android:text="@string/summary"
                     android:textColor="@color/user_account_color"
                     android:textSize="@dimen/font_size_fif"/>
 

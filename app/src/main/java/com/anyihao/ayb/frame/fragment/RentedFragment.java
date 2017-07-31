@@ -80,7 +80,7 @@ public class RentedFragment extends ABaseFragment {
                 TextView tvHint = (TextView) mView.findViewById(R.id.tv_hint);
                 if (imvError != null) {
                     imvError.setImageDrawable(getResources().getDrawable(R.drawable
-                            .ic_no_binding_devices));
+                            .ic_no_auth_devices));
                 }
                 if (tvHint != null) {
                     tvHint.setText("暂无设备");

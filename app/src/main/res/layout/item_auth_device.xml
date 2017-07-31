@@ -27,7 +27,6 @@
         android:textSize="@dimen/font_size_normal_high"/>
 
     <View
-        android:id="@+id/line"
         style="@style/divider_line"
         android:layout_alignParentBottom="true"/>
 

@@ -45,6 +45,7 @@ import com.anyihao.ayb.bean.MerchantListBean.DataBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.frame.activity.RadarActivity;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -113,9 +114,6 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         mAmap = mMapView.getMap();
         //设置定位监听
         mAmap.setLocationSource(this);
-        // 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
-        mAmap.setMyLocationEnabled(true);
-        mAmap.setMyLocationType(AMap.MAP_TYPE_NORMAL);
     }
 
     private void initUiSettings() {
@@ -133,8 +131,9 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
 
     private void initLocationStyle() {
         MyLocationStyle myLocationStyle = new MyLocationStyle();
-        myLocationStyle.myLocationIcon(BitmapDescriptorFactory.defaultMarker());
-        myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
+        myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromResource(R.drawable
+                .icon_location));
+        myLocationStyle.interval(20 * 1000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
         myLocationStyle.strokeColor(android.R.color.transparent);
         myLocationStyle.radiusFillColor(android.R.color.transparent);
         myLocationStyle.strokeWidth(0);
@@ -142,6 +141,8 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         //连续定位、且将视角移动到地图中心点，定位蓝点跟随设备移动。（1秒1次定位）
         myLocationStyle.showMyLocation(true);
         mAmap.setMyLocationStyle(myLocationStyle);
+        // 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
+        mAmap.setMyLocationEnabled(true);
     }
 
     @Override
@@ -159,9 +160,9 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
                 }
                 mListener.onLocationChanged(aMapLocation);
             } else {
-//                Logger.d("AmapError", "location Error, ErrCode:"
-//                        + aMapLocation.getErrorCode() + ", errInfo:"
-//                        + aMapLocation.getErrorInfo());
+                Logger.d("location Error, ErrCode:"
+                        + aMapLocation.getErrorCode() + ", errInfo:"
+                        + aMapLocation.getErrorInfo());
             }
         }
     }
@@ -191,7 +192,7 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
         //设置定位间隔,单位毫秒,默认为2000ms
-        mLocationOption.setInterval(2 * 1000);
+        mLocationOption.setInterval(20 * 1000);
         //设置是否返回地址信息（默认返回地址信息）
         mLocationOption.setNeedAddress(true);
         //设置是否只定位一次,默认为false
@@ -209,13 +210,16 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
         //启动定位
         mLocationClient.startLocation();
-//      addMarkersToMap(generateMarkerOptions(mLocationClient.getLastKnownLocation()));
+        mAmap.moveCamera(CameraUpdateFactory.zoomTo(17));
+        //将地图移动到定位点
+        mAmap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(mLocationClient
+                .getLastKnownLocation()
+                .getLatitude(), mLocationClient.getLastKnownLocation().getLongitude())));
     }
 
     @Override
     protected void initEvent() {
         mAmap.setOnMarkerClickListener(this);
-
         imvMyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -397,7 +401,7 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     public void onDestroy() {
         super.onDestroy();
         mAmap = null;
-        if (mMapView != null){
+        if (mMapView != null) {
             mMapView.onDestroy();
         }
         if (mLocationClient != null) {

@@ -17,11 +17,11 @@ public class SettingsAdapter extends RecyclerViewAdapter<String> {
 
     @Override
     public void convert(ViewHolder holder, String s) {
-        holder.setText(R.id.title, s);
+        holder.setText(R.id.tv_title, s);
 
         if ("意见反馈".equals(s) || "关于云逸宝".equals(s)) {
             holder.setVisible(R.id.space, true);
-            holder.setVisible(R.id.line, false);
+            holder.setVisible(R.id.divider_line, false);
         }
     }
 }

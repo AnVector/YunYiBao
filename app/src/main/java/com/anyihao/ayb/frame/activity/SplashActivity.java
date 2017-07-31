@@ -75,9 +75,6 @@ public class SplashActivity extends ABaseActivity {
 
         }
     }
-
-    ;
-
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);

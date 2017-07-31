@@ -43,6 +43,7 @@ import com.anyihao.ayb.bean.AdvertiseBean;
 import com.anyihao.ayb.bean.AdvertiseBean.DataBean;
 import com.anyihao.ayb.bean.CertificationStatusBean;
 import com.anyihao.ayb.bean.IEBoxBean;
+import com.anyihao.ayb.bean.NewMessageBean;
 import com.anyihao.ayb.bean.ResultBean;
 import com.anyihao.ayb.bean.SsidPwdBean;
 import com.anyihao.ayb.bean.UserLevelBean;
@@ -213,6 +214,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
         progress.setDotColor(Color.parseColor("#d6d7dc"));
         progress.show();
         getUserInfo();
+        getUnreadMsg();
         if (loading) {
             startAnimation();
         }
@@ -586,7 +588,6 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
         }
     }
 
-
     private void getSsidPwd() {
         if (TextUtils.isEmpty(aliasName))
             return;
@@ -609,6 +610,19 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
         params.put("uid", PreferencesUtils.getString(mContext, "uid", ""));
         params.put("userType", PreferencesUtils.getString(mContext, "userType", ""));
         postForm(params, 1, 5);
+    }
+
+    private void getUnreadMsg() {
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "NEWMSG");
+        params.put("uid", PreferencesUtils.getString(mContext.getApplicationContext(), ""));
+        postForm(params, 1, 6);
+    }
+
+    private void handleNewMessage(int count) {
+        if (count > 0) {
+            toolbar.getMenu().getItem(0).setIcon(R.drawable.ic_news);
+        }
     }
 
     private void postForm(Map<String, String> params, int page, int actionType) {
@@ -738,7 +752,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                 return;
             if (bean.getCode() == 200) {
                 ToastUtils.showToast(mContext.getApplicationContext(), "授权成功");
-            }else {
+            } else {
                 ToastUtils.showToast(mContext.getApplicationContext(), bean.getMsg());
             }
         }
@@ -814,6 +828,16 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                             transferDataAmount(bean.getFlow())));
                 }
 
+            }
+        }
+
+        if (actionType == 6) {
+            NewMessageBean bean = GsonUtils.getInstance().transitionToBean(result, NewMessageBean
+                    .class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                handleNewMessage(bean.getResult());
             }
         }
     }
