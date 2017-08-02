@@ -10,7 +10,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.provider.Settings;
-import android.text.TextUtils;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -143,7 +142,7 @@ public class ProcessUtils {
      * @return {@code true}: 杀死成功<br>{@code false}: 杀死失败
      */
     public static boolean killBackgroundProcesses(Context context, String packageName) {
-        if (StringUtils.isSpace(packageName)) return false;
+        if (TextUtils.isSpace(packageName)) return false;
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> infos = am.getRunningAppProcesses();
         if (infos == null || infos.size() == 0) return true;
@@ -175,7 +174,7 @@ public class ProcessUtils {
         try {
             reader = new BufferedReader(new FileReader("/proc/" + pid + "/cmdline"));
             String processName = reader.readLine();
-            if (!TextUtils.isEmpty(processName)) {
+            if (!android.text.TextUtils.isEmpty(processName)) {
                 processName = processName.trim();
             }
             return processName;

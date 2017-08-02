@@ -131,7 +131,9 @@ public class SystemRecordActivity extends ABaseActivity {
                 if (o instanceof DataBean) {
                     Intent intent = new Intent(SystemRecordActivity.this, SysRecordDetailsActivity
                             .class);
-                    intent.putExtra("idxOrderID", ((DataBean) o).getIdxOrderID());
+                    intent.putExtra("amount", ((DataBean) o).getFlow());
+                    intent.putExtra("expires", ((DataBean) o).getEffecTm());
+                    intent.putExtra("date", ((DataBean) o).getCrtTm());
                     startActivity(intent);
                 }
             }
@@ -154,7 +156,7 @@ public class SystemRecordActivity extends ABaseActivity {
 
     private void onLoadMore(List<DataBean> beans) {
         mAdapter.insert(beans);
-        if (beans.size() < PAGE_SIZE) {
+        if (beans.size() < PAGE_SIZE && recyclerView != null) {
             recyclerView.disableLoadmore();
         }
     }

@@ -22,15 +22,16 @@ import java.util.List;
 public class RentedAdapter extends UAdapter<DataBean> {
 
     private OnItemButtonClickListener mOnItemButtonClickListener;
+    private String status;
 
-
-    public void setmOnItemButtonClickListener(OnItemButtonClickListener
-                                                      mOnItemButtonClickListener) {
+    public void setOnItemButtonClickListener(OnItemButtonClickListener
+                                                     mOnItemButtonClickListener) {
         this.mOnItemButtonClickListener = mOnItemButtonClickListener;
     }
 
-    public RentedAdapter(List<DataBean> data, int layoutId) {
+    public RentedAdapter(List<DataBean> data, int layoutId, String status) {
         super(data, layoutId);
+        this.status = status;
     }
 
     @Override
@@ -53,9 +54,15 @@ public class RentedAdapter extends UAdapter<DataBean> {
             final int index = (hasHeaderView() ? position - 1 : position);
             DataBean content = mData.get(index);
             if (content == null) return;
-            ((RentedViewHolder) holder).tvDevice.setText(content.getPrintId());
+            ((RentedViewHolder) holder).tvDevice.setText("设备编号：" + content.getPrintId());
             ((RentedViewHolder) holder).tvUser.setText("用户：" + content.getNickname());
             ((RentedViewHolder) holder).tvDate.setText(content.getOutTm());
+            ((RentedViewHolder) holder).btnReturn.setTag(status);
+            if ("2".equals(status)) {
+                ((RentedViewHolder) holder).btnReturn.setText("确认租赁");
+            } else {
+                ((RentedViewHolder) holder).btnReturn.setText("确认归还");
+            }
             ((RentedViewHolder) holder).btnReturn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

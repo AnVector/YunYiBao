@@ -42,7 +42,7 @@ public class FileUtils {
      * @return 文件
      */
     public static File getFileByPath(String filePath) {
-        return StringUtils.isSpace(filePath) ? null : new File(filePath);
+        return TextUtils.isSpace(filePath) ? null : new File(filePath);
     }
 
     /**
@@ -816,7 +816,7 @@ public class FileUtils {
             String line;
             int curLine = 1;
             List<String> list = new ArrayList<>();
-            if (StringUtils.isSpace(charsetName)) {
+            if (TextUtils.isSpace(charsetName)) {
                 reader = new BufferedReader(new FileReader(file));
             } else {
                 reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), charsetName));
@@ -858,7 +858,7 @@ public class FileUtils {
         BufferedReader reader = null;
         try {
             StringBuilder sb = new StringBuilder();
-            if (StringUtils.isSpace(charsetName)) {
+            if (TextUtils.isSpace(charsetName)) {
                 reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
             } else {
                 reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), charsetName));
@@ -1037,7 +1037,7 @@ public class FileUtils {
      * @return filePath最长目录
      */
     public static String getDirName(String filePath) {
-        if (StringUtils.isSpace(filePath)) return filePath;
+        if (TextUtils.isSpace(filePath)) return filePath;
         int lastSep = filePath.lastIndexOf(File.separator);
         return lastSep == -1 ? "" : filePath.substring(0, lastSep + 1);
     }
@@ -1060,7 +1060,7 @@ public class FileUtils {
      * @return 文件名
      */
     public static String getFileName(String filePath) {
-        if (StringUtils.isSpace(filePath)) return filePath;
+        if (TextUtils.isSpace(filePath)) return filePath;
         int lastSep = filePath.lastIndexOf(File.separator);
         return lastSep == -1 ? filePath : filePath.substring(lastSep + 1);
     }
@@ -1083,7 +1083,7 @@ public class FileUtils {
      * @return 不带拓展名的文件名
      */
     public static String getFileNameNoExtension(String filePath) {
-        if (StringUtils.isSpace(filePath)) return filePath;
+        if (TextUtils.isSpace(filePath)) return filePath;
         int lastPoi = filePath.lastIndexOf('.');
         int lastSep = filePath.lastIndexOf(File.separator);
         if (lastSep == -1) {
@@ -1113,7 +1113,7 @@ public class FileUtils {
      * @return 文件拓展名
      */
     public static String getFileExtension(String filePath) {
-        if (StringUtils.isSpace(filePath)) return filePath;
+        if (TextUtils.isSpace(filePath)) return filePath;
         int lastPoi = filePath.lastIndexOf('.');
         int lastSep = filePath.lastIndexOf(File.separator);
         if (lastPoi == -1 || lastSep >= lastPoi) return "";

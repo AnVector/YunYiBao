@@ -2,8 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="65dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
                 android:paddingTop="10dp">
 
     <TextView
@@ -11,6 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_marginLeft="12dp"
         android:gravity="left|center_vertical"
         android:textColor="@color/user_account_color"
         android:textSize="@dimen/font_size_normal_high"/>
@@ -32,9 +31,9 @@
         android:layout_height="25dp"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@id/tv_user"
+        android:layout_marginRight="12dp"
         android:background="@drawable/return_button_bg"
         android:gravity="center"
-        android:text="@string/confirm_to_return"
         android:textColor="@color/toolbar_title_color"
         android:textSize="@dimen/font_size_small"/>
 
@@ -44,6 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@id/btn_return"
+        android:layout_marginRight="12dp"
         android:layout_marginTop="10dp"
         android:gravity="left|center_vertical"
         android:textColor="@color/light_gray"
@@ -55,5 +55,4 @@
         android:layout_height="0.6dp"
         android:layout_alignParentBottom="true"
         android:background="@color/line_color"/>
-
 </RelativeLayout>

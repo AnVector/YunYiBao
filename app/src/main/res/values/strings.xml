@@ -67,8 +67,10 @@
     <string name="pay">支付</string>
     <string name="service_location">设备服务点</string>
     <string name="transfer_record">转赠记录</string>
+    <string name="transfer_record_details">转赠记录详情</string>
     <string name="summary">简介：</string>
     <string name="device_no_hint">设备编号：%1$s</string>
+    <string name="exchange_process">兑换方法：</string>
 
     <!--user register-->
     <string name="phone_num_input_hint">请填写注册手机号</string>
@@ -112,6 +114,8 @@
     <string name="donate_data">转赠流量</string>
     <string name="lease_zone">租赁用户专区</string>
     <string name="normal_zone">普通用户专区</string>
+    <string name="convertible_of">可兑换%1$s流量</string>
+    <string name="points">%1$s积分</string>
 
     <!--modify self info-->
     <string name="save">保存</string>
@@ -281,12 +285,12 @@
     <string name="rented_devices">我的设备</string>
     <string name="rented_history">租赁记录</string>
     <string name="rent_details">租赁详情</string>
+    <string name="reciprocal_account">对方账户</string>
 
     <!--QR Scan-->
     <string name="QR_code">二维码</string>
     <string name="QR_scan_hint">对准二维码，将会自动扫描</string>
     <!--exchange details-->
-    <string name="describe_content">开启网络，点击相应的WIFI获取上网密码，获取密码前，请确保已绑定上网设备（手机、Pad、笔记本电脑）的Mac地址</string>
     <string name="exchange">兑换</string>
     <string name="exchange_details">兑换详情</string>
     <!--certification-->

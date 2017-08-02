@@ -9,7 +9,7 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
-import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.TextUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.ResultBean;
@@ -73,7 +73,7 @@ public class SayHiActivity extends ABaseActivity {
             @Override
             public void onClick(View v) {
                 String content = edtContent.getText().toString().trim();
-                if (StringUtils.isEmpty(content)) {
+                if (TextUtils.isEmpty(content)) {
                     ToastUtils.showToast(getApplicationContext(), "请输入打招呼的内容");
                     return;
                 }
@@ -84,7 +84,7 @@ public class SayHiActivity extends ABaseActivity {
     }
 
     private void sendMessage(String content) {
-        if (StringUtils.isEmpty(mRecieveUid))
+        if (TextUtils.isEmpty(mRecieveUid))
             return;
         Map<String, String> params = new HashMap<>();
         params.put("cmd", "SENDMSG");

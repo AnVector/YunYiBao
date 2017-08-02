@@ -62,8 +62,8 @@
 
         <ImageView
             android:id="@+id/iv_qr_code"
-            android:layout_width="280dp"
-            android:layout_height="280dp"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
             android:layout_below="@id/iv_user_profile"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
@@ -73,8 +73,9 @@
             android:id="@+id/tv_qr_hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/iv_qr_code"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:layout_marginBottom="42dp"
             android:gravity="center"
             android:text="@string/profile_qr_hint"
             android:textColor="@color/light_gray"

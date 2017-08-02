@@ -10,9 +10,9 @@ import java.io.UnsupportedEncodingException;
  *     desc  : 字符串相关工具类
  * </pre>
  */
-public class StringUtils {
+public class TextUtils {
 
-    private StringUtils() {
+    private TextUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 

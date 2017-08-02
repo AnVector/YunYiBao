@@ -43,12 +43,16 @@ public class NotRentFragment extends ABaseFragment {
 
     @Override
     protected void initData() {
-
         initUltimateRV();
         Bundle bundle = getArguments();
         if (bundle != null) {
             status = bundle.getString("status");
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         getBelongs();
     }
 
@@ -97,11 +101,13 @@ public class NotRentFragment extends ABaseFragment {
     private void onLoadMore(List<DataBean> beans) {
         mAdapter.removeAllInternal(mData);
         mAdapter.insert(beans);
-        if (isRefresh) {
-            ultimateRecyclerView.setRefreshing(false);
-            layoutManager.scrollToPosition(0);
-            ultimateRecyclerView.reenableLoadmore();
-        }
+    }
+
+    private void onFireRefresh(List<DataBean> beans) {
+        mAdapter.removeAllInternal(mData);
+        mAdapter.insert(beans);
+        ultimateRecyclerView.setRefreshing(false);
+        layoutManager.scrollToPosition(0);
     }
 
     private void onLoadNoData() {
@@ -137,11 +143,14 @@ public class NotRentFragment extends ABaseFragment {
             if (bean.getCode() == 200) {
                 List<DataBean> beans = bean.getData();
                 if (beans.size() > 0) {
-                    onLoadMore(beans);
+                    if (isRefresh) {
+                        onFireRefresh(beans);
+                    } else {
+                        onLoadMore(beans);
+                    }
                 } else {
                     onLoadNoData();
                 }
-
             } else {
                 ToastUtils.showToast(mContext.getApplicationContext(), bean.getMsg());
                 onLoadNoData();

@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.view.Gravity;
@@ -24,7 +25,6 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
-import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.LendAdapter;
@@ -39,6 +39,7 @@ import com.anyihao.ayb.bean.TaskInfoListBean.DataBean.NormalBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.frame.activity.BriberyMoneyActivity;
+import com.anyihao.ayb.frame.activity.ExchangeDetailsActivity;
 import com.anyihao.ayb.listener.OnItemClickListener;
 import com.anyihao.ayb.ui.CropCircleTransformation;
 import com.bumptech.glide.Glide;
@@ -116,32 +117,32 @@ public class TaskFragment extends ABaseFragment {
     private List<NormalBean> mNormalData = new ArrayList<>();
     private List<String> mWeekData = new ArrayList<>();
     private int isSign = 0;
-    private int mSignCount = 0;
-    private boolean isLogin;
+//    private int count = 0;
 
     @Override
     protected void initData() {
         toolbar.setNavigationIcon(null);
         titleMid.setText(getString(R.string.task));
         fakeStatusBar.setBackgroundColor(mContext.getResources().getColor(R.color.white));
-        isLogin = PreferencesUtils.getBoolean(mContext.getApplicationContext(), "isLogin", false);
-        mNormalAdapter = new NormalAdapter(mContext, R.layout.item_task_ad);
+        mNormalAdapter = new NormalAdapter(mContext, R.layout.item_task_ad, mNormalData);
         recyclerviewBottom.setNestedScrollingEnabled(false);
         recyclerviewBottom.setAdapter(mNormalAdapter);
         recyclerviewBottom.setLayoutManager(new GridLayoutManager(mContext, 2,
                 GridLayoutManager.VERTICAL, false));
 
-        mLendAdapter = new LendAdapter(mContext, R.layout.item_task_ad);
+        mLendAdapter = new LendAdapter(mContext, R.layout.item_task_ad, mLendData);
         recyclerviewMiddle.setNestedScrollingEnabled(false);
         recyclerviewMiddle.setAdapter(mLendAdapter);
         recyclerviewMiddle.setLayoutManager(new GridLayoutManager(mContext, 2,
                 GridLayoutManager.VERTICAL, false));
 
         initDefaultWeek();
+        setPoints("我的积分：0分");
         mSignAdapter = new SignAdapter(mContext, R.layout.item_sign_history, mWeekData);
         recyclerview.setAdapter(mSignAdapter);
         recyclerview.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager
                 .HORIZONTAL, false));
+        getTaskList();
     }
 
 
@@ -153,7 +154,7 @@ public class TaskFragment extends ABaseFragment {
     }
 
     private void setPoints(String txt) {
-        if (StringUtils.isEmpty(txt) || tvMyPoints == null)
+        if (TextUtils.isEmpty(txt) || tvMyPoints == null)
             return;
         tvMyPoints.setText(txt);
         SpannableString spannableString = new SpannableString(txt);
@@ -165,14 +166,13 @@ public class TaskFragment extends ABaseFragment {
         tvMyPoints.setText(spannableString);
     }
 
+
     @Override
     protected void initEvent() {
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(getActivity(), ExchangeDetailsActivity.class);
-//                startActivity(intent);
                 if (isSign == 1) {
                     ToastUtils.showToast(mContext.getApplicationContext(), "已签到");
                     return;
@@ -220,10 +220,71 @@ public class TaskFragment extends ABaseFragment {
             }
         });
 
+        mNormalAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(ViewGroup parent, View view, Object o, int position) {
+                if (o instanceof NormalBean) {
+                    startExchangeActivity(((NormalBean) o).getExchangeId());
+                }
+            }
+
+            @Override
+            public boolean onItemLongClick(ViewGroup parent, View view, Object o, int position) {
+                return false;
+            }
+        });
+
+        mLendAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(ViewGroup parent, View view, Object o, int position) {
+                if (o instanceof LendBean) {
+                    startExchangeActivity(((LendBean) o).getExchangeId());
+                }
+
+            }
+
+            @Override
+            public boolean onItemLongClick(ViewGroup parent, View view, Object o, int position) {
+                return false;
+            }
+        });
+
+        ivPointsExchange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v.getTag(R.id.tag_exhange_img) instanceof Integer) {
+                    startExchangeActivity((int) v.getTag(R.id.tag_exhange_img));
+                }
+            }
+        });
+
+        ivTicketLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v.getTag(R.id.tag_left_img) instanceof Integer) {
+                    startExchangeActivity((int) v.getTag(R.id.tag_left_img));
+                }
+            }
+        });
+
+        ivTicketRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v.getTag(R.id.tag_right_img) instanceof Integer) {
+                    startExchangeActivity((int) v.getTag(R.id.tag_right_img));
+                }
+            }
+        });
+
+    }
+
+    private void startExchangeActivity(int exchangeId) {
+        Intent intent = new Intent(mContext, ExchangeDetailsActivity.class);
+        intent.putExtra("exchangeId", exchangeId);
+        startActivity(intent);
     }
 
     private void updateSignHistory(int count) {
-        mSignCount = count;
         for (int i = 1; i <= count; i++) {
             if (i < count) {
                 mWeekData.set(i - 1, i + "1");
@@ -296,7 +357,9 @@ public class TaskFragment extends ABaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getTaskList();
+//        ToastUtils.showToast(mContext.getApplicationContext(), " TaskFragment onResume
+// Executed" + (++count) +
+//                "次");
     }
 
     @Override
@@ -336,7 +399,6 @@ public class TaskFragment extends ABaseFragment {
                 ToastUtils.showToast(mContext.getApplicationContext(), "未登录，请先登录");
             } else {
                 ToastUtils.showToast(mContext.getApplicationContext(), "未登录，请先登录");
-
             }
         }
     }
@@ -371,8 +433,7 @@ public class TaskFragment extends ABaseFragment {
             btnSignIn.setText("签到领积分");
         }
         initDefaultWeek();
-        mSignAdapter.remove(0, mWeekData.size());
-        mSignAdapter.add(0, mWeekData.size(), mWeekData);
+        mSignAdapter.notifyDataSetChanged();
     }
 
     private void setLimitedData(List<LimitedBean> beans) {
@@ -387,11 +448,17 @@ public class TaskFragment extends ABaseFragment {
             }
 
             if (tvPointsExchangeHint != null) {
-                tvPointsExchangeHint.setText("可领取" + beans.get(0).getExContent() + "流量");
+                tvPointsExchangeHint.setText(String.format(mContext.getString(R.string
+                        .convertible_of), beans.get(0).getExContent()));
             }
 
             if (tvPoints != null) {
-                tvPoints.setText(beans.get(0).getIntegral() + "积分");
+                tvPoints.setText(String.format(mContext.getString(R.string.points), beans.get(0)
+                        .getIntegral()));
+            }
+
+            if (ivPointsExchange != null) {
+                ivPointsExchange.setTag(R.id.tag_exhange_img, beans.get(0).getExchangeId());
             }
 
             if (ivAdvertisement != null) {
@@ -409,10 +476,16 @@ public class TaskFragment extends ABaseFragment {
             }
 
             if (tvTicketLeftDesc != null) {
-                tvTicketLeftDesc.setText("可兑换" + beans.get(2).getExContent() + "流量");
+                tvTicketLeftDesc.setText(String.format(mContext.getString(R.string
+                        .convertible_of), beans.get(2).getExContent()));
             }
             if (tvTicketLeftHint != null) {
-                tvTicketLeftHint.setText(beans.get(2).getIntegral() + "积分");
+                tvTicketLeftHint.setText(String.format(mContext.getString(R.string.points), beans
+                        .get(2).getIntegral()));
+            }
+
+            if (ivTicketLeft != null) {
+                ivTicketLeft.setTag(R.id.tag_left_img, beans.get(2).getExchangeId());
             }
 
             if (ivTicketRight != null) {
@@ -422,10 +495,16 @@ public class TaskFragment extends ABaseFragment {
                         .into(ivTicketRight);
             }
             if (tvTicketRightDesc != null) {
-                tvTicketRightDesc.setText("可兑换" + beans.get(3).getExContent() + "流量");
+                tvTicketRightDesc.setText(String.format(mContext.getString(R.string
+                        .convertible_of), beans.get(3).getExContent()));
             }
             if (tvTicketRightHint != null) {
-                tvTicketRightHint.setText(beans.get(3).getIntegral() + "积分");
+                tvTicketRightHint.setText(String.format(mContext.getString(R.string.points),
+                        beans.get(3).getIntegral()));
+            }
+
+            if (ivTicketRight != null) {
+                ivTicketRight.setTag(R.id.tag_right_img, beans.get(3).getExchangeId());
             }
         }
 
@@ -434,18 +513,16 @@ public class TaskFragment extends ABaseFragment {
     private void setLendData(List<LendBean> beans) {
         if (beans == null || beans.isEmpty())
             return;
-        mLendAdapter.remove(0, mLendData.size());
         mLendData.clear();
         mLendData.addAll(beans);
-        mLendAdapter.add(0, mLendData.size(), mLendData);
+        mLendAdapter.notifyDataSetChanged();
     }
 
     private void setNormalData(List<NormalBean> beans) {
         if (beans == null || beans.isEmpty())
             return;
-        mNormalAdapter.remove(0, mNormalData.size());
         mNormalData.clear();
         mNormalData.addAll(beans);
-        mNormalAdapter.add(0, mNormalData.size(), mNormalData);
+        mNormalAdapter.notifyDataSetChanged();
     }
 }

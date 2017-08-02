@@ -14,7 +14,7 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
-import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.TextUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.EnvelopeAdapter;
@@ -46,6 +46,7 @@ public class EnvelopeFragment extends ABaseFragment {
     private static final int PAGE_SIZE = 10;
     private boolean isRefresh;
     private boolean isInited = false;
+    private boolean networkError;
     private static final int REQUEST_ENVELOPE_CODE = 0x0001;
 
     @Override
@@ -75,12 +76,17 @@ public class EnvelopeFragment extends ABaseFragment {
                     return;
                 ImageView imvError = (ImageView) mView.findViewById(R.id.ic_error);
                 TextView tvHint = (TextView) mView.findViewById(R.id.tv_hint);
-                if (imvError != null) {
-                    imvError.setImageDrawable(getResources().getDrawable(R.drawable
-                            .ic_no_message));
-                }
-                if (tvHint != null) {
-                    tvHint.setText("暂无红包消息");
+                if (imvError != null && tvHint != null) {
+                    if (networkError) {
+                        tvHint.setText("网络异常");
+                        imvError.setImageDrawable(getResources().getDrawable(R.drawable
+                                .ic_no_network));
+                    } else {
+                        tvHint.setText("暂无红包消息");
+                        imvError.setImageDrawable(getResources().getDrawable(R.drawable
+                                .ic_no_message));
+                    }
+
                 }
             }
         });
@@ -149,27 +155,31 @@ public class EnvelopeFragment extends ABaseFragment {
     private void onFireRefresh(List<DataBean> beans) {
         mAdapter.removeAllInternal(mData);
         mAdapter.insert(beans);
-        ultimateRecyclerView.setRefreshing(false);
+        if (ultimateRecyclerView != null) {
+            ultimateRecyclerView.setRefreshing(false);
+        }
         layoutManager.scrollToPosition(0);
-        ultimateRecyclerView.reenableLoadmore();
+        if (ultimateRecyclerView != null) {
+            ultimateRecyclerView.reenableLoadmore();
+        }
     }
 
     private void onLoadMore(List<DataBean> beans) {
         mAdapter.insert(beans);
-        if (beans.size() < PAGE_SIZE) {
+        if (beans.size() < PAGE_SIZE && ultimateRecyclerView != null) {
             ultimateRecyclerView.disableLoadmore();
         }
     }
 
     private void onLoadNoData() {
-        if (ultimateRecyclerView == null)
-            return;
         isInited = false;
-        ultimateRecyclerView.showEmptyView();
+        if (ultimateRecyclerView != null) {
+            ultimateRecyclerView.showEmptyView();
+        }
     }
 
     private void getMessage() {
-        if (StringUtils.isEmpty(type)) {
+        if (TextUtils.isEmpty(type)) {
             return;
         }
         Map<String, String> params = new HashMap<>();
@@ -195,7 +205,7 @@ public class EnvelopeFragment extends ABaseFragment {
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
-
+        networkError = false;
         if (actionType == 0) {
             RedPackageBean bean = GsonUtils.getInstance().transitionToBean(result, RedPackageBean
                     .class);
@@ -222,6 +232,15 @@ public class EnvelopeFragment extends ABaseFragment {
                     onLoadNoData();
                 }
             }
+        }
+    }
+
+    @Override
+    public void onFailure(String error, int page, Integer actionType) {
+        super.onFailure(error, page, actionType);
+        networkError = true;
+        if (ultimateRecyclerView != null) {
+            ultimateRecyclerView.showEmptyView();
         }
     }
 }

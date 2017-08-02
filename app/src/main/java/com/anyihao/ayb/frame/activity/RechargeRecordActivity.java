@@ -109,11 +109,6 @@ public class RechargeRecordActivity extends ABaseActivity {
                 onBackPressed();
             }
         });
-        recyclerView.setOnParallaxScroll(new UltimateRecyclerView.OnParallaxScroll() {
-            @Override
-            public void onParallaxScroll(float percentage, float offset, View parallax) {
-            }
-        });
         recyclerView.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener
                 () {
             @Override
@@ -169,7 +164,7 @@ public class RechargeRecordActivity extends ABaseActivity {
 
     private void onLoadMore(List<DataBean> beans) {
         mRechargeAdapter.insert(beans);
-        if (beans.size() < PAGE_SIZE) {
+        if (beans.size() < PAGE_SIZE && recyclerView != null) {
             recyclerView.disableLoadmore();
         }
     }

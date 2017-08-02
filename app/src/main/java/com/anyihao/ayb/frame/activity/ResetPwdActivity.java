@@ -11,7 +11,7 @@ import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.MD5;
 import com.anyihao.androidbase.utils.PwdCheckUtils;
-import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.TextUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.ResultBean;
@@ -71,7 +71,7 @@ public class ResetPwdActivity extends ABaseActivity {
             public void onClick(View v) {
                 newPwd = edtNewPwd.getText().toString().trim();
                 confirmPwd = edtComfirmPwd.getText().toString().trim();
-                if (StringUtils.isEmpty(newPwd)) {
+                if (TextUtils.isEmpty(newPwd)) {
                     ToastUtils.showToast(getApplicationContext(), "请输入新密码", R.layout.toast, R.id
                             .tv_message);
                     return;

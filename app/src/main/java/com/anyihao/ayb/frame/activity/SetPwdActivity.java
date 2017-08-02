@@ -17,7 +17,7 @@ import com.anyihao.androidbase.utils.DeviceUtils;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.MD5;
 import com.anyihao.androidbase.utils.PwdCheckUtils;
-import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.TextUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.RegisterBean;
@@ -118,7 +118,7 @@ public class SetPwdActivity extends ABaseActivity {
                 verifyCode = inputVerifyCode.getText().toString().trim();
                 setPwd = inputSetPwd.getText().toString().trim();
                 checkPwd = confirmPwd.getText().toString().trim();
-                if (StringUtils.isEmpty(verifyCode)) {
+                if (TextUtils.isEmpty(verifyCode)) {
                     ToastUtils.showToast(getApplicationContext(), "请输入验证码", R.layout.toast, R.id
                             .tv_message);
                     return;
@@ -128,7 +128,7 @@ public class SetPwdActivity extends ABaseActivity {
                             .tv_message);
                     return;
                 }
-                if (StringUtils.isEmpty(setPwd)) {
+                if (TextUtils.isEmpty(setPwd)) {
                     ToastUtils.showToast(getApplicationContext(), "请输入密码", R.layout.toast, R.id
                             .tv_message);
                     return;

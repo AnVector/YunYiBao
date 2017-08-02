@@ -56,18 +56,23 @@ public class RentedFragment extends ABaseFragment {
 
     @Override
     protected void initData() {
-        initUltimateRV();
         Bundle bundle = getArguments();
         if (bundle != null) {
             status = bundle.getString("status");
         }
+        initUltimateRV();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         getBelongs();
     }
 
     private void initUltimateRV() {
         recyclerView.setHasFixedSize(false);
-        mAdapter = new RentedAdapter(mData, R.layout.item_rented_device);
-        layoutManager = new LinearLayoutManager(getContext());
+        mAdapter = new RentedAdapter(mData, R.layout.item_rented_device, status);
+        layoutManager = new LinearLayoutManager(mContext);
         recyclerView.setLayoutManager(layoutManager);
         mAdapter.setEmptyViewPolicy(UltimateRecyclerView.EMPTY_SHOW_LOADMORE_ONLY);
         recyclerView.setEmptyView(R.layout.empty_view, UltimateRecyclerView
@@ -111,6 +116,15 @@ public class RentedFragment extends ABaseFragment {
         postForm(params, 1, 1);
     }
 
+    private void confirmToRent(String keyId) {
+        if (TextUtils.isEmpty(keyId))
+            return;
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "CONFIRM");
+        params.put("keyId", keyId);
+        postForm(params, 1, 2);
+    }
+
     private void postForm(Map<String, String> params, int page, int actionType) {
         PresenterFactory.getInstance().createPresenter(this).execute(new Task.TaskBuilder()
                 .setTaskType(TaskType.Method.POST)
@@ -124,11 +138,15 @@ public class RentedFragment extends ABaseFragment {
     private void onLoadMore(List<DataBean> beans) {
         mAdapter.removeAllInternal(mData);
         mAdapter.insert(beans);
-        if (isRefresh) {
+    }
+
+    private void onFireRefresh(List<DataBean> beans) {
+        mAdapter.removeAllInternal(mData);
+        mAdapter.insert(beans);
+        if (recyclerView != null) {
             recyclerView.setRefreshing(false);
-            layoutManager.scrollToPosition(0);
-            recyclerView.reenableLoadmore();
         }
+        layoutManager.scrollToPosition(0);
     }
 
     private void onLoadNoData() {
@@ -167,13 +185,21 @@ public class RentedFragment extends ABaseFragment {
             }
         });
 
-        mAdapter.setmOnItemButtonClickListener(new RentedAdapter.OnItemButtonClickListener() {
+        mAdapter.setOnItemButtonClickListener(new RentedAdapter.OnItemButtonClickListener() {
             @Override
             public void onItemButtonClick(ViewGroup parent, View view, DataBean bean, int
                     position) {
-                if (bean != null) {
-                    showDialog(bean.getPrintId());
+                if (view.getTag() instanceof String) {
+                    String status = (String) view.getTag();
+                    if ("2".equals(status)) {
+                        confirmToRent(bean.getKeyId());
+                    } else {
+                        if (bean != null) {
+                            showDialog(bean.getPrintId());
+                        }
+                    }
                 }
+
             }
         });
 
@@ -234,7 +260,11 @@ public class RentedFragment extends ABaseFragment {
             if (bean.getCode() == 200) {
                 List<DataBean> beans = bean.getData();
                 if (beans.size() > 0) {
-                    onLoadMore(beans);
+                    if (isRefresh) {
+                        onFireRefresh(beans);
+                    } else {
+                        onLoadMore(beans);
+                    }
                 } else {
                     onLoadNoData();
                 }
@@ -244,7 +274,7 @@ public class RentedFragment extends ABaseFragment {
             }
         }
 
-        if (actionType == 1) {
+        if (actionType == 1 || actionType == 2) {
             ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean.class);
             if (bean == null)
                 return;
@@ -255,5 +285,4 @@ public class RentedFragment extends ABaseFragment {
             }
         }
     }
-
 }

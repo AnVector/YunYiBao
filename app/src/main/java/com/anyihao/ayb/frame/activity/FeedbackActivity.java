@@ -10,7 +10,7 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.AppUtils;
 import com.anyihao.androidbase.utils.GsonUtils;
-import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.TextUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.ResultBean;
@@ -65,7 +65,7 @@ public class FeedbackActivity extends ABaseActivity {
             @Override
             public void onClick(View v) {
                 String content = tvMessage.getText().toString().trim();
-                if (StringUtils.isEmpty(content)) {
+                if (TextUtils.isEmpty(content)) {
                     ToastUtils.showToast(getApplicationContext(), "请输入反馈内容", R.layout.toast, R.id
                             .tv_message);
                     return;

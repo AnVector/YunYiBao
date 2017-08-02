@@ -18,7 +18,7 @@ import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.DensityUtils;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
-import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.TextUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.MeAdapter;
@@ -81,6 +81,8 @@ public class MeFragment extends ABaseFragment {
     private boolean isLogin = false;
     private List<KeyValueBean> mData = new ArrayList<>();
     private String mIntegral;
+//    private int count = 0;
+
 
     @Override
     protected int getContentViewId() {
@@ -93,11 +95,6 @@ public class MeFragment extends ABaseFragment {
         toolbar.inflateMenu(R.menu.toolbar_menu);
         toolbarTitle.setText(mContext.getString(R.string.me));
         initUltimateRV();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         getUserInfo();
     }
 
@@ -155,7 +152,6 @@ public class MeFragment extends ABaseFragment {
 
     @Override
     protected void initEvent() {
-
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -276,7 +272,7 @@ public class MeFragment extends ABaseFragment {
                     case R.id.btn_ok:
                         if (powerfulEditText != null) {
                             String code = powerfulEditText.getText().toString().trim();
-                            if (StringUtils.isEmpty(code)) {
+                            if (TextUtils.isEmpty(code)) {
                                 ToastUtils.showToast(mContext.getApplicationContext(),
                                         "请输入邀请码或兑换码");
                             } else {

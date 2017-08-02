@@ -36,7 +36,7 @@ public class PwdCheckUtils {
      * @return
      */
     public static boolean containsLetterDigit(String str) {
-        if (StringUtils.isEmpty(str))
+        if (TextUtils.isEmpty(str))
             return false;
         boolean isDigit = false;//定义一个boolean值，用来表示是否包含数字
         boolean isLetter = false;//定义一个boolean值，用来表示是否包含字母

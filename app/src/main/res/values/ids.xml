@@ -10,4 +10,7 @@
     <item name="empty_view_loc" type="id"/>
     <item name="header_slider" type="id"/>
     <item name="divider_line" type="id"/>
+    <item name="tag_exhange_img" type="id"/>
+    <item name="tag_left_img" type="id"/>
+    <item name="tag_right_img" type="id"/>
 </resources>

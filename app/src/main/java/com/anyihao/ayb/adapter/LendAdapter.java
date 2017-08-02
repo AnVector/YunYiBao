@@ -3,7 +3,10 @@ package com.anyihao.ayb.adapter;
 import android.content.Context;
 
 import com.anyihao.ayb.R;
+import com.anyihao.ayb.bean.TaskInfoListBean;
 import com.anyihao.ayb.bean.TaskInfoListBean.DataBean.LendBean;
+
+import java.util.List;
 
 /**
  * Created by Admin on 2017/4/7.
@@ -12,8 +15,8 @@ import com.anyihao.ayb.bean.TaskInfoListBean.DataBean.LendBean;
 public class LendAdapter extends RecyclerViewAdapter<LendBean> {
 
 
-    public LendAdapter(Context context, int layoutId) {
-        super(context, layoutId);
+    public LendAdapter(Context context, int layoutId, List<LendBean> datas) {
+        super(context, layoutId, datas);
     }
 
     @Override

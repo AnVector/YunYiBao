@@ -3,7 +3,7 @@ package com.anyihao.androidbase.mvp;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.TextUtils;
 
 import java.io.File;
 import java.io.Serializable;
@@ -51,7 +51,7 @@ public class Task implements Serializable {
     }
 
     private Task(@NonNull String taskType, String url, int page, @NonNull Object actionType) {
-        if (StringUtils.isEmpty(url)) {
+        if (TextUtils.isEmpty(url)) {
             throw new UnsupportedOperationException("u must transmit a valid url");
         }
         this.taskType = taskType;
@@ -62,7 +62,7 @@ public class Task implements Serializable {
 
     private Task(@NonNull String taskType, String url, String content, int page, @NonNull Object
             actionType) {
-        if (StringUtils.isEmpty(url)) {
+        if (TextUtils.isEmpty(url)) {
             throw new UnsupportedOperationException("u must transmit a valid url");
         }
         this.taskType = taskType;
@@ -74,7 +74,7 @@ public class Task implements Serializable {
 
     private Task(@NonNull String taskType, String url, String content, int page, @NonNull Object
             actionType, @Nullable Map<String, String> params) {
-        if (StringUtils.isEmpty(url)) {
+        if (TextUtils.isEmpty(url)) {
             throw new UnsupportedOperationException("u must transmit a valid url");
         }
         this.taskType = taskType;
@@ -87,7 +87,7 @@ public class Task implements Serializable {
 
     private Task(@NonNull String taskType, String url, File file, int page, @NonNull Object
             actionType) {
-        if (StringUtils.isEmpty(url) || file == null) {
+        if (TextUtils.isEmpty(url) || file == null) {
             throw new UnsupportedOperationException("u must transmit a valid url and a valid file");
         }
         this.taskType = taskType;

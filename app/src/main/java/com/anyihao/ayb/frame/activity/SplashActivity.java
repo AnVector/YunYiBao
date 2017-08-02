@@ -40,7 +40,7 @@ public class SplashActivity extends ABaseActivity {
     private byte mTimeLeft;
     private CountDownTimer mCountDownTimer;
     private UHandler mHandler = new UHandler(this);
-    //    private ComponentName mDefault;
+    //private ComponentName mDefault;
 //    private ComponentName mNewCN;
 //    private PackageManager mPackageManager;
 
@@ -221,9 +221,11 @@ public class SplashActivity extends ABaseActivity {
         super.onDestroy();
         if (mCountDownTimer != null) {
             mCountDownTimer.cancel();
+            mCountDownTimer = null;
         }
         if(mHandler!=null){
             mHandler.removeCallbacksAndMessages(null);
+            mHandler = null;
         }
     }
 }

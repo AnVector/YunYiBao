@@ -151,6 +151,6 @@ public class RegexUtils {
      * @return {@code true}: 匹配<br>{@code false}: 不匹配
      */
     public static boolean isMatch(String regex, String string) {
-        return !StringUtils.isEmpty(string) && Pattern.matches(regex, string);
+        return !TextUtils.isEmpty(string) && Pattern.matches(regex, string);
     }
 }

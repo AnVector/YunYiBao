@@ -274,6 +274,7 @@ public class MainActivity extends ABaseActivity {
         }
         if(mHandler!=null){
             mHandler.removeCallbacksAndMessages(null);
+            mHandler = null;
         }
         super.onDestroy();
     }

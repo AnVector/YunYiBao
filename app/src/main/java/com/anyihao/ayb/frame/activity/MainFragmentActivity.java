@@ -8,8 +8,10 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.anyihao.androidbase.manager.ActivityManager;
 import com.anyihao.androidbase.mvp.Task;
@@ -54,9 +56,12 @@ public class MainFragmentActivity extends ABaseActivity {
     RadioButton mRadioButtonTask;
     @BindView(R.id.viewpager)
     CustomViewPager mViewPager;
+    @BindView(R.id.radio_group)
+    RadioGroup radioGroup;
     private List<Fragment> mFragmentList = new ArrayList<>();
     private UFragmentPagerAdapter uFragmentPagerAdapter;
     private RadioButton mCurrent;
+//    private int count;
 
     private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -155,43 +160,89 @@ public class MainFragmentActivity extends ABaseActivity {
     @Override
     protected void initEvent() {
 
-        mRadioButtonDevice.setOnClickListener(new View.OnClickListener() {
+//        mRadioButtonDevice.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                resetIcon();
+//                changeIcon(mRadioButtonDevice, R.drawable.device_focused);
+//                mCurrent = mRadioButtonDevice;
+//                mViewPager.setCurrentItem(0, true);
+//            }
+//        });
+
+        mRadioButtonDevice.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onTouch(View v, MotionEvent event) {
                 resetIcon();
                 changeIcon(mRadioButtonDevice, R.drawable.device_focused);
                 mCurrent = mRadioButtonDevice;
                 mViewPager.setCurrentItem(0, true);
+                return false;
             }
         });
 
-        mRadioButtonDiscovery.setOnClickListener(new View.OnClickListener() {
+//        mRadioButtonDiscovery.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                resetIcon();
+//                changeIcon(mRadioButtonDiscovery, R.drawable.discovery_focused);
+//                mCurrent = mRadioButtonDiscovery;
+//                mViewPager.setCurrentItem(1);
+//            }
+//        });
+
+        mRadioButtonDiscovery.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onTouch(View v, MotionEvent event) {
                 resetIcon();
                 changeIcon(mRadioButtonDiscovery, R.drawable.discovery_focused);
                 mCurrent = mRadioButtonDiscovery;
                 mViewPager.setCurrentItem(1);
+                return false;
             }
         });
 
-        mRadioButtonTask.setOnClickListener(new View.OnClickListener() {
+//        mRadioButtonTask.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                resetIcon();
+//                changeIcon(mRadioButtonTask, R.drawable.task_focused);
+//                mCurrent = mRadioButtonTask;
+//                mViewPager.setCurrentItem(2);
+//            }
+//        });
+
+        mRadioButtonTask.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onTouch(View v, MotionEvent event) {
+//                ToastUtils.showToast(getApplicationContext(), "Task radio button touched" +
+//                        (++count) + "次");
                 resetIcon();
                 changeIcon(mRadioButtonTask, R.drawable.task_focused);
                 mCurrent = mRadioButtonTask;
                 mViewPager.setCurrentItem(2);
+                return false;
             }
         });
 
-        mRadioButtonMe.setOnClickListener(new View.OnClickListener() {
+//        mRadioButtonMe.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                resetIcon();
+//                changeIcon(mRadioButtonMe, R.drawable.me_focused);
+//                mCurrent = mRadioButtonMe;
+//                mViewPager.setCurrentItem(3, true);
+//            }
+//        });
+
+        mRadioButtonMe.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onTouch(View v, MotionEvent event) {
                 resetIcon();
                 changeIcon(mRadioButtonMe, R.drawable.me_focused);
                 mCurrent = mRadioButtonMe;
                 mViewPager.setCurrentItem(3, true);
+                return false;
             }
         });
 

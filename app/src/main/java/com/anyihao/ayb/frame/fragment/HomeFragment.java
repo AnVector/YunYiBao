@@ -12,7 +12,6 @@ import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.CountDownTimer;
-import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -72,7 +71,6 @@ import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
-import com.orhanobut.logger.Logger;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -108,7 +106,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
     ViewFlipper flipper;
     @BindView(R.id.iv_bell)
     ImageView ivBell;
-    private static final int REQUEST_WIFI_SETTINGS_CODE = 0x0002;
+    private static final int REQUEST_NEW_MSG_CODE = 0x0002;
     private static final int REQUEST_LOGIN_CODE = 0x0003;
     private static final int RC_LOCATION_CONTACTS_PERM = 0x0004;
     @BindView(R.id.progress)
@@ -145,29 +143,8 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                     case WifiManager.WIFI_STATE_DISABLED:
                         wifiClosed();
                         break;
-                    case WifiManager.WIFI_STATE_DISABLING:
-                        break;
-                    case WifiManager.WIFI_STATE_ENABLING:
-                        break;
-                    case WifiManager.WIFI_STATE_ENABLED:
-                        break;
-                    case WifiManager.WIFI_STATE_UNKNOWN:
-                        break;
                     default:
                         break;
-                }
-            }
-            if (WifiManager.NETWORK_STATE_CHANGED_ACTION.equals(action)) {
-                Parcelable parcelableExtra = intent
-                        .getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
-                if (null != parcelableExtra) {
-                    NetworkInfo networkInfo = (NetworkInfo) parcelableExtra;
-                    NetworkInfo.State state = networkInfo.getState();
-                    boolean isConnected = state == NetworkInfo.State.CONNECTED;// 当然，这边可以更精确的确定状态
-                    if (isConnected) {
-                        getConnectWifi();
-                    } else {
-                    }
                 }
             }
             if (ConnectivityManager.CONNECTIVITY_ACTION.equals(action)) {
@@ -177,18 +154,9 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                 if (activeNetwork != null) { // connected to the internet
                     if (activeNetwork.isConnected()) {
                         if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
-                            // connected to wifi
-                            getConnectWifi();
-                            Logger.d("当前WiFi连接可用 ");
-                        } else if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
-                            // connected to the mobile provider's data plan
-                            Logger.d("当前移动网络连接可用 ");
+                            getConnectWifi();// connected to wifi
                         }
-                    } else {
-                        Logger.d("当前没有网络连接，请确保你已经打开网络 ");
                     }
-                } else {   // not connected to the internet
-                    Logger.d("当前没有网络连接，请确保你已经打开网络 ");
                 }
             }
         }
@@ -232,7 +200,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
             public void onFinish() {
                 loading = false;
                 stopAnimation();
-                ToastUtils.showToast(mContext.getApplicationContext(), "设备上卡超时，请稍后重试");
+                ToastUtils.showToast(mContext.getApplicationContext(), "设备连网超时，请稍后重试");
             }
         };
     }
@@ -393,7 +361,9 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
         stopAnimation();
         mData.clear();
         mAdapter.notifyDataSetChanged();
-        mRecyclerView.showEmptyView();
+        if (mRecyclerView != null) {
+            mRecyclerView.showEmptyView();
+        }
     }
 
     private void initNetWorkStateReceiver() {
@@ -428,7 +398,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                     return true;
                 }
                 Intent intent = new Intent(mContext, MessageActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_NEW_MSG_CODE);
                 return true;
             }
         });
@@ -515,6 +485,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                 startActivity(intent);
             }
         });
+
 
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -615,14 +586,8 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
     private void getUnreadMsg() {
         Map<String, String> params = new HashMap<>();
         params.put("cmd", "NEWMSG");
-        params.put("uid", PreferencesUtils.getString(mContext.getApplicationContext(), ""));
+        params.put("uid", PreferencesUtils.getString(mContext.getApplicationContext(), "uid", ""));
         postForm(params, 1, 6);
-    }
-
-    private void handleNewMessage(int count) {
-        if (count > 0) {
-            toolbar.getMenu().getItem(0).setIcon(R.drawable.ic_news);
-        }
     }
 
     private void postForm(Map<String, String> params, int page, int actionType) {
@@ -712,7 +677,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                         ClipboardUtils.copyText(mContext, mPassword);
                         ToastUtils.showToast(mContext.getApplicationContext(), "密码复制成功");
                         Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
-                        startActivityForResult(intent, REQUEST_WIFI_SETTINGS_CODE);
+                        startActivity(intent);
                         dialog.dismiss();
                         break;
                     default:
@@ -837,7 +802,13 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
             if (bean == null)
                 return;
             if (bean.getCode() == 200) {
-                handleNewMessage(bean.getResult());
+                if (toolbar != null) {
+                    if (bean.getResult() > 0) {
+                        toolbar.getMenu().getItem(0).setIcon(R.drawable.ic_news_unread);
+                    } else {
+                        toolbar.getMenu().getItem(0).setIcon(R.drawable.ic_news);
+                    }
+                }
             }
         }
     }
@@ -864,6 +835,10 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
             if (isLogin) {
                 getUserCertStatus();
             }
+        }
+
+        if (requestCode == REQUEST_NEW_MSG_CODE) {
+            getUnreadMsg();
         }
         IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode,
                 data);

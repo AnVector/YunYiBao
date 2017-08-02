@@ -5,19 +5,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
-import com.anyihao.androidbase.mvp.Task;
-import com.anyihao.androidbase.mvp.TaskType;
-import com.anyihao.androidbase.utils.GsonUtils;
-import com.anyihao.androidbase.utils.PreferencesUtils;
-import com.anyihao.androidbase.utils.StringUtils;
-import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
-import com.anyihao.ayb.bean.RechargeDetailsBean;
-import com.anyihao.ayb.common.PresenterFactory;
-import com.anyihao.ayb.constant.GlobalConsts;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 
@@ -33,7 +21,9 @@ public class SysRecordDetailsActivity extends ABaseActivity {
     TextView tvExpires;
     @BindView(R.id.tv_date)
     TextView tvDate;
-    private String mIdxOrderID;
+    private String mAmount;
+    private String mExpires;
+    private String mDate;
 
     @Override
     protected int getContentViewId() {
@@ -45,10 +35,9 @@ public class SysRecordDetailsActivity extends ABaseActivity {
         Intent intent = getIntent();
         if (intent == null)
             return;
-        mIdxOrderID = intent.getStringExtra("idxOrderID");
-        if (!StringUtils.isEmpty(mIdxOrderID)) {
-            getSysRecordDetails();
-        }
+        mAmount = intent.getStringExtra("amount");
+        mExpires = intent.getStringExtra("expires");
+        mDate = intent.getStringExtra("date");
     }
 
     @Override
@@ -59,6 +48,9 @@ public class SysRecordDetailsActivity extends ABaseActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         toolbarTitleMid.setText(getString(R.string.record_details));
+        tvDataAmount.setText(mAmount);
+        tvExpires.setText(mExpires);
+        tvDate.setText(mDate);
     }
 
     @Override
@@ -73,37 +65,8 @@ public class SysRecordDetailsActivity extends ABaseActivity {
 
     }
 
-    private void getSysRecordDetails() {
-        Map<String, String> params = new HashMap<>();
-        params.put("cmd", "PAYDETAILS");
-        params.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
-        params.put("idxOrderID", mIdxOrderID);
-
-        PresenterFactory.getInstance().createPresenter(this)
-                .execute(new Task.TaskBuilder()
-                        .setTaskType(TaskType.Method.POST)
-                        .setUrl(GlobalConsts.PREFIX_URL)
-                        .setParams(params)
-                        .setPage(1)
-                        .setActionType(0)
-                        .createTask());
-    }
-
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
-        if (actionType == 0) {
-            RechargeDetailsBean bean = GsonUtils.getInstance().transitionToBean(result,
-                    RechargeDetailsBean.class);
-            if (bean == null)
-                return;
-            if (bean.getCode() == 200) {
-                tvDataAmount.setText(bean.getFlow());
-                tvExpires.setText(bean.getEffectTm());
-                tvDate.setText(bean.getCrtTm());
-            } else {
-                ToastUtils.showToast(getApplicationContext(), bean.getMsg());
-            }
-        }
 
     }
 }

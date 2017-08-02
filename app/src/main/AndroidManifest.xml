@@ -532,6 +532,8 @@
         </activity>
         <activity android:name=".frame.activity.MacInstructionActivity">
         </activity>
+        <activity android:name=".frame.activity.TransRecordDetailsActivity">
+        </activity>
     </application>
 
 </manifest>

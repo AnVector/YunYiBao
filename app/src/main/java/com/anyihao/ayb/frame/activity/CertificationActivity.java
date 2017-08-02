@@ -10,7 +10,7 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
-import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.TextUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.CertificationStatusBean;
@@ -91,7 +91,7 @@ public class CertificationActivity extends ABaseActivity {
             public void onClick(View v) {
                 userName = edtUserName.getText().toString().trim();
                 IDNumber = edtIdentificationNo.getText().toString().trim();
-                if (StringUtils.isEmpty(userName) || StringUtils.isEmpty(IDNumber)) {
+                if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(IDNumber)) {
                     ToastUtils.showToast(getApplicationContext(), "请填写完整的用户信息", R.layout.toast, R
                             .id.tv_message);
                     return;

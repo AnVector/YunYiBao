@@ -13,7 +13,7 @@ import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.androidbase.utils.StatusBarUtil;
-import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.TextUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.ShareBean;
@@ -161,7 +161,7 @@ public class InviteFriendsActivity extends ABaseActivity {
 
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
-            if (StringUtils.isEmpty(t.toString()))
+            if (TextUtils.isEmpty(t.toString()))
                 return;
             if (t.toString().contains("2008")) {
                 ToastUtils.showToast(getApplicationContext(), "应用未安装");

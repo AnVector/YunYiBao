@@ -17,7 +17,7 @@ import android.widget.RemoteViews;
 
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.NetworkUtils;
-import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.TextUtils;
 import com.anyihao.ayb.ITaskCallback;
 import com.anyihao.ayb.IWifiInfoManager;
 import com.anyihao.ayb.R;
@@ -212,7 +212,7 @@ public class PollingService extends Service {
     }
 
     private void convertUUWifiInfo(String resultMsg) {
-        if (StringUtils.isEmpty(resultMsg)) {
+        if (TextUtils.isEmpty(resultMsg)) {
             return;
         }
         isConnected = true;

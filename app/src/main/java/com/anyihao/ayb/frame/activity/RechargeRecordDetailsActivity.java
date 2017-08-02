@@ -7,7 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
-import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.TextUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.RechargeRecordDetailsAdapter;
 import com.anyihao.ayb.bean.KeyValueBean;
@@ -76,7 +76,7 @@ public class RechargeRecordDetailsActivity extends ABaseActivity {
         recyclerview.setAdapter(mAdapter);
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager
                 .VERTICAL, false));
-        if (!StringUtils.isEmpty(fee)) {
+        if (!TextUtils.isEmpty(fee)) {
             tvPrice.setText(fee + "元");
         }
     }

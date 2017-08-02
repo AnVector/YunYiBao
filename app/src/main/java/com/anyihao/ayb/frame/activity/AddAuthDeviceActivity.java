@@ -15,7 +15,7 @@ import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.DensityUtils;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
-import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.TextUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.ResultBean;
@@ -90,7 +90,7 @@ public class AddAuthDeviceActivity extends ABaseActivity {
             @Override
             public void onClick(View v) {
                 macAddress = etMacAddress.getText().toString().trim();
-                if (StringUtils.isEmpty(macAddress)) {
+                if (TextUtils.isEmpty(macAddress)) {
                     ToastUtils.showToast(getApplicationContext(), "请输入设备Mac地址", R.layout.toast, R
                             .id.tv_message);
                     return;

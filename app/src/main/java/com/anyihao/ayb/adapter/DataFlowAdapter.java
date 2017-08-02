@@ -6,7 +6,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.anyihao.ayb.R;
+import com.anyihao.ayb.bean.PackageListBean;
 import com.anyihao.ayb.bean.PackageListBean.DataBean;
+
+import java.util.List;
 
 /**
  * Created by Admin on 2017/4/7.
@@ -16,8 +19,8 @@ public class DataFlowAdapter extends RecyclerViewAdapter<DataBean> {
 
     private View mCurrent;
 
-    public DataFlowAdapter(Context context, int layoutId) {
-        super(context, layoutId);
+    public DataFlowAdapter(Context context, int layoutId, List<DataBean> datas) {
+        super(context, layoutId, datas);
     }
 
     @Override

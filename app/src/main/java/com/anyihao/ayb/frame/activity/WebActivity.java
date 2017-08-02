@@ -96,16 +96,25 @@ public class WebActivity extends ABaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                ((CircularProgressDrawable) progressbarCircular.getIndeterminateDrawable()).stop();
-                progressbarCircular.setVisibility(View.GONE);
-                webView.setVisibility(View.VISIBLE);
+                if (progressbarCircular != null) {
+                    ((CircularProgressDrawable) progressbarCircular.getIndeterminateDrawable())
+                            .stop();
+                    progressbarCircular.setVisibility(View.GONE);
+                }
+                if (webView != null) {
+                    webView.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                progressbarCircular.setVisibility(View.VISIBLE);
-                ((CircularProgressDrawable) progressbarCircular.getIndeterminateDrawable()).start();
+                if (progressbarCircular != null) {
+                    progressbarCircular.setVisibility(View.VISIBLE);
+                    ((CircularProgressDrawable) progressbarCircular.getIndeterminateDrawable())
+                            .start();
+                }
+
             }
         });
 
@@ -128,6 +137,13 @@ public class WebActivity extends ABaseActivity {
         if (progressbarCircular != null) {
             progressbarCircular.progressiveStop();
             progressbarCircular = null;
+        }
+
+        if (webView != null) {
+            webView.clearHistory();
+            webView.clearCache(true);
+            webView.removeAllViews();
+            webView.destroy();
         }
     }
 }

@@ -179,7 +179,7 @@ public class CameraUtils {
 //                }
 //            }
 //        }
-//        return StringUtils.isEmpty(path) ? originalUri.getPath() : null;
+//        return TextUtils.isEmpty(path) ? originalUri.getPath() : null;
 //    }
 //
 //    /**

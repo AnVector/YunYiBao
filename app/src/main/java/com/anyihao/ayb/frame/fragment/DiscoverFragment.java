@@ -192,13 +192,13 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
         //设置定位间隔,单位毫秒,默认为2000ms
-        mLocationOption.setInterval(20 * 1000);
+        mLocationOption.setInterval(60 * 1000);
         //设置是否返回地址信息（默认返回地址信息）
         mLocationOption.setNeedAddress(true);
         //设置是否只定位一次,默认为false
-        mLocationOption.setOnceLocation(false);
+        mLocationOption.setOnceLocation(true);
         //设置是否强制刷新WIFI，默认为强制刷新
-        mLocationOption.setWifiActiveScan(true);
+        mLocationOption.setWifiActiveScan(false);
         //设置是否允许模拟位置,默认为false，不允许模拟位置
         mLocationOption.setMockEnable(false);
         //给定位客户端对象设置定位参数
@@ -210,11 +210,15 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
         //启动定位
         mLocationClient.startLocation();
-        mAmap.moveCamera(CameraUpdateFactory.zoomTo(17));
         //将地图移动到定位点
-        mAmap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(mLocationClient
-                .getLastKnownLocation()
-                .getLatitude(), mLocationClient.getLastKnownLocation().getLongitude())));
+        AMapLocation aMapLocation = mLocationClient
+                .getLastKnownLocation();
+        if (aMapLocation != null) {
+            mAmap.moveCamera(CameraUpdateFactory.zoomTo(17));
+            mAmap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(aMapLocation.getLatitude
+                    (), aMapLocation.getLongitude())));
+        }
+
     }
 
     @Override
@@ -223,11 +227,15 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         imvMyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAmap.moveCamera(CameraUpdateFactory.zoomTo(17));
-                //将地图移动到定位点
-                mAmap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(mLocationClient
-                        .getLastKnownLocation()
-                        .getLatitude(), mLocationClient.getLastKnownLocation().getLongitude())));
+
+                AMapLocation aMapLocation = mLocationClient
+                        .getLastKnownLocation();
+                if (aMapLocation != null) {
+                    mAmap.moveCamera(CameraUpdateFactory.zoomTo(17));
+                    mAmap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(aMapLocation
+                            .getLatitude
+                                    (), aMapLocation.getLongitude())));
+                }
             }
         });
     }

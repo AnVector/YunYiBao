@@ -33,7 +33,6 @@ public class NotRentAdapter extends UAdapter<DataBean> {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
         super.onBindViewHolder(holder, position);
         if (bp && holder instanceof NotRentViewHolder) {
             DataBean content = mData.get((hasHeaderView() ? position - 1 : position));
@@ -45,7 +44,6 @@ public class NotRentAdapter extends UAdapter<DataBean> {
     private class NotRentViewHolder extends UltimateRecyclerviewViewHolder {
 
         public TextView tvDevice;
-
         public NotRentViewHolder(View itemView) {
             super(itemView);
             tvDevice = (TextView) itemView.findViewById(R.id.tv_device);

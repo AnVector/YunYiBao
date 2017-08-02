@@ -71,7 +71,7 @@ public class NetworkUtils {
     public static String getConnectWifiSsid(Context context){
         WifiManager wifiManager = (WifiManager) context.getSystemService(WIFI_SERVICE);
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        if(!StringUtils.isEmpty(wifiInfo.getSSID())){
+        if(!TextUtils.isEmpty(wifiInfo.getSSID())){
             return wifiInfo.getSSID().substring(1,wifiInfo.getSSID().length()-1);
         }
         return "";

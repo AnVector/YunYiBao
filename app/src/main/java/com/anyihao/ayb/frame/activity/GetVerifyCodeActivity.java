@@ -14,7 +14,7 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
-import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.TextUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.LoginBean;
@@ -128,7 +128,7 @@ public class GetVerifyCodeActivity extends ABaseActivity {
             @Override
             public void onClick(View v) {
                 verifyCode = inputVerifyCode.getText().toString().trim();
-                if (StringUtils.isEmpty(verifyCode)) {
+                if (TextUtils.isEmpty(verifyCode)) {
                     ToastUtils.showToast(getApplicationContext(), "请输入验证码", R.layout.toast, R.id
                             .tv_message);
                     return;
@@ -146,7 +146,7 @@ public class GetVerifyCodeActivity extends ABaseActivity {
             @Override
             public void onClick(View v) {
                 phoneNum = edtPhoneNum.getText().toString().trim();
-                if (StringUtils.isEmpty(phoneNum)) {
+                if (TextUtils.isEmpty(phoneNum)) {
                     ToastUtils.showToast(getApplicationContext(), "请输入手机号", R.layout.toast, R.id
                             .tv_message);
                     return;
@@ -202,7 +202,7 @@ public class GetVerifyCodeActivity extends ABaseActivity {
     }
 
     private void bindMobile() {
-        if (StringUtils.isEmpty(appId) || StringUtils.isEmpty(userType))
+        if (TextUtils.isEmpty(appId) || TextUtils.isEmpty(userType))
             return;
         Map<String, String> params = new HashMap<>();
         params.put("cmd", "PHONEBIND");
@@ -360,9 +360,11 @@ public class GetVerifyCodeActivity extends ABaseActivity {
         super.onDestroy();
         if (mCountDownTimer != null) {
             mCountDownTimer.cancel();
+            mCountDownTimer = null;
         }
-        if (mHandler != null) {
+        if(mHandler!=null){
             mHandler.removeCallbacksAndMessages(null);
+            mHandler = null;
         }
     }
 }

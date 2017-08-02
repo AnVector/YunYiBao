@@ -201,7 +201,7 @@ public class ImageUtils {
      * @return bitmap
      */
     public static Bitmap getBitmap(String filePath) {
-        if (StringUtils.isSpace(filePath)) return null;
+        if (TextUtils.isSpace(filePath)) return null;
         return BitmapFactory.decodeFile(filePath);
     }
 
@@ -214,7 +214,7 @@ public class ImageUtils {
      * @return bitmap
      */
     public static Bitmap getBitmap(String filePath, int maxWidth, int maxHeight) {
-        if (StringUtils.isSpace(filePath)) return null;
+        if (TextUtils.isSpace(filePath)) return null;
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(filePath, options);

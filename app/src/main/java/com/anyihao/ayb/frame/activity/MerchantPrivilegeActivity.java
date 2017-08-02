@@ -55,8 +55,6 @@ public class MerchantPrivilegeActivity extends ABaseActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         toolbarTitleMid.setText(getString(R.string.merchat_privilege));
-        toolbarTitleRight.setText(getString(R.string.direction_for_use));
-        toolbarTitleRight.setTextColor(getResources().getColor(R.color.light_gray));
         tabLayout.setupWithViewPager(viewpager);
     }
 

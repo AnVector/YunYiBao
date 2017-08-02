@@ -9,7 +9,7 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
-import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.TextUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.ResultBean;
@@ -60,7 +60,7 @@ public class UpdateInfoActivity extends ABaseActivity {
     }
 
     private void setProperty(String key) {
-        if (StringUtils.isEmpty(key))
+        if (TextUtils.isEmpty(key))
             return;
         switch (key) {
             case "昵称":
@@ -84,11 +84,11 @@ public class UpdateInfoActivity extends ABaseActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         titleRight.setText(getString(R.string.save));
-        if (!StringUtils.isEmpty(key)) {
+        if (!TextUtils.isEmpty(key)) {
             titleMid.setText(key);
             tvInfo.setText(key + "：");
         }
-        if (!StringUtils.isEmpty(value)) {
+        if (!TextUtils.isEmpty(value)) {
             edtInfo.setText(value);
         }
     }
@@ -100,7 +100,7 @@ public class UpdateInfoActivity extends ABaseActivity {
             @Override
             public void onClick(View v) {
                 newValue = edtInfo.getText().toString().trim();
-                if (StringUtils.isEmpty(newValue)) {
+                if (TextUtils.isEmpty(newValue)) {
                     ToastUtils.showToast(getApplicationContext(), "信息不能为空", R.layout.toast, R.id
                             .tv_message);
                     return;

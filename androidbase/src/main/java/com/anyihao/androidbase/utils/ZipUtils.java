@@ -179,14 +179,14 @@ public class ZipUtils {
     private static boolean zipFile(File resFile, String rootPath, ZipOutputStream zos, String
             comment)
             throws IOException {
-        rootPath = rootPath + (StringUtils.isSpace(rootPath) ? "" : File.separator) + resFile
+        rootPath = rootPath + (TextUtils.isSpace(rootPath) ? "" : File.separator) + resFile
                 .getName();
         if (resFile.isDirectory()) {
             File[] fileList = resFile.listFiles();
             // 如果是空文件夹那么创建它，我把'/'换为File.separator测试就不成功，eggPain
             if (fileList == null || fileList.length <= 0) {
                 ZipEntry entry = new ZipEntry(rootPath + '/');
-                if (!StringUtils.isEmpty(comment)) entry.setComment(comment);
+                if (!TextUtils.isEmpty(comment)) entry.setComment(comment);
                 zos.putNextEntry(entry);
                 zos.closeEntry();
             } else {
@@ -200,7 +200,7 @@ public class ZipUtils {
             try {
                 is = new BufferedInputStream(new FileInputStream(resFile));
                 ZipEntry entry = new ZipEntry(rootPath);
-                if (!StringUtils.isEmpty(comment)) entry.setComment(comment);
+                if (!TextUtils.isEmpty(comment)) entry.setComment(comment);
                 zos.putNextEntry(entry);
                 byte buffer[] = new byte[KB];
                 int len;
@@ -306,7 +306,7 @@ public class ZipUtils {
         while (entries.hasMoreElements()) {
             ZipEntry entry = ((ZipEntry) entries.nextElement());
             String entryName = entry.getName();
-            if (StringUtils.isEmpty(keyword) || FileUtils.getFileName(entryName).toLowerCase()
+            if (TextUtils.isEmpty(keyword) || FileUtils.getFileName(entryName).toLowerCase()
                     .contains(keyword.toLowerCase())) {
                 String filePath = destDir + File.separator + entryName;
                 File file = new File(filePath);

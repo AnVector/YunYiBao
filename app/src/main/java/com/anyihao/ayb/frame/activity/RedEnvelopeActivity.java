@@ -12,7 +12,7 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
-import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.TextUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.ResultBean;
@@ -90,7 +90,7 @@ public class RedEnvelopeActivity extends ABaseActivity {
         if (status == 0) {
             llClose.setVisibility(View.VISIBLE);
             llOpen.setVisibility(View.GONE);
-            if (!StringUtils.isEmpty(sendAvatar)) {
+            if (!TextUtils.isEmpty(sendAvatar)) {
                 Glide.with(this).load(sendAvatar)
                         .bitmapTransform(new CropCircleTransformation(this))
                         .placeholder(R.drawable.user_profile)
@@ -104,7 +104,7 @@ public class RedEnvelopeActivity extends ABaseActivity {
     private void openEnvelope() {
         llClose.setVisibility(View.GONE);
         llOpen.setVisibility(View.VISIBLE);
-        if (!StringUtils.isEmpty(sendAvatar)) {
+        if (!TextUtils.isEmpty(sendAvatar)) {
             Glide.with(this).load(sendAvatar)
                     .bitmapTransform(new CropCircleTransformation(this))
                     .placeholder(R.drawable.user_profile)
@@ -117,7 +117,7 @@ public class RedEnvelopeActivity extends ABaseActivity {
     }
 
     private String getDate(String time) {
-        if (StringUtils.isEmpty(time) || time.length() < 10)
+        if (TextUtils.isEmpty(time) || time.length() < 10)
             return "";
         return time.substring(0, 10).replace("-", ".");
     }

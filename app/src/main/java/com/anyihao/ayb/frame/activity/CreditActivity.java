@@ -1,11 +1,11 @@
 package com.anyihao.ayb.frame.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,7 +14,6 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
-import com.anyihao.androidbase.utils.StringUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.CreditAdapter;
@@ -41,7 +40,6 @@ public class CreditActivity extends ABaseActivity {
     Toolbar toolbar;
     @BindView(R.id.ultimate_recycler_view)
     UltimateRecyclerView recyclerView;
-    private NumberRunningTextView tvPoints;
     private LinearLayoutManager layoutManager;
     private CreditAdapter mAdapter;
     private List<DataBean> mData = new ArrayList<>();
@@ -61,7 +59,7 @@ public class CreditActivity extends ABaseActivity {
         if (intent == null)
             return;
         mCredit = intent.getStringExtra("integral");
-        if (!StringUtils.isEmpty(mCredit)) {
+        if (!TextUtils.isEmpty(mCredit)) {
             mCredit = mCredit.replace(" 积分", "");
         }
     }
@@ -69,7 +67,6 @@ public class CreditActivity extends ABaseActivity {
     @Override
     protected void initData() {
         toolbar.setNavigationIcon(R.drawable.ic_back);
-        toolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -104,7 +101,8 @@ public class CreditActivity extends ABaseActivity {
         recyclerView.setLoadMoreView(R.layout.custom_bottom_progressbar);
         View headerView = getLayoutInflater().inflate(R.layout
                 .view_credit_header_layout, recyclerView.mRecyclerView, false);
-        tvPoints = (NumberRunningTextView) headerView.findViewById(R.id.tv_points);
+        NumberRunningTextView tvPoints = (NumberRunningTextView) headerView.findViewById(R.id
+                .tv_points);
         if (tvPoints != null) {
             Typeface fontFace = Typeface.createFromAsset(getAssets(),
                     "fonts/W13.ttc");
@@ -157,7 +155,7 @@ public class CreditActivity extends ABaseActivity {
 
     private void onLoadMore(List<DataBean> beans) {
         mAdapter.insert(beans);
-        if (beans.size() < PAGE_SIZE) {
+        if (beans.size() < PAGE_SIZE && recyclerView != null) {
             recyclerView.disableLoadmore();
         }
     }

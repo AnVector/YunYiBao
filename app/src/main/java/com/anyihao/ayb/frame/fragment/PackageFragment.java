@@ -12,7 +12,7 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
-import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.TextUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.DataFlowAdapter;
@@ -51,13 +51,13 @@ public class PackageFragment extends ABaseFragment {
             flowType = bundle.getString("flowType");
             getPackageInfo();
         }
-        mAdapter = new DataFlowAdapter(getActivity(), R.layout.item_data_flow);
+        mAdapter = new DataFlowAdapter(mContext, R.layout.item_data_flow, mData);
         recyclerview.setAdapter(mAdapter);
         recyclerview.setLayoutManager(new GridLayoutManager(mContext, 3));
     }
 
     private void getPackageInfo() {
-        if (StringUtils.isEmpty(flowType))
+        if (TextUtils.isEmpty(flowType))
             return;
         Map<String, String> params = new HashMap<>();
         params.put("cmd", "PAYINFO");
@@ -128,7 +128,6 @@ public class PackageFragment extends ABaseFragment {
             if (bean == null)
                 return;
             if (bean.getCode() == 200) {
-                mAdapter.remove(0, mData.size());
                 mData.clear();
                 List<DataBean> beans = bean.getData();
                 if (beans != null && !beans.isEmpty()) {
@@ -136,9 +135,11 @@ public class PackageFragment extends ABaseFragment {
                     amount = beans.get(0).getFlow();
                     expires = beans.get(0).getPkgDesc();
                     packageID = beans.get(0).getPackageID();
-                    tvPackageDesc.setText(expires);
+                    if (tvPackageDesc != null) {
+                        tvPackageDesc.setText(expires);
+                    }
                     mData.addAll(beans);
-                    mAdapter.add(0, mData.size(), mData);
+                    mAdapter.notifyDataSetChanged();
                 }
 
             } else {

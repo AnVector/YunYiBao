@@ -3,7 +3,7 @@ package com.anyihao.ayb.adapter;
 import android.content.Context;
 import android.graphics.Color;
 
-import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.TextUtils;
 import com.anyihao.ayb.R;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public class SignAdapter extends RecyclerViewAdapter<String> {
 
     @Override
     public void convert(ViewHolder holder, String s) {
-        if (StringUtils.isEmpty(s))
+        if (TextUtils.isEmpty(s))
             return;
         if (s.contains("7")) {
             holder.setInVisible(R.id.line);

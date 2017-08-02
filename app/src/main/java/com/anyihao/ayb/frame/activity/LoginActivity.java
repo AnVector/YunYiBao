@@ -18,12 +18,13 @@ import com.anyihao.androidbase.utils.LogUtils;
 import com.anyihao.androidbase.utils.MD5;
 import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.androidbase.utils.StatusBarUtil;
-import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.TextUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.LoginBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
+import com.orhanobut.logger.Logger;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -211,7 +212,7 @@ public class LoginActivity extends ABaseActivity {
         boolean valid = true;
         userName = etUserName.getText().toString().trim();
         password = etPassword.getText().toString().trim();
-        if (StringUtils.isEmpty(userName) || StringUtils.isEmpty(password)) {
+        if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(password)) {
             valid = false;
         }
         return valid;
@@ -314,13 +315,10 @@ public class LoginActivity extends ABaseActivity {
     UMAuthListener authListener = new UMAuthListener() {
         @Override
         public void onStart(SHARE_MEDIA platform) {
-//            SocializeUtils.safeShowDialog(dialog);
-//            UmengTool.getSignature(LoginActivity.this);
         }
 
         @Override
         public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
-//            SocializeUtils.safeCloseDialog(dialog);
             String nickname = "";
             String avatar = "";
             String sex = "";
@@ -336,10 +334,7 @@ public class LoginActivity extends ABaseActivity {
                     sex = data.get("gender");
                     if (platform == SHARE_MEDIA.WEIXIN)
                         userType = "WX";
-                    for (Map.Entry<String, String> entry : data.entrySet()) {
-                        LogUtils.e(TAG, "Key = " + entry.getKey() + ", Value = " + entry
-                                .getValue());
-                    }
+                    Logger.d(data);
                     break;
                 case SINA:
                     userType = "WB";
@@ -347,10 +342,7 @@ public class LoginActivity extends ABaseActivity {
                     avatar = data.get("iconurl");
                     nickname = data.get("name");
                     sex = data.get("gender");
-                    for (Map.Entry<String, String> entry : data.entrySet()) {
-                        LogUtils.e(TAG, "Key = " + entry.getKey() + ", Value = " + entry
-                                .getValue());
-                    }
+                    Logger.d(data);
                     break;
                 default:
                     break;
@@ -361,17 +353,15 @@ public class LoginActivity extends ABaseActivity {
 
         @Override
         public void onError(SHARE_MEDIA platform, int action, Throwable t) {
-//            SocializeUtils.safeCloseDialog(dialog);
-            LogUtils.e(TAG, "platform=" + platform);
-            LogUtils.e(TAG, "action = " + action);
-            LogUtils.e(TAG, "error = " + t.getMessage());
+            Logger.e(TAG, "platform=" + platform);
+            Logger.e(TAG, "action = " + action);
+            Logger.e(TAG, "error = " + t.getMessage());
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform, int action) {
-//            SocializeUtils.safeCloseDialog(dialog);
-            LogUtils.e(TAG, "platform=" + platform);
-            LogUtils.e(TAG, "action = " + action);
+            Logger.e(TAG, "platform=" + platform);
+            Logger.e(TAG, "action = " + action);
         }
     };
 }

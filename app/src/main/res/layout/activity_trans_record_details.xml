@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.anyihao.ayb.frame.activity.SysRecordDetailsActivity">
+    tools:context="com.anyihao.ayb.frame.activity.TransRecordDetailsActivity">
 
     <include layout="@layout/toolbar_common"/>
 
@@ -16,28 +16,28 @@
         android:background="@color/white">
 
         <ImageView
-            android:id="@+id/iv_system"
+            android:id="@+id/ic_profile"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="26dp"
+            android:layout_marginTop="38dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_system"/>
+            android:src="@drawable/user_profile"/>
 
         <TextView
-            android:id="@+id/tv_system_hint"
+            android:id="@+id/tv_to"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/iv_system"
+            android:layout_below="@id/ic_profile"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="15dp"
             android:gravity="center"
-            android:text="@string/system_gift"
             android:textColor="@color/toolbar_title_color"
             android:textSize="@dimen/font_size_normal"/>
 
         <TextView
-            android:id="@+id/tv_gift_date"
+            android:id="@+id/tv_title_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -50,47 +50,45 @@
             android:textSize="@dimen/font_size_normal"/>
 
         <TextView
-            android:id="@+id/tv_date"
+            android:id="@+id/tv_value_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_alignTop="@id/tv_gift_date"
+            android:layout_alignTop="@id/tv_title_date"
             android:layout_marginRight="12dp"
             android:gravity="center"
             android:textColor="@color/toolbar_register_color"
-            android:textSize="@dimen/font_size_normal"
             tools:text="2017-03-25 17:22:22"/>
 
         <TextView
-            android:id="@+id/tv_expires_hint"
+            android:id="@+id/tv_title_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@id/tv_gift_date"
+            android:layout_above="@id/tv_title_date"
             android:layout_alignParentLeft="true"
             android:layout_marginBottom="20dp"
             android:layout_marginLeft="12dp"
             android:gravity="center"
-            android:text="@string/expires"
+            android:text="@string/reciprocal_account"
             android:textColor="@color/pay_title_text_color"
             android:textSize="@dimen/font_size_normal"/>
 
         <TextView
-            android:id="@+id/tv_expires"
+            android:id="@+id/tv_value_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_alignTop="@id/tv_expires_hint"
+            android:layout_alignTop="@id/tv_title_account"
             android:layout_marginRight="12dp"
             android:gravity="center"
             android:textColor="@color/toolbar_register_color"
-            android:textSize="@dimen/font_size_normal"
-            tools:text="一年"/>
+            tools:text="疯人愿"/>
 
         <TextView
-            android:id="@+id/tv_gift_data_hint"
+            android:id="@+id/tv_title_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@id/tv_expires_hint"
+            android:layout_above="@id/tv_title_account"
             android:layout_alignParentLeft="true"
             android:layout_marginBottom="20dp"
             android:layout_marginLeft="12dp"
@@ -100,15 +98,14 @@
             android:textSize="@dimen/font_size_normal"/>
 
         <TextView
-            android:id="@+id/tv_data_amount"
+            android:id="@+id/tv_value_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_alignTop="@id/tv_gift_data_hint"
+            android:layout_alignTop="@id/tv_title_amount"
             android:layout_marginRight="12dp"
             android:gravity="center"
             android:textColor="@color/toolbar_title_color"
-            android:textSize="@dimen/font_size_normal"
-            tools:text="100M"/>
+            tools:text="50M"/>
     </RelativeLayout>
 </LinearLayout>

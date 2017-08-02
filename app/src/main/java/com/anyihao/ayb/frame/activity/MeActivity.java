@@ -664,6 +664,7 @@ public class MeActivity extends ABaseActivity {
         super.onDestroy();
         if(mHandler!=null){
             mHandler.removeCallbacksAndMessages(null);
+            mHandler = null;
         }
     }
 }

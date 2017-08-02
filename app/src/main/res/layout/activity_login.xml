@@ -31,6 +31,7 @@
             android:drawablePadding="29dp"
             android:drawableRight="@drawable/edit_text_selector"
             android:hint="@string/user_name_hint"
+            android:inputType="phone"
             android:maxLines="1"
             android:textColor="@color/user_account_color"
             android:textColorHint="@color/light_gray"

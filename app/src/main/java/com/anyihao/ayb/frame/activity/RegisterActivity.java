@@ -6,7 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
-import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.TextUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.chaychan.viewlib.PowerfulEditText;
@@ -61,7 +61,7 @@ public class RegisterActivity extends ABaseActivity {
             public void onClick(View v) {
                 String phoneNo = inputPhoneNum.getText().toString().trim();
 
-                if (StringUtils.isEmpty(phoneNo)) {
+                if (TextUtils.isEmpty(phoneNo)) {
                     ToastUtils.showToast(getApplicationContext(), "请输入手机号");
                     return;
                 }

@@ -1,81 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center_horizontal"
-              android:background="@color/white"
-              android:orientation="vertical">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="65dp"
+    android:background="@color/white">
 
     <TextView
-        android:id="@+id/tv_month"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:background="@color/app_background_color"
-        android:gravity="left|center_vertical"
-        android:paddingLeft="15dp"
+        android:id="@+id/tv_weekday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:textColor="@color/light_gray"
+        android:textSize="@dimen/font_size_normal_high"/>
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv_weekday"
+        android:layout_below="@id/tv_weekday"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:textColor="@color/light_gray"
+        android:textSize="@dimen/font_size_thi"/>
+
+    <ImageView
+        android:id="@+id/img_payment_mode"
+        android:layout_width="33dp"
+        android:layout_height="33dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@id/tv_weekday"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_recharge_record_alipay"/>
+
+    <TextView
+        android:id="@+id/tv_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/tv_weekday"
+        android:layout_marginLeft="21dp"
+        android:layout_toRightOf="@id/img_payment_mode"
+        android:gravity="center"
+        android:textSize="@dimen/font_size_normal_high"/>
+
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/tv_date"
+        android:layout_alignLeft="@id/tv_price"
+        android:gravity="center"
         android:textColor="@color/pay_title_text_color"
-        android:textSize="@dimen/font_size_normal"
-        android:visibility="gone"/>
+        android:textSize="@dimen/font_size_thi"/>
 
     <View
-        style="@style/divider_line"/>
-
-    <RelativeLayout
-        android:id="@+id/record_item"
-        android:layout_width="match_parent"
-        android:layout_height="65dp">
-
-        <TextView
-            android:id="@+id/tv_weekday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="10dp"
-            android:gravity="right|top"
-            android:textColor="@color/light_gray"
-            android:textSize="@dimen/font_size_normal_high"/>
-
-        <TextView
-            android:id="@+id/tv_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/tv_weekday"
-            android:layout_below="@id/tv_weekday"
-            android:layout_marginTop="5dp"
-            android:gravity="left|top"
-            android:textColor="@color/light_gray"
-            android:textSize="@dimen/font_size_thi"/>
-
-        <ImageView
-            android:id="@+id/img_payment_mode"
-            android:layout_width="33dp"
-            android:layout_height="33dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
-            android:layout_toRightOf="@id/tv_weekday"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_recharge_record_alipay"/>
-
-        <TextView
-            android:id="@+id/tv_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/tv_weekday"
-            android:layout_marginLeft="21dp"
-            android:layout_toRightOf="@id/img_payment_mode"
-            android:gravity="right|top"
-            android:textSize="@dimen/font_size_normal_high"/>
-
-        <TextView
-            android:id="@+id/tv_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/tv_time"
-            android:layout_alignLeft="@id/tv_price"
-            android:gravity="left|top"
-            android:textColor="@color/pay_title_text_color"
-            android:textSize="@dimen/font_size_thi"/>
-    </RelativeLayout>
-</LinearLayout>
+        style="@style/divider_line"
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>

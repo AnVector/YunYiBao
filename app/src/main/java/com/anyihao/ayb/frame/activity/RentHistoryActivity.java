@@ -133,7 +133,7 @@ public class RentHistoryActivity extends ABaseActivity {
 
     private void onLoadMore(List<DataBean> beans) {
         mAdapter.insert(beans);
-        if (beans.size() < PAGE_SIZE) {
+        if (beans.size() < PAGE_SIZE && recyclerView != null) {
             recyclerView.disableLoadmore();
         }
     }

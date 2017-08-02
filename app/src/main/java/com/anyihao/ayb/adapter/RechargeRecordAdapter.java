@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.TextUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.RechargeRecordListBean.DataBean;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
@@ -61,7 +61,7 @@ public class RechargeRecordAdapter extends UAdapter<DataBean> {
             String week = null;
             if (date[0].length() > 5) {
                 week = getWeekOfDate(date[0]);
-                ((RechargeRecordViewHolder) holder).tvTime.setText(date[0].substring(5));
+                ((RechargeRecordViewHolder) holder).tvDate.setText(date[0].substring(5));
             }
             if (week != null) {
                 ((RechargeRecordViewHolder) holder).tvWeekday.setText(week);
@@ -98,7 +98,7 @@ public class RechargeRecordAdapter extends UAdapter<DataBean> {
      * @return
      */
     private String getWeekOfDate(String date) {
-        if (StringUtils.isEmpty(date))
+        if (TextUtils.isEmpty(date))
             return null;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
         Date d = null;
@@ -120,13 +120,17 @@ public class RechargeRecordAdapter extends UAdapter<DataBean> {
     }
 
     public long getItemId(int position) {
-        if (customHeaderView != null)
+        if (customHeaderView != null) {
             position--;
-        String date = "";
-        if (position >= 0 && position < mData.size()) {
-            date = mData.get(position).getCrtTm().substring(0, 6);
         }
-        return (long) date.hashCode();
+        String date = "0";
+        if (position >= 0 && position < mData.size()) {
+            String time = mData.get(position).getCrtTm();
+            if (time != null && time.length() >= 8) {
+                date = time.substring(0, 7).replace("-", "");
+            }
+        }
+        return Long.valueOf(date);
     }
 
     private String getNowMonth() {
@@ -142,44 +146,43 @@ public class RechargeRecordAdapter extends UAdapter<DataBean> {
     }
 
     private String generateHeaderContent(int position) {
-        if (customHeaderView != null)
+        if (customHeaderView != null) {
             position--;
-        String date = "";
-        if (position >= 0 && position < mData.size()) {
-            date = mData.get(position).getCrtTm().substring(0, 7);
-            if (date.equals(getNowMonth())) {
-                return "本月";
-            }
-            date = mData.get(position).getCrtTm().substring(0, 4);
-            if (date.equals(getNowYear())) {
-                return mData.get(position).getCrtTm().substring(4, 7) + "月";
-            }
-            return mData.get(position).getCrtTm().substring(0, 7);
         }
-        return date;
+        String date = "";
+        if (position < 0 || position >= mData.size()) {
+            return date;
+        }
+        String time = mData.get(position).getCrtTm();
+        if (time == null || time.length() < 10) {
+            return date;
+        }
+        date = time.substring(0, 7);
+        if (date.equals(getNowMonth())) {
+            return "本月";
+        }
+        date = time.substring(0, 4);
+        if (date.equals(getNowYear())) {
+            return time.substring(5, 7) + "月";
+        }
+        return time.substring(0, 7);
     }
 
     private class RechargeRecordViewHolder extends UltimateRecyclerviewViewHolder {
 
-        public TextView tvMonth;
         public TextView tvWeekday;
-        public TextView tvTime;
+        public TextView tvDate;
         public TextView tvPrice;
         public TextView tvDescription;
         public ImageView imgPayIcon;
-        public View line;
-        public View recordItem;
 
         public RechargeRecordViewHolder(View itemView) {
             super(itemView);
-            tvMonth = (TextView) itemView.findViewById(R.id.tv_month);
             tvWeekday = (TextView) itemView.findViewById(R.id.tv_weekday);
-            tvTime = (TextView) itemView.findViewById(R.id.tv_time);
+            tvDate = (TextView) itemView.findViewById(R.id.tv_date);
             tvPrice = (TextView) itemView.findViewById(R.id.tv_price);
             tvDescription = (TextView) itemView.findViewById(R.id.tv_description);
             imgPayIcon = (ImageView) itemView.findViewById(R.id.img_payment_mode);
-            line = itemView.findViewById(R.id.line);
-            recordItem = itemView.findViewById(R.id.record_item);
         }
     }
 }

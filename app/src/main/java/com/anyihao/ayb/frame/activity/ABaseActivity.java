@@ -12,7 +12,7 @@ import android.view.WindowManager;
 import com.anyihao.androidbase.acitivity.BKBaseActivity;
 import com.anyihao.androidbase.mvp.IView;
 import com.anyihao.androidbase.utils.StatusBarUtil;
-import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.TextUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.common.PresenterFactory;
@@ -51,7 +51,7 @@ public abstract class ABaseActivity extends BKBaseActivity implements IView<Inte
             Method getStringMethod = sysClass.getDeclaredMethod("get", String.class);
             String version = (String) getStringMethod.invoke(sysClass, "ro.miui.ui.version" +
                     ".name");
-            if (!StringUtils.isEmpty(version)) {
+            if (!TextUtils.isEmpty(version)) {
                 if (version.contains("V") && version.length() == 2) {
                     int verNum = Integer.parseInt(version.substring(1));
                     if (verNum >= 6) {
@@ -137,13 +137,13 @@ public abstract class ABaseActivity extends BKBaseActivity implements IView<Inte
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-        if (StringUtils.isEmpty(error))
+        if (TextUtils.isEmpty(error))
             return;
         if (error.contains("ConnectException")) {
             ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
         } else if (error.contains("404")) {
             ToastUtils.showToast(getApplicationContext(), "未知异常");
-        } else if (error.contains("TimeoutException")) {
+        } else if (error.contains("SocketTimeoutException")) {
             ToastUtils.showToast(getApplicationContext(), "网络连接超时，请稍后重试");
         } else {
             ToastUtils.showToast(getApplicationContext(), error);

@@ -1,5 +1,6 @@
 package com.anyihao.ayb.frame.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -133,7 +134,14 @@ public class TransferRecordActivity extends ABaseActivity {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
                 if (o instanceof DataBean) {
-
+                    Intent intent = new Intent(TransferRecordActivity.this,
+                            TransRecordDetailsActivity.class);
+                    intent.putExtra("url", ((DataBean) o).getAvatar());
+                    intent.putExtra("nickname", ((DataBean) o).getNickname());
+                    intent.putExtra("amount", ((DataBean) o).getFlow());
+                    intent.putExtra("account", ((DataBean) o).getNickname());
+                    intent.putExtra("date", ((DataBean) o).getCrtTm());
+                    startActivity(intent);
                 }
             }
 
@@ -156,7 +164,7 @@ public class TransferRecordActivity extends ABaseActivity {
 
     private void onLoadMore(List<DataBean> beans) {
         mTransferAdapter.insert(beans);
-        if (beans.size() < PAGE_SIZE) {
+        if (beans.size() < PAGE_SIZE && recyclerView != null) {
             recyclerView.disableLoadmore();
         }
     }

@@ -14,7 +14,7 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
-import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.TextUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.MessageAdapter;
@@ -48,6 +48,7 @@ public class MessageFragment extends ABaseFragment {
     private static final int PAGE_SIZE = 8;
     private boolean isRefresh;
     private boolean isInited = false;
+    private boolean networkError;
 
     @Override
     protected void initData() {
@@ -77,12 +78,17 @@ public class MessageFragment extends ABaseFragment {
                     return;
                 ImageView imvError = (ImageView) mView.findViewById(R.id.ic_error);
                 TextView tvHint = (TextView) mView.findViewById(R.id.tv_hint);
-                if (imvError != null) {
-                    imvError.setImageDrawable(getResources().getDrawable(R.drawable
-                            .ic_no_message));
-                }
-                if (tvHint != null) {
-                    tvHint.setText("暂无消息");
+                if (imvError != null && tvHint != null) {
+                    if (networkError) {
+                        tvHint.setText("网络异常");
+                        imvError.setImageDrawable(getResources().getDrawable(R.drawable
+                                .ic_no_network));
+                    } else {
+                        tvHint.setText("暂无消息");
+                        imvError.setImageDrawable(getResources().getDrawable(R.drawable
+                                .ic_no_message));
+                    }
+
                 }
             }
         });
@@ -149,7 +155,7 @@ public class MessageFragment extends ABaseFragment {
 
     private void onLoadMore(List<DataBean> beans) {
         mAdapter.insert(beans);
-        if (beans.size() < PAGE_SIZE) {
+        if (beans.size() < PAGE_SIZE && ultimateRecyclerView != null) {
             ultimateRecyclerView.disableLoadmore();
         }
     }
@@ -162,7 +168,7 @@ public class MessageFragment extends ABaseFragment {
     }
 
     private void getMessage() {
-        if (StringUtils.isEmpty(type)) {
+        if (TextUtils.isEmpty(type)) {
             return;
         }
         Map<String, String> params = new HashMap<>();
@@ -182,7 +188,7 @@ public class MessageFragment extends ABaseFragment {
 
     private void flagMessage(int keyId) {
 
-        if (StringUtils.isEmpty(type)) {
+        if (TextUtils.isEmpty(type)) {
             return;
         }
         Map<String, String> params = new HashMap<>();
@@ -207,7 +213,7 @@ public class MessageFragment extends ABaseFragment {
 
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
-
+        networkError = false;
         if (actionType == 0) {
             MessageBean bean = GsonUtils.getInstance().transitionToBean(result, MessageBean.class);
             if (bean == null)
@@ -249,6 +255,9 @@ public class MessageFragment extends ABaseFragment {
     @Override
     public void onFailure(String error, int page, Integer actionType) {
         super.onFailure(error, page, actionType);
-        ultimateRecyclerView.showEmptyView();
+        networkError = true;
+        if (ultimateRecyclerView != null) {
+            ultimateRecyclerView.showEmptyView();
+        }
     }
 }

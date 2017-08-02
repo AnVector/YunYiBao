@@ -106,7 +106,7 @@ public class UApplication extends MultiDexApplication {
         mLocationOption = new AMapLocationClientOption();
         //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy)
-                .setInterval(3000 * 1000)//设置定位间隔,单位毫秒,默认为2000ms，最低1000ms。
+                .setInterval(300 * 1000)//设置定位间隔,单位毫秒,默认为2000ms，最低1000ms。
                 .setNeedAddress(true);//设置是否返回地址信息（默认返回地址信息）
         //初始化定位
         mLocationClient = new AMapLocationClient(getApplicationContext());
@@ -139,8 +139,8 @@ public class UApplication extends MultiDexApplication {
 //        CookieJarImpl cookieJar = new CookieJarImpl(new PersistentCookieStore
 // (getApplicationContext()));
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(30*1000L, TimeUnit.MILLISECONDS)
-                .readTimeout(30*1000L, TimeUnit.MILLISECONDS)
+                .connectTimeout(15*1000L, TimeUnit.MILLISECONDS)
+                .readTimeout(15*1000L, TimeUnit.MILLISECONDS)
                 .addInterceptor(new LoggerInterceptor("OKHttp", true))
                 .cookieJar(cookieJar1)
                 .hostnameVerifier(new HostnameVerifier() {

@@ -8,7 +8,6 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.RadioButton;
@@ -20,7 +19,7 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
-import com.anyihao.androidbase.utils.StringUtils;
+import com.anyihao.androidbase.utils.TextUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.bean.AliOrderInfoBean;
@@ -108,7 +107,7 @@ public class PayActivity extends ABaseActivity {
         Logger.e(resultInfo);
         String resultStatus = payResult.getResultStatus();
         // 判断resultStatus 为9000则代表支付成功
-        if (TextUtils.equals(resultStatus, "9000")) {
+        if (android.text.TextUtils.equals(resultStatus, "9000")) {
             // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
             Intent intent = new Intent(PayActivity.this, PayResultActivity.class);
             intent.putExtra("amount", amount);
@@ -116,7 +115,7 @@ public class PayActivity extends ABaseActivity {
             intent.putExtra("expires", expires);
             startActivityForResult(intent, REQUEST_PAY_RESULT_CODE);
 //            ToastUtils.showToast(PayActivity.this, "支付成功");
-        } else if (TextUtils.equals(resultStatus, "6001")) {
+        } else if (android.text.TextUtils.equals(resultStatus, "6001")) {
             ToastUtils.showToast(getApplicationContext(), "支付取消");
         } else {
             // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
@@ -244,7 +243,7 @@ public class PayActivity extends ABaseActivity {
     }
 
     private void payByAliPay(final String orderInfo) {
-        if (StringUtils.isEmpty(orderInfo))
+        if (TextUtils.isEmpty(orderInfo))
             return;
         ToastUtils.showToast(getApplicationContext(), "订单获取中...");
         Runnable payRunnable = new Runnable() {
@@ -266,7 +265,7 @@ public class PayActivity extends ABaseActivity {
     }
 
     private void getOrderInfo() {
-        if (StringUtils.isEmpty(topupType) || StringUtils.isEmpty(packageID))
+        if (TextUtils.isEmpty(topupType) || TextUtils.isEmpty(packageID))
             return;
         Map<String, String> params = new HashMap<>();
         params.put("cmd", "PAY");
@@ -332,6 +331,15 @@ public class PayActivity extends ABaseActivity {
             } else {
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg());
             }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mHandler!=null){
+            mHandler.removeCallbacksAndMessages(null);
+            mHandler = null;
         }
     }
 }
