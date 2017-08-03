@@ -101,7 +101,6 @@ public class MeActivity extends ABaseActivity {
     private String mZone;
     private static final int REQUEST_UPDATE_CODE = 0x0004;
     private static final int RC_CAMERA_PERM = 0x0005;
-    private static final int REQUEST_CODE_CHOOSE = 0x0006;
     private boolean isGender = true;
     private String depositMoney;
     private UHandler mHandler = new UHandler(this);

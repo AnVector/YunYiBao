@@ -46,17 +46,28 @@ public class RechargeRecordAdapter extends UAdapter<DataBean> {
         if (bp && holder instanceof RechargeRecordViewHolder) {
             DataBean content = mData.get((hasHeaderView() ? position - 1 : position));
             if (content == null) return;
+            String pkgType = content.getPkgType();
             if ("WXPAY".equals(content.getTopupType())) {
-                ((RechargeRecordViewHolder) holder).tvDescription.setText("微信充值成功" + content
-                        .getFlow() + "流量");
                 ((RechargeRecordViewHolder) holder).imgPayIcon.setImageResource(R.drawable
                         .ic_recharge_record_wxpay);
+                if ("DEPOSIT".equals(pkgType)) {
+                    ((RechargeRecordViewHolder) holder).tvDescription.setText("缴纳押金-微信支付");
+                } else {
+                    ((RechargeRecordViewHolder) holder).tvDescription.setText("微信充值成功" + content
+                            .getFlow() + "流量");
+                }
+
             } else {
-                ((RechargeRecordViewHolder) holder).tvDescription.setText("支付宝充值成功" + content
-                        .getFlow() + "流量");
                 ((RechargeRecordViewHolder) holder).imgPayIcon.setImageResource(R.drawable
                         .ic_recharge_record_alipay);
+                if ("DEPOSIT".equals(pkgType)) {
+                    ((RechargeRecordViewHolder) holder).tvDescription.setText("缴纳押金-支付宝支付");
+                } else {
+                    ((RechargeRecordViewHolder) holder).tvDescription.setText("支付宝充值成功" + content
+                            .getFlow() + "流量");
+                }
             }
+
             String[] date = content.getCrtTm().split(" ");
             String week = null;
             if (date[0].length() > 5) {

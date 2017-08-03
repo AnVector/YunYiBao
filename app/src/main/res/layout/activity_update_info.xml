@@ -38,6 +38,7 @@
             android:background="@null"
             android:drawableRight="@drawable/edit_text_selector"
             android:gravity="left|center_vertical"
+            android:inputType="textNoSuggestions"
             android:maxLines="1"
             android:textCursorDrawable="@drawable/edittext_cursor_color"
             android:textSize="@dimen/font_size_thi"

@@ -129,8 +129,8 @@ public class ChartFragment extends ABaseFragment {
             public void onValueSelected(Entry e, Highlight h) {
                 float value = e.getY();
                 DecimalFormat df = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
-                if (value > 1024) {
-                    value = value / 1024;
+                if (value >= 1024f) {
+                    value = value / 1024f;
                     tvDataAmount.setText(String.valueOf(df.format(value) + "G"));
                 } else {
                     tvDataAmount.setText(String.valueOf(e.getY() + "M"));

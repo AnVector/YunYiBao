@@ -1,6 +1,8 @@
 package com.anyihao.ayb.adapter;
 
 import android.content.Context;
+import android.view.MotionEvent;
+import android.view.View;
 
 import com.anyihao.ayb.R;
 
@@ -22,6 +24,12 @@ public class DataFlowAssortAdapter extends RecyclerViewAdapter<Double> {
     @Override
     public void convert(ViewHolder holder, Double aDouble) {
         holder.setText(R.id.tv_description, array[holder.getLayoutPosition()] + aDouble + "%");
+        holder.setOnTouchListener(R.id.seekBar, new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
         switch (holder.getLayoutPosition()) {
             case 0:
                 holder.setProgressDrawable(R.id.seekBar, mContext.getResources().getDrawable(R

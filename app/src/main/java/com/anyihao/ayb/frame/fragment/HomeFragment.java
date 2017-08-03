@@ -71,6 +71,7 @@ import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
+import com.orhanobut.logger.Logger;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -303,6 +304,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                 list.add(bean);
             }
         }
+//        uploadWifiList(list);
         return list;
     }
 
@@ -590,6 +592,30 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
         postForm(params, 1, 6);
     }
 
+    private void uploadWifiList(List<WifiInfoBean> list) {
+        if (list == null || list.isEmpty())
+            return;
+        String latitude = PreferencesUtils.getString(mContext.getApplicationContext(),
+                "latitude", "");
+        String longitude = PreferencesUtils.getString(mContext.getApplicationContext(),
+                "longitude", "");
+        if (TextUtils.isEmpty(latitude) || TextUtils.isEmpty(longitude))
+            return;
+        StringBuilder sb = new StringBuilder();
+        for (WifiInfoBean bean : list) {
+            sb.append(bean.getSsid()).append(",");
+        }
+        String aliasName = sb.deleteCharAt(sb.length() - 1).toString();
+        if (TextUtils.isEmpty(aliasName))
+            return;
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "WIFILISTA");
+        params.put("latitude", latitude);
+        params.put("longitude", longitude);
+        params.put("aliasName", aliasName);
+        postForm(params, 1, 7);
+    }
+
     private void postForm(Map<String, String> params, int page, int actionType) {
         PresenterFactory.getInstance().createPresenter(this).execute(new Task.TaskBuilder()
                 .setTaskType(TaskType.Method.POST)
@@ -811,14 +837,25 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                 }
             }
         }
+
+        if (actionType == 7) {
+            ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean.class);
+            if (bean == null)
+                return;
+            if (bean.getCode() == 200) {
+                Logger.d("附近热点信息上送成功");
+            } else {
+                Logger.d(bean.getMsg());
+            }
+        }
     }
 
     private String transferDataAmount(String amount) {
         if (TextUtils.isEmpty(amount))
             return "--";
         float flow = Float.parseFloat(amount);
-        if (flow > 1024f) {
-            float f = flow / 1024;
+        if (flow >= 1024f) {
+            float f = flow / 1024f;
             float ft = new BigDecimal(f).setScale(2, BigDecimal.ROUND_HALF_UP)
                     .floatValue();
             return ft + "G";

@@ -73,10 +73,10 @@ public class RechargeActivity extends ABaseActivity {
     @Override
     protected void getExtraParams() {
         Intent intent = getIntent();
-        if(intent == null)
+        if (intent == null)
             return;
         String action = intent.getStringExtra("action");
-        if(!TextUtils.isEmpty(action)){
+        if (!TextUtils.isEmpty(action)) {
             index = intent.getIntExtra("index", 0);
         }
     }
@@ -104,7 +104,7 @@ public class RechargeActivity extends ABaseActivity {
         }
         mTabAdapter = new UTabAdapter(getSupportFragmentManager(), mFragments, mTitles);
         mViewpager.setAdapter(mTabAdapter);
-        if(index < mFragments.size()){
+        if (index < mFragments.size()) {
             mViewpager.setCurrentItem(index, true);
         }
     }
@@ -197,8 +197,8 @@ public class RechargeActivity extends ABaseActivity {
     }
 
     private String transferAmount(double amount) {
-        if (amount > 1024) {
-            BigDecimal bg = new BigDecimal(amount / 1024);
+        if (amount >= 1024f) {
+            BigDecimal bg = new BigDecimal(amount / 1024f);
             amount = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
             return amount + "G";
         }

@@ -2,6 +2,8 @@ package com.anyihao.ayb.frame.activity;
 
 import android.content.Intent;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.TextView;
 
@@ -84,6 +86,7 @@ public class UpdateInfoActivity extends ABaseActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         titleRight.setText(getString(R.string.save));
+        titleRight.setEnabled(false);
         if (!TextUtils.isEmpty(key)) {
             titleMid.setText(key);
             tvInfo.setText(key + "：");
@@ -112,6 +115,32 @@ public class UpdateInfoActivity extends ABaseActivity {
                 }
                 updateInfo();
 
+            }
+        });
+
+        edtInfo.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (value == null)
+                    return;
+                if (!value.equals(s.toString())) {
+                    titleRight.setEnabled(true);
+                    titleRight.setTextColor(getResources().getColor(R.color.toolbar_title_color));
+                } else {
+                    titleRight.setEnabled(false);
+                    titleRight.setTextColor(getResources().getColor(R.color
+                            .toolbar_register_color));
+                }
             }
         });
 

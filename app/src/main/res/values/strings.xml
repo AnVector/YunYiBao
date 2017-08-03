@@ -33,7 +33,6 @@
     <string name="social_account_login">社交账号登录</string>
 
     <!--我的-->
-    <string name="say_hello">%1$s，你好</string>
     <string name="about_me">个人中心</string>
     <string name="my_balance">我的流量</string>
     <string name="data_flow_shop">流量商城</string>
@@ -94,9 +93,7 @@
 
     <!--bind device-->
     <string name="confirm">确认</string>
-
     <!--messages details-->
-
     <!--settings-->
     <string name="logout">退出登录</string>
     <string name="not_login">未登录</string>
@@ -116,12 +113,8 @@
     <string name="normal_zone">普通用户专区</string>
     <string name="convertible_of">可兑换%1$s流量</string>
     <string name="points">%1$s积分</string>
-
     <!--modify self info-->
     <string name="save">保存</string>
-
-    <!--modify device info-->
-
     <!--question details-->
     <string name="question_details">问题详情</string>
 

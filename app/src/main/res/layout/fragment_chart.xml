@@ -15,7 +15,6 @@
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal|bottom"
-            android:text="@string/init_data_flow"
             android:textColor="@color/user_account_color"
             android:textSize="@dimen/font_size_large"/>
 

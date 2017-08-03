@@ -139,8 +139,8 @@ public class UApplication extends MultiDexApplication {
 //        CookieJarImpl cookieJar = new CookieJarImpl(new PersistentCookieStore
 // (getApplicationContext()));
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(15*1000L, TimeUnit.MILLISECONDS)
-                .readTimeout(15*1000L, TimeUnit.MILLISECONDS)
+                .connectTimeout(15 * 1000L, TimeUnit.MILLISECONDS)
+                .readTimeout(15 * 1000L, TimeUnit.MILLISECONDS)
                 .addInterceptor(new LoggerInterceptor("OKHttp", true))
                 .cookieJar(cookieJar1)
                 .hostnameVerifier(new HostnameVerifier() {

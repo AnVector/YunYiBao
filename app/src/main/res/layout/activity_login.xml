@@ -2,19 +2,19 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/app_background_color"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <include
             layout="@layout/toolbar_common"/>
 
         <ImageView
+            android:id="@+id/ic_logo"
             android:layout_width="79dp"
             android:layout_height="79dp"
-            android:layout_gravity="center_horizontal"
+            android:layout_below="@id/toolbar"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="8dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_launcher"/>
@@ -23,9 +23,11 @@
             android:id="@+id/input_user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/ic_logo"
+            android:layout_centerHorizontal="true"
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
-            android:layout_marginTop="53dp"
+            android:layout_marginTop="83dp"
             android:background="@null"
             android:drawableLeft="@drawable/ic_profile"
             android:drawablePadding="29dp"
@@ -40,17 +42,22 @@
             app:funcType="canClear"/>
 
         <View
+            android:id="@+id/line1"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_gravity="center_horizontal"
+            android:layout_below="@id/input_user_name"
+            android:layout_centerHorizontal="true"
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:layout_marginTop="15dp"
             android:background="@color/line_color"/>
 
         <LinearLayout
+            android:id="@+id/ll_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/line1"
+            android:layout_centerHorizontal="true"
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:layout_marginTop="23dp"
@@ -86,9 +93,11 @@
         </LinearLayout>
 
         <View
+            android:id="@+id/line2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_gravity="center_horizontal"
+            android:layout_below="@id/ll_password"
+            android:layout_centerHorizontal="true"
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:layout_marginTop="15dp"
@@ -96,12 +105,11 @@
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_login"
-            android:layout_width="match_parent"
+            android:layout_width="288dp"
             android:layout_height="49dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="45dp"
-            android:layout_marginRight="45dp"
-            android:layout_marginTop="45dp"
+            android:layout_below="@id/line2"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="55dp"
             android:background="@drawable/btn_login"
             android:text="@string/login"
             android:textColor="@color/white"
@@ -109,43 +117,12 @@
             android:textStyle="bold"/>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="45dp"
-            android:layout_marginRight="45dp"
-            android:layout_marginTop="66dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1"
-                android:background="@color/line_color"
-                android:gravity="center_vertical"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/social_account_login"
-                android:textColor="@color/light_gray"
-                android:textSize="@dimen/font_size_small"/>
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1"
-                android:background="@color/line_color"
-                android:gravity="center_vertical"/>
-        </LinearLayout>
-
-        <LinearLayout
+            android:id="@+id/ll_account"
             android:layout_width="match_parent"
             android:layout_height="52dp"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginTop="22dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="26dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -173,7 +150,42 @@
                 android:background="@null"
                 android:src="@drawable/ic_wb"/>
         </LinearLayout>
-    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/ll_account"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="22dp"
+            android:layout_marginLeft="45dp"
+            android:layout_marginRight="45dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="@color/line_color"
+                android:gravity="center_vertical"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/social_account_login"
+                android:textColor="@color/light_gray"
+                android:textSize="@dimen/font_size_small"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="@color/line_color"
+                android:gravity="center_vertical"/>
+        </LinearLayout>
+    </RelativeLayout>
 
     <include layout="@layout/circle_progress_layout"/>
 </merge>

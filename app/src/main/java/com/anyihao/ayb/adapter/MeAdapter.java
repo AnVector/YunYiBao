@@ -49,7 +49,7 @@ public class MeAdapter extends UAdapter<KeyValueBean> {
                     setCompoundDrawables(viewHolder, R.drawable.ic_balance);
                     if (!TextUtils.isEmpty(content.getValue())) {
                         float amount = Float.parseFloat(content.getValue());
-                        if (amount > 1024f) {
+                        if (amount >= 1024f) {
                             float f = amount / 1024;
                             float ft = new BigDecimal(f).setScale(2, BigDecimal.ROUND_HALF_UP)
                                     .floatValue();

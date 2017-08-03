@@ -26,7 +26,7 @@ public class UserInfoAdapter extends RecyclerViewAdapter<KeyValueBean> {
         holder.setText(R.id.title, title);
         switch (title) {
             case "头像":
-                holder.setVisible(R.id.value, false);
+                holder.setVisible(R.id.tv_value, false);
                 holder.setVisible(R.id.space, false);
                 holder.setVisible(R.id.line, true);
                 holder.setVisible(R.id.img_profile, true);
@@ -39,15 +39,16 @@ public class UserInfoAdapter extends RecyclerViewAdapter<KeyValueBean> {
                 holder.setVisible(R.id.img_code, true);
                 holder.setVisible(R.id.line, true);
                 holder.setVisible(R.id.img_profile, false);
-                holder.setVisible(R.id.value, false);
+                holder.setVisible(R.id.tv_value, false);
                 break;
             case "押金退款":
-                holder.setTextColor(R.id.value, Color.parseColor("#ff1919"));
+                holder.setTextColor(R.id.tv_value, Color.parseColor("#ff1919"));
                 holder.setVisible(R.id.line, false);
-                holder.setText(R.id.value, keyValueBean.getValue());
+                holder.setText(R.id.tv_value, keyValueBean.getValue());
                 break;
             default:
-                holder.setText(R.id.value, keyValueBean.getValue());
+                holder.setTextColor(R.id.tv_value, Color.parseColor("#b5b5b5"));
+                holder.setText(R.id.tv_value, keyValueBean.getValue());
                 holder.setVisible(R.id.img_code, false);
                 holder.setVisible(R.id.img_profile, false);
                 break;

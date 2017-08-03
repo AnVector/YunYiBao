@@ -1,5 +1,7 @@
 package com.anyihao.ayb.listener;
 
+import android.content.Context;
+
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
 import com.anyihao.androidbase.utils.PreferencesUtils;
@@ -24,6 +26,7 @@ public class LocationListener implements AMapLocationListener {
     public void onLocationChanged(AMapLocation aMapLocation) {
         if (aMapLocation != null) {
             if (aMapLocation.getErrorCode() == 0) {
+                saveLocationInfo(UApplication.getInstance(), aMapLocation);
                 if (PreferencesUtils.getBoolean(UApplication.getInstance(), "isLogin", false)) {
                     sendLocationInfo(aMapLocation.getLatitude(), aMapLocation.getLongitude(),
                             aMapLocation.getCity(), aMapLocation.getCityCode(), aMapLocation
@@ -39,6 +42,11 @@ public class LocationListener implements AMapLocationListener {
                         + aMapLocation.getErrorInfo());
             }
         }
+    }
+
+    private void saveLocationInfo(Context context, AMapLocation aMapLocation) {
+        PreferencesUtils.putString(context, "latitude", aMapLocation.getLatitude() + "");
+        PreferencesUtils.putString(context, "longitude", aMapLocation.getLongitude() + "");
     }
 
     private void sendLocationInfo(double latitude, double longtitude, String city, String

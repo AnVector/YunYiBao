@@ -77,6 +77,7 @@ public class MeFragment extends ABaseFragment {
     private View rlHeader;
     private MeAdapter mAdapter;
     private static int REQUEST_SETTINGS_CODE = 0x00001;
+    private static int REQUEST_INFO_CODE = 0x00002;
     private static int REQUEST_LOGIN_CODE = 0x00003;
     private boolean isLogin = false;
     private List<KeyValueBean> mData = new ArrayList<>();
@@ -110,8 +111,6 @@ public class MeFragment extends ABaseFragment {
             icProfile = (ImageView) rlHeader.findViewById(R.id.ic_profile);
             tvGreeting = (TextView) rlHeader.findViewById(R.id.tv_greeting);
             recyclerView.setNormalHeader(rlHeader);
-        } else {
-            ToastUtils.showToast(mContext.getApplicationContext(), "哈哈");
         }
         recyclerView.setAdapter(mAdapter);
         mData.clear();
@@ -232,7 +231,7 @@ public class MeFragment extends ABaseFragment {
                     intent.putExtra("uid", PreferencesUtils.getString(mContext, "uid", ""));
                     intent.putExtra("userType", PreferencesUtils.getString(mContext, "userType",
                             ""));
-                    startActivity(intent);
+                    startActivityForResult(intent, REQUEST_INFO_CODE);
                 } else {
                     startActivityForLogin();
                 }
@@ -249,10 +248,8 @@ public class MeFragment extends ABaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_SETTINGS_CODE || requestCode == REQUEST_LOGIN_CODE) {
-            if (isLogin == PreferencesUtils.getBoolean(mContext.getApplicationContext(),
-                    "isLogin", false))
-                return;
+        if (requestCode == REQUEST_SETTINGS_CODE || requestCode == REQUEST_LOGIN_CODE ||
+                requestCode == REQUEST_INFO_CODE) {
             getUserInfo();
         }
     }
@@ -358,8 +355,7 @@ public class MeFragment extends ABaseFragment {
         if (tvGreeting == null || icProfile == null)
             return;
         if (code == 200) {
-            tvGreeting.setText(String.format(mContext.getResources().getString(R.string
-                    .say_hello), nickname));
+            tvGreeting.setText(nickname);
             Glide.with(this).load(url)
                     .bitmapTransform(new CropCircleTransformation(mContext))
                     .placeholder(R.drawable.user_profile)

@@ -173,6 +173,8 @@ public class MainFragmentActivity extends ABaseActivity {
         mRadioButtonDevice.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                if (mViewPager.getCurrentItem() == 0)
+                    return true;
                 resetIcon();
                 changeIcon(mRadioButtonDevice, R.drawable.device_focused);
                 mCurrent = mRadioButtonDevice;
@@ -194,10 +196,12 @@ public class MainFragmentActivity extends ABaseActivity {
         mRadioButtonDiscovery.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                if (mViewPager.getCurrentItem() == 1)
+                    return true;
                 resetIcon();
                 changeIcon(mRadioButtonDiscovery, R.drawable.discovery_focused);
                 mCurrent = mRadioButtonDiscovery;
-                mViewPager.setCurrentItem(1);
+                mViewPager.setCurrentItem(1, true);
                 return false;
             }
         });
@@ -215,12 +219,12 @@ public class MainFragmentActivity extends ABaseActivity {
         mRadioButtonTask.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-//                ToastUtils.showToast(getApplicationContext(), "Task radio button touched" +
-//                        (++count) + "次");
+                if (mViewPager.getCurrentItem() == 2)
+                    return true;
                 resetIcon();
                 changeIcon(mRadioButtonTask, R.drawable.task_focused);
                 mCurrent = mRadioButtonTask;
-                mViewPager.setCurrentItem(2);
+                mViewPager.setCurrentItem(2, true);
                 return false;
             }
         });
@@ -238,6 +242,8 @@ public class MainFragmentActivity extends ABaseActivity {
         mRadioButtonMe.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                if (mViewPager.getCurrentItem() == 3)
+                    return true;
                 resetIcon();
                 changeIcon(mRadioButtonMe, R.drawable.me_focused);
                 mCurrent = mRadioButtonMe;

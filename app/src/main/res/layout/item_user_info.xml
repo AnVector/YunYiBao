@@ -53,12 +53,11 @@
                 android:visibility="gone"/>
 
             <TextView
-                android:id="@+id/value"
+                android:id="@+id/tv_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center_vertical"
-                android:textColor="@color/light_gray"
                 android:textSize="@dimen/font_size_small"/>
         </FrameLayout>
 
