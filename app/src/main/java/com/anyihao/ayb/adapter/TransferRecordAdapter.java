@@ -79,7 +79,7 @@ public class TransferRecordAdapter extends UAdapter<DataBean> {
     @Override
     public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.stick_header_item, parent, false);
+                .inflate(R.layout.item_stick_header, parent, false);
         return new RecyclerView.ViewHolder(view) {
         };
     }

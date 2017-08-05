@@ -100,7 +100,7 @@ public class CreditActivity extends ABaseActivity {
         });
         recyclerView.setLoadMoreView(R.layout.custom_bottom_progressbar);
         View headerView = getLayoutInflater().inflate(R.layout
-                .view_credit_header_layout, recyclerView.mRecyclerView, false);
+                .view_credit_header, recyclerView.mRecyclerView, false);
         NumberRunningTextView tvPoints = (NumberRunningTextView) headerView.findViewById(R.id
                 .tv_points);
         if (tvPoints != null) {
@@ -160,9 +160,12 @@ public class CreditActivity extends ABaseActivity {
         }
     }
 
-    private void onLoadNoData() {
+    private void onLoadNoData(int page) {
         if (recyclerView != null) {
-            recyclerView.showEmptyView();
+            recyclerView.disableLoadmore();
+            if (page == 1) {
+                recyclerView.showEmptyView();
+            }
         }
     }
 
@@ -199,16 +202,22 @@ public class CreditActivity extends ABaseActivity {
                         onLoadMore(beans);
                     }
                 } else {
-                    if (page == 1) {
-                        onLoadNoData();
-                    }
+                    onLoadNoData(page);
                 }
             } else {
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg());
-                if (page == 1) {
-                    onLoadNoData();
-                }
+                onLoadNoData(page);
             }
+        }
+    }
+
+    @Override
+    public void onFailure(String error, int page, Integer actionType) {
+        super.onFailure(error, page, actionType);
+        if (isRefresh && recyclerView != null) {
+            recyclerView.setRefreshing(false);
+            layoutManager.scrollToPosition(0);
+            recyclerView.reenableLoadmore();
         }
     }
 }

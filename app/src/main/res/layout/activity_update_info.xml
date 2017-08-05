@@ -40,6 +40,7 @@
             android:gravity="left|center_vertical"
             android:inputType="textNoSuggestions"
             android:maxLines="1"
+            android:textColorHint="@color/light_gray"
             android:textCursorDrawable="@drawable/edittext_cursor_color"
             android:textSize="@dimen/font_size_thi"
             app:funcType="canClear"/>

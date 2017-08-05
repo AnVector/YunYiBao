@@ -1,6 +1,7 @@
 package com.anyihao.ayb.frame.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.anyihao.androidbase.mvp.Task;
@@ -17,6 +19,7 @@ import com.anyihao.androidbase.utils.DensityUtils;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.LogUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.StatusBarUtil;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.AccountManageAdapter;
@@ -49,6 +52,10 @@ public class AccountManageActivity extends ABaseActivity {
     Toolbar toolbar;
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
+    @BindView(R.id.activity_account_manage)
+    LinearLayout activityAccountManage;
+    @BindView(R.id.fake_status_bar)
+    View fakeStatusBar;
     private AccountManageAdapter mAdapter;
     private List<DataBean> mData = new ArrayList<>();
 
@@ -63,7 +70,19 @@ public class AccountManageActivity extends ABaseActivity {
     }
 
     @Override
+    protected void setStatusBarTheme() {
+        super.setStatusBarTheme();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            StatusBarUtil.setTranslucentForImageView(AccountManageActivity.this, 0,
+                    activityAccountManage);
+        }
+    }
+
+    @Override
     protected void initData() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            fakeStatusBar.setVisibility(View.VISIBLE);
+        }
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -113,7 +132,7 @@ public class AccountManageActivity extends ABaseActivity {
     }
 
     private void showDialog(final String accountType) {
-        Holder holder = new ViewHolder(LayoutInflater.from(this).inflate(R.layout.confirm_dialog,
+        Holder holder = new ViewHolder(LayoutInflater.from(this).inflate(R.layout.dialog_confirm,
                 null));
         TextView tvTitle = (TextView) holder.getInflatedView().findViewById(R.id.dia_title);
         Button btnLeft = (Button) holder.getInflatedView().findViewById(R.id.btn_cancel);

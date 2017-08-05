@@ -187,5 +187,5 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <include layout="@layout/circle_progress_layout"/>
+    <include layout="@layout/view_circle_progress"/>
 </merge>

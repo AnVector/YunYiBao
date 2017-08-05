@@ -107,7 +107,7 @@ public class MeFragment extends ABaseFragment {
 
         if (getActivity() != null) {
             rlHeader = getActivity().getLayoutInflater().inflate(R.layout
-                    .view_me_header_layout, recyclerView.mRecyclerView, false);
+                    .view_me_header, recyclerView.mRecyclerView, false);
             icProfile = (ImageView) rlHeader.findViewById(R.id.ic_profile);
             tvGreeting = (TextView) rlHeader.findViewById(R.id.tv_greeting);
             recyclerView.setNormalHeader(rlHeader);
@@ -256,7 +256,7 @@ public class MeFragment extends ABaseFragment {
 
     private void showDialog() {
         Holder holder = new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout
-                .me_dialog_content, null));
+                .dialog_me_content, null));
         final PowerfulEditText powerfulEditText = (PowerfulEditText) holder.getInflatedView()
                 .findViewById(R.id.edt_exchange_code);
         OnClickListener clickListener = new OnClickListener() {

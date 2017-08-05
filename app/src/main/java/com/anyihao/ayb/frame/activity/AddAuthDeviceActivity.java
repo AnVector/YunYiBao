@@ -184,7 +184,7 @@ public class AddAuthDeviceActivity extends ABaseActivity {
     }
 
     private void showDialog() {
-        Holder holder = new ViewHolder(LayoutInflater.from(this).inflate(R.layout.confirm_dialog,
+        Holder holder = new ViewHolder(LayoutInflater.from(this).inflate(R.layout.dialog_confirm,
                 null));
         TextView tvTitle = (TextView) holder.getInflatedView().findViewById(R.id.dia_title);
         Button btnLeft = (Button) holder.getInflatedView().findViewById(R.id.btn_cancel);

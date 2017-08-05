@@ -63,7 +63,7 @@ import com.anyihao.ayb.frame.activity.ScanActivity;
 import com.anyihao.ayb.frame.activity.WebActivity;
 import com.anyihao.ayb.listener.OnItemClickListener;
 import com.anyihao.ayb.ui.WSCircleRotate;
-import com.anyihao.ayb.ui.WaitingDots.DilatingDotsProgressBar;
+import com.anyihao.ayb.ui.waitingdots.DilatingDotsProgressBar;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
@@ -293,9 +293,10 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
         for (ScanResult ele : results) {
             if (ele == null || TextUtils.isEmpty(ele.SSID))
                 continue;
-            if (ele.SSID.toUpperCase().contains("IEBOX")) {
+            if (ele.SSID.contains("IeBox")) {
                 bean = new WifiInfoBean();
                 bean.setSsid(ele.SSID);
+                Logger.d(ele.SSID);
                 if (!TextUtils.isEmpty(ssid) && ssid.replace("\"", "").equals(ele.SSID)) {
                     bean.setConnected(true);
                 } else {
@@ -304,7 +305,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                 list.add(bean);
             }
         }
-//        uploadWifiList(list);
+        uploadWifiList(list);
         return list;
     }
 
@@ -317,7 +318,6 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
             mAdapter.removeAllInternal(mData);
             if (mWifiList != null && !mWifiList.isEmpty()) {
                 mAdapter.insert(mWifiList);
-                mAdapter.notifyDataSetChanged();
             } else {
                 mRecyclerView.showEmptyView();
             }
@@ -331,7 +331,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
     private void getConnectWifi() {
         String ssid = WifiInfoManager.getInstance(mContext).getSSid();
         if (!TextUtils.isEmpty(ssid)) {
-            if (ssid.toUpperCase().contains("IEBOX")) {
+            if (ssid.contains("IeBox")) {
                 setConnectSuccess(ssid);
             } else {
                 stopAnimation();
@@ -346,13 +346,12 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
         mWifiList = getIWifiList();
         mAdapter.removeAllInternal(mData);
         if (mWifiList != null && !mWifiList.isEmpty()) {
+//            Logger.d(mWifiList.size());
             mAdapter.insert(mWifiList);
-            mAdapter.notifyDataSetChanged();
             mRecyclerView.setRefreshing(false);
             layoutManager.scrollToPosition(0);
             mRecyclerView.hideEmptyView();
         } else {
-            mAdapter.notifyDataSetChanged();
             mRecyclerView.setRefreshing(false);
             layoutManager.scrollToPosition(0);
             mRecyclerView.showEmptyView();
@@ -381,7 +380,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
         mRecyclerView.setHasFixedSize(false);
         mAdapter = new MainAdapter(mData, R.layout.item_main);
         layoutManager = new LinearLayoutManager(mContext);
-        mRecyclerView.setEmptyView(R.layout.main_empty_view, UltimateRecyclerView
+        mRecyclerView.setEmptyView(R.layout.view_empty_main, UltimateRecyclerView
                 .EMPTY_CLEAR_ALL);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -627,11 +626,11 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
     }
 
     private void onGetPwdSuccess() {
-        showDialog(R.layout.wifi_password_dialog, true);
+        showDialog(R.layout.dialog_wifi_password, true);
     }
 
     private void onGetPwdFailure() {
-        showDialog(R.layout.confirm_dialog, false);
+        showDialog(R.layout.dialog_confirm, false);
     }
 
     private void startActivityForLogin() {

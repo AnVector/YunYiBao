@@ -158,6 +158,6 @@
                 android:textSize="@dimen/font_size_sev"/>
         </RelativeLayout>
 
-        <include layout="@layout/auth_finish_layout"/>
+        <include layout="@layout/view_auth_finish"/>
     </FrameLayout>
 </LinearLayout>

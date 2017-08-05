@@ -2,6 +2,7 @@ package com.anyihao.ayb.frame.activity;
 
 import android.app.DownloadManager;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -79,7 +80,12 @@ public class MainFragmentActivity extends ABaseActivity {
 
     @Override
     protected void setStatusBarTheme() {
-        StatusBarUtil.setTranslucentForImageViewInFragment(MainFragmentActivity.this, null);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            super.setStatusBarTheme();
+            StatusBarUtil.setTranslucentForImageView(this, 0, mViewPager);
+        } else {
+            StatusBarUtil.setTranslucentForImageViewInFragment(MainFragmentActivity.this, null);
+        }
     }
 
     @Override

@@ -55,6 +55,6 @@
                 android:textColor="#d20505"
                 android:textSize="@dimen/font_size_max"/>
         </LinearLayout>
-        <include layout="@layout/envelope_open_layout"/>
+        <include layout="@layout/view_envelope_open"/>
     </FrameLayout>
 </LinearLayout>

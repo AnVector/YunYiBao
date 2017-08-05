@@ -22,10 +22,10 @@ public class RechargeRecordDetailsAdapter extends RecyclerViewAdapter<KeyValueBe
     public void convert(ViewHolder holder, KeyValueBean keyValueBean) {
         if (keyValueBean == null)
             return;
-        holder.setText(R.id.property, keyValueBean.getTitle());
-        holder.setText(R.id.value, keyValueBean.getValue() + "");
-        if (holder.getPosition() == getItemCount() - 1) {
-            holder.setVisible(R.id.line, false);
+        holder.setText(R.id.tv_property, keyValueBean.getTitle());
+        holder.setText(R.id.tv_value, keyValueBean.getValue() + "");
+        if ("流水号".equals(keyValueBean.getTitle())) {
+            holder.setVisible(R.id.divider_line, true);
         }
     }
 }

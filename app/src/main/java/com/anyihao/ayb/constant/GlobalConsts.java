@@ -14,7 +14,8 @@ public class GlobalConsts {
     public static final String WX_APP_ID = "wxc6a6d430c1f2c793";
     // API address
 //    public static final String PREFIX_URL = "http://192.168.0.118:8888/vrsws/vappws.json";
-//  public static final String PREFIX_URL = "http://122.224.91.149:8888/vrsws/vappws.json";
+//    public static final String PREFIX_URL = "http://122.224.91.149:8888/vrsws/vappws.json";
 //    public static final String PREFIX_URL = "http://180.153.59.29:8888/vrsws/vappws.json";
-    public static final String PREFIX_URL = "http://122.224.91.148:8888/vrsws/vappws.json";
+    public static final String PREFIX_URL = "http://122.224.91.147:8888/vrsws/vappws.json";
+//    public static final String PREFIX_URL = "http://122.224.91.148:8888/vrsws/vappws.json";
 }

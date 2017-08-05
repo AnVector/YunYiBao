@@ -10,7 +10,7 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="15dp"
-        android:gravity="left|center_vertical"
+        android:gravity="center"
         android:textColor="@color/user_account_color"
         android:textSize="@dimen/font_size_normal_high"/>
 
@@ -29,5 +29,4 @@
     <View
         style="@style/divider_line"
         android:layout_alignParentBottom="true"/>
-
 </RelativeLayout>

@@ -20,7 +20,7 @@
             android:visibility="invisible">
         </com.github.lzyzsd.jsbridge.BridgeWebView>
 
-        <include layout="@layout/circle_progress_layout"/>
+        <include layout="@layout/view_circle_progress"/>
     </FrameLayout>
 
 </LinearLayout>

@@ -92,7 +92,11 @@ public class UpdateInfoActivity extends ABaseActivity {
             tvInfo.setText(key + "：");
         }
         if (!TextUtils.isEmpty(value)) {
-            edtInfo.setText(value);
+            if ("未设置".equals(value)) {
+                edtInfo.setHint("请输入邮箱");
+            } else {
+                edtInfo.setText(value);
+            }
         }
     }
 

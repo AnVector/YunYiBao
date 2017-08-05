@@ -117,7 +117,6 @@ public class TaskFragment extends ABaseFragment {
     private List<NormalBean> mNormalData = new ArrayList<>();
     private List<String> mWeekData = new ArrayList<>();
     private int isSign = 0;
-//    private int count = 0;
 
     @Override
     protected void initData() {
@@ -324,7 +323,7 @@ public class TaskFragment extends ABaseFragment {
     }
 
     private void showDialog() {
-        Holder holder = new ViewHolder(R.layout.sign_dialog);
+        Holder holder = new ViewHolder(R.layout.dialog_sign_explain);
         OnClickListener clickListener = new OnClickListener() {
             @Override
             public void onClick(DialogPlus dialog, View view) {
@@ -352,14 +351,6 @@ public class TaskFragment extends ABaseFragment {
     @Override
     protected int getContentViewId() {
         return R.layout.fragment_task;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-//        ToastUtils.showToast(mContext.getApplicationContext(), " TaskFragment onResume
-// Executed" + (++count) +
-//                "次");
     }
 
     @Override

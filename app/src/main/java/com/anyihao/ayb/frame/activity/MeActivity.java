@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.anyihao.androidbase.mvp.Task;
@@ -23,6 +25,7 @@ import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.DensityUtils;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.StatusBarUtil;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.UserInfoAdapter;
@@ -74,6 +77,10 @@ public class MeActivity extends ABaseActivity {
     RecyclerView recyclerview;
     @BindView(R.id.progressbar_circular)
     CircularProgressBar progressbarCircular;
+    @BindView(R.id.activity_me)
+    LinearLayout activityMe;
+    @BindView(R.id.fake_status_bar)
+    View fakeStatusBar;
     private UserInfoAdapter mAdapter;
     private List<KeyValueBean> mData = new LinkedList<>();
     private ArrayList<ProvinceBean> options1Items = new ArrayList<>();
@@ -158,6 +165,9 @@ public class MeActivity extends ABaseActivity {
 
     @Override
     protected void initData() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            fakeStatusBar.setVisibility(View.VISIBLE);
+        }
         getUserInfo();
         mHandler.sendEmptyMessage(MSG_LOAD_DATA);
         setSupportActionBar(toolbar);
@@ -173,15 +183,23 @@ public class MeActivity extends ABaseActivity {
         initBottomDialog();
     }
 
+    @Override
+    protected void setStatusBarTheme() {
+        super.setStatusBarTheme();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            StatusBarUtil.setTranslucentForImageView(MeActivity.this, 0, activityMe);
+        }
+    }
+
     private void initTimePicker() {
         //控制时间范围(如果不设置范围，则使用默认时间1900-2100年，此段代码可注释)
         //因为系统Calendar的月份是从0-11的,所以如果是调用Calendar的set方法来设置时间,月份的范围也要是从0-11
         Calendar selectedDate = Calendar.getInstance();
         Calendar startDate = Calendar.getInstance();
-        startDate.set(2017, 1, 1);
+        startDate.set(1918, 1, 1);
 
         Calendar endDate = Calendar.getInstance();
-        endDate.set(2050, 1, 1);
+        endDate.set(2100, 1, 1);
         //时间选择器
         mPvDate = new TimePickerView.Builder(this, new TimePickerView.OnTimeSelectListener() {
             @Override
@@ -522,7 +540,7 @@ public class MeActivity extends ABaseActivity {
     }
 
     private void showConfirmDialog() {
-        Holder holder = new ViewHolder(LayoutInflater.from(this).inflate(R.layout.confirm_dialog,
+        Holder holder = new ViewHolder(LayoutInflater.from(this).inflate(R.layout.dialog_confirm,
                 null));
         TextView tvTitle = (TextView) holder.getInflatedView().findViewById(R.id.dia_title);
         Button btnLeft = (Button) holder.getInflatedView().findViewById(R.id.btn_cancel);
@@ -653,15 +671,15 @@ public class MeActivity extends ABaseActivity {
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
+        super.onFailure(error, page, actionType);
         ((CircularProgressDrawable) progressbarCircular.getIndeterminateDrawable()).stop();
         progressbarCircular.setVisibility(View.GONE);
-        super.onFailure(error, page, actionType);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mHandler!=null){
+        if (mHandler != null) {
             mHandler.removeCallbacksAndMessages(null);
             mHandler = null;
         }

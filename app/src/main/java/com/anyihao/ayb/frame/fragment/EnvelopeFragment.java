@@ -239,7 +239,10 @@ public class EnvelopeFragment extends ABaseFragment {
     public void onFailure(String error, int page, Integer actionType) {
         super.onFailure(error, page, actionType);
         networkError = true;
-        if (ultimateRecyclerView != null) {
+        if (isRefresh && ultimateRecyclerView != null) {
+            ultimateRecyclerView.setRefreshing(false);
+            layoutManager.scrollToPosition(0);
+            ultimateRecyclerView.reenableLoadmore();
             ultimateRecyclerView.showEmptyView();
         }
     }

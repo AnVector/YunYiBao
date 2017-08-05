@@ -1,6 +1,7 @@
 package com.anyihao.ayb.frame.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.anyihao.androidbase.mvp.Task;
@@ -17,6 +19,7 @@ import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.DensityUtils;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.StatusBarUtil;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.AuthDeviceAdapter;
@@ -49,11 +52,13 @@ public class DeviceManageActivity extends ABaseActivity {
     Toolbar toolbar;
     @BindView(R.id.btn_add_auth_device)
     AppCompatButton btnAddAuthDevice;
-    @BindView(R.id.toolbar_title_right)
-    TextView toolbarTitleRight;
     protected LinearLayoutManager layoutManager;
     @BindView(R.id.ultimate_recycler_view)
     UltimateRecyclerView recyclerView;
+    @BindView(R.id.activity_device_manage)
+    RelativeLayout activityDeviceManage;
+    @BindView(R.id.fake_status_bar)
+    View fakeStatusBar;
     private AuthDeviceAdapter mAdapter;
     private List<DataBean> mData = new ArrayList<>();
     public static final int REQUEST_ADD_AUTH_DEVICE_CODE = 0X00006;
@@ -71,6 +76,9 @@ public class DeviceManageActivity extends ABaseActivity {
 
     @Override
     protected void initData() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            fakeStatusBar.setVisibility(View.VISIBLE);
+        }
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -106,6 +114,15 @@ public class DeviceManageActivity extends ABaseActivity {
     }
 
     @Override
+    protected void setStatusBarTheme() {
+        super.setStatusBarTheme();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            StatusBarUtil.setTranslucentForImageView(DeviceManageActivity.this, 0,
+                    activityDeviceManage);
+        }
+    }
+
+    @Override
     protected void initEvent() {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,7 +155,7 @@ public class DeviceManageActivity extends ABaseActivity {
 
     }
 
-    private void refresh(List<DataBean> beans){
+    private void add(List<DataBean> beans) {
         mAdapter.removeAllInternal(mData);
         mAdapter.insert(beans);
     }
@@ -182,8 +199,8 @@ public class DeviceManageActivity extends ABaseActivity {
             if (bean.getCode() == 200) {
                 List<DataBean> beans = bean.getData();
                 if (beans.size() > 0) {
-                    refresh(beans);
-                }else {
+                    add(beans);
+                } else {
                     recyclerView.showEmptyView();
                 }
             } else {
@@ -216,7 +233,7 @@ public class DeviceManageActivity extends ABaseActivity {
     }
 
     private void showDialog() {
-        Holder holder = new ViewHolder(LayoutInflater.from(this).inflate(R.layout.confirm_dialog,
+        Holder holder = new ViewHolder(LayoutInflater.from(this).inflate(R.layout.dialog_confirm,
                 null));
         TextView tvTitle = (TextView) holder.getInflatedView().findViewById(R.id.dia_title);
         Button btnLeft = (Button) holder.getInflatedView().findViewById(R.id.btn_cancel);

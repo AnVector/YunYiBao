@@ -157,4 +157,14 @@ public class NotRentFragment extends ABaseFragment {
             }
         }
     }
+
+    @Override
+    public void onFailure(String error, int page, Integer actionType) {
+        super.onFailure(error, page, actionType);
+        if (isRefresh && ultimateRecyclerView != null) {
+            ultimateRecyclerView.setRefreshing(false);
+            layoutManager.scrollToPosition(0);
+            ultimateRecyclerView.reenableLoadmore();
+        }
+    }
 }

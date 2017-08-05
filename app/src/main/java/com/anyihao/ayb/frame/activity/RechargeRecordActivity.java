@@ -141,6 +141,7 @@ public class RechargeRecordActivity extends ABaseActivity {
                     intent.putExtra("flow", ((DataBean) o).getFlow());
                     intent.putExtra("payType", ((DataBean) o).getTopupType());
                     intent.putExtra("idxOrderID", ((DataBean) o).getIdxOrderID());
+                    intent.putExtra("status", ((DataBean) o).getStatus());
                     startActivity(intent);
                 }
             }
@@ -221,6 +222,16 @@ public class RechargeRecordActivity extends ABaseActivity {
                     onLoadNoData();
                 }
             }
+        }
+    }
+
+    @Override
+    public void onFailure(String error, int page, Integer actionType) {
+        super.onFailure(error, page, actionType);
+        if (isRefresh && recyclerView != null) {
+            recyclerView.setRefreshing(false);
+            layoutManager.scrollToPosition(0);
+            recyclerView.reenableLoadmore();
         }
     }
 }

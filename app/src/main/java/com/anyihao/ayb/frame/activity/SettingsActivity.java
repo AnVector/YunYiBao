@@ -1,6 +1,7 @@
 package com.anyihao.ayb.frame.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.anyihao.androidbase.mvp.Task;
@@ -17,6 +19,7 @@ import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.DensityUtils;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
+import com.anyihao.androidbase.utils.StatusBarUtil;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.SettingsAdapter;
@@ -48,6 +51,10 @@ public class SettingsActivity extends ABaseActivity {
     RecyclerView recyclerview;
     @BindView(R.id.btn_logout)
     AppCompatButton btnLogout;
+    @BindView(R.id.activity_settings)
+    LinearLayout activitySettings;
+    @BindView(R.id.fake_status_bar)
+    View fakeStatusBar;
     private SettingsAdapter mAdapter;
     String[] array = new String[]{"修改密码", "常见问题", "意见反馈", "账号管理", "关于云逸宝"};
     private List<String> mData = Arrays.asList(array);
@@ -71,6 +78,9 @@ public class SettingsActivity extends ABaseActivity {
     protected void initData() {
         if (!isLogin) {
             btnLogout.setText(getString(R.string.not_login));
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            fakeStatusBar.setVisibility(View.VISIBLE);
         }
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
@@ -164,6 +174,14 @@ public class SettingsActivity extends ABaseActivity {
 
     }
 
+    @Override
+    protected void setStatusBarTheme() {
+        super.setStatusBarTheme();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            StatusBarUtil.setTranslucentForImageView(SettingsActivity.this, 0, activitySettings);
+        }
+    }
+
     private void startActivityForLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivityForResult(intent, REQUEST_LOGIN_CODE);
@@ -207,7 +225,7 @@ public class SettingsActivity extends ABaseActivity {
     }
 
     private void showDialog() {
-        Holder holder = new ViewHolder(LayoutInflater.from(this).inflate(R.layout.confirm_dialog,
+        Holder holder = new ViewHolder(LayoutInflater.from(this).inflate(R.layout.dialog_confirm,
                 null));
         TextView tvTitle = (TextView) holder.getInflatedView().findViewById(R.id.dia_title);
         Button btnLeft = (Button) holder.getInflatedView().findViewById(R.id.btn_cancel);

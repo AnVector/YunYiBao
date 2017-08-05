@@ -215,4 +215,14 @@ public class SystemRecordActivity extends ABaseActivity {
             }
         }
     }
+
+    @Override
+    public void onFailure(String error, int page, Integer actionType) {
+        super.onFailure(error, page, actionType);
+        if (isRefresh && recyclerView != null) {
+            recyclerView.setRefreshing(false);
+            layoutManager.scrollToPosition(0);
+            recyclerView.reenableLoadmore();
+        }
+    }
 }

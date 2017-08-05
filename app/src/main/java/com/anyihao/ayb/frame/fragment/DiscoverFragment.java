@@ -67,8 +67,6 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     Toolbar toolbar;
     @BindView(R.id.map)
     MapView mMapView;
-    @BindView(R.id.fake_status_bar)
-    View fakeStatusBar;
     @BindView(R.id.imv_my_location)
     ImageView imvMyLocation;
     Unbinder unbinder;
@@ -99,7 +97,6 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     protected void initData() {
         titleMid.setText(getString(R.string.service_location));
         toolbar.setNavigationIcon(null);
-        fakeStatusBar.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         initAMap();
         initUiSettings();
         initLocationStyle();
@@ -218,7 +215,6 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
             mAmap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(aMapLocation.getLatitude
                     (), aMapLocation.getLongitude())));
         }
-
     }
 
     @Override
@@ -233,8 +229,7 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
                 if (aMapLocation != null) {
                     mAmap.moveCamera(CameraUpdateFactory.zoomTo(17));
                     mAmap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(aMapLocation
-                            .getLatitude
-                                    (), aMapLocation.getLongitude())));
+                            .getLatitude(), aMapLocation.getLongitude())));
                 }
             }
         });

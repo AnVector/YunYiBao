@@ -246,7 +246,8 @@ public static final ** CREATOR;
 -dontwarn com.amap.api.maps2d.overlay.**
 -keep class com.amap.api.mapcore2d.**{ *; }
 -dontwarn com.amap.api.mapcore2d.**
-
+-keep class com.amap.api.maps.**{ *; }
+-dontwarn com.amap.api.maps.**
 
 ### JPush
 -dontwarn cn.jpush.**

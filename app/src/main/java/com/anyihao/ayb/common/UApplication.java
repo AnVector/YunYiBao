@@ -51,20 +51,9 @@ public class UApplication extends MultiDexApplication {
     private final String TAG = UApplication.this.getClass().getSimpleName();
     private static UApplication mInstance;
     private UBroadcastReceiver mUBroadcastReceiver;
-    private NetworkStateReceiver mNetworkStateReceiver;
     private AMapLocationListener mLocationListener = null;
     public AMapLocationClient mLocationClient = null;
     public AMapLocationClientOption mLocationOption = null;
-    //表示是否连接
-    public boolean isConnected;
-    //    表示是否是移动网络
-    public boolean isMobile;
-    //    表示是否是WiFi
-    public boolean isWifi;
-    //    表示WiFi开关是否打开
-    public boolean isEnablaWifi;
-    //    表示移动网络数据是否打开
-    public boolean isEnableMobile;
 
     static {
         PlatformConfig.setQQZone("1105774848", "WmRdHTA5MG4bCO2F");//QQ
@@ -90,7 +79,6 @@ public class UApplication extends MultiDexApplication {
             initUBroadcastReceiver();//在当前进程注册广播
             initOkHttpUtils();//初始化OkHttp配置
             initUAnalysis();//初始化友盟统计
-            initNetWorkStateReceiver();//注册网络状态变化广播
         }
         initBugly();//初始化Bugly
         initLeakCanary();//初始化LeakCanary
@@ -197,15 +185,6 @@ public class UApplication extends MultiDexApplication {
         registerReceiver(mUBroadcastReceiver, filter);
     }
 
-    private void initNetWorkStateReceiver() {
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-        filter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
-        filter.addAction("android.net.wifi.STATE_CHANGE");
-        mNetworkStateReceiver = new NetworkStateReceiver();
-        registerReceiver(mNetworkStateReceiver, filter);
-    }
-
     private void initLogger() {
 
         FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()
@@ -252,54 +231,9 @@ public class UApplication extends MultiDexApplication {
         if (mUBroadcastReceiver != null) {
             unregisterReceiver(mUBroadcastReceiver);
         }
-
-        if (mNetworkStateReceiver != null) {
-            unregisterReceiver(mNetworkStateReceiver);
-        }
-
         if (mLocationClient != null) {
             mLocationClient.stopLocation();//停止定位后，本地定位服务并不会被销毁
             mLocationClient.onDestroy();//销毁定位客户端，同时销毁本地定位服务。
         }
-    }
-
-    public boolean isConnected() {
-        return isWifi || isMobile;
-    }
-
-    public void setConnected(boolean connected) {
-        isConnected = connected;
-    }
-
-    public boolean isMobile() {
-        return isMobile;
-    }
-
-    public void setMobile(boolean mobile) {
-        isMobile = mobile;
-    }
-
-    public boolean isWifi() {
-        return isWifi;
-    }
-
-    public void setWifi(boolean wifi) {
-        isWifi = wifi;
-    }
-
-    public boolean isEnablaWifi() {
-        return isEnablaWifi;
-    }
-
-    public void setEnablaWifi(boolean enablaWifi) {
-        isEnablaWifi = enablaWifi;
-    }
-
-    public boolean isEnableMobile() {
-        return isEnableMobile;
-    }
-
-    public void setEnableMobile(boolean enableMobile) {
-        isEnableMobile = enableMobile;
     }
 }

@@ -4,20 +4,20 @@
         "source": "H:\\YunYiBao\\easypermissions\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout\\abc_alert_dialog_button_bar_material.xml"
     },
     {
-        "merged": "H:\\YunYiBao\\easypermissions\\build\\intermediates\\res\\merged\\release\\layout\\abc_popup_menu_header_item_layout.xml",
-        "source": "H:\\YunYiBao\\easypermissions\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout\\abc_popup_menu_header_item_layout.xml"
-    },
-    {
         "merged": "H:\\YunYiBao\\easypermissions\\build\\intermediates\\res\\merged\\release\\layout\\notification_template_media_custom.xml",
         "source": "H:\\YunYiBao\\easypermissions\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout\\notification_template_media_custom.xml"
     },
     {
-        "merged": "H:\\YunYiBao\\easypermissions\\build\\intermediates\\res\\merged\\release\\layout\\abc_action_menu_item_layout.xml",
-        "source": "H:\\YunYiBao\\easypermissions\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout\\abc_action_menu_item_layout.xml"
+        "merged": "H:\\YunYiBao\\easypermissions\\build\\intermediates\\res\\merged\\release\\layout\\abc_popup_menu_header_item_layout.xml",
+        "source": "H:\\YunYiBao\\easypermissions\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout\\abc_popup_menu_header_item_layout.xml"
     },
     {
         "merged": "H:\\YunYiBao\\easypermissions\\build\\intermediates\\res\\merged\\release\\layout\\abc_action_bar_view_list_nav_layout.xml",
         "source": "H:\\YunYiBao\\easypermissions\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout\\abc_action_bar_view_list_nav_layout.xml"
+    },
+    {
+        "merged": "H:\\YunYiBao\\easypermissions\\build\\intermediates\\res\\merged\\release\\layout\\abc_action_menu_item_layout.xml",
+        "source": "H:\\YunYiBao\\easypermissions\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout\\abc_action_menu_item_layout.xml"
     },
     {
         "merged": "H:\\YunYiBao\\easypermissions\\build\\intermediates\\res\\merged\\release\\layout\\abc_search_dropdown_item_icons_2line.xml",

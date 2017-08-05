@@ -38,6 +38,7 @@ public class RechargeRecordDetailsActivity extends ABaseActivity {
     private String flow;
     private String payType;
     private String idxOrderID;
+    private String status;
 
     @Override
     protected int getContentViewId() {
@@ -55,6 +56,7 @@ public class RechargeRecordDetailsActivity extends ABaseActivity {
         flow = intent.getStringExtra("flow");
         payType = intent.getStringExtra("payType");
         idxOrderID = intent.getStringExtra("idxOrderID");
+        status = intent.getStringExtra("status");
         if ("WXPAY".equals(payType)) {
             payType = "微信支付";
         } else {
@@ -69,13 +71,19 @@ public class RechargeRecordDetailsActivity extends ABaseActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         titleMid.setText(getString(R.string.recharge_record_details));
-        mData.clear();
-        mData.addAll(convert2KeyValueBean());
+        if ("5".equals(status)) {
+            mData.addAll(convert2Bean("押金缴纳"));
+        } else if ("7".equals(status)) {
+            mData.addAll(convert2Bean("押金退款"));
+        } else {
+            mData.addAll(convert2KeyValueBean());
+        }
         mAdapter = new RechargeRecordDetailsAdapter(this, R.layout.item_recharge_record_details,
                 mData);
-        recyclerview.setAdapter(mAdapter);
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager
                 .VERTICAL, false));
+        recyclerview.setAdapter(mAdapter);
+
         if (!TextUtils.isEmpty(fee)) {
             tvPrice.setText(fee + "元");
         }
@@ -99,11 +107,21 @@ public class RechargeRecordDetailsActivity extends ABaseActivity {
 
     private List<KeyValueBean> convert2KeyValueBean() {
         List<KeyValueBean> beans = new LinkedList<>();
-        beans.add(0, new KeyValueBean().setTitle("流量充值").setValue(flow));
-        beans.add(1, new KeyValueBean().setTitle("截止日期").setValue(effectTm));
-        beans.add(2, new KeyValueBean().setTitle("付款方式").setValue(payType));
-        beans.add(3, new KeyValueBean().setTitle("流水号").setValue(idxOrderID));
-        beans.add(4, new KeyValueBean().setTitle("支付时间").setValue(crtTime));
+        beans.add(0, new KeyValueBean().setTitle("订单类型").setValue("流量充值"));
+        beans.add(1, new KeyValueBean().setTitle("充值说明").setValue(flow));
+        beans.add(2, new KeyValueBean().setTitle("截止日期").setValue(effectTm));
+        beans.add(3, new KeyValueBean().setTitle("付款方式").setValue(payType));
+        beans.add(4, new KeyValueBean().setTitle("流水号").setValue(idxOrderID));
+        beans.add(5, new KeyValueBean().setTitle("创建时间").setValue(crtTime));
+        return beans;
+    }
+
+    private List<KeyValueBean> convert2Bean(String type) {
+        List<KeyValueBean> beans = new LinkedList<>();
+        beans.add(0, new KeyValueBean().setTitle("订单类型").setValue(type));
+        beans.add(1, new KeyValueBean().setTitle("付款方式").setValue(payType));
+        beans.add(2, new KeyValueBean().setTitle("流水号").setValue(idxOrderID));
+        beans.add(3, new KeyValueBean().setTitle("创建时间").setValue(crtTime));
         return beans;
     }
 }

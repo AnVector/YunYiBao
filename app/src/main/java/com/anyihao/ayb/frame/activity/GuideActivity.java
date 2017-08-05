@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.anyihao.androidbase.utils.StatusBarUtil;
 import com.anyihao.ayb.R;
+import com.anyihao.ayb.ui.pagetransformer.DepthPageTransformer;
 
 import butterknife.BindView;
 
@@ -51,14 +53,15 @@ public class GuideActivity extends ABaseActivity {
 
     @Override
     protected void setStatusBarTheme() {
+        StatusBarUtil.setTranslucentForImageView(this, 0, mGuideViewpager);
     }
 
     private void initViewPager() {
-//        mGuideViewpager.setPageTransformer(true, new DepthPageTransformer());
+        mGuideViewpager.setPageTransformer(true, new DepthPageTransformer());
         mGuideViewpager.setAdapter(new PagerAdapter() {
             @Override
             public Object instantiateItem(ViewGroup container, int position) {
-                View contentView = getLayoutInflater().inflate(R.layout.guide_layout, null);
+                View contentView = getLayoutInflater().inflate(R.layout.view_guide, null);
                 ImageView img = (ImageView) contentView.findViewById(R.id.iv_guide);
                 if (position == 2) {
                     btnGo = (AppCompatButton) contentView.findViewById(R.id.btn_go);

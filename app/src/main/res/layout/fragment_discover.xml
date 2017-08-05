@@ -8,15 +8,15 @@
     <View
         android:id="@+id/fake_status_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/statusbar_view_height"/>
+        android:layout_height="@dimen/statusbar_view_height"
+        android:background="@color/white"/>
 
     <include
         layout="@layout/toolbar_common"/>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="49dp">
+        android:layout_height="match_parent">
 
         <com.amap.api.maps2d.MapView
             android:id="@+id/map"
@@ -31,5 +31,4 @@
             android:scaleType="fitXY"
             android:src="@drawable/ic_my_location"/>
     </FrameLayout>
-
 </LinearLayout>

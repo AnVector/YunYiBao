@@ -207,7 +207,7 @@ public class RentedFragment extends ABaseFragment {
 
     private void showDialog(final String vid) {
         Holder holder = new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout
-                        .confirm_dialog,
+                        .dialog_confirm,
                 null));
         TextView tvTitle = (TextView) holder.getInflatedView().findViewById(R.id.dia_title);
         Button btnLeft = (Button) holder.getInflatedView().findViewById(R.id.btn_cancel);
@@ -283,6 +283,16 @@ public class RentedFragment extends ABaseFragment {
                 isRefresh = true;
                 getBelongs();
             }
+        }
+    }
+
+    @Override
+    public void onFailure(String error, int page, Integer actionType) {
+        super.onFailure(error, page, actionType);
+        if (isRefresh && recyclerView != null) {
+            recyclerView.setRefreshing(false);
+            layoutManager.scrollToPosition(0);
+            recyclerView.reenableLoadmore();
         }
     }
 }

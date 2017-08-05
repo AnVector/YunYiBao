@@ -1,4 +1,4 @@
-package com.anyihao.ayb.ui.WaitingDots;
+package com.anyihao.ayb.ui.waitingdots;
 
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;

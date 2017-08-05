@@ -6,11 +6,6 @@
     android:layout_height="match_parent"
     tools:context="com.anyihao.ayb.frame.activity.MainFragmentActivity">
 
-    <com.anyihao.ayb.ui.CustomViewPager
-        android:id="@+id/viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
     <RadioGroup
         android:id="@+id/radio_group"
         android:layout_width="match_parent"
@@ -44,4 +39,11 @@
             android:drawableTop="@drawable/me_normal"
             android:text="@string/me"/>
     </RadioGroup>
+
+    <com.anyihao.ayb.ui.CustomViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/radio_group"
+        android:layout_centerHorizontal="true"/>
 </RelativeLayout>
