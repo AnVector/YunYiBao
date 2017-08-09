@@ -1,1 +1,1 @@
-include ':app', ':androidbase', ':okhttputils', ':ultimaterecyclerview', ':easypermissions'
+include ':app', ':androidbase', ':okhttputils', ':ultimaterecyclerview', ':easypermissions', ':matisse'

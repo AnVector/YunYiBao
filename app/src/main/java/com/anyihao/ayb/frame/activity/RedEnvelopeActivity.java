@@ -20,6 +20,8 @@ import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.ui.CropCircleTransformation;
 import com.bumptech.glide.Glide;
+import com.nineoldandroids.animation.AnimatorSet;
+import com.nineoldandroids.animation.ObjectAnimator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -88,32 +90,51 @@ public class RedEnvelopeActivity extends ABaseActivity {
         toolbarTitleMid.setText(getString(R.string.red_envelope));
 
         if (status == 0) {
-            llClose.setVisibility(View.VISIBLE);
-            llOpen.setVisibility(View.GONE);
-            if (!TextUtils.isEmpty(sendAvatar)) {
-                Glide.with(this).load(sendAvatar)
-                        .bitmapTransform(new CropCircleTransformation(this))
-                        .placeholder(R.drawable.user_profile)
-                        .crossFade().into(ivUserProfile);
-            }
+            showEnvelope();
         } else {
             openEnvelope();
+        }
+    }
+
+    private void showEnvelope() {
+        llClose.setVisibility(View.VISIBLE);
+        llOpen.setVisibility(View.GONE);
+        if (!TextUtils.isEmpty(sendAvatar)) {
+            Glide.with(this).load(sendAvatar)
+                    .bitmapTransform(new CropCircleTransformation(this))
+                    .placeholder(R.drawable.user_profile)
+                    .crossFade().into(ivUserProfile);
         }
     }
 
     private void openEnvelope() {
         llClose.setVisibility(View.GONE);
         llOpen.setVisibility(View.VISIBLE);
+        startAnimation();
         if (!TextUtils.isEmpty(sendAvatar)) {
             Glide.with(this).load(sendAvatar)
                     .bitmapTransform(new CropCircleTransformation(this))
                     .placeholder(R.drawable.user_profile)
                     .crossFade().into(ivProfile);
         }
-
         tvEnvelopeValue.setText(flow);
         tvUseExpires.setText("有效期：" + getDate(crtTime) + "-" + getDate(effectTime));
         tvFrom.setText(String.format(getString(R.string.fried_name), sendName));
+    }
+
+    private void startAnimation() {
+        //沿x轴放大
+        ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(llOpen, "scaleX", 0f, 0.6f, 1f);
+        //沿y轴放大
+        ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(llOpen, "scaleY", 0f, 0.6f, 1f);
+        //透明动画
+        ObjectAnimator animator = ObjectAnimator.ofFloat(llOpen, "alpha", 0f, 0.6f, 1f);
+        AnimatorSet set = new AnimatorSet();
+        //同时沿X,Y轴放大，且改变透明度，然后移动
+        set.play(scaleXAnimator).with(scaleYAnimator).with(animator);
+        //都设置3s，也可以为每个单独设置
+        set.setDuration(1000);
+        set.start();
     }
 
     private String getDate(String time) {

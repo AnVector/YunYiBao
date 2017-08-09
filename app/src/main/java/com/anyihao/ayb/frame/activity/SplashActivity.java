@@ -110,11 +110,6 @@ public class SplashActivity extends ABaseActivity {
     }
 
     @Override
-    protected void getExtraParams() {
-
-    }
-
-    @Override
     protected void setStatusBarTheme() {
         StatusBarUtil.setTransparent(this);
     }

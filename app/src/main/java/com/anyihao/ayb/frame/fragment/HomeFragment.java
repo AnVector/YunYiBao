@@ -38,8 +38,8 @@ import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.MainAdapter;
-import com.anyihao.ayb.bean.AdvertiseBean;
-import com.anyihao.ayb.bean.AdvertiseBean.DataBean;
+import com.anyihao.ayb.bean.AdvertisementBean;
+import com.anyihao.ayb.bean.AdvertisementBean.DataBean;
 import com.anyihao.ayb.bean.CertificationStatusBean;
 import com.anyihao.ayb.bean.IEBoxBean;
 import com.anyihao.ayb.bean.NewMessageBean;
@@ -780,7 +780,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
         }
 
         if (actionType == 3) {
-            AdvertiseBean bean = GsonUtils.getInstance().transitionToBean(result, AdvertiseBean
+            AdvertisementBean bean = GsonUtils.getInstance().transitionToBean(result, AdvertisementBean
                     .class);
             if (bean == null)
                 return;

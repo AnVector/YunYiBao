@@ -31,11 +31,11 @@ import com.anyihao.ayb.adapter.LendAdapter;
 import com.anyihao.ayb.adapter.NormalAdapter;
 import com.anyihao.ayb.adapter.SignAdapter;
 import com.anyihao.ayb.bean.SignBean;
-import com.anyihao.ayb.bean.TaskInfoListBean;
-import com.anyihao.ayb.bean.TaskInfoListBean.DataBean;
-import com.anyihao.ayb.bean.TaskInfoListBean.DataBean.LendBean;
-import com.anyihao.ayb.bean.TaskInfoListBean.DataBean.LimitedBean;
-import com.anyihao.ayb.bean.TaskInfoListBean.DataBean.NormalBean;
+import com.anyihao.ayb.bean.TaskListBean;
+import com.anyihao.ayb.bean.TaskListBean.DataBean;
+import com.anyihao.ayb.bean.TaskListBean.DataBean.LendBean;
+import com.anyihao.ayb.bean.TaskListBean.DataBean.LimitedBean;
+import com.anyihao.ayb.bean.TaskListBean.DataBean.NormalBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.frame.activity.BriberyMoneyActivity;
@@ -204,7 +204,7 @@ public class TaskFragment extends ABaseFragment {
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, BriberyMoneyActivity
                         .class);
-                intent.putExtra("type", 0);
+                intent.putExtra("type", 1);
                 startActivity(intent);
             }
         });
@@ -214,7 +214,7 @@ public class TaskFragment extends ABaseFragment {
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, BriberyMoneyActivity
                         .class);
-                intent.putExtra("type", 0);
+                intent.putExtra("type", 1);
                 startActivity(intent);
             }
         });
@@ -239,7 +239,6 @@ public class TaskFragment extends ABaseFragment {
                 if (o instanceof LendBean) {
                     startExchangeActivity(((LendBean) o).getExchangeId());
                 }
-
             }
 
             @Override
@@ -357,8 +356,8 @@ public class TaskFragment extends ABaseFragment {
     public void onSuccess(String result, int page, Integer actionType) {
 
         if (actionType == 0) {
-            TaskInfoListBean bean = GsonUtils.getInstance().transitionToBean(result,
-                    TaskInfoListBean.class);
+            TaskListBean bean = GsonUtils.getInstance().transitionToBean(result,
+                    TaskListBean.class);
             if (bean == null)
                 return;
             if (bean.getCode() == 200) {

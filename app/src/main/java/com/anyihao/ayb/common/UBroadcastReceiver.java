@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 
-import com.anyihao.ayb.utils.UpdaterUtils;
+import com.anyihao.ayb.utils.UpdateUtils;
 import com.orhanobut.logger.Logger;
 
 /**
@@ -22,7 +22,7 @@ public class UBroadcastReceiver extends BroadcastReceiver {
         switch (action) {
             case DownloadManager.ACTION_DOWNLOAD_COMPLETE:
                 long downloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-                long localDownloadId = UpdaterUtils.getLocalDownloadId(context);
+                long localDownloadId = UpdateUtils.getLocalDownloadId(context);
                 Logger.d("downloadId is " + downloadId);
                 Logger.d("localDownloadId is " + localDownloadId);
                 if (downloadId == localDownloadId) {

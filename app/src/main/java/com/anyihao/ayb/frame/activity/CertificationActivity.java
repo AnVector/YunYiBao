@@ -54,14 +54,6 @@ public class CertificationActivity extends ABaseActivity {
     }
 
     /**
-     * 获取从上一页面传递的参数
-     */
-    @Override
-    protected void getExtraParams() {
-
-    }
-
-    /**
      * 初始化数据
      */
     @Override

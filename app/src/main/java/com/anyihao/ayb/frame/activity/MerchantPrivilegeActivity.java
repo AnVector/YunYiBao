@@ -43,11 +43,6 @@ public class MerchantPrivilegeActivity extends ABaseActivity {
     }
 
     @Override
-    protected void getExtraParams() {
-
-    }
-
-    @Override
     protected void initData() {
         initViewPager();
         setSupportActionBar(toolbar);

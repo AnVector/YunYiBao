@@ -51,11 +51,6 @@ public class RentHistoryActivity extends ABaseActivity {
     }
 
     @Override
-    protected void getExtraParams() {
-
-    }
-
-    @Override
     protected void initData() {
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {

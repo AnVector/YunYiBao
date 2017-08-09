@@ -4,8 +4,10 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.AssetManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
@@ -36,6 +38,7 @@ import com.anyihao.ayb.bean.UserInfoBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.listener.OnItemClickListener;
+import com.anyihao.ayb.utils.PermissionSettingUtils;
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.bigkoo.pickerview.TimePickerView;
 import com.google.gson.Gson;
@@ -43,6 +46,10 @@ import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
+import com.zhihu.matisse.Matisse;
+import com.zhihu.matisse.MimeType;
+import com.zhihu.matisse.engine.impl.GlideEngine;
+import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
 import org.json.JSONArray;
 
@@ -108,7 +115,8 @@ public class MeActivity extends ABaseActivity {
     private String mZone;
     private static final int REQUEST_UPDATE_CODE = 0x0004;
     private static final int RC_CAMERA_PERM = 0x0005;
-    private boolean isGender = true;
+    private static final int REQUEST_CODE_CHOOSE = 0x0006;
+    private static final int REQUEST_PHOTO_EDIT = 0x0007;
     private String depositMoney;
     private UHandler mHandler = new UHandler(this);
 
@@ -165,7 +173,7 @@ public class MeActivity extends ABaseActivity {
 
     @Override
     protected void initData() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             fakeStatusBar.setVisibility(View.VISIBLE);
         }
         getUserInfo();
@@ -186,7 +194,7 @@ public class MeActivity extends ABaseActivity {
     @Override
     protected void setStatusBarTheme() {
         super.setStatusBarTheme();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             StatusBarUtil.setTranslucentForImageView(MeActivity.this, 0, activityMe);
         }
     }
@@ -238,15 +246,10 @@ public class MeActivity extends ABaseActivity {
                 if (o instanceof KeyValueBean) {
                     switch (((KeyValueBean) o).getTitle()) {
                         case "头像":
-//                            if (bottomDialog != null) {
-//                                isGender = false;
-//                                tvMale.setText(getString(R.string.from_album));
-//                                tvFemale.setText(getString(R.string.photo));
-//                                bottomDialog.show();
-//                            }
+                            permissionsRequest();
                             break;
                         case "地区":
-                            tvValue = (TextView) view.findViewById(R.id.value);
+                            tvValue = (TextView) view.findViewById(R.id.tv_value);
                             if (isLoaded) {
                                 showPickerView(tvValue);
                             } else {
@@ -254,7 +257,7 @@ public class MeActivity extends ABaseActivity {
                             }
                             break;
                         case "生日":
-                            tvValue = (TextView) view.findViewById(R.id.value);
+                            tvValue = (TextView) view.findViewById(R.id.tv_value);
                             if (mPvDate != null) {
                                 mPvDate.show(tvValue);
                             }
@@ -269,14 +272,14 @@ public class MeActivity extends ABaseActivity {
                             startActivity(intent1);
                             break;
                         case "押金退款":
-                            tvValue = (TextView) view.findViewById(R.id.value);
+                            tvValue = (TextView) view.findViewById(R.id.tv_value);
                             if ("未缴纳".equals(((KeyValueBean) o).getValue())) {
                                 ToastUtils.showToast(getApplicationContext(), ((KeyValueBean) o)
                                         .getValue());
                                 return;
                             } else {
                                 depositMoney = ((KeyValueBean) o).getValue();
-                                showConfirmDialog();
+                                showConfirmDialog(0);
                             }
                             break;
                         case "手机号码":
@@ -288,9 +291,8 @@ public class MeActivity extends ABaseActivity {
                             startActivity(intent2);
                             break;
                         case "性别":
-                            tvValue = (TextView) view.findViewById(R.id.value);
+                            tvValue = (TextView) view.findViewById(R.id.tv_value);
                             if (bottomDialog != null) {
-                                isGender = true;
                                 tvMale.setText(getString(R.string.male));
                                 tvFemale.setText(getString(R.string.female));
                                 bottomDialog.show();
@@ -318,32 +320,22 @@ public class MeActivity extends ABaseActivity {
         tvMale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isGender) {
-                    mGender = "男";
-                    updateInfo(3, mGender);
-                    if (bottomDialog != null) {
-                        bottomDialog.dismiss();
-                    }
-                } else {
-                    permissionsRequest();
+                mGender = "男";
+                updateInfo(3, mGender);
+                if (bottomDialog != null) {
+                    bottomDialog.dismiss();
                 }
-
             }
         });
 
         tvFemale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isGender) {
-                    mGender = "女";
-                    updateInfo(3, mGender);
-                    if (bottomDialog != null) {
-                        bottomDialog.dismiss();
-                    }
-                } else {
-
+                mGender = "女";
+                updateInfo(3, mGender);
+                if (bottomDialog != null) {
+                    bottomDialog.dismiss();
                 }
-
             }
         });
 
@@ -362,21 +354,22 @@ public class MeActivity extends ABaseActivity {
         String[] permissions = {Manifest.permission.CAMERA, Manifest.permission
                 .WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
         if (EasyPermissions.hasPermissions(this, permissions)) {
-//            Matisse.from(this)
-//                    .choose(MimeType.allOf())
-//                    .countable(true)
-//                    .capture(true)
-//                    .captureStrategy(
-//                            new CaptureStrategy(true, "com.zhihu.matisse.sample.fileprovider"))
-//                    .maxSelectable(9)
-//                    .gridExpectedSize(
-//                            getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
-//                    .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-//                    .thumbnailScale(0.85f)
-//                    .imageEngine(new GlideEngine())
-//                    .forResult(REQUEST_CODE_CHOOSE);
+            Matisse.from(this)
+                    .choose(MimeType.ofImage())
+                    .countable(true)
+                    .capture(true)
+                    .captureStrategy(
+                            new CaptureStrategy(true, "com.anyihao.ayb.fileprovider"))
+                    .maxSelectable(1)
+                    .countable(false)
+                    .gridExpectedSize(
+                            getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
+                    .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+                    .thumbnailScale(0.85f)
+                    .imageEngine(new GlideEngine())
+                    .forResult(REQUEST_CODE_CHOOSE);
         } else {
-            EasyPermissions.requestPermissions(this, "打开摄像头",
+            EasyPermissions.requestPermissions(this, "打开手机相册",
                     RC_CAMERA_PERM, permissions);
         }
     }
@@ -539,24 +532,32 @@ public class MeActivity extends ABaseActivity {
         return detail;
     }
 
-    private void showConfirmDialog() {
+    private void showConfirmDialog(final int type) {
         Holder holder = new ViewHolder(LayoutInflater.from(this).inflate(R.layout.dialog_confirm,
                 null));
         TextView tvTitle = (TextView) holder.getInflatedView().findViewById(R.id.dia_title);
         Button btnLeft = (Button) holder.getInflatedView().findViewById(R.id.btn_cancel);
         Button btnRight = (Button) holder.getInflatedView().findViewById(R.id.btn_ok);
-        tvTitle.setText(String.format(getString(R.string.refund_deposit_hint), depositMoney));
-        btnLeft.setText(getString(R.string.deposit_confirm));
-        btnRight.setText(getString(R.string.deposit_cancel));
+        if (type == 0) {
+            tvTitle.setText(String.format(getString(R.string.refund_deposit_hint), depositMoney));
+            tvTitle.setTextSize(17f);
+            btnLeft.setText(getString(R.string.deposit_cancel));
+            btnRight.setText(getString(R.string.deposit_confirm));
+        } else {
+            tvTitle.setText(getString(R.string.permission_camera_hint));
+            tvTitle.setTextSize(14f);
+            btnLeft.setText(getString(R.string.cancel));
+            btnRight.setText(getString(R.string.go_to_config));
+        }
         OnClickListener clickListener = new OnClickListener() {
             @Override
             public void onClick(DialogPlus dialog, View view) {
                 switch (view.getId()) {
                     case R.id.btn_cancel:
-                        deposit();
                         dialog.dismiss();
                         break;
                     case R.id.btn_ok:
+                        handleConfirm(type);
                         dialog.dismiss();
                         break;
                     default:
@@ -575,6 +576,14 @@ public class MeActivity extends ABaseActivity {
                 .setContentBackgroundResource(R.drawable.dialog_bg)
                 .create();
         dialog.show();
+    }
+
+    private void handleConfirm(int type) {
+        if (type == 0) {
+            deposit();
+        } else {
+            PermissionSettingUtils.goToSettings(this);
+        }
     }
 
     private void initBottomDialog() {
@@ -598,12 +607,26 @@ public class MeActivity extends ABaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_UPDATE_CODE) {
-            if (resultCode == UpdateInfoActivity.RESULT_UPDATE_SUCCESS_CODE) {
-                getUserInfo();
-            }
+        if (requestCode == REQUEST_UPDATE_CODE && resultCode == RESULT_OK) {
+            getUserInfo();
+        }
+        if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
+            ArrayList<Uri> source = (ArrayList<Uri>) Matisse.obtainResult(data);
+            Intent intent = new Intent(MeActivity.this, PhotoEditActivity.class);
+            intent.putParcelableArrayListExtra("uri", source);
+            startActivityForResult(intent, REQUEST_PHOTO_EDIT);
+        }
+        if (requestCode == REQUEST_PHOTO_EDIT && resultCode == RESULT_OK) {
+            getUserInfo();
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            showConfirmDialog(1);
+        }
     }
 
     @Override
@@ -668,6 +691,7 @@ public class MeActivity extends ABaseActivity {
         beans.add(8, new KeyValueBean().setTitle("押金退款").setValue(bean.getDeposit()));
         return beans;
     }
+
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {

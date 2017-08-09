@@ -42,6 +42,9 @@
     <string name="qr_code_of_mine">我的二维码</string>
     <string name="from_album">从相册选择</string>
     <string name="photo">拍照</string>
+    <string name="permission_camera_hint">在设置-应用-云逸宝-权限中开启相机权限，读写手机存储权限，以正常使用拍照功能和上传头像的功能</string>
+    <string name="permission_location_hint">在设置-应用-云逸宝-权限中开启位置信息权限，以正常使用获取附近WIFI热点信息和定位功能</string>
+    <string name="go_to_config">去设置</string>
 
     <!--Toolbar Title-->
     <string name="data_flow_charge">流量充值</string>
@@ -187,7 +190,7 @@
     <string name="connected_devices_hint">有%1$d台设备接入当前WIFI</string>
     <string name="menu_hint">去和心仪的人打个招呼吧，用红包打招呼收到回应的机会会更上一层楼哦~~</string>
     <string name="say_hi">打招呼</string>
-    <string name="bribery_money">发红包</string>
+    <string name="bribery_money">发流量红包</string>
     <string name="cancel">取消</string>
     <!--Authorization device-->
     <string name="authorization_device">授权设备</string>
@@ -201,9 +204,9 @@
     <string name="data_flow">流量：</string>
     <string name="remark">添加备注（30字以内）</string>
     <string name="confirm_to_gift">确认</string>
-    <string name="gift_data">赠送流量</string>
+    <string name="gift_data">发流量红包</string>
     <string name="gift_history">转赠记录</string>
-    <string name="data_amount_hint">请输入转赠的流量（10M的倍数）</string>
+    <string name="data_amount_hint">请输入转赠的流量（10M的倍数，仅限月包）</string>
     <!--QR scan-->
     <string name="invite_code_hint">您的邀请码为：</string>
 

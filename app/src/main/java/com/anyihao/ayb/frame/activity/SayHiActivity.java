@@ -2,6 +2,8 @@ package com.anyihao.ayb.frame.activity;
 
 import android.content.Intent;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.TextView;
 
@@ -56,7 +58,7 @@ public class SayHiActivity extends ABaseActivity {
         toolbarTitleMid.setText(getString(R.string.say_hi));
         toolbarTitleRight.setText(getString(R.string.send_hi));
         toolbarTitleRight.setTextColor(getResources().getColor(R.color.light_gray));
-
+        toolbarTitleRight.setEnabled(false);
     }
 
     @Override
@@ -78,6 +80,30 @@ public class SayHiActivity extends ABaseActivity {
                     return;
                 }
                 sendMessage(content);
+            }
+        });
+
+        edtContent.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!TextUtils.isEmpty(s.toString())) {
+                    toolbarTitleRight.setEnabled(true);
+                    toolbarTitleRight.setTextColor(getResources().getColor(R.color
+                            .toolbar_title_color));
+                } else {
+                    toolbarTitleRight.setEnabled(false);
+                    toolbarTitleRight.setTextColor(getResources().getColor(R.color.light_gray));
+                }
             }
         });
 

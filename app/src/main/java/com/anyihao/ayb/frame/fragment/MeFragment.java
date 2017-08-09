@@ -31,7 +31,7 @@ import com.anyihao.ayb.frame.activity.CreditActivity;
 import com.anyihao.ayb.frame.activity.DeviceManageActivity;
 import com.anyihao.ayb.frame.activity.FlowAccountActivity;
 import com.anyihao.ayb.frame.activity.FlowChartActivity;
-import com.anyihao.ayb.frame.activity.InviteFriendsActivity;
+import com.anyihao.ayb.frame.activity.InviteFriendActivity;
 import com.anyihao.ayb.frame.activity.LoginActivity;
 import com.anyihao.ayb.frame.activity.MeActivity;
 import com.anyihao.ayb.frame.activity.MerchantPrivilegeActivity;
@@ -188,7 +188,7 @@ public class MeFragment extends ABaseFragment {
                             startActivity(intent);
                             break;
                         case "邀请好友":
-                            intent = new Intent(mContext, InviteFriendsActivity.class);
+                            intent = new Intent(mContext, InviteFriendActivity.class);
                             startActivity(intent);
                             break;
                         case "输入邀请码":

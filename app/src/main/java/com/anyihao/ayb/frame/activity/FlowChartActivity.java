@@ -51,11 +51,6 @@ public class FlowChartActivity extends ABaseActivity {
     }
 
     @Override
-    protected void getExtraParams() {
-
-    }
-
-    @Override
     protected void initData() {
         initViewPager();
         initTimePicker();

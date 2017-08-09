@@ -22,9 +22,9 @@ import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.androidbase.utils.TextUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
-import com.anyihao.ayb.bean.AliOrderInfoBean;
+import com.anyihao.ayb.bean.AliOrderBean;
 import com.anyihao.ayb.bean.PayResult;
-import com.anyihao.ayb.bean.WxOrderInfoBean;
+import com.anyihao.ayb.bean.WxOrderBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.wxapi.WXPayEntryActivity;
@@ -309,8 +309,8 @@ public class PayActivity extends ABaseActivity {
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
         if (actionType == 0) {
-            AliOrderInfoBean bean = GsonUtils.getInstance().transitionToBean(result,
-                    AliOrderInfoBean.class);
+            AliOrderBean bean = GsonUtils.getInstance().transitionToBean(result,
+                    AliOrderBean.class);
             if (bean == null)
                 return;
             if (bean.getCode() == 200) {
@@ -321,8 +321,8 @@ public class PayActivity extends ABaseActivity {
         }
 
         if (actionType == 1) {
-            WxOrderInfoBean bean = GsonUtils.getInstance().transitionToBean(result,
-                    WxOrderInfoBean.class);
+            WxOrderBean bean = GsonUtils.getInstance().transitionToBean(result,
+                    WxOrderBean.class);
             if (bean == null)
                 return;
             if (bean.getCode() == 200) {

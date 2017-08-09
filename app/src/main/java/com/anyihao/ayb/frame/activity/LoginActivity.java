@@ -77,11 +77,6 @@ public class LoginActivity extends ABaseActivity {
     }
 
     @Override
-    protected void getExtraParams() {
-
-    }
-
-    @Override
     protected void initData() {
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
@@ -162,7 +157,7 @@ public class LoginActivity extends ABaseActivity {
 
     private void loginByMobile() {
         if (!validate()) {
-           ToastUtils.showToast(getApplicationContext(), "请输入用户名或密码");
+            ToastUtils.showToast(getApplicationContext(), "请输入用户名或密码");
             return;
         }
         btnLogin.setEnabled(false);
@@ -195,7 +190,7 @@ public class LoginActivity extends ABaseActivity {
         params.put("nickname", nickname);
         params.put("avatar", avatar);
         params.put("sex", sex);
-        params.put("ver", AppUtils.getAppVersionName(this));
+        params.put("ver", AppUtils.getAppVersionName(getApplicationContext()));
         progressbarCircular.setVisibility(View.VISIBLE);
         ((CircularProgressDrawable) progressbarCircular.getIndeterminateDrawable()).start();
         PresenterFactory.getInstance().createPresenter(this)
@@ -218,38 +213,9 @@ public class LoginActivity extends ABaseActivity {
         return valid;
     }
 
-//    private void updateValues() {
-//        CircularProgressDrawable circularProgressDrawable;
-//        CircularProgressDrawable.Builder b = new CircularProgressDrawable.Builder(this)
-//                .colors(getResources().getIntArray(R.array.yun_colors))
-//                .sweepSpeed(1f)
-//                .rotationSpeed(1f)
-//                .strokeWidth(dpToPx(3))
-//                .style(CircularProgressDrawable.Style.ROUNDED);
-//        if (mCurrentInterpolator != null) {
-//            b.sweepInterpolator(mCurrentInterpolator);
-//        }
-//        progressbarCircular.setIndeterminateDrawable(circularProgressDrawable = b.build());
-//
-//        // /!\ Terrible hack, do not do this at home!
-//        circularProgressDrawable.setBounds(0,
-//                0,
-//                progressbarCircular.getWidth(),
-//                progressbarCircular.getHeight());
-//        progressbarCircular.setVisibility(View.INVISIBLE);
-//        progressbarCircular.setVisibility(View.VISIBLE);
-//    }
-
-//    public int dpToPx(int dp) {
-//        Resources r = getResources();
-//        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-//                dp, r.getDisplayMetrics());
-//    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == REQUEST_CODE) {
             if (resultCode == GetVerifyCodeActivity.RESULT_BIND_NEW_CODE) {
                 finish();
@@ -319,11 +285,12 @@ public class LoginActivity extends ABaseActivity {
 
         @Override
         public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
+            Logger.d(data);
             String nickname = "";
             String avatar = "";
             String sex = "";
-            LogUtils.e(TAG, "platform=" + platform);
-            LogUtils.e(TAG, "action = " + action);
+            LogUtils.d(TAG, "platform=" + platform);
+            LogUtils.d(TAG, "action = " + action);
             switch (platform) {
                 case QQ:
                 case WEIXIN:
@@ -332,9 +299,9 @@ public class LoginActivity extends ABaseActivity {
                     nickname = data.get("screen_name");
                     avatar = data.get("iconurl");
                     sex = data.get("gender");
-                    if (platform == SHARE_MEDIA.WEIXIN)
+                    if (platform == SHARE_MEDIA.WEIXIN) {
                         userType = "WX";
-                    Logger.d(data);
+                    }
                     break;
                 case SINA:
                     userType = "WB";
@@ -342,7 +309,6 @@ public class LoginActivity extends ABaseActivity {
                     avatar = data.get("iconurl");
                     nickname = data.get("name");
                     sex = data.get("gender");
-                    Logger.d(data);
                     break;
                 default:
                     break;
@@ -353,15 +319,15 @@ public class LoginActivity extends ABaseActivity {
 
         @Override
         public void onError(SHARE_MEDIA platform, int action, Throwable t) {
-            Logger.e(TAG, "platform=" + platform);
-            Logger.e(TAG, "action = " + action);
-            Logger.e(TAG, "error = " + t.getMessage());
+            Logger.d(TAG, "platform=" + platform);
+            Logger.d(TAG, "action = " + action);
+            Logger.d(TAG, "error = " + t.getMessage());
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform, int action) {
-            Logger.e(TAG, "platform=" + platform);
-            Logger.e(TAG, "action = " + action);
+            Logger.d(TAG, "platform=" + platform);
+            Logger.d(TAG, "action = " + action);
         }
     };
 }

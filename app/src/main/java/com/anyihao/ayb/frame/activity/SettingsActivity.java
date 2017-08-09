@@ -79,7 +79,7 @@ public class SettingsActivity extends ABaseActivity {
         if (!isLogin) {
             btnLogout.setText(getString(R.string.not_login));
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             fakeStatusBar.setVisibility(View.VISIBLE);
         }
         setSupportActionBar(toolbar);
@@ -177,7 +177,7 @@ public class SettingsActivity extends ABaseActivity {
     @Override
     protected void setStatusBarTheme() {
         super.setStatusBarTheme();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             StatusBarUtil.setTranslucentForImageView(SettingsActivity.this, 0, activitySettings);
         }
     }

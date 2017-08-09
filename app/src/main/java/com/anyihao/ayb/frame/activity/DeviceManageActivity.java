@@ -70,13 +70,8 @@ public class DeviceManageActivity extends ABaseActivity {
     }
 
     @Override
-    protected void getExtraParams() {
-
-    }
-
-    @Override
     protected void initData() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             fakeStatusBar.setVisibility(View.VISIBLE);
         }
         setSupportActionBar(toolbar);
@@ -116,7 +111,7 @@ public class DeviceManageActivity extends ABaseActivity {
     @Override
     protected void setStatusBarTheme() {
         super.setStatusBarTheme();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             StatusBarUtil.setTranslucentForImageView(DeviceManageActivity.this, 0,
                     activityDeviceManage);
         }

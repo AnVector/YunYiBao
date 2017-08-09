@@ -73,11 +73,6 @@ public class RdoActivity extends ABaseActivity {
     }
 
     @Override
-    protected void getExtraParams() {
-
-    }
-
-    @Override
     protected void initData() {
         initOptionData();
         initOptionPicker();

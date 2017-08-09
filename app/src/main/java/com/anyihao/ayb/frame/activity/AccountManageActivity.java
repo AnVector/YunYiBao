@@ -17,14 +17,13 @@ import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.DensityUtils;
 import com.anyihao.androidbase.utils.GsonUtils;
-import com.anyihao.androidbase.utils.LogUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.androidbase.utils.StatusBarUtil;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.AccountManageAdapter;
-import com.anyihao.ayb.bean.AccountListInfoBean;
-import com.anyihao.ayb.bean.AccountListInfoBean.DataBean;
+import com.anyihao.ayb.bean.AccountListBean;
+import com.anyihao.ayb.bean.AccountListBean.DataBean;
 import com.anyihao.ayb.bean.ResultBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
@@ -33,6 +32,7 @@ import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
+import com.orhanobut.logger.Logger;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -65,14 +65,9 @@ public class AccountManageActivity extends ABaseActivity {
     }
 
     @Override
-    protected void getExtraParams() {
-
-    }
-
-    @Override
     protected void setStatusBarTheme() {
         super.setStatusBarTheme();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             StatusBarUtil.setTranslucentForImageView(AccountManageActivity.this, 0,
                     activityAccountManage);
         }
@@ -80,7 +75,7 @@ public class AccountManageActivity extends ABaseActivity {
 
     @Override
     protected void initData() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             fakeStatusBar.setVisibility(View.VISIBLE);
         }
         setSupportActionBar(toolbar);
@@ -88,7 +83,7 @@ public class AccountManageActivity extends ABaseActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         toolbarTitleMid.setText(getString(R.string.account_management));
-        mAdapter = new AccountManageAdapter(this, R.layout.item_about_us);
+        mAdapter = new AccountManageAdapter(this, R.layout.item_about_us, mData);
         recyclerview.setAdapter(mAdapter);
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager
                 .VERTICAL, false));
@@ -220,15 +215,14 @@ public class AccountManageActivity extends ABaseActivity {
     public void onSuccess(String result, int page, Integer actionType) {
 
         if (actionType == 0) {
-            AccountListInfoBean beans = GsonUtils.getInstance().transitionToBean(result,
-                    AccountListInfoBean.class);
+            AccountListBean beans = GsonUtils.getInstance().transitionToBean(result,
+                    AccountListBean.class);
             if (beans == null)
                 return;
             if (beans.getCode() == 200) {
-                mAdapter.remove(0, mData.size());
                 mData.clear();
                 mData.addAll(beans.getData());
-                mAdapter.add(0, mData.size(), mData);
+                mAdapter.notifyDataSetChanged();
             }
         }
 
@@ -237,10 +231,10 @@ public class AccountManageActivity extends ABaseActivity {
             if (bean == null)
                 return;
             if (bean.getCode() == 200) {
-                ToastUtils.showToast(this, "账号解绑成功");
+                ToastUtils.showToast(getApplicationContext(), "账号解绑成功");
                 getAccountList();
             } else {
-                ToastUtils.showToast(this, bean.getMsg());
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg());
             }
         }
 
@@ -249,10 +243,10 @@ public class AccountManageActivity extends ABaseActivity {
             if (bean == null)
                 return;
             if (bean.getCode() == 200) {
-                ToastUtils.showToast(this, "账号绑定成功");
+                ToastUtils.showToast(getApplicationContext(), "账号绑定成功");
                 getAccountList();
             } else {
-                ToastUtils.showToast(this, bean.getMsg());
+                ToastUtils.showToast(getApplicationContext(), bean.getMsg());
             }
         }
 
@@ -267,10 +261,7 @@ public class AccountManageActivity extends ABaseActivity {
 
         @Override
         public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
-            for (Map.Entry<String, String> entry : data.entrySet()) {
-                LogUtils.e(TAG, "Key = " + entry.getKey() + ", Value = " + entry
-                        .getValue());
-            }
+            Logger.d(data);
             String type = "";
             String appId;
             appId = data.get("uid");
@@ -293,16 +284,16 @@ public class AccountManageActivity extends ABaseActivity {
         @Override
         public void onError(SHARE_MEDIA platform, int action, Throwable t) {
 //            SocializeUtils.safeCloseDialog(dialog);
-            LogUtils.e(TAG, "platform=" + platform);
-            LogUtils.e(TAG, "action = " + action);
-            LogUtils.e(TAG, "error = " + t.getMessage());
+            Logger.d(TAG, "platform=" + platform);
+            Logger.d(TAG, "action = " + action);
+            Logger.d(TAG, "error = " + t.getMessage());
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform, int action) {
 //            SocializeUtils.safeCloseDialog(dialog);
-            LogUtils.e(TAG, "platform=" + platform);
-            LogUtils.e(TAG, "action = " + action);
+            Logger.d(TAG, "platform=" + platform);
+            Logger.d(TAG, "action = " + action);
         }
     };
 

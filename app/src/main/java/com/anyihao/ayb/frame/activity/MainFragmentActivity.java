@@ -80,17 +80,12 @@ public class MainFragmentActivity extends ABaseActivity {
 
     @Override
     protected void setStatusBarTheme() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             super.setStatusBarTheme();
             StatusBarUtil.setTranslucentForImageView(this, 0, mViewPager);
         } else {
             StatusBarUtil.setTranslucentForImageViewInFragment(MainFragmentActivity.this, null);
         }
-    }
-
-    @Override
-    protected void getExtraParams() {
-
     }
 
     @Override

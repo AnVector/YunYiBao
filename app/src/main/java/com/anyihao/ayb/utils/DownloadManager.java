@@ -78,7 +78,7 @@ public class DownloadManager {
 
         long id = getDM(updaterConfig.getContext()).enqueue(req);
         //把DownloadId保存到本地
-        UpdaterUtils.saveDownloadId(updaterConfig.getContext(), id);
+        UpdateUtils.saveDownloadId(updaterConfig.getContext(), id);
         return id;
         //long downloadId = mDownloadManager.enqueue(req);
         //Log.d("DownloadManager", downloadId + "");

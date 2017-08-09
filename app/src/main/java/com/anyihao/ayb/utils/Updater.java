@@ -37,12 +37,12 @@ public class Updater {
 
     public void download(UpdateConfig updaterConfig) {
 
-        if (!UpdaterUtils.checkDownloadState(updaterConfig.getContext())) {
-            UpdaterUtils.showDownloadSetting(updaterConfig.getContext());
+        if (!UpdateUtils.checkDownloadState(updaterConfig.getContext())) {
+            UpdateUtils.showDownloadSetting(updaterConfig.getContext());
             return;
         }
 
-        long downloadId = UpdaterUtils.getLocalDownloadId(updaterConfig.getContext());
+        long downloadId = UpdateUtils.getLocalDownloadId(updaterConfig.getContext());
         Logger.d("local download id is " + downloadId);
         if (downloadId != -1L) {
             DownloadManager dm = DownloadManager.getInstance();
@@ -55,9 +55,9 @@ public class Updater {
                     Uri uri = dm.getDownloadUri(updaterConfig.getContext(), downloadId);
                     if (uri != null) {
                         //本地的版本大于当前程序的版本直接安装
-                        if (UpdaterUtils.compare(updaterConfig.getContext(), uri.getPath())) {
+                        if (UpdateUtils.compare(updaterConfig.getContext(), uri.getPath())) {
                             Logger.d("start install UI");
-                            UpdaterUtils.startInstall(updaterConfig.getContext(), uri);
+                            UpdateUtils.startInstall(updaterConfig.getContext(), uri);
                             return;
                         } else {
                             //从FileDownloadManager中移除这个任务

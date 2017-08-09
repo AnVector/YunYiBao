@@ -121,6 +121,11 @@ public abstract class ABaseActivity extends BKBaseActivity implements IView<Inte
     }
 
     @Override
+    protected void getExtraParams() {
+
+    }
+
+    @Override
     protected void setBackground() {
         Resources res = getResources();
         Drawable drawable = res.getDrawable(R.drawable.app_background);

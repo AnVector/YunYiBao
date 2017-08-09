@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Color;
 
 import com.anyihao.ayb.R;
-import com.anyihao.ayb.bean.AccountListInfoBean.DataBean;
+import com.anyihao.ayb.bean.AccountListBean.DataBean;
+
+import java.util.List;
 
 /**
  * Created by Admin on 2017/4/7.
@@ -12,8 +14,8 @@ import com.anyihao.ayb.bean.AccountListInfoBean.DataBean;
 
 public class AccountManageAdapter extends RecyclerViewAdapter<DataBean> {
 
-    public AccountManageAdapter(Context context, int layoutId) {
-        super(context, layoutId);
+    public AccountManageAdapter(Context context, int layoutId, List<DataBean> datas) {
+        super(context, layoutId, datas);
     }
 
     @Override

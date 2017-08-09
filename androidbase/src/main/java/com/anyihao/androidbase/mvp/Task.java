@@ -19,17 +19,20 @@ public class Task implements Serializable {
 
     @NonNull
     private String taskType;//任务类型：网络请求或本地数据库操作
+    @Nullable
     private String url;//网络请求用到的url
+    @Nullable
     private String content;//post请求用到的参数
     @Nullable
     private Map<String, String> params;//表单参数提交
     private int page;//分页请求，用于回调判断
     @NonNull
     private Object actionType;//操作类型，用于区分网络请求的哪个接口或本地操作的哪次操作
-
+    @Nullable
     private File file;//put请求的文件参数
 
-    private Task(@NonNull String taskType, String url, String content, int page, File file,
+    private Task(@NonNull String taskType, @Nullable String url, @Nullable String content, int
+            page, @Nullable File file,
                  @NonNull Object actionType) {
         this.taskType = taskType;
         this.url = url;
@@ -39,7 +42,21 @@ public class Task implements Serializable {
         this.actionType = actionType;
     }
 
-    private Task(@NonNull String taskType, String url, String content, int page, File file,
+    private Task(@NonNull String taskType, @Nullable String url, @Nullable Map<String, String>
+            params, int page,
+                 @Nullable File
+                         file,
+                 @NonNull Object actionType) {
+        this.taskType = taskType;
+        this.url = url;
+        this.params = params;
+        this.page = page;
+        this.file = file;
+        this.actionType = actionType;
+    }
+
+    private Task(@NonNull String taskType, @Nullable String url, @Nullable String content, int
+            page, @Nullable File file,
                  @NonNull Object actionType, @Nullable Map<String, String> params) {
         this.taskType = taskType;
         this.url = url;
@@ -50,7 +67,8 @@ public class Task implements Serializable {
         this.params = params;
     }
 
-    private Task(@NonNull String taskType, String url, int page, @NonNull Object actionType) {
+    private Task(@NonNull String taskType, @Nullable String url, int page, @NonNull Object
+            actionType) {
         if (TextUtils.isEmpty(url)) {
             throw new UnsupportedOperationException("u must transmit a valid url");
         }
@@ -60,8 +78,9 @@ public class Task implements Serializable {
         this.actionType = actionType;
     }
 
-    private Task(@NonNull String taskType, String url, String content, int page, @NonNull Object
-            actionType) {
+    private Task(@NonNull String taskType, @Nullable String url, @Nullable String content, int
+            page, @NonNull Object
+                         actionType) {
         if (TextUtils.isEmpty(url)) {
             throw new UnsupportedOperationException("u must transmit a valid url");
         }
@@ -72,8 +91,9 @@ public class Task implements Serializable {
         this.actionType = actionType;
     }
 
-    private Task(@NonNull String taskType, String url, String content, int page, @NonNull Object
-            actionType, @Nullable Map<String, String> params) {
+    private Task(@NonNull String taskType, @Nullable String url, @Nullable String content, int
+            page, @NonNull Object
+                         actionType, @Nullable Map<String, String> params) {
         if (TextUtils.isEmpty(url)) {
             throw new UnsupportedOperationException("u must transmit a valid url");
         }
@@ -85,8 +105,9 @@ public class Task implements Serializable {
         this.params = params;
     }
 
-    private Task(@NonNull String taskType, String url, File file, int page, @NonNull Object
-            actionType) {
+    private Task(@NonNull String taskType, @Nullable String url, @Nullable File file, int page,
+                 @NonNull Object
+                         actionType) {
         if (TextUtils.isEmpty(url) || file == null) {
             throw new UnsupportedOperationException("u must transmit a valid url and a valid file");
         }
@@ -102,6 +123,7 @@ public class Task implements Serializable {
         return taskType;
     }
 
+    @Nullable
     public String getUrl() {
         return url;
     }
@@ -110,10 +132,12 @@ public class Task implements Serializable {
         return page;
     }
 
+    @Nullable
     public String getContent() {
         return content;
     }
 
+    @Nullable
     public File getFile() {
         return file;
     }
@@ -199,6 +223,8 @@ public class Task implements Serializable {
                     break;
                 case TaskType.Method.PUT:
                     return new Task(taskType, url, file, page, actionType);
+                case TaskType.Method.POST_FILE:
+                    return new Task(taskType, url, params, page, file, actionType);
                 default:
                     break;
             }

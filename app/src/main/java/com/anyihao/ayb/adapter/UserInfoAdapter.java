@@ -23,7 +23,7 @@ public class UserInfoAdapter extends RecyclerViewAdapter<KeyValueBean> {
         if (keyValueBean == null)
             return;
         String title = keyValueBean.getTitle();
-        holder.setText(R.id.title, title);
+        holder.setText(R.id.tv_title, title);
         switch (title) {
             case "头像":
                 holder.setVisible(R.id.tv_value, false);

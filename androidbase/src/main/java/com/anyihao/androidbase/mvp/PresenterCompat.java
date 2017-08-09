@@ -46,19 +46,34 @@ public abstract class PresenterCompat extends PresenterImpl {
             case TaskType.Local.INSERT:
                 executeInsert(task);
                 break;
+            case TaskType.Method.POST_FILE:
+                postFile(task);
+                break;
             default:
                 break;
 
         }
     }
+
     abstract protected void executeInsert(Task task);
+
     abstract protected void executeSelect(Task task);
+
     abstract protected void executeDelete(Task task);
+
     abstract protected void executeUpdate(Task task);
+
     abstract protected void post(Task task);
+
     abstract protected void get(Task task);
+
     abstract protected void put(Task task);
+
     abstract protected void delete(Task task);
+
     abstract protected void head(Task task);
+
     abstract protected void patch(Task task);
+
+    abstract protected void postFile(Task task);
 }

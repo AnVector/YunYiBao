@@ -15,6 +15,7 @@ public interface TaskType {
         String HEAD = "HEAD";
         String DELETE = "DELETE";
         String PATCH = "PATCH";
+        String POST_FILE = "POST_FILE";
     }
 
     interface Local {

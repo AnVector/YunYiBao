@@ -3,8 +3,7 @@ package com.anyihao.ayb.adapter;
 import android.content.Context;
 
 import com.anyihao.ayb.R;
-import com.anyihao.ayb.bean.TaskInfoListBean;
-import com.anyihao.ayb.bean.TaskInfoListBean.DataBean.LendBean;
+import com.anyihao.ayb.bean.TaskListBean.DataBean.LendBean;
 
 import java.util.List;
 

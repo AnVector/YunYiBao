@@ -137,7 +137,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths_private">
+                android:resource="@xml/file_paths">
             </meta-data>
         </provider>
         <!-- Required  SDK核心功能 -->
@@ -425,7 +425,7 @@
             android:launchMode="singleTop">
         </activity>
         <activity
-            android:name=".frame.activity.InviteFriendsActivity"
+            android:name=".frame.activity.InviteFriendActivity"
             android:launchMode="singleTop">
         </activity>
         <activity
@@ -533,6 +533,8 @@
         <activity android:name=".frame.activity.MacInstructionActivity">
         </activity>
         <activity android:name=".frame.activity.TransRecordDetailsActivity">
+        </activity>
+        <activity android:name=".frame.activity.PhotoEditActivity">
         </activity>
     </application>
 

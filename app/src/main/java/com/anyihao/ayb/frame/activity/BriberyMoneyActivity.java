@@ -3,9 +3,13 @@ package com.anyihao.ayb.frame.activity;
 import android.content.Intent;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.AbsoluteSizeSpan;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.anyihao.androidbase.mvp.Task;
@@ -55,7 +59,6 @@ public class BriberyMoneyActivity extends ABaseActivity {
             return;
         phoneNum = intent.getStringExtra("phoneNum");
         type = intent.getIntExtra("type", 0);
-
     }
 
     @Override
@@ -67,12 +70,21 @@ public class BriberyMoneyActivity extends ABaseActivity {
         toolbarTitleMid.setText(getString(R.string.gift_data));
         toolbarTitleRight.setText(getString(R.string.gift_history));
         toolbarTitleRight.setTextColor(getResources().getColor(R.color.light_gray));
-
         if (type == 0) {
             if (!TextUtils.isEmpty(phoneNum)) {
-                edtUserName.setText(phoneNum);
+                setTextHintSize(edtUserName, phoneNum);
+                edtUserName.setEnabled(false);
             }
         }
+    }
+
+    private void setTextHintSize(EditText edt, String phone) {
+        if (TextUtils.isEmpty(phone) || edt == null)
+            return;
+        SpannableString s = new SpannableString(phone);
+        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(13, true);
+        s.setSpan(ass, 0, s.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        edt.setHint(s);
     }
 
     @Override
@@ -93,7 +105,13 @@ public class BriberyMoneyActivity extends ABaseActivity {
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String userName = edtUserName.getText().toString().trim();
+
+                String userName;
+                if (type == 0) {
+                    userName = phoneNum;
+                } else {
+                    userName = edtUserName.getText().toString().trim();
+                }
                 String data = edtDataAmount.getText().toString().trim();
                 String remark = edtRemark.getText().toString().trim();
                 if (TextUtils.isEmpty(userName)) {

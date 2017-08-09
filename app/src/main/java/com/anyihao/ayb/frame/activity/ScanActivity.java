@@ -34,11 +34,6 @@ public class ScanActivity extends ABaseActivity implements DecoratedBarcodeView.
     }
 
     @Override
-    protected void getExtraParams() {
-
-    }
-
-    @Override
     protected void initData() {
         toolbar.setNavigationIcon(R.drawable.ic_back_white);
         setSupportActionBar(toolbar);

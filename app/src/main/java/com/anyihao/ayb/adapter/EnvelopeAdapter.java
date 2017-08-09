@@ -29,9 +29,6 @@ public class EnvelopeAdapter extends UAdapter<DataBean> {
     public UltimateRecyclerviewViewHolder onCreateViewHolder(ViewGroup parent) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(layoutId, parent, false);
-        if (v == null) {
-            return null;
-        }
         return new EnvelopeViewHolder(v);
     }
 

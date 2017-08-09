@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/invite_friends_bg"
-    tools:context="com.anyihao.ayb.frame.activity.InviteFriendsActivity">
+    tools:context="com.anyihao.ayb.frame.activity.InviteFriendActivity">
 
     <include
         layout="@layout/toolbar_common"/>

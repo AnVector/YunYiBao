@@ -43,7 +43,6 @@ public class UpdateInfoActivity extends ABaseActivity {
     private String value;
     private String newValue;
     private String property;
-    public static final int RESULT_UPDATE_SUCCESS_CODE = 0X0002;
 
     @Override
     protected int getContentViewId() {
@@ -184,7 +183,7 @@ public class UpdateInfoActivity extends ABaseActivity {
             ToastUtils.showToast(getApplicationContext(), bean.getMsg(), R.layout.toast, R.id
                     .tv_message);
             if (bean.getCode() == 200) {
-                setResult(RESULT_UPDATE_SUCCESS_CODE);
+                setResult(RESULT_OK);
                 finish();
             }
         }
