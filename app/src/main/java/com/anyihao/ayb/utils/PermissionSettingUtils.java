@@ -76,8 +76,8 @@ public class PermissionSettingUtils {
         Intent intent = new Intent();
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("packageName", BuildConfig.APPLICATION_ID);
-        ComponentName comp = new ComponentName("com.huawei.systemmanager", "com.huawei" +
-                ".permissionmanager.ui.MainActivity");
+        ComponentName comp = new ComponentName("com.android.packageinstaller", "com.android" +
+                ".packageinstaller.permission.ui.ManagePermissionsActivity");
         intent.setComponent(comp);
         try {
             context.startActivity(intent);
@@ -85,7 +85,6 @@ public class PermissionSettingUtils {
             Logger.d(e.toString());
             applicationInfo(context);
         }
-
     }
 
     private static void Meizu(Context context) {

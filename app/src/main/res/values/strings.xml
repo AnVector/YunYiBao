@@ -137,6 +137,9 @@
     <string name="surplus_amount">剩余：%1$s</string>
     <string name="message">消息</string>
     <string name="no_available_wifi">附近暂无可用WIFI</string>
+    <string name="new_version_update_hint">检测到新版本，是否更新？</string>
+    <string name="refuse_to_update">暂不更新</string>
+    <string name="agree_to_update">立即更新</string>
 
     <!--pay page-->
     <string name="order_details">订单详情</string>

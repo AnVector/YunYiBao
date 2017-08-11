@@ -110,6 +110,7 @@ public class TransferRecordActivity extends ABaseActivity {
                 () {
             @Override
             public void onRefresh() {
+                recyclerView.reenableLoadmore();
                 page = 1;
                 isRefresh = true;
                 getPresentRecord();
@@ -150,24 +151,33 @@ public class TransferRecordActivity extends ABaseActivity {
     }
 
     private void onFireRefresh(List<DataBean> beans) {
+        if (recyclerView == null)
+            return;
         mTransferAdapter.removeAllInternal(mTransferData);
         mTransferAdapter.insert(beans);
         recyclerView.setRefreshing(false);
         layoutManager.scrollToPosition(0);
-        recyclerView.reenableLoadmore();
-    }
-
-    private void onLoadMore(List<DataBean> beans) {
-        mTransferAdapter.insert(beans);
-        if (beans.size() < PAGE_SIZE && recyclerView != null) {
+        if (beans.size() < PAGE_SIZE) {
             recyclerView.disableLoadmore();
         }
     }
 
-    private void onLoadNoData() {
+    private void onLoadMore(List<DataBean> beans) {
         if (recyclerView == null)
             return;
-        recyclerView.showEmptyView();
+        mTransferAdapter.insert(beans);
+        if (beans.size() < PAGE_SIZE) {
+            recyclerView.disableLoadmore();
+        }
+    }
+
+    private void onLoadNoData(int page) {
+        if (recyclerView == null)
+            return;
+        recyclerView.disableLoadmore();
+        if (page == 1) {
+            recyclerView.showEmptyView();
+        }
 
     }
 
@@ -206,15 +216,11 @@ public class TransferRecordActivity extends ABaseActivity {
                         onLoadMore(beans);
                     }
                 } else {
-                    if (page == 1) {
-                        onLoadNoData();
-                    }
+                    onLoadNoData(page);
                 }
             } else {
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg());
-                if (page == 1) {
-                    onLoadNoData();
-                }
+                onLoadNoData(page);
             }
         }
     }
@@ -222,10 +228,13 @@ public class TransferRecordActivity extends ABaseActivity {
     @Override
     public void onFailure(String error, int page, Integer actionType) {
         super.onFailure(error, page, actionType);
-        if (isRefresh && recyclerView != null) {
+        if (recyclerView == null)
+            return;
+        if (isRefresh) {
             recyclerView.setRefreshing(false);
             layoutManager.scrollToPosition(0);
-            recyclerView.reenableLoadmore();
+//            recyclerView.showEmptyView();
         }
+        recyclerView.disableLoadmore();
     }
 }

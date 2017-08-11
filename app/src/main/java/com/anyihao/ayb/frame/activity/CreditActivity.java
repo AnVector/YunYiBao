@@ -127,6 +127,7 @@ public class CreditActivity extends ABaseActivity {
                 () {
             @Override
             public void onRefresh() {
+                recyclerView.reenableLoadmore();
                 page = 1;
                 isRefresh = true;
                 getCredits();
@@ -145,27 +146,33 @@ public class CreditActivity extends ABaseActivity {
     }
 
     private void onFireRefresh(List<DataBean> beans) {
+        if (recyclerView == null)
+            return;
         mData.clear();
         mData.addAll(beans);
         mAdapter.notifyDataSetChanged();
         recyclerView.setRefreshing(false);
         layoutManager.scrollToPosition(0);
-        recyclerView.reenableLoadmore();
+        if (beans.size() < PAGE_SIZE) {
+            recyclerView.disableLoadmore();
+        }
     }
 
     private void onLoadMore(List<DataBean> beans) {
+        if (recyclerView == null)
+            return;
         mAdapter.insert(beans);
-        if (beans.size() < PAGE_SIZE && recyclerView != null) {
+        if (beans.size() < PAGE_SIZE) {
             recyclerView.disableLoadmore();
         }
     }
 
     private void onLoadNoData(int page) {
-        if (recyclerView != null) {
-            recyclerView.disableLoadmore();
-            if (page == 1) {
-                recyclerView.showEmptyView();
-            }
+        if (recyclerView == null)
+            return;
+        recyclerView.disableLoadmore();
+        if (page == 1) {
+            recyclerView.showEmptyView();
         }
     }
 
@@ -214,10 +221,13 @@ public class CreditActivity extends ABaseActivity {
     @Override
     public void onFailure(String error, int page, Integer actionType) {
         super.onFailure(error, page, actionType);
-        if (isRefresh && recyclerView != null) {
+        if (recyclerView == null)
+            return;
+        if (isRefresh) {
             recyclerView.setRefreshing(false);
             layoutManager.scrollToPosition(0);
-            recyclerView.reenableLoadmore();
+//            recyclerView.showEmptyView();
         }
+        recyclerView.disableLoadmore();
     }
 }

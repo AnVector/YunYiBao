@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.anyihao.androidbase.utils.TextUtils;
+import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.RechargeRecordDetailsAdapter;
 import com.anyihao.ayb.bean.KeyValueBean;
@@ -71,7 +72,7 @@ public class RechargeRecordDetailsActivity extends ABaseActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         titleMid.setText(getString(R.string.recharge_record_details));
-        if ("5".equals(status)) {
+        if ("5".equals(status) || "6".equals(status)) {
             mData.addAll(convert2Bean("押金缴纳"));
         } else if ("7".equals(status)) {
             mData.addAll(convert2Bean("押金退款"));

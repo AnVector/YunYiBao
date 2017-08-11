@@ -9,15 +9,19 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.view.MotionEvent;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.anyihao.androidbase.manager.ActivityManager;
 import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.AppUtils;
+import com.anyihao.androidbase.utils.DensityUtils;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.StatusBarUtil;
 import com.anyihao.androidbase.utils.ToastUtils;
@@ -33,6 +37,10 @@ import com.anyihao.ayb.frame.fragment.TaskFragment;
 import com.anyihao.ayb.ui.CustomViewPager;
 import com.anyihao.ayb.utils.UpdateConfig;
 import com.anyihao.ayb.utils.Updater;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.Holder;
+import com.orhanobut.dialogplus.OnClickListener;
+import com.orhanobut.dialogplus.ViewHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -148,7 +156,7 @@ public class MainFragmentActivity extends ABaseActivity {
         if (TextUtils.isEmpty(versionName) || TextUtils.isEmpty(downloadUrl))
             return;
         if (checkUpdate(versionName)) {
-            downloadApkFile(downloadUrl);
+            showDialog(downloadUrl);
         }
     }
 
@@ -161,98 +169,46 @@ public class MainFragmentActivity extends ABaseActivity {
     @Override
     protected void initEvent() {
 
-//        mRadioButtonDevice.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                resetIcon();
-//                changeIcon(mRadioButtonDevice, R.drawable.device_focused);
-//                mCurrent = mRadioButtonDevice;
-//                mViewPager.setCurrentItem(0, true);
-//            }
-//        });
-
-        mRadioButtonDevice.setOnTouchListener(new View.OnTouchListener() {
+        mRadioButtonDevice.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (mViewPager.getCurrentItem() == 0)
-                    return true;
+            public void onClick(View v) {
                 resetIcon();
                 changeIcon(mRadioButtonDevice, R.drawable.device_focused);
                 mCurrent = mRadioButtonDevice;
                 mViewPager.setCurrentItem(0, true);
-                return false;
             }
         });
 
-//        mRadioButtonDiscovery.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                resetIcon();
-//                changeIcon(mRadioButtonDiscovery, R.drawable.discovery_focused);
-//                mCurrent = mRadioButtonDiscovery;
-//                mViewPager.setCurrentItem(1);
-//            }
-//        });
 
-        mRadioButtonDiscovery.setOnTouchListener(new View.OnTouchListener() {
+        mRadioButtonDiscovery.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (mViewPager.getCurrentItem() == 1)
-                    return true;
+            public void onClick(View v) {
                 resetIcon();
                 changeIcon(mRadioButtonDiscovery, R.drawable.discovery_focused);
                 mCurrent = mRadioButtonDiscovery;
-                mViewPager.setCurrentItem(1, true);
-                return false;
+                mViewPager.setCurrentItem(1);
             }
         });
 
-//        mRadioButtonTask.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                resetIcon();
-//                changeIcon(mRadioButtonTask, R.drawable.task_focused);
-//                mCurrent = mRadioButtonTask;
-//                mViewPager.setCurrentItem(2);
-//            }
-//        });
-
-        mRadioButtonTask.setOnTouchListener(new View.OnTouchListener() {
+        mRadioButtonTask.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (mViewPager.getCurrentItem() == 2)
-                    return true;
+            public void onClick(View v) {
                 resetIcon();
                 changeIcon(mRadioButtonTask, R.drawable.task_focused);
                 mCurrent = mRadioButtonTask;
-                mViewPager.setCurrentItem(2, true);
-                return false;
+                mViewPager.setCurrentItem(2);
             }
         });
 
-//        mRadioButtonMe.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                resetIcon();
-//                changeIcon(mRadioButtonMe, R.drawable.me_focused);
-//                mCurrent = mRadioButtonMe;
-//                mViewPager.setCurrentItem(3, true);
-//            }
-//        });
-
-        mRadioButtonMe.setOnTouchListener(new View.OnTouchListener() {
+        mRadioButtonMe.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (mViewPager.getCurrentItem() == 3)
-                    return true;
+            public void onClick(View v) {
                 resetIcon();
                 changeIcon(mRadioButtonMe, R.drawable.me_focused);
                 mCurrent = mRadioButtonMe;
                 mViewPager.setCurrentItem(3, true);
-                return false;
             }
         });
-
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int
@@ -319,6 +275,45 @@ public class MainFragmentActivity extends ABaseActivity {
             default:
                 break;
         }
+    }
+
+    private void showDialog(final String downloadUrl) {
+        Holder holder = new ViewHolder(LayoutInflater.from(this).inflate(R.layout.dialog_confirm,
+                null));
+        TextView tvTitle = (TextView) holder.getInflatedView().findViewById(R.id.tv_title);
+        Button btnLeft = (Button) holder.getInflatedView().findViewById(R.id.btn_cancel);
+        Button btnRight = (Button) holder.getInflatedView().findViewById(R.id.btn_ok);
+        tvTitle.setText(getString(R.string.new_version_update_hint));
+        btnLeft.setText(getString(R.string.refuse_to_update));
+        btnRight.setText(getString(R.string.agree_to_update));
+        OnClickListener clickListener = new OnClickListener() {
+            @Override
+            public void onClick(DialogPlus dialog, View view) {
+                switch (view.getId()) {
+                    case R.id.btn_cancel:
+                        dialog.dismiss();
+                        break;
+                    case R.id.btn_ok:
+                        ToastUtils.showToast(getApplicationContext(), "正在下载云逸宝...");
+                        downloadApkFile(downloadUrl);
+                        dialog.dismiss();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
+
+        final DialogPlus dialog = DialogPlus.newDialog(this)
+                .setContentHolder(holder)
+                .setGravity(Gravity.CENTER)
+                .setCancelable(true)
+                .setOnClickListener(clickListener)
+                .setContentHeight(DensityUtils.dp2px(this, 195))
+                .setContentWidth(DensityUtils.dp2px(this, 298))
+                .setContentBackgroundResource(R.drawable.dialog_bg)
+                .create();
+        dialog.show();
     }
 
 

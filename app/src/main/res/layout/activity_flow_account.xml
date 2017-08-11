@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/dashboard_view"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="-16dp">
+        android:layout_marginTop="-6dp">
     </android.support.v7.widget.RecyclerView>
 
     <LinearLayout

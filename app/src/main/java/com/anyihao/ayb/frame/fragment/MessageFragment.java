@@ -102,6 +102,7 @@ public class MessageFragment extends ABaseFragment {
                 () {
             @Override
             public void onRefresh() {
+                ultimateRecyclerView.reenableLoadmore();
                 page = 1;
                 isRefresh = true;
                 getMessage();
@@ -146,23 +147,32 @@ public class MessageFragment extends ABaseFragment {
     }
 
     private void onFireRefresh(List<DataBean> beans) {
+        if (ultimateRecyclerView == null)
+            return;
         mAdapter.removeAllInternal(mData);
         mAdapter.insert(beans);
         ultimateRecyclerView.setRefreshing(false);
         layoutManager.scrollToPosition(0);
-        ultimateRecyclerView.reenableLoadmore();
-    }
-
-    private void onLoadMore(List<DataBean> beans) {
-        mAdapter.insert(beans);
-        if (beans.size() < PAGE_SIZE && ultimateRecyclerView != null) {
+        if (beans.size() < PAGE_SIZE) {
             ultimateRecyclerView.disableLoadmore();
         }
     }
 
-    private void onLoadNoData() {
-        if (ultimateRecyclerView != null) {
-            isInited = false;
+    private void onLoadMore(List<DataBean> beans) {
+        if (ultimateRecyclerView == null)
+            return;
+        mAdapter.insert(beans);
+        if (beans.size() < PAGE_SIZE) {
+            ultimateRecyclerView.disableLoadmore();
+        }
+    }
+
+    private void onLoadNoData(int page) {
+        isInited = false;
+        if (ultimateRecyclerView == null)
+            return;
+        ultimateRecyclerView.disableLoadmore();
+        if (page == 1) {
             ultimateRecyclerView.showEmptyView();
         }
     }
@@ -229,15 +239,11 @@ public class MessageFragment extends ABaseFragment {
                         onLoadMore(beans);
                     }
                 } else {
-                    if (page == 1) {
-                        onLoadNoData();
-                    }
+                    onLoadNoData(page);
                 }
             } else {
                 ToastUtils.showToast(mContext.getApplicationContext(), bean.getMsg());
-                if (page == 1) {
-                    onLoadNoData();
-                }
+                onLoadNoData(page);
             }
         }
 
@@ -255,12 +261,15 @@ public class MessageFragment extends ABaseFragment {
     @Override
     public void onFailure(String error, int page, Integer actionType) {
         super.onFailure(error, page, actionType);
-        if (isRefresh && ultimateRecyclerView != null) {
+        if (ultimateRecyclerView == null)
+            return;
+        if (isRefresh) {
             networkError = true;
             ultimateRecyclerView.setRefreshing(false);
             layoutManager.scrollToPosition(0);
-            ultimateRecyclerView.reenableLoadmore();
-            ultimateRecyclerView.showEmptyView();
+//            ultimateRecyclerView.showEmptyView();
         }
+        ultimateRecyclerView.disableLoadmore();
+
     }
 }

@@ -111,7 +111,7 @@ public class RechargeRecordAdapter extends UAdapter<DataBean> {
 
     @Override
     public long generateHeaderId(int position) {
-        Logger.d(position + " = " + getItemId(position));
+//        Logger.d(position + " = " + getItemId(position));
         return getItemId(position);
     }
 

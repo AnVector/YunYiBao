@@ -4,19 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/dia_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:gravity="center"
-        android:lineSpacingMultiplier="1.2"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:textColor="@color/pay_title_text_color"
-        android:textSize="@dimen/font_size_sev"/>
-
     <LinearLayout
         android:id="@+id/ll_bottom"
         android:layout_width="match_parent"
@@ -53,10 +40,23 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="0.6dp"
         android:layout_above="@id/ll_bottom"
         android:background="@color/line_color"/>
 
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/line"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:lineSpacingMultiplier="1.2"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:textColor="@color/pay_title_text_color"
+        android:textSize="@dimen/font_size_sev"/>
 </RelativeLayout>
 

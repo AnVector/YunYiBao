@@ -14,7 +14,7 @@ def static String releaseVName() {
 
 //定义versionCode
 def static int releaseVCode() {
-    return 10
+    return 9
 }
 
 def gitVersionCode() {
@@ -323,7 +323,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile project(':androidbase')
     //multidex
     compile 'com.android.support:multidex:1.0.1'
     //leakcanary
@@ -351,4 +350,5 @@ dependencies {
     compile project(':matisse')
     //cropview
     compile 'com.oginotihiro:cropview:1.0.0'
+    compile project(':androidbase')
 }

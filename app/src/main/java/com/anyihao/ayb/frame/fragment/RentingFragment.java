@@ -21,7 +21,7 @@ import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.androidbase.utils.ToastUtils;
 import com.anyihao.ayb.R;
-import com.anyihao.ayb.adapter.RentedAdapter;
+import com.anyihao.ayb.adapter.RentingAdapter;
 import com.anyihao.ayb.bean.RentedBean;
 import com.anyihao.ayb.bean.RentedBean.DataBean;
 import com.anyihao.ayb.bean.ResultBean;
@@ -44,11 +44,11 @@ import java.util.Map;
 import butterknife.BindView;
 
 
-public class RentedFragment extends ABaseFragment {
+public class RentingFragment extends ABaseFragment {
 
     @BindView(R.id.ultimate_recycler_view)
     UltimateRecyclerView recyclerView;
-    private RentedAdapter mAdapter;
+    private RentingAdapter mAdapter;
     protected LinearLayoutManager layoutManager;
     private List<DataBean> mData = new ArrayList<>();
     private String status;
@@ -71,7 +71,7 @@ public class RentedFragment extends ABaseFragment {
 
     private void initUltimateRV() {
         recyclerView.setHasFixedSize(false);
-        mAdapter = new RentedAdapter(mData, R.layout.item_rented_device);
+        mAdapter = new RentingAdapter(mData, R.layout.item_renting_device);
         layoutManager = new LinearLayoutManager(mContext);
         recyclerView.setLayoutManager(layoutManager);
         mAdapter.setEmptyViewPolicy(UltimateRecyclerView.EMPTY_SHOW_LOADMORE_ONLY);
@@ -114,6 +114,16 @@ public class RentedFragment extends ABaseFragment {
                 "uid", ""));
         params.put("vid", vid);
         postForm(params, 1, 1);
+    }
+
+    private void rentOperation(String keyId, int status) {
+        if (TextUtils.isEmpty(keyId))
+            return;
+        Map<String, String> params = new HashMap<>();
+        params.put("cmd", "CONFIRM");
+        params.put("keyId", keyId);
+        params.put("status", status + "");
+        postForm(params, 1, 2);
     }
 
     private void postForm(Map<String, String> params, int page, int actionType) {
@@ -176,59 +186,68 @@ public class RentedFragment extends ABaseFragment {
             }
         });
 
-        mAdapter.setOnItemButtonClickListener(new RentedAdapter.OnItemButtonClickListener() {
+        mAdapter.setOnItemButtonClickListener1(new RentingAdapter.OnItemButtonClickListener() {
             @Override
             public void onItemButtonClick(ViewGroup parent, View view, DataBean bean, int
                     position) {
-                if (bean != null) {
-                    showDialog(bean.getPrintId());
-                }
+                if (bean == null)
+                    return;
+                rentOperation(bean.getKeyId(), 1);
+            }
+        });
 
+        mAdapter.setOnItemButtonClickListener2(new RentingAdapter.OnItemButtonClickListener() {
+            @Override
+            public void onItemButtonClick(ViewGroup parent, View view, DataBean bean, int
+                    position) {
+                if (bean == null)
+                    return;
+                rentOperation(bean.getKeyId(), 0);
             }
         });
 
     }
 
-    private void showDialog(final String vid) {
-        Holder holder = new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout
-                        .dialog_confirm,
-                null));
-        TextView tvTitle = (TextView) holder.getInflatedView().findViewById(R.id.tv_title);
-        Button btnLeft = (Button) holder.getInflatedView().findViewById(R.id.btn_cancel);
-        Button btnRight = (Button) holder.getInflatedView().findViewById(R.id.btn_ok);
-        tvTitle.setText(getString(R.string.device_return_dialog_hint));
-        btnLeft.setText(getString(R.string.cancel));
-        btnRight.setText(getString(R.string.ok));
-        OnClickListener clickListener = new OnClickListener() {
-            @Override
-            public void onClick(DialogPlus dialog, View view) {
-                switch (view.getId()) {
-                    case R.id.btn_cancel:
-                        dialog.dismiss();
-                        break;
-                    case R.id.btn_ok:
-                        returnBelongs(vid);
-                        dialog.dismiss();
-                        break;
-                    default:
-                        break;
-                }
-            }
-        };
-
-        final DialogPlus dialog = DialogPlus.newDialog(mContext)
-                .setContentHolder(holder)
-                .setGravity(Gravity.CENTER)
-                .setCancelable(true)
-                .setInAnimation(R.anim.fade_in_center)
-                .setOutAnimation(R.anim.fade_out_center)
-                .setOnClickListener(clickListener)
-                .setContentWidth(DensityUtils.dp2px(mContext, 298f))
-                .setContentHeight(DensityUtils.dp2px(mContext, 195f))
-                .setContentBackgroundResource(R.drawable.dialog_bg)
-                .create();
-        dialog.show();
-    }
+//    private void showDialog(final String vid) {
+//        Holder holder = new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout
+//                        .dialog_confirm,
+//                null));
+//        TextView tvTitle = (TextView) holder.getInflatedView().findViewById(R.id.tv_title);
+//        Button btnLeft = (Button) holder.getInflatedView().findViewById(R.id.btn_cancel);
+//        Button btnRight = (Button) holder.getInflatedView().findViewById(R.id.btn_ok);
+//        tvTitle.setText(getString(R.string.device_return_dialog_hint));
+//        btnLeft.setText(getString(R.string.cancel));
+//        btnRight.setText(getString(R.string.ok));
+//        OnClickListener clickListener = new OnClickListener() {
+//            @Override
+//            public void onClick(DialogPlus dialog, View view) {
+//                switch (view.getId()) {
+//                    case R.id.btn_cancel:
+//                        dialog.dismiss();
+//                        break;
+//                    case R.id.btn_ok:
+//                        returnBelongs(vid);
+//                        dialog.dismiss();
+//                        break;
+//                    default:
+//                        break;
+//                }
+//            }
+//        };
+//
+//        final DialogPlus dialog = DialogPlus.newDialog(mContext)
+//                .setContentHolder(holder)
+//                .setGravity(Gravity.CENTER)
+//                .setCancelable(true)
+//                .setInAnimation(R.anim.fade_in_center)
+//                .setOutAnimation(R.anim.fade_out_center)
+//                .setOnClickListener(clickListener)
+//                .setContentWidth(DensityUtils.dp2px(mContext, 298f))
+//                .setContentHeight(DensityUtils.dp2px(mContext, 195f))
+//                .setContentBackgroundResource(R.drawable.dialog_bg)
+//                .create();
+//        dialog.show();
+//    }
 
     @Override
     protected int getContentViewId() {

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.anyihao.androidbase.mvp.Task;
 import com.anyihao.androidbase.mvp.TaskType;
 import com.anyihao.androidbase.utils.DensityUtils;
+import com.anyihao.androidbase.utils.DeviceUtils;
 import com.anyihao.androidbase.utils.GsonUtils;
 import com.anyihao.androidbase.utils.PreferencesUtils;
 import com.anyihao.androidbase.utils.StatusBarUtil;
@@ -197,6 +198,27 @@ public class ConnectedDevicesActivity extends ABaseActivity {
         }
     }
 
+    private void refresh(List<DataBean> beans) {
+        String macAddress = DeviceUtils.getMacAddress(this);
+        DataBean me = null;
+        if (!TextUtils.isEmpty(macAddress)) {
+            for (DataBean bean : beans) {
+                if (macAddress.equals(bean.getMac())) {
+                    me = bean;
+                    beans.remove(bean);
+                    break;
+                }
+            }
+        }
+        tvCount.setText(String.format(getString(R.string.connected_devices_hint),
+                count));
+        mAdapter.removeAllInternal(mData);
+        if (me != null) {
+            mAdapter.insert(me, 0);
+        }
+        mAdapter.insert(beans);
+    }
+
     @Override
     public void onSuccess(String result, int page, Integer actionType) {
 
@@ -207,13 +229,12 @@ public class ConnectedDevicesActivity extends ABaseActivity {
                 return;
             if (bean.getCode() == 200) {
                 List<DataBean> beans = bean.getData();
-                count = beans.size();
-                if (count > 0) {
-                    tvCount.setText(String.format(getString(R.string.connected_devices_hint),
-                            count));
-                    mAdapter.removeAllInternal(mData);
-                    mAdapter.insert(beans);
+                if (beans == null || beans.isEmpty()) {
+                    ToastUtils.showToast(getApplicationContext(), "当前暂无连接设备");
+                    return;
                 }
+                count = beans.size();
+                refresh(beans);
             } else {
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg());
             }

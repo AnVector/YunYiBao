@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="79dp">
+
+    <TextView
+        android:id="@+id/tv_device"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="15dp"
+        android:gravity="center"
+        android:textColor="@color/light_gray"
+        android:textSize="@dimen/font_size_thi"/>
+
+    <TextView
+        android:id="@+id/tv_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/tv_device"
+        android:layout_alignLeft="@id/tv_device"
+        android:layout_marginBottom="4dp"
+        android:gravity="center"
+        android:textColor="@color/user_account_color"
+        android:textSize="@dimen/font_size_normal_high"/>
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv_user"
+        android:layout_below="@id/tv_device"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="4dp"
+        android:gravity="center"
+        android:textColor="@color/light_gray"
+        android:textSize="@dimen/font_size_ele"/>
+
+    <Button
+        android:id="@+id/btn_return"
+        android:layout_width="65dp"
+        android:layout_height="25dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/tv_user"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/return_button_bg"
+        android:gravity="center"
+        android:textColor="@color/toolbar_title_color"
+        android:textSize="@dimen/font_size_small"/>
+
+    <Button
+        android:id="@+id/btn_cancel"
+        android:layout_width="65dp"
+        android:layout_height="25dp"
+        android:layout_alignRight="@id/btn_return"
+        android:layout_below="@id/btn_return"
+        android:layout_marginTop="9dp"
+        android:background="@drawable/return_button_bg"
+        android:gravity="center"
+        android:textColor="@color/toolbar_title_color"
+        android:textSize="@dimen/font_size_small"/>
+
+    <View
+        style="@style/divider_line"
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>

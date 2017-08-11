@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -124,16 +125,17 @@ public class RedEnvelopeActivity extends ABaseActivity {
 
     private void startAnimation() {
         //沿x轴放大
-        ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(llOpen, "scaleX", 0f, 0.6f, 1f);
+        ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(llOpen, "scaleX", 0f, 1f);
         //沿y轴放大
-        ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(llOpen, "scaleY", 0f, 0.6f, 1f);
+        ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(llOpen, "scaleY", 0f, 1f);
         //透明动画
-        ObjectAnimator animator = ObjectAnimator.ofFloat(llOpen, "alpha", 0f, 0.6f, 1f);
+        ObjectAnimator animator = ObjectAnimator.ofFloat(llOpen, "alpha", 0f, 1f);
         AnimatorSet set = new AnimatorSet();
         //同时沿X,Y轴放大，且改变透明度，然后移动
         set.play(scaleXAnimator).with(scaleYAnimator).with(animator);
         //都设置3s，也可以为每个单独设置
-        set.setDuration(1000);
+        set.setInterpolator(new LinearInterpolator());
+        set.setDuration(600);
         set.start();
     }
 

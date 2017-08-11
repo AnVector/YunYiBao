@@ -43,6 +43,7 @@ public class ConnectedUserBean implements Serializable {
         private String avatar;
         private String nickname;
         private String device;
+        private String mac;
 
         public String getUid() {
             return uid;
@@ -82,6 +83,14 @@ public class ConnectedUserBean implements Serializable {
 
         public void setDevice(String device) {
             this.device = device;
+        }
+
+        public String getMac() {
+            return mac;
+        }
+
+        public void setMac(String mac) {
+            this.mac = mac;
         }
     }
 }

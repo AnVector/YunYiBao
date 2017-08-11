@@ -13,6 +13,7 @@ import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.UTabAdapter;
 import com.anyihao.ayb.frame.fragment.NotRentFragment;
 import com.anyihao.ayb.frame.fragment.RentedFragment;
+import com.anyihao.ayb.frame.fragment.RentingFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,7 +56,7 @@ public class MerchantPrivilegeActivity extends ABaseActivity {
 
     private void initViewPager() {
         Bundle bundle;
-        RentedFragment fragment1 = new RentedFragment();
+        RentingFragment fragment1 = new RentingFragment();
         bundle = new Bundle();
         bundle.putString("status", "2");
         fragment1.setArguments(bundle);

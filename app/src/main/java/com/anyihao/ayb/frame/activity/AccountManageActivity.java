@@ -129,7 +129,7 @@ public class AccountManageActivity extends ABaseActivity {
     private void showDialog(final String accountType) {
         Holder holder = new ViewHolder(LayoutInflater.from(this).inflate(R.layout.dialog_confirm,
                 null));
-        TextView tvTitle = (TextView) holder.getInflatedView().findViewById(R.id.dia_title);
+        TextView tvTitle = (TextView) holder.getInflatedView().findViewById(R.id.tv_title);
         Button btnLeft = (Button) holder.getInflatedView().findViewById(R.id.btn_cancel);
         Button btnRight = (Button) holder.getInflatedView().findViewById(R.id.btn_ok);
         tvTitle.setText(getString(R.string.account_unbunding_hint));

@@ -3,15 +3,11 @@ package com.anyihao.ayb.frame.fragment;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
@@ -47,13 +43,14 @@ import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.frame.activity.RadarActivity;
 import com.orhanobut.logger.Logger;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.Unbinder;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,23 +74,9 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     private AMap mAmap;
     //标识，用于判断是否只显示一次定位信息和用户重新定位
     private boolean isFirstLoc = true;
-    /**
-     * 需要进行检测的权限数组
-     */
-    protected String[] needPermissions = {
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.READ_PHONE_STATE
-    };
-    private static final int PERMISSON_REQUESTCODE = 0;
-    /**
-     * 判断是否需要检测，防止不停的弹框
-     */
-    private boolean isNeedCheck = true;
+    private boolean needCheck = true;
+    private static final int RC_LOCATION_PERM = 0x0001;
 
-    @Override
     protected void initData() {
         titleMid.setText(getString(R.string.service_location));
         toolbar.setNavigationIcon(null);
@@ -134,7 +117,7 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         myLocationStyle.strokeColor(android.R.color.transparent);
         myLocationStyle.radiusFillColor(android.R.color.transparent);
         myLocationStyle.strokeWidth(0);
-        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW);
+        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);
         //连续定位、且将视角移动到地图中心点，定位蓝点跟随设备移动。（1秒1次定位）
         myLocationStyle.showMyLocation(true);
         mAmap.setMyLocationStyle(myLocationStyle);
@@ -205,16 +188,6 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         // 注意设置合适的定位时间的间隔（最小间隔支持为1000ms），并且在合适时间调用stopLocation()方法来取消定位请求
         // 在定位结束后，在合适的生命周期调用onDestroy()方法
         // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
-        //启动定位
-        mLocationClient.startLocation();
-        //将地图移动到定位点
-        AMapLocation aMapLocation = mLocationClient
-                .getLastKnownLocation();
-        if (aMapLocation != null) {
-            mAmap.moveCamera(CameraUpdateFactory.zoomTo(17));
-            mAmap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(aMapLocation.getLatitude
-                    (), aMapLocation.getLongitude())));
-        }
     }
 
     @Override
@@ -336,53 +309,43 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     @Override
     public void onResume() {
         super.onResume();
-        if (isNeedCheck) {
-            checkPermissions(needPermissions);
-        }
         isFirstLoc = true;
-        if (mLocationClient != null) {
-            mLocationClient.startLocation();
-        }
+        permissionsRequest();
         if (mMapView == null)
             return;
         mMapView.onResume();
     }
 
-    /**
-     * @param permissions
-     * @since 2.5.0
-     */
-    private void checkPermissions(String... permissions) {
-        List<String> needRequestPermissonList = findDeniedPermissions(permissions);
-        if (null != needRequestPermissonList
-                && needRequestPermissonList.size() > 0) {
-            ActivityCompat.requestPermissions(getActivity(),
-                    needRequestPermissonList.toArray(
-                            new String[needRequestPermissonList.size()]),
-                    PERMISSON_REQUESTCODE);
-        }
-    }
-
-    /**
-     * 获取权限集中需要申请权限的列表
-     *
-     * @param permissions
-     * @return
-     * @since 2.5.0
-     */
-    private List<String> findDeniedPermissions(String[] permissions) {
-        List<String> needRequestPermissonList = new ArrayList<>();
-        for (String perm : permissions) {
-            if (ContextCompat.checkSelfPermission(mContext,
-                    perm) != PackageManager.PERMISSION_GRANTED
-                    || ActivityCompat.shouldShowRequestPermissionRationale(
-                    getActivity(), perm)) {
-                needRequestPermissonList.add(perm);
+    @AfterPermissionGranted(RC_LOCATION_PERM)
+    protected void permissionsRequest() {
+        String[] permissions = {
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.READ_PHONE_STATE
+        };
+        if (EasyPermissions.hasPermissions(mContext, permissions)) {
+            if (mLocationClient != null) {
+                //启动定位
+                mLocationClient.startLocation();
+                //将地图移动到定位点
+                AMapLocation aMapLocation = mLocationClient
+                        .getLastKnownLocation();
+                if (aMapLocation != null) {
+                    mAmap.moveCamera(CameraUpdateFactory.zoomTo(17));
+                    mAmap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(aMapLocation
+                            .getLatitude
+                                    (), aMapLocation.getLongitude())));
+                }
             }
-        }
-        return needRequestPermissonList;
-    }
+        } else {
+            if (needCheck) {
+                EasyPermissions.requestPermissions(this, "开启定位",
+                        RC_LOCATION_PERM, permissions);
+                needCheck = false;
+            }
 
+        }
+    }
 
     @Override
     public void onPause() {
@@ -401,6 +364,13 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     }
 
     @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            Logger.d(perms);
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         mAmap = null;
@@ -410,33 +380,6 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         if (mLocationClient != null) {
             mLocationClient.onDestroy();
         }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSON_REQUESTCODE) {
-            if (!verifyPermissions(grantResults)) {
-                isNeedCheck = false;
-            }
-        }
-    }
-
-    /**
-     * 检测是否所有的权限都已经授权
-     *
-     * @param grantResults
-     * @return
-     * @since 2.5.0
-     */
-    private boolean verifyPermissions(int[] grantResults) {
-        for (int result : grantResults) {
-            if (result != PackageManager.PERMISSION_GRANTED) {
-                return false;
-            }
-        }
-        return true;
     }
 
     private void getMerchantList() {

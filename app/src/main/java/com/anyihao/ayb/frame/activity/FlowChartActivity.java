@@ -1,6 +1,7 @@
 package com.anyihao.ayb.frame.activity;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -9,8 +10,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.anyihao.androidbase.utils.StatusBarUtil;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.adapter.UTabAdapter;
 import com.anyihao.ayb.frame.fragment.ChartFragment;
@@ -36,6 +39,10 @@ public class FlowChartActivity extends ABaseActivity {
     TabLayout tabLayout;
     @BindView(R.id.viewpager)
     ViewPager mViewpager;
+    @BindView(R.id.fake_status_bar)
+    View fakeStatusBar;
+    @BindView(R.id.activity_flow_chart)
+    LinearLayout activityFlowChart;
     private TimePickerView mPvMonth;
     private TimePickerView mPvDay;
     private UTabAdapter mTabAdapter;
@@ -61,6 +68,17 @@ public class FlowChartActivity extends ABaseActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         toolbarTitle.setText(getString(R.string.data_flow_chart));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            fakeStatusBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    protected void setStatusBarTheme() {
+        super.setStatusBarTheme();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            StatusBarUtil.setTranslucentForImageView(FlowChartActivity.this, 0, activityFlowChart);
+        }
     }
 
     private void initViewPager() {

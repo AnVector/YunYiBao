@@ -104,6 +104,8 @@ public class NotRentFragment extends ABaseFragment {
     }
 
     private void onFireRefresh(List<DataBean> beans) {
+        if (ultimateRecyclerView == null)
+            return;
         mAdapter.removeAllInternal(mData);
         mAdapter.insert(beans);
         ultimateRecyclerView.setRefreshing(false);
@@ -111,9 +113,9 @@ public class NotRentFragment extends ABaseFragment {
     }
 
     private void onLoadNoData() {
-        if (ultimateRecyclerView != null) {
-            ultimateRecyclerView.showEmptyView();
-        }
+        if (ultimateRecyclerView == null)
+            return;
+        ultimateRecyclerView.showEmptyView();
     }
 
     @Override
@@ -142,6 +144,8 @@ public class NotRentFragment extends ABaseFragment {
                 return;
             if (bean.getCode() == 200) {
                 List<DataBean> beans = bean.getData();
+                if (beans == null)
+                    return;
                 if (beans.size() > 0) {
                     if (isRefresh) {
                         onFireRefresh(beans);
@@ -161,10 +165,11 @@ public class NotRentFragment extends ABaseFragment {
     @Override
     public void onFailure(String error, int page, Integer actionType) {
         super.onFailure(error, page, actionType);
-        if (isRefresh && ultimateRecyclerView != null) {
+        if (ultimateRecyclerView == null)
+            return;
+        if (isRefresh) {
             ultimateRecyclerView.setRefreshing(false);
             layoutManager.scrollToPosition(0);
-            ultimateRecyclerView.reenableLoadmore();
         }
     }
 }

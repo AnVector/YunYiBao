@@ -96,6 +96,11 @@ public class MeFragment extends ABaseFragment {
         toolbar.inflateMenu(R.menu.toolbar_menu);
         toolbarTitle.setText(mContext.getString(R.string.me));
         initUltimateRV();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         getUserInfo();
     }
 
@@ -337,9 +342,9 @@ public class MeFragment extends ABaseFragment {
                 mIntegral = bean.getIntegral();
                 setHeaderData(200, bean.getAvatar(), bean.getNickname());
             }
-            if (bean.getCode() == 437) {
+            if (bean.getCode() == 435) {
                 isLogin = false;
-                setHeaderData(437, null, null);
+                setHeaderData(435, null, null);
             }
         }
 

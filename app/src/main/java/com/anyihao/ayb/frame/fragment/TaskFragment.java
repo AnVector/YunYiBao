@@ -141,9 +141,13 @@ public class TaskFragment extends ABaseFragment {
         recyclerview.setAdapter(mSignAdapter);
         recyclerview.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager
                 .HORIZONTAL, false));
-        getTaskList();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getTaskList();
+    }
 
     private void initDefaultWeek() {
         mWeekData.clear();

@@ -76,16 +76,16 @@
         "source": "H:\\YunYiBao\\ultimaterecyclerview\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.1.1\\res\\layout\\abc_alert_dialog_button_bar_material.xml"
     },
     {
-        "merged": "H:\\YunYiBao\\ultimaterecyclerview\\build\\intermediates\\res\\merged\\release\\layout\\abc_popup_menu_header_item_layout.xml",
-        "source": "H:\\YunYiBao\\ultimaterecyclerview\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.1.1\\res\\layout\\abc_popup_menu_header_item_layout.xml"
+        "merged": "H:\\YunYiBao\\ultimaterecyclerview\\build\\intermediates\\res\\merged\\release\\layout\\abc_action_mode_bar.xml",
+        "source": "H:\\YunYiBao\\ultimaterecyclerview\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.1.1\\res\\layout\\abc_action_mode_bar.xml"
     },
     {
         "merged": "H:\\YunYiBao\\ultimaterecyclerview\\build\\intermediates\\res\\merged\\release\\layout\\cube_ptr_classic_default_header.xml",
         "source": "H:\\YunYiBao\\ultimaterecyclerview\\build\\intermediates\\exploded-aar\\in.srain.cube\\ultra-ptr\\1.0.11\\res\\layout\\cube_ptr_classic_default_header.xml"
     },
     {
-        "merged": "H:\\YunYiBao\\ultimaterecyclerview\\build\\intermediates\\res\\merged\\release\\layout\\abc_action_mode_bar.xml",
-        "source": "H:\\YunYiBao\\ultimaterecyclerview\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.1.1\\res\\layout\\abc_action_mode_bar.xml"
+        "merged": "H:\\YunYiBao\\ultimaterecyclerview\\build\\intermediates\\res\\merged\\release\\layout\\abc_popup_menu_header_item_layout.xml",
+        "source": "H:\\YunYiBao\\ultimaterecyclerview\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.1.1\\res\\layout\\abc_popup_menu_header_item_layout.xml"
     },
     {
         "merged": "H:\\YunYiBao\\ultimaterecyclerview\\build\\intermediates\\res\\merged\\release\\layout\\abc_screen_toolbar.xml",

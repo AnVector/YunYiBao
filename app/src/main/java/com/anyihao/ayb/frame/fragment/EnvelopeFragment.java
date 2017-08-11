@@ -100,6 +100,7 @@ public class EnvelopeFragment extends ABaseFragment {
                 () {
             @Override
             public void onRefresh() {
+                ultimateRecyclerView.reenableLoadmore();
                 page = 1;
                 isRefresh = true;
                 getMessage();
@@ -153,27 +154,32 @@ public class EnvelopeFragment extends ABaseFragment {
     }
 
     private void onFireRefresh(List<DataBean> beans) {
+        if (ultimateRecyclerView == null)
+            return;
         mAdapter.removeAllInternal(mData);
         mAdapter.insert(beans);
-        if (ultimateRecyclerView != null) {
-            ultimateRecyclerView.setRefreshing(false);
-        }
+        ultimateRecyclerView.setRefreshing(false);
         layoutManager.scrollToPosition(0);
-        if (ultimateRecyclerView != null) {
-            ultimateRecyclerView.reenableLoadmore();
-        }
-    }
-
-    private void onLoadMore(List<DataBean> beans) {
-        mAdapter.insert(beans);
-        if (beans.size() < PAGE_SIZE && ultimateRecyclerView != null) {
+        if (beans.size() < PAGE_SIZE) {
             ultimateRecyclerView.disableLoadmore();
         }
     }
 
-    private void onLoadNoData() {
+    private void onLoadMore(List<DataBean> beans) {
+        if (ultimateRecyclerView == null)
+            return;
+        mAdapter.insert(beans);
+        if (beans.size() < PAGE_SIZE) {
+            ultimateRecyclerView.disableLoadmore();
+        }
+    }
+
+    private void onLoadNoData(int page) {
         isInited = false;
-        if (ultimateRecyclerView != null) {
+        if (ultimateRecyclerView == null)
+            return;
+        ultimateRecyclerView.disableLoadmore();
+        if (page == 1) {
             ultimateRecyclerView.showEmptyView();
         }
     }
@@ -222,15 +228,11 @@ public class EnvelopeFragment extends ABaseFragment {
                         onLoadMore(beans);
                     }
                 } else {
-                    if (page == 1) {
-                        onLoadNoData();
-                    }
+                    onLoadNoData(page);
                 }
             } else {
                 ToastUtils.showToast(mContext.getApplicationContext(), bean.getMsg());
-                if (page == 1) {
-                    onLoadNoData();
-                }
+                onLoadNoData(page);
             }
         }
     }
@@ -238,12 +240,14 @@ public class EnvelopeFragment extends ABaseFragment {
     @Override
     public void onFailure(String error, int page, Integer actionType) {
         super.onFailure(error, page, actionType);
-        networkError = true;
-        if (isRefresh && ultimateRecyclerView != null) {
+        if (ultimateRecyclerView == null)
+            return;
+        if (isRefresh) {
+            networkError = true;
             ultimateRecyclerView.setRefreshing(false);
             layoutManager.scrollToPosition(0);
-            ultimateRecyclerView.reenableLoadmore();
-            ultimateRecyclerView.showEmptyView();
+//            ultimateRecyclerView.showEmptyView();
         }
+        ultimateRecyclerView.disableLoadmore();
     }
 }

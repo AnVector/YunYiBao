@@ -64,6 +64,7 @@ import com.anyihao.ayb.frame.activity.WebActivity;
 import com.anyihao.ayb.listener.OnItemClickListener;
 import com.anyihao.ayb.ui.WSCircleRotate;
 import com.anyihao.ayb.ui.waitingdots.DilatingDotsProgressBar;
+import com.anyihao.ayb.utils.PermissionSettingUtils;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
@@ -83,7 +84,7 @@ import butterknife.BindView;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class HomeFragment extends ABaseFragment implements EasyPermissions.PermissionCallbacks {
+public class HomeFragment extends ABaseFragment {
 
     @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
@@ -131,6 +132,8 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
     private boolean isConnected;
     private List<WifiInfoBean> mWifiList;
     private boolean loading;
+    private boolean refresh;
+    private boolean needCheck = true;
     private CountDownTimer mCountDownTimer;
 
     private class UNetWorkReceiver extends BroadcastReceiver {
@@ -156,6 +159,8 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                     if (activeNetwork.isConnected()) {
                         if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
                             getConnectWifi();// connected to wifi
+                            refresh = false;
+                            permissionsRequest();
                         }
                     }
                 }
@@ -177,6 +182,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
         }
         getAdvertisement();
         initUltimateRV();
+        refresh = false;
         permissionsRequest();
         initNetWorkStateReceiver();
         initTimer();
@@ -191,7 +197,6 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
 
     private void initTimer() {
         mCountDownTimer = new CountDownTimer(120 * 1000, 10 * 1000) {
-
             @Override
             public void onTick(long millisUntilFinished) {
                 getSsidPwd();
@@ -280,7 +285,6 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
     }
 
     private List<WifiInfoBean> getIWifiList() {
-
         WifiInfoManager.getInstance(mContext).openWifi();
         WifiInfoManager.getInstance(mContext).startScan();
         List<ScanResult> results = WifiInfoManager.getInstance(mContext).getWifiList();
@@ -314,17 +318,14 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission
                 .ACCESS_COARSE_LOCATION};
         if (EasyPermissions.hasPermissions(mContext, permissions)) {
-            mWifiList = getIWifiList();
-            mAdapter.removeAllInternal(mData);
-            if (mWifiList != null && !mWifiList.isEmpty()) {
-                mAdapter.insert(mWifiList);
-            } else {
-                mRecyclerView.showEmptyView();
-            }
-            getConnectWifi();
+            updateWifiList();
         } else {
-            EasyPermissions.requestPermissions(this, "开启WIFI",
-                    RC_LOCATION_CONTACTS_PERM, permissions);
+            if (needCheck || refresh) {
+                EasyPermissions.requestPermissions(this, "开启WIFI",
+                        RC_LOCATION_CONTACTS_PERM, permissions);
+                needCheck = false;
+            }
+
         }
     }
 
@@ -336,7 +337,6 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
             } else {
                 stopAnimation();
             }
-            updateWifiList();
         }
     }
 
@@ -345,16 +345,22 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
             return;
         mWifiList = getIWifiList();
         mAdapter.removeAllInternal(mData);
-        if (mWifiList != null && !mWifiList.isEmpty()) {
+        if (mWifiList == null || mWifiList.isEmpty()) {
+            if (refresh) {
+                mRecyclerView.setRefreshing(false);
+                layoutManager.scrollToPosition(0);
+            }
+            mRecyclerView.showEmptyView();
+            return;
+        }
+        mAdapter.insert(mWifiList);
+        if (refresh) {
 //            Logger.d(mWifiList.size());
-            mAdapter.insert(mWifiList);
             mRecyclerView.setRefreshing(false);
             layoutManager.scrollToPosition(0);
             mRecyclerView.hideEmptyView();
         } else {
-            mRecyclerView.setRefreshing(false);
-            layoutManager.scrollToPosition(0);
-            mRecyclerView.showEmptyView();
+            getConnectWifi();
         }
     }
 
@@ -518,7 +524,8 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                 () {
             @Override
             public void onRefresh() {
-                updateWifiList();
+                refresh = true;
+                permissionsRequest();
             }
         });
     }
@@ -626,11 +633,11 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
     }
 
     private void onGetPwdSuccess() {
-        showDialog(R.layout.dialog_wifi_password, true);
+        showDialog(R.layout.dialog_wifi_password, 0);
     }
 
     private void onGetPwdFailure() {
-        showDialog(R.layout.dialog_confirm, false);
+        showDialog(R.layout.dialog_confirm, 1);
     }
 
     private void startActivityForLogin() {
@@ -669,21 +676,30 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
         postForm(params, 1, 4);
     }
 
-    private void showDialog(int layoutId, final boolean bool) {
+    private void showDialog(int layoutId, final int type) {
         Holder holder = new ViewHolder(LayoutInflater.from(mContext).inflate(layoutId, null));
-        if (bool) {
+        if (type == 0) {
             TextView tvCopy = (TextView) holder.getInflatedView().findViewById(R.id.btn_copy);
             TextView tvPassword = (TextView) holder.getInflatedView().findViewById(R.id
                     .tv_password);
             tvCopy.setText(getString(R.string.copy_password));
             tvPassword.setText("密码获取成功，选择相应的WIFI热点名称，点击进入" + aliasName + "，长按密码框，粘贴密码即可上网");
-        } else {
-            TextView tvTitle = (TextView) holder.getInflatedView().findViewById(R.id.dia_title);
+        } else if (type == 1) {
+            TextView tvTitle = (TextView) holder.getInflatedView().findViewById(R.id.tv_title);
             Button btnLeft = (Button) holder.getInflatedView().findViewById(R.id.btn_cancel);
             Button btnRight = (Button) holder.getInflatedView().findViewById(R.id.btn_ok);
             tvTitle.setText(getString(R.string.no_authenticate_device_hint));
+            tvTitle.setTextSize(17f);
             btnLeft.setText(getString(R.string.refuse_to_auth));
             btnRight.setText(getString(R.string.agree_to_auth));
+        } else {
+            TextView tvTitle = (TextView) holder.getInflatedView().findViewById(R.id.tv_title);
+            Button btnLeft = (Button) holder.getInflatedView().findViewById(R.id.btn_cancel);
+            Button btnRight = (Button) holder.getInflatedView().findViewById(R.id.btn_ok);
+            tvTitle.setText(getResources().getString(R.string.permission_location_hint));
+            tvTitle.setTextSize(14f);
+            btnLeft.setText(getResources().getString(R.string.cancel));
+            btnRight.setText(getResources().getString(R.string.go_to_config));
         }
 
 
@@ -695,7 +711,7 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                         dialog.dismiss();
                         break;
                     case R.id.btn_ok:
-                        addAuthorizedDevice();
+                        handleConfirm(type);
                         dialog.dismiss();
                         break;
                     case R.id.btn_copy:
@@ -721,6 +737,32 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
                 .setContentBackgroundResource(R.drawable.dialog_bg)
                 .create();
         dialog.show();
+    }
+
+    private void handleConfirm(int type) {
+        if (type == 1) {
+            addAuthorizedDevice();
+        } else {
+            PermissionSettingUtils.goToSettings(mContext);
+        }
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+        updateWifiList();
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            if (refresh) {
+                showDialog(R.layout.dialog_confirm, 2);
+                if (mRecyclerView != null) {
+                    mRecyclerView.setRefreshing(false);
+                    layoutManager.scrollToPosition(0);
+                }
+            }
+        }
     }
 
     @Override
@@ -780,8 +822,9 @@ public class HomeFragment extends ABaseFragment implements EasyPermissions.Permi
         }
 
         if (actionType == 3) {
-            AdvertisementBean bean = GsonUtils.getInstance().transitionToBean(result, AdvertisementBean
-                    .class);
+            AdvertisementBean bean = GsonUtils.getInstance().transitionToBean(result,
+                    AdvertisementBean
+                            .class);
             if (bean == null)
                 return;
             if (bean.getCode() == 200) {
