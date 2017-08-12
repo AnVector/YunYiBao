@@ -195,9 +195,7 @@ public class RedEnvelopeActivity extends ABaseActivity {
             ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean.class);
             if (bean == null)
                 return;
-            if (bean.getCode() == 200) {
-                ToastUtils.showToast(getApplicationContext(), "红包领取成功");
-            } else {
+            if (bean.getCode() != 200) {
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg());
             }
         }

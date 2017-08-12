@@ -70,8 +70,7 @@ public class DepositActivity extends ABaseActivity {
     @BindView(R.id.btn_submit)
     AppCompatButton btnSubmit;
     private static final int SDK_PAY_FLAG = 0x0001;
-    private static final int REQUEST_DEPOSIT_CODE = 0X0002;
-    public static final int RESULT_DEPOSIT_CODE = 0X0003;
+    private static final int REQUEST_FINISH_CODE = 0X0002;
     private String topupType = "ALIPAY";
     private String packageID;
     private String pkgType;
@@ -180,7 +179,7 @@ public class DepositActivity extends ABaseActivity {
         if (android.text.TextUtils.equals(resultStatus, "9000")) {
             // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
             Intent intent = new Intent(DepositActivity.this, AuthFinishActivity.class);
-            startActivityForResult(intent, REQUEST_DEPOSIT_CODE);
+            startActivityForResult(intent, REQUEST_FINISH_CODE);
         } else if (android.text.TextUtils.equals(resultStatus, "6001")) {
             ToastUtils.showToast(getApplicationContext(), "支付取消");
         } else {
@@ -274,9 +273,9 @@ public class DepositActivity extends ABaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_DEPOSIT_CODE) {
-            if (resultCode == AuthFinishActivity.RESULT_FINISH_CODE) {
-                setResult(RESULT_DEPOSIT_CODE);
+        if (requestCode == REQUEST_FINISH_CODE) {
+            if (resultCode == RESULT_OK) {
+                setResult(RESULT_OK);
                 finish();
             }
         }
@@ -333,7 +332,7 @@ public class DepositActivity extends ABaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mHandler!=null){
+        if (mHandler != null) {
             mHandler.removeCallbacksAndMessages(null);
             mHandler = null;
         }

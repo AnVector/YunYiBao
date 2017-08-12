@@ -79,18 +79,8 @@ public class RentedDevicesActivity extends ABaseActivity {
                 .item_rented_devices);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerview.setLayoutManager(layoutManager);
-//        recyclerview.setParallaxHeader(getLayoutInflater().inflate(R.layout
-//                .parallax_recyclerview_header, recyclerview.mRecyclerView, false));
         recyclerview.setNormalHeader(getLayoutInflater().inflate(R.layout
                 .parallax_recyclerview_header, recyclerview.mRecyclerView, false));
-//        recyclerview.setOnParallaxScroll(new UltimateRecyclerView.OnParallaxScroll() {
-//            @Override
-//            public void onParallaxScroll(float percentage, float offset, View parallax) {
-//                Drawable c = toolbar.getBackground();
-//                c.setAlpha(255);
-//                toolbar.setBackgroundDrawable(c);
-//            }
-//        });
         recyclerview.setAdapter(mAdapter);
     }
 
@@ -145,7 +135,12 @@ public class RentedDevicesActivity extends ABaseActivity {
         if (bean != null) {
             beans.add(0, new KeyValueBean().setTitle("设备编号").setValue(bean.getVid()));
             beans.add(1, new KeyValueBean().setTitle("设备版本").setValue(bean.getVidVer()));
-            beans.add(2, new KeyValueBean().setTitle("设备状态").setValue(bean.getVidStatus()));
+            if ("1".equals(bean.getVidStatus())) {
+                beans.add(2, new KeyValueBean().setTitle("设备状态").setValue("租用中"));
+            }
+            if ("2".equals(bean.getVidStatus())) {
+                beans.add(2, new KeyValueBean().setTitle("设备状态").setValue("待确认租赁"));
+            }
             beans.add(3, new KeyValueBean().setTitle("租赁时间").setValue(bean.getLeaseTime()));
             beans.add(4, new KeyValueBean().setTitle("商家名称").setValue(bean.getShopName()));
             beans.add(5, new KeyValueBean().setTitle("商家地址").setValue(bean.getShopAddr()));

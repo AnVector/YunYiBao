@@ -10,6 +10,7 @@ public class WifiInfoBean implements Serializable {
 
     private String ssid;
     private boolean connected;
+    private int level;
 
     public boolean isConnected() {
         return connected;
@@ -25,5 +26,13 @@ public class WifiInfoBean implements Serializable {
 
     public void setSsid(String ssid) {
         this.ssid = ssid;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 }

@@ -105,17 +105,6 @@ public class RentingFragment extends ABaseFragment {
         postForm(params, 1, 0);
     }
 
-    private void returnBelongs(String vid) {
-        if (TextUtils.isEmpty(vid))
-            return;
-        Map<String, String> params = new HashMap<>();
-        params.put("cmd", "RETURN");
-        params.put("merchantId", PreferencesUtils.getString(mContext.getApplicationContext(),
-                "uid", ""));
-        params.put("vid", vid);
-        postForm(params, 1, 1);
-    }
-
     private void rentOperation(String keyId, int status) {
         if (TextUtils.isEmpty(keyId))
             return;

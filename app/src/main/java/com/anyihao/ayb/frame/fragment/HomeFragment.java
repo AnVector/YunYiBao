@@ -76,6 +76,8 @@ import com.orhanobut.logger.Logger;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,9 +110,12 @@ public class HomeFragment extends ABaseFragment {
     ViewFlipper flipper;
     @BindView(R.id.iv_bell)
     ImageView ivBell;
+    private static final int REQUEST_DEPOSIT_CODE = 0x0001;
     private static final int REQUEST_NEW_MSG_CODE = 0x0002;
     private static final int REQUEST_LOGIN_CODE = 0x0003;
     private static final int RC_LOCATION_CONTACTS_PERM = 0x0004;
+    private static final int REQUEST_CERTIFICATE_CODE = 0x0005;
+    private static final int RC_CAMERA_PERM = 0x0006;
     @BindView(R.id.progress)
     DilatingDotsProgressBar progress;
     @BindView(R.id.tv_data_amount)
@@ -129,8 +134,8 @@ public class HomeFragment extends ABaseFragment {
     private UNetWorkReceiver mNetworkReceiver;
     private boolean isLogin;
     private String aliasName;
+    private String ssid;
     private boolean isConnected;
-    private List<WifiInfoBean> mWifiList;
     private boolean loading;
     private boolean refresh;
     private boolean needCheck = true;
@@ -196,7 +201,9 @@ public class HomeFragment extends ABaseFragment {
     }
 
     private void initTimer() {
-        mCountDownTimer = new CountDownTimer(120 * 1000, 10 * 1000) {
+        mCountDownTimer = new CountDownTimer(GlobalConsts.CONNECT_TIME_OUT_MINUTES * 1000,
+                GlobalConsts.RETRY_CYCLE_TIME_MINUTES *
+                        1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 getSsidPwd();
@@ -301,6 +308,7 @@ public class HomeFragment extends ABaseFragment {
                 bean = new WifiInfoBean();
                 bean.setSsid(ele.SSID);
                 Logger.d(ele.SSID);
+                bean.setLevel(ele.level);
                 if (!TextUtils.isEmpty(ssid) && ssid.replace("\"", "").equals(ele.SSID)) {
                     bean.setConnected(true);
                 } else {
@@ -309,6 +317,12 @@ public class HomeFragment extends ABaseFragment {
                 list.add(bean);
             }
         }
+        Collections.sort(list, new Comparator<WifiInfoBean>() {
+            @Override
+            public int compare(WifiInfoBean o1, WifiInfoBean o2) {
+                return String.valueOf(o1.getLevel()).compareTo(String.valueOf(o2.getLevel()));
+            }
+        });
         uploadWifiList(list);
         return list;
     }
@@ -329,8 +343,19 @@ public class HomeFragment extends ABaseFragment {
         }
     }
 
+    @AfterPermissionGranted(RC_CAMERA_PERM)
+    protected void cameraPermissionsRequest() {
+        String[] permissions = {Manifest.permission.CAMERA};
+        if (EasyPermissions.hasPermissions(mContext, permissions)) {
+            startScan();
+        } else {
+            EasyPermissions.requestPermissions(this, "打开相机",
+                    RC_CAMERA_PERM, permissions);
+        }
+    }
+
     private void getConnectWifi() {
-        String ssid = WifiInfoManager.getInstance(mContext).getSSid();
+        ssid = WifiInfoManager.getInstance(mContext).getSSid();
         if (!TextUtils.isEmpty(ssid)) {
             if (ssid.contains("IeBox")) {
                 setConnectSuccess(ssid);
@@ -343,7 +368,7 @@ public class HomeFragment extends ABaseFragment {
     private void updateWifiList() {
         if (mRecyclerView == null)
             return;
-        mWifiList = getIWifiList();
+        List<WifiInfoBean> mWifiList = getIWifiList();
         mAdapter.removeAllInternal(mData);
         if (mWifiList == null || mWifiList.isEmpty()) {
             if (refresh) {
@@ -362,6 +387,18 @@ public class HomeFragment extends ABaseFragment {
         } else {
             getConnectWifi();
         }
+    }
+
+    private void startScan() {
+        IntentIntegrator intentIntegrator = IntentIntegrator
+                .forSupportFragment(HomeFragment.this).setCaptureActivity
+                        (ScanActivity.class);
+        intentIntegrator
+                .setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
+                .setOrientationLocked(false)//扫描方向固定
+                .setCaptureActivity(ScanActivity.class) //
+                // 设置自定义的activity是CustomActivity
+                .initiateScan(); // 初始化扫描
     }
 
     private void wifiClosed() {
@@ -442,22 +479,14 @@ public class HomeFragment extends ABaseFragment {
                 switch (mProgress) {
                     case 2:
                         intent.setClass(mContext, CertificationActivity.class);
-                        startActivity(intent);
+                        startActivityForResult(intent, REQUEST_CERTIFICATE_CODE);
                         break;
                     case 3:
                         intent.setClass(mContext, DepositActivity.class);
-                        startActivity(intent);
+                        startActivityForResult(intent, REQUEST_DEPOSIT_CODE);
                         break;
                     case 4:
-                        IntentIntegrator intentIntegrator = IntentIntegrator
-                                .forSupportFragment(HomeFragment.this).setCaptureActivity
-                                        (ScanActivity.class);
-                        intentIntegrator
-                                .setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
-                                .setOrientationLocked(false)//扫描方向固定
-                                .setCaptureActivity(ScanActivity.class) //
-                                // 设置自定义的activity是CustomActivity
-                                .initiateScan(); // 初始化扫描
+                        cameraPermissionsRequest();
                         break;
                     default:
                         break;
@@ -506,10 +535,15 @@ public class HomeFragment extends ABaseFragment {
                 if (o instanceof WifiInfoBean) {
                     if (loading) {
                         ToastUtils.showToast(mContext.getApplicationContext(), "设备连网中，请稍后重试");
-                    } else {
-                        aliasName = ((WifiInfoBean) o).getSsid();
-                        getSsidPwd();
+                        return;
                     }
+                    aliasName = ((WifiInfoBean) o).getSsid();
+                    if (!TextUtils.isEmpty(ssid) && ssid.contains(aliasName)) {
+                        ToastUtils.showToast(mContext.getApplicationContext(),
+                                "已成功连接到该网络，无需重复获取密码");
+                        return;
+                    }
+                    getSsidPwd();
 
                 }
             }
@@ -684,25 +718,27 @@ public class HomeFragment extends ABaseFragment {
                     .tv_password);
             tvCopy.setText(getString(R.string.copy_password));
             tvPassword.setText("密码获取成功，选择相应的WIFI热点名称，点击进入" + aliasName + "，长按密码框，粘贴密码即可上网");
-        } else if (type == 1) {
-            TextView tvTitle = (TextView) holder.getInflatedView().findViewById(R.id.tv_title);
-            Button btnLeft = (Button) holder.getInflatedView().findViewById(R.id.btn_cancel);
-            Button btnRight = (Button) holder.getInflatedView().findViewById(R.id.btn_ok);
-            tvTitle.setText(getString(R.string.no_authenticate_device_hint));
-            tvTitle.setTextSize(17f);
-            btnLeft.setText(getString(R.string.refuse_to_auth));
-            btnRight.setText(getString(R.string.agree_to_auth));
         } else {
             TextView tvTitle = (TextView) holder.getInflatedView().findViewById(R.id.tv_title);
             Button btnLeft = (Button) holder.getInflatedView().findViewById(R.id.btn_cancel);
             Button btnRight = (Button) holder.getInflatedView().findViewById(R.id.btn_ok);
-            tvTitle.setText(getResources().getString(R.string.permission_location_hint));
-            tvTitle.setTextSize(14f);
-            btnLeft.setText(getResources().getString(R.string.cancel));
-            btnRight.setText(getResources().getString(R.string.go_to_config));
+            if (type == 1) {
+                tvTitle.setText(getString(R.string.no_authenticate_device_hint));
+                tvTitle.setTextSize(17f);
+                btnLeft.setText(getString(R.string.refuse_to_auth));
+                btnRight.setText(getString(R.string.agree_to_auth));
+            } else if (type == 2) {
+                tvTitle.setText(getResources().getString(R.string.permission_location_hint));
+                tvTitle.setTextSize(14f);
+                btnLeft.setText(getResources().getString(R.string.cancel));
+                btnRight.setText(getResources().getString(R.string.go_to_config));
+            } else {
+                tvTitle.setText(getResources().getString(R.string.permission_scan_hint));
+                tvTitle.setTextSize(14f);
+                btnLeft.setText(getResources().getString(R.string.cancel));
+                btnRight.setText(getResources().getString(R.string.go_to_config));
+            }
         }
-
-
         OnClickListener clickListener = new OnClickListener() {
             @Override
             public void onClick(DialogPlus dialog, View view) {
@@ -749,18 +785,29 @@ public class HomeFragment extends ABaseFragment {
 
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
-        updateWifiList();
+        if (requestCode == RC_LOCATION_CONTACTS_PERM) {
+            updateWifiList();
+        }
+        if (requestCode == RC_CAMERA_PERM) {
+            startScan();
+        }
     }
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
-            if (refresh) {
-                showDialog(R.layout.dialog_confirm, 2);
-                if (mRecyclerView != null) {
-                    mRecyclerView.setRefreshing(false);
-                    layoutManager.scrollToPosition(0);
+            if (requestCode == RC_LOCATION_CONTACTS_PERM) {
+                if (refresh) {
+                    showDialog(R.layout.dialog_confirm, 2);
+                    if (mRecyclerView != null) {
+                        mRecyclerView.setRefreshing(false);
+                        layoutManager.scrollToPosition(0);
+                    }
                 }
+            }
+
+            if (requestCode == RC_CAMERA_PERM) {
+                showDialog(R.layout.dialog_confirm, 3);
             }
         }
     }
@@ -908,18 +955,11 @@ public class HomeFragment extends ABaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_LOGIN_CODE) {
-            isLogin = PreferencesUtils.getBoolean(mContext.getApplicationContext(), "isLogin",
-                    false);
-            if (isLogin) {
-                getUserCertStatus();
-            }
-        }
-
-        if (requestCode == REQUEST_NEW_MSG_CODE) {
-            getUnreadMsg();
-        }
-        IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode,
+        isLogin = PreferencesUtils.getBoolean(mContext.getApplicationContext(),
+                "isLogin",
+                false);
+        IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode,
+                resultCode,
                 data);
         if (intentResult != null && intentResult.getContents() != null) {
             String result = intentResult.getContents();
@@ -929,10 +969,23 @@ public class HomeFragment extends ABaseFragment {
                 getIEBoxNum(result);
             }
         } else {
-            super.onActivityResult(requestCode, resultCode, data);
+            switch (requestCode) {
+                case REQUEST_LOGIN_CODE:
+                case REQUEST_CERTIFICATE_CODE:
+                case REQUEST_DEPOSIT_CODE:
+                    if (isLogin) {
+                        getUserCertStatus();
+                    }
+                    break;
+                case REQUEST_NEW_MSG_CODE:
+                    getUnreadMsg();
+                    break;
+                default:
+                    super.onActivityResult(requestCode, resultCode, data);
+                    break;
+            }
         }
     }
-
 
     @Override
     public void onDestroy() {

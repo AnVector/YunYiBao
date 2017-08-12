@@ -45,7 +45,6 @@ public class AuthFinishActivity extends ABaseActivity {
     ImageView imvFinished;
     @BindView(R.id.btn_submit)
     AppCompatButton btnSubmit;
-    public static final int RESULT_FINISH_CODE = 0X0004;
 
     @Override
     protected int getContentViewId() {
@@ -128,7 +127,7 @@ public class AuthFinishActivity extends ABaseActivity {
                 Intent intent = new Intent(this, DeviceCodeActivity.class);
                 intent.putExtra("vid", bean.getVid());
                 startActivity(intent);
-                setResult(RESULT_FINISH_CODE);
+                setResult(RESULT_OK);
                 finish();
             } else {
                 ToastUtils.showToast(this.getApplicationContext(), bean.getMsg());

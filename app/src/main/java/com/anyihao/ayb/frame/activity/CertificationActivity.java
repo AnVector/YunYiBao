@@ -41,7 +41,7 @@ public class CertificationActivity extends ABaseActivity {
     AppCompatButton btnSubmit;
     private String userName;
     private String IDNumber;
-    private static final int REQUEST_CERTIFICATE_CODE = 0X0001;
+    private static final int REQUEST_DEPOSIT_CODE = 0X0001;
 
     /**
      * 获取布局文件Id
@@ -96,8 +96,9 @@ public class CertificationActivity extends ABaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CERTIFICATE_CODE) {
-            if (resultCode == DepositActivity.RESULT_DEPOSIT_CODE) {
+        if (requestCode == REQUEST_DEPOSIT_CODE) {
+            if (resultCode == RESULT_OK) {
+                setResult(RESULT_OK);
                 this.finish();
             }
         }
@@ -130,7 +131,7 @@ public class CertificationActivity extends ABaseActivity {
                     .tv_message);
             if (bean.getCode() == 200) {
                 Intent intent = new Intent(CertificationActivity.this, DepositActivity.class);
-                startActivityForResult(intent, REQUEST_CERTIFICATE_CODE);
+                startActivityForResult(intent, REQUEST_DEPOSIT_CODE);
             }
         }
     }

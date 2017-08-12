@@ -44,6 +44,7 @@
     <string name="photo">拍照</string>
     <string name="permission_camera_hint">在设置-应用-云逸宝-权限中开启相机权限，读写手机存储权限，以正常使用拍照功能和上传头像的功能</string>
     <string name="permission_location_hint">在设置-应用-云逸宝-权限中开启位置信息权限，以正常使用获取附近WIFI热点信息和定位功能</string>
+    <string name="permission_scan_hint">在设置-应用-云逸宝-权限中开启相机权限，以正常使用扫一扫功能</string>
     <string name="go_to_config">去设置</string>
 
     <!--Toolbar Title-->

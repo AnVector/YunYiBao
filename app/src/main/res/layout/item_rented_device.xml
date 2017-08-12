@@ -34,7 +34,7 @@
         android:layout_marginRight="12dp"
         android:background="@drawable/return_button_bg"
         android:gravity="center"
-        android:textColor="@color/toolbar_title_color"
+        android:textColor="@color/white"
         android:textSize="@dimen/font_size_small"/>
 
     <TextView

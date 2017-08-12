@@ -272,7 +272,6 @@ public class MeActivity extends ABaseActivity {
                             startActivity(intent1);
                             break;
                         case "押金退款":
-                            tvValue = (TextView) view.findViewById(R.id.tv_value);
                             if ("未缴纳".equals(((KeyValueBean) o).getValue())) {
                                 ToastUtils.showToast(getApplicationContext(), ((KeyValueBean) o)
                                         .getValue());
@@ -656,20 +655,24 @@ public class MeActivity extends ABaseActivity {
                 return;
             ToastUtils.showToast(getApplicationContext(), bean.getMsg());
             if (bean.getCode() == 200) {
-                if (tvValue == null)
-                    return;
                 switch (actionType) {
                     case 1:
-                        tvValue.setText(mArea);
+                        if (tvValue != null) {
+                            tvValue.setText(mArea);
+                        }
                         break;
                     case 2:
-                        tvValue.setText(mDate);
+                        if (tvValue != null) {
+                            tvValue.setText(mDate);
+                        }
                         break;
                     case 3:
-                        tvValue.setText(mGender);
+                        if (tvValue != null) {
+                            tvValue.setText(mGender);
+                        }
                         break;
                     case 4:
-                        tvValue.setText("未缴纳");
+                        getUserInfo();
                         break;
                     default:
                         break;
