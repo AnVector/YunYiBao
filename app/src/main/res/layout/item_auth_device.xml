@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="55dp">
+                android:layout_height="55dp"
+                android:background="@color/white">
 
     <TextView
         android:id="@+id/tv_device"
@@ -23,7 +24,7 @@
         android:background="@null"
         android:gravity="center"
         android:text="@string/unbind_auth_device"
-        android:textColor="#FF1919"
+        android:textColor="@color/payment_fee_text_color"
         android:textSize="@dimen/font_size_normal_high"/>
 
     <View

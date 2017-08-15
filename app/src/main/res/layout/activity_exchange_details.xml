@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              tools:context="com.anyihao.ayb.frame.activity.ExchangeDetailsActivity">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.anyihao.ayb.frame.activity.ExchangeDetailsActivity">
 
-    <include layout="@layout/toolbar_common"
-        android:id="@+id/toolbar"/>
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_common"/>
 
     <ScrollView
-        android:layout_below="@id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,8 +25,7 @@
                 android:layout_height="252dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/exchange_details_header"/>
+                android:scaleType="centerCrop"/>
 
             <TextView
                 android:id="@+id/tv_duration"
@@ -98,6 +98,7 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_exchange"
         android:layout_width="match_parent"

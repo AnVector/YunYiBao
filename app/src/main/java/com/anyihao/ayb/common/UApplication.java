@@ -48,10 +48,8 @@ import okhttp3.OkHttpClient;
 
 public class UApplication extends MultiDexApplication {
 
-    private final String TAG = UApplication.this.getClass().getSimpleName();
     private static UApplication mInstance;
     private UBroadcastReceiver mUBroadcastReceiver;
-    private AMapLocationListener mLocationListener = null;
     public AMapLocationClient mLocationClient = null;
     public AMapLocationClientOption mLocationOption = null;
 
@@ -89,7 +87,7 @@ public class UApplication extends MultiDexApplication {
     }
 
     private void initAMapLocation() {
-        mLocationListener = new LocationListener();
+        AMapLocationListener mLocationListener = new LocationListener();
         //初始化AMapLocationClientOption对象
         mLocationOption = new AMapLocationClientOption();
         //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
@@ -97,7 +95,7 @@ public class UApplication extends MultiDexApplication {
                 .setInterval(300 * 1000)//设置定位间隔,单位毫秒,默认为2000ms，最低1000ms。
                 .setNeedAddress(true);//设置是否返回地址信息（默认返回地址信息）
         //初始化定位
-        mLocationClient = new AMapLocationClient(getApplicationContext());
+        mLocationClient = new AMapLocationClient(this);
         //给定位客户端对象设置定位参数
         mLocationClient.setLocationOption(mLocationOption);
         //启动定位
@@ -196,7 +194,7 @@ public class UApplication extends MultiDexApplication {
         Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy) {
             @Override
             public boolean isLoggable(int priority, String tag) {
-                return true;
+                return BuildConfig.DEBUG;
             }
         });
     }
@@ -214,11 +212,10 @@ public class UApplication extends MultiDexApplication {
         if (res.getConfiguration().fontScale != 1) {//非默认值
             Configuration newConfig = new Configuration();
             newConfig.setToDefaults();
-            //设置默认
-            res.updateConfiguration(newConfig, res.getDisplayMetrics());
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 createConfigurationContext(newConfig);
             } else {
+                //设置默认
                 res.updateConfiguration(newConfig, res.getDisplayMetrics());
             }
         }

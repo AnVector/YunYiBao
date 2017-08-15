@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Environment;
 import android.os.SystemClock;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
@@ -42,7 +43,8 @@ public class PhoneUtils {
      * @return {@code true}: 是<br>{@code false}: 否
      */
     public static boolean isPhone(Context context) {
-        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context
+                .TELEPHONY_SERVICE);
         return tm != null && tm.getPhoneType() != TelephonyManager.PHONE_TYPE_NONE;
     }
 
@@ -55,7 +57,8 @@ public class PhoneUtils {
      */
     @SuppressLint("HardwareIds")
     public static String getIMEI(Context context) {
-        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context
+                .TELEPHONY_SERVICE);
         return tm != null ? tm.getDeviceId() : null;
     }
 
@@ -68,7 +71,8 @@ public class PhoneUtils {
      */
     @SuppressLint("HardwareIds")
     public static String getIMSI(Context context) {
-        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context
+                .TELEPHONY_SERVICE);
         return tm != null ? tm.getSubscriberId() : null;
     }
 
@@ -85,7 +89,8 @@ public class PhoneUtils {
      * </ul>
      */
     public static int getPhoneType(Context context) {
-        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context
+                .TELEPHONY_SERVICE);
         return tm != null ? tm.getPhoneType() : -1;
     }
 
@@ -97,7 +102,8 @@ public class PhoneUtils {
      * @return sim卡运营商名称
      */
     public static String getSimOperatorName(Context context) {
-        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context
+                .TELEPHONY_SERVICE);
         return tm != null ? tm.getSimOperatorName() : null;
     }
 
@@ -109,7 +115,8 @@ public class PhoneUtils {
      * @return 移动网络运营商名称
      */
     public static String getSimOperatorByMnc(Context context) {
-        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context
+                .TELEPHONY_SERVICE);
         String operator = tm != null ? tm.getSimOperator() : null;
         if (operator == null) return null;
         switch (operator) {
@@ -187,7 +194,8 @@ public class PhoneUtils {
      * @param phoneNumber 电话号码
      */
     public static void call(Context context, String phoneNumber) {
-        context.startActivity(new Intent("android.intent.action.CALL", Uri.parse("tel:" + phoneNumber)));
+        context.startActivity(new Intent("android.intent.action.CALL", Uri.parse("tel:" +
+                phoneNumber)));
     }
 
     /**
@@ -228,7 +236,8 @@ public class PhoneUtils {
 
     /**
      * 获取手机联系人
-     * <p>需添加权限 {@code <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>}</p>
+     * <p>需添加权限 {@code <uses-permission android:name="android.permission
+     * .READ_EXTERNAL_STORAGE"/>}</p>
      * <p>需添加权限 {@code <uses-permission android:name="android.permission.READ_CONTACTS"/>}</p>
      *
      * @param context 上下文;
@@ -325,7 +334,8 @@ public class PhoneUtils {
 
     /**
      * 获取手机短信并保存到xml中
-     * <p>需添加权限 {@code <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>}</p>
+     * <p>需添加权限 {@code <uses-permission android:name="android.permission
+     * .WRITE_EXTERNAL_STORAGE"/>}</p>
      * <p>需添加权限 {@code <uses-permission android:name="android.permission.READ_SMS"/>}</p>
      *
      * @param context 上下文
@@ -342,7 +352,8 @@ public class PhoneUtils {
         // selection : 查询的条件
         // selectionArgs : 查询条件的参数
         // sortOrder : 排序
-        Cursor cursor = resolver.query(uri, new String[]{"address", "date", "type", "body"}, null, null, null);
+        Cursor cursor = resolver.query(uri, new String[]{"address", "date", "type", "body"},
+                null, null, null);
         // 设置最大进度
         int count = cursor.getCount();//获取短信的个数
         // 2.备份短信
@@ -352,7 +363,8 @@ public class PhoneUtils {
             // 2.2设置xml文件保存的路径
             // os : 保存的位置
             // encoding : 编码格式
-            xmlSerializer.setOutput(new FileOutputStream(new File("/mnt/sdcard/backupsms.xml")), "utf-8");
+            xmlSerializer.setOutput(new FileOutputStream(new File(Environment
+                    .getExternalStorageDirectory().getPath() + "/backupsms.xml")), "utf-8");
             // 2.3设置头信息
             // standalone : 是否独立保存
             xmlSerializer.startDocument("utf-8", true);
@@ -382,7 +394,8 @@ public class PhoneUtils {
                 xmlSerializer.text(body);
                 xmlSerializer.endTag(null, "body");
                 xmlSerializer.endTag(null, "sms");
-                System.out.println("address:" + address + "   date:" + date + "  type:" + type + "  body:" + body);
+                System.out.println("address:" + address + "   date:" + date + "  type:" + type +
+                        "  body:" + body);
             }
             xmlSerializer.endTag(null, "smss");
             xmlSerializer.endDocument();

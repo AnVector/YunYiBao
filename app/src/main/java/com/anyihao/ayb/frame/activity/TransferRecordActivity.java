@@ -45,7 +45,7 @@ public class TransferRecordActivity extends ABaseActivity {
     private static final int PAGE_SIZE = 20;
     private TransferRecordAdapter mTransferAdapter;
     private LinearLayoutManager layoutManager;
-    private List<TransferListBean.DataBean> mTransferData = new ArrayList<>();
+    private List<DataBean> mTransferData = new ArrayList<>();
     private int page = 1;
     private boolean isRefresh;
 
@@ -182,7 +182,6 @@ public class TransferRecordActivity extends ABaseActivity {
     }
 
     private void getPresentRecord() {
-
         Map<String, String> params = new HashMap<>();
         params.put("cmd", "TRANSFER");
         params.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));

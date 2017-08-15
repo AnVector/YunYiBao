@@ -975,6 +975,8 @@ public class HomeFragment extends ABaseFragment {
                 case REQUEST_DEPOSIT_CODE:
                     if (isLogin) {
                         getUserCertStatus();
+                        getUserInfo();
+                        getUnreadMsg();
                     }
                     break;
                 case REQUEST_NEW_MSG_CODE:

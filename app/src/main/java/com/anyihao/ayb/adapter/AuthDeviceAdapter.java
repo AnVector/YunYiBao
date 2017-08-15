@@ -44,7 +44,25 @@ public class AuthDeviceAdapter extends UAdapter<DataBean> {
         if (bp && holder instanceof AuthDeviceViewHolder) {
             DataBean content = mData.get((hasHeaderView() ? position - 1 : position));
             if (content == null) return;
-            ((AuthDeviceViewHolder) holder).tvMacAddress.setText(content.getMac());
+            String remark = content.getMac();
+            switch (content.getRemarks()) {
+                case "PHONE":
+                    remark = "我的手机：" + remark;
+                    break;
+                case "IPAD":
+                    remark = "我的平板：" + remark;
+                    break;
+                case "PC":
+                    remark = "我的电脑：" + remark;
+                    break;
+                default:
+                    remark = "我的未知设备：" + remark;
+                    break;
+            }
+            ((AuthDeviceViewHolder) holder).tvMacAddress.setText(remark);
+            if (position == getAdapterItemCount() - 1) {
+                ((AuthDeviceViewHolder) holder).line.setVisibility(View.GONE);
+            }
 
             ((AuthDeviceViewHolder) holder).btnRelease.setOnClickListener(new View
                     .OnClickListener() {

@@ -1,23 +1,23 @@
 [
     {
-        "merged": "H:\\YunYiBao\\matisse\\build\\intermediates\\res\\merged\\release\\layout\\abc_activity_chooser_view.xml",
-        "source": "H:\\YunYiBao\\matisse\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout\\abc_activity_chooser_view.xml"
-    },
-    {
         "merged": "H:\\YunYiBao\\matisse\\build\\intermediates\\res\\merged\\release\\layout\\media_grid_content.xml",
         "source": "H:\\YunYiBao\\matisse\\src\\main\\res\\layout\\media_grid_content.xml"
+    },
+    {
+        "merged": "H:\\YunYiBao\\matisse\\build\\intermediates\\res\\merged\\release\\layout\\abc_activity_chooser_view.xml",
+        "source": "H:\\YunYiBao\\matisse\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout\\abc_activity_chooser_view.xml"
     },
     {
         "merged": "H:\\YunYiBao\\matisse\\build\\intermediates\\res\\merged\\release\\layout\\notification_template_lines_media.xml",
         "source": "H:\\YunYiBao\\matisse\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout\\notification_template_lines_media.xml"
     },
     {
-        "merged": "H:\\YunYiBao\\matisse\\build\\intermediates\\res\\merged\\release\\layout\\media_grid_item.xml",
-        "source": "H:\\YunYiBao\\matisse\\src\\main\\res\\layout\\media_grid_item.xml"
-    },
-    {
         "merged": "H:\\YunYiBao\\matisse\\build\\intermediates\\res\\merged\\release\\layout\\abc_action_bar_title_item.xml",
         "source": "H:\\YunYiBao\\matisse\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout\\abc_action_bar_title_item.xml"
+    },
+    {
+        "merged": "H:\\YunYiBao\\matisse\\build\\intermediates\\res\\merged\\release\\layout\\media_grid_item.xml",
+        "source": "H:\\YunYiBao\\matisse\\src\\main\\res\\layout\\media_grid_item.xml"
     },
     {
         "merged": "H:\\YunYiBao\\matisse\\build\\intermediates\\res\\merged\\release\\layout\\abc_list_menu_item_icon.xml",
@@ -96,16 +96,16 @@
         "source": "H:\\YunYiBao\\matisse\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout\\abc_list_menu_item_radio.xml"
     },
     {
-        "merged": "H:\\YunYiBao\\matisse\\build\\intermediates\\res\\merged\\release\\layout\\abc_action_menu_layout.xml",
-        "source": "H:\\YunYiBao\\matisse\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout\\abc_action_menu_layout.xml"
+        "merged": "H:\\YunYiBao\\matisse\\build\\intermediates\\res\\merged\\release\\layout\\abc_screen_content_include.xml",
+        "source": "H:\\YunYiBao\\matisse\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout\\abc_screen_content_include.xml"
     },
     {
         "merged": "H:\\YunYiBao\\matisse\\build\\intermediates\\res\\merged\\release\\layout\\abc_screen_simple.xml",
         "source": "H:\\YunYiBao\\matisse\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout\\abc_screen_simple.xml"
     },
     {
-        "merged": "H:\\YunYiBao\\matisse\\build\\intermediates\\res\\merged\\release\\layout\\abc_screen_content_include.xml",
-        "source": "H:\\YunYiBao\\matisse\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout\\abc_screen_content_include.xml"
+        "merged": "H:\\YunYiBao\\matisse\\build\\intermediates\\res\\merged\\release\\layout\\abc_action_menu_layout.xml",
+        "source": "H:\\YunYiBao\\matisse\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout\\abc_action_menu_layout.xml"
     },
     {
         "merged": "H:\\YunYiBao\\matisse\\build\\intermediates\\res\\merged\\release\\layout\\select_dialog_singlechoice_material.xml",

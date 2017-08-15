@@ -56,7 +56,8 @@ import com.marshalchen.ultimaterecyclerview.uiUtils.SavedStateScrolling;
 
 
 /**
- * UltimateRecyclerView is a recyclerview which contains many features like  swipe to dismiss,animations,drag drop etc.
+ * UltimateRecyclerView is a recyclerview which contains many features like  swipe to dismiss,
+ * animations,drag drop etc.
  */
 public class UltimateRecyclerView extends FrameLayout implements Scrollable {
     /**
@@ -143,7 +144,8 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
 
     /**
      * control to show the loading view first when list is initiated at the beginning
-     * true - assume there is a buffer to load things before and the adapter suppose zero data at the beignning
+     * true - assume there is a buffer to load things before and the adapter suppose zero data at
+     * the beignning
      * false - assume there is data to show at the beginning level
      */
     private boolean isFirstLoadingOnlineAdapter = false;
@@ -182,7 +184,8 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
         inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.ultimate_recycler_view_layout, this);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.ultimate_list);
-        mSwipeRefreshLayout = (VerticalSwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout = (VerticalSwipeRefreshLayout) view.findViewById(R.id
+                .swipe_refresh_layout);
         setScrollbars();
         mSwipeRefreshLayout.setEnabled(false);
 
@@ -195,7 +198,8 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
             }
         }
 
-        defaultFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.defaultFloatingActionButton);
+        defaultFloatingActionButton = (FloatingActionButton) view.findViewById(R.id
+                .defaultFloatingActionButton);
         setDefaultScrollListener();
 
         /**
@@ -253,7 +257,8 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
     }
 
     /**
-     * Set custom empty view.The view will be shown if the adapter is null or the size of the adapter is zero.
+     * Set custom empty view.The view will be shown if the adapter is null or the size of the
+     * adapter is zero.
      * You can customize it as loading view.
      *
      * @param emptyResourceId the Resource Id from the empty view
@@ -266,18 +271,22 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
         mEmpty.setVisibility(View.GONE);
     }
 
-    public final void setEmptyView(@LayoutRes int emptyResourceId, final int emptyViewPolicy, final int mEmptyViewInitPolicy) {
+    public final void setEmptyView(@LayoutRes int emptyResourceId, final int emptyViewPolicy,
+                                   final int mEmptyViewInitPolicy) {
         setEmptyView(emptyResourceId);
         setPolicies(emptyViewPolicy, mEmptyViewInitPolicy);
     }
 
-    public final void setEmptyView(@LayoutRes int emptyResourceId, final int emptyViewPolicy, final emptyViewOnShownListener listener) {
+    public final void setEmptyView(@LayoutRes int emptyResourceId, final int emptyViewPolicy,
+                                   final emptyViewOnShownListener listener) {
         setEmptyView(emptyResourceId);
         setPolicies(emptyViewPolicy, UltimateRecyclerView.STARTWITH_OFFLINE_ITEMS);
         mEmptyViewListener = listener;
     }
 
-    public final void setEmptyView(@LayoutRes int emptyResourceId, final int emptyViewPolicy, final int emptyViewInitPolicy, final emptyViewOnShownListener listener) {
+    public final void setEmptyView(@LayoutRes int emptyResourceId, final int emptyViewPolicy,
+                                   final int emptyViewInitPolicy, final emptyViewOnShownListener
+                                           listener) {
         setEmptyView(emptyResourceId);
         setPolicies(emptyViewPolicy, emptyViewInitPolicy);
         mEmptyViewListener = listener;
@@ -291,7 +300,8 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
      */
     public boolean showEmptyView() {
         if (mEmpty != null && mEmptyView != null && mAdapter != null) {
-            if (mAdapter.getEmptyViewPolicy() == EMPTY_CLEAR_ALL || mAdapter.getEmptyViewPolicy() == EMPTY_KEEP_HEADER) {
+            if (mAdapter.getEmptyViewPolicy() == EMPTY_CLEAR_ALL || mAdapter.getEmptyViewPolicy()
+                    == EMPTY_KEEP_HEADER) {
                 mEmpty.setVisibility(View.VISIBLE);
                 if (mEmptyViewListener != null) {
                     mEmptyViewListener.onEmptyViewShow(mEmptyView);
@@ -321,8 +331,10 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
             return;
         }
         if (mlayoutView == null) {
-            mLoadMoreView = LayoutInflater.from(getContext()).inflate(R.layout.bottom_progressbar, null);
-            Log.d(VIEW_LOG_TAG, "Layout Resource view is null. This system will use the default loading view instead.");
+            mLoadMoreView = LayoutInflater.from(getContext()).inflate(R.layout
+                    .bottom_progressbar, null);
+            Log.d(VIEW_LOG_TAG, "Layout Resource view is null. This system will use the default " +
+                    "loading view instead.");
         } else {
             mLoadMoreView = mlayoutView;
         }
@@ -337,7 +349,8 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
         if (layout > 0) {
             mLoadMoreView = LayoutInflater.from(getContext()).inflate(layout, null);
         } else {
-            Log.d(VIEW_LOG_TAG, "Layout Resource Id is not found for load more view for ulitmaterecyclerview");
+            Log.d(VIEW_LOG_TAG, "Layout Resource Id is not found for load more view for " +
+                    "ulitmaterecyclerview");
         }
     }
 
@@ -349,7 +362,8 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
             mFloatingButtonView = mFloatingButtonViewStub.inflate();
             mFloatingButtonView.setVisibility(View.VISIBLE);
         } else {
-            Log.d(VIEW_LOG_TAG, "floating button cannot be inflated because it has inflated already");
+            Log.d(VIEW_LOG_TAG, "floating button cannot be inflated because it has inflated " +
+                    "already");
         }
     }
 
@@ -357,16 +371,19 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
      * Add ScrollBar of Recyclerview
      */
     protected void setScrollbars() {
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context
+                .LAYOUT_INFLATER_SERVICE);
         switch (mScrollbarsStyle) {
             case SCROLLBARS_VERTICAL:
                 mSwipeRefreshLayout.removeView(mRecyclerView);
-                View verticalView = inflater.inflate(R.layout.vertical_recycler_view, mSwipeRefreshLayout, true);
+                View verticalView = inflater.inflate(R.layout.vertical_recycler_view,
+                        mSwipeRefreshLayout, true);
                 mRecyclerView = (RecyclerView) verticalView.findViewById(R.id.ultimate_list);
                 break;
             case SCROLLBARS_HORIZONTAL:
                 mSwipeRefreshLayout.removeView(mRecyclerView);
-                View horizontalView = inflater.inflate(R.layout.horizontal_recycler_view, mSwipeRefreshLayout, true);
+                View horizontalView = inflater.inflate(R.layout.horizontal_recycler_view,
+                        mSwipeRefreshLayout, true);
                 mRecyclerView = (RecyclerView) horizontalView.findViewById(R.id.ultimate_list);
                 break;
             default:
@@ -375,19 +392,30 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
     }
 
     protected void initAttrs(AttributeSet attrs) {
-        TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.UltimateRecyclerview);
+        TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable
+                .UltimateRecyclerview);
 
         try {
-            mPadding = (int) typedArray.getDimension(R.styleable.UltimateRecyclerview_recyclerviewPadding, -1.1f);
-            mPaddingTop = (int) typedArray.getDimension(R.styleable.UltimateRecyclerview_recyclerviewPaddingTop, 0.0f);
-            mPaddingBottom = (int) typedArray.getDimension(R.styleable.UltimateRecyclerview_recyclerviewPaddingBottom, 0.0f);
-            mPaddingLeft = (int) typedArray.getDimension(R.styleable.UltimateRecyclerview_recyclerviewPaddingLeft, 0.0f);
-            mPaddingRight = (int) typedArray.getDimension(R.styleable.UltimateRecyclerview_recyclerviewPaddingRight, 0.0f);
-            mClipToPadding = typedArray.getBoolean(R.styleable.UltimateRecyclerview_recyclerviewClipToPadding, false);
-            mEmptyId = typedArray.getResourceId(R.styleable.UltimateRecyclerview_recyclerviewEmptyView, 0);
-            mFloatingButtonId = typedArray.getResourceId(R.styleable.UltimateRecyclerview_recyclerviewFloatingActionView, 0);
-            mScrollbarsStyle = typedArray.getInt(R.styleable.UltimateRecyclerview_recyclerviewScrollbars, SCROLLBARS_NONE);
-            int colorList = typedArray.getResourceId(R.styleable.UltimateRecyclerview_recyclerviewDefaultSwipeColor, 0);
+            mPadding = (int) typedArray.getDimension(R.styleable
+                    .UltimateRecyclerview_recyclerviewPadding, -1.1f);
+            mPaddingTop = (int) typedArray.getDimension(R.styleable
+                    .UltimateRecyclerview_recyclerviewPaddingTop, 0.0f);
+            mPaddingBottom = (int) typedArray.getDimension(R.styleable
+                    .UltimateRecyclerview_recyclerviewPaddingBottom, 0.0f);
+            mPaddingLeft = (int) typedArray.getDimension(R.styleable
+                    .UltimateRecyclerview_recyclerviewPaddingLeft, 0.0f);
+            mPaddingRight = (int) typedArray.getDimension(R.styleable
+                    .UltimateRecyclerview_recyclerviewPaddingRight, 0.0f);
+            mClipToPadding = typedArray.getBoolean(R.styleable
+                    .UltimateRecyclerview_recyclerviewClipToPadding, false);
+            mEmptyId = typedArray.getResourceId(R.styleable
+                    .UltimateRecyclerview_recyclerviewEmptyView, 0);
+            mFloatingButtonId = typedArray.getResourceId(R.styleable
+                    .UltimateRecyclerview_recyclerviewFloatingActionView, 0);
+            mScrollbarsStyle = typedArray.getInt(R.styleable
+                    .UltimateRecyclerview_recyclerviewScrollbars, SCROLLBARS_NONE);
+            int colorList = typedArray.getResourceId(R.styleable
+                    .UltimateRecyclerview_recyclerviewDefaultSwipeColor, 0);
             if (colorList != 0) {
                 defaultSwipeToDismissColors = getResources().getIntArray(colorList);
             }
@@ -424,7 +452,8 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
             } else if (layoutManager instanceof LinearLayoutManager) {
                 layoutManagerType = LAYOUT_MANAGER_TYPE.LINEAR;
             } else {
-                throw new RuntimeException("Unsupported LayoutManager used. Valid ones are LinearLayoutManager, GridLayoutManager and StaggeredGridLayoutManager");
+                throw new RuntimeException("Unsupported LayoutManager used. Valid ones are " +
+                        "LinearLayoutManager, GridLayoutManager and StaggeredGridLayoutManager");
             }
         }
 
@@ -473,7 +502,8 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
             if (mIsLoadMoreWidgetEnabled) {
                 /**auto activate load more**/
                 if (!automaticLoadMoreEnabled) {
-                    onLoadMoreListener.loadMore(mRecyclerView.getAdapter().getItemCount(), lastVisibleItemPosition);
+                    onLoadMoreListener.loadMore(mRecyclerView.getAdapter().getItemCount(),
+                            lastVisibleItemPosition);
                     automaticLoadMoreEnabled = true;
                 }
             }
@@ -506,7 +536,8 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
 
 
     /**
-     * If you have used {@link #disableLoadmore()} and want to enable loading more again,you can use this method.
+     * If you have used {@link #disableLoadmore()} and want to enable loading more again,you can
+     * use this method.
      */
     public void reenableLoadmore() {
         if (mAdapter != null && mLoadMoreView != null) {
@@ -533,13 +564,16 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
     protected void enableShoworHideToolbarAndFloatingButton(RecyclerView recyclerView) {
         if (mCallbacks != null) {
             if (getChildCount() > 0) {
-                int firstVisiblePosition = recyclerView.getChildAdapterPosition(recyclerView.getChildAt(0));
-                int lastVisiblePosition = recyclerView.getChildAdapterPosition(recyclerView.getChildAt(recyclerView.getChildCount() - 1));
+                int firstVisiblePosition = recyclerView.getChildAdapterPosition(recyclerView
+                        .getChildAt(0));
+                int lastVisiblePosition = recyclerView.getChildAdapterPosition(recyclerView
+                        .getChildAt(recyclerView.getChildCount() - 1));
                 try {
                     for (int i = firstVisiblePosition, j = 0; i <= lastVisiblePosition; i++, j++) {
                         int childHeight = 0;
                         View child = recyclerView.getChildAt(j);
-                        if (mChildrenHeights.indexOfKey(i) < 0 || (child != null && child.getHeight() != mChildrenHeights.get(i))) {
+                        if (mChildrenHeights.indexOfKey(i) < 0 || (child != null && child
+                                .getHeight() != mChildrenHeights.get(i))) {
                             if (child != null)
                                 childHeight = child.getHeight();
                         }
@@ -548,8 +582,11 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
 
                 } catch (NullPointerException e) {
                     e.printStackTrace();
-                    //todo: need to solve this issue when the first child is missing from the scroll. Please also see the debug from the RV error.
-                    //todo: 07-01 11:50:36.359  32348-32348/com.marshalchen.ultimaterecyclerview.demo D/RVerror? Attempt to invoke virtual method 'int android.view.View.getHeight()' on a null object reference
+                    //todo: need to solve this issue when the first child is missing from the
+                    // scroll. Please also see the debug from the RV error.
+                    //todo: 07-01 11:50:36.359  32348-32348/com.marshalchen.ultimaterecyclerview
+                    // .demo D/RVerror? Attempt to invoke virtual method 'int android.view.View
+                    // .getHeight()' on a null object reference
                     URLogs.e(e, "");
                 }
 
@@ -559,7 +596,8 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
                         // scroll down
                         int skippedChildrenHeight = 0;
                         if (firstVisiblePosition - mPrevFirstVisiblePosition != 1) {
-                            for (int i = firstVisiblePosition - 1; i > mPrevFirstVisiblePosition; i--) {
+                            for (int i = firstVisiblePosition - 1; i > mPrevFirstVisiblePosition;
+                                 i--) {
                                 if (0 < mChildrenHeights.indexOfKey(i)) {
                                     skippedChildrenHeight += mChildrenHeights.get(i);
                                 } else {
@@ -570,13 +608,15 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
                                 }
                             }
                         }
-                        mPrevScrolledChildrenHeight += mPrevFirstVisibleChildHeight + skippedChildrenHeight;
+                        mPrevScrolledChildrenHeight += mPrevFirstVisibleChildHeight +
+                                skippedChildrenHeight;
                         mPrevFirstVisibleChildHeight = firstVisibleChild.getHeight();
                     } else if (firstVisiblePosition < mPrevFirstVisiblePosition) {
                         // scroll up
                         int skippedChildrenHeight = 0;
                         if (mPrevFirstVisiblePosition - firstVisiblePosition != 1) {
-                            for (int i = mPrevFirstVisiblePosition - 1; i > firstVisiblePosition; i--) {
+                            for (int i = mPrevFirstVisiblePosition - 1; i > firstVisiblePosition;
+                                 i--) {
                                 if (0 < mChildrenHeights.indexOfKey(i)) {
                                     skippedChildrenHeight += mChildrenHeights.get(i);
                                 } else {
@@ -587,7 +627,8 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
                                 }
                             }
                         }
-                        mPrevScrolledChildrenHeight -= firstVisibleChild.getHeight() + skippedChildrenHeight;
+                        mPrevScrolledChildrenHeight -= firstVisibleChild.getHeight() +
+                                skippedChildrenHeight;
                         mPrevFirstVisibleChildHeight = firstVisibleChild.getHeight();
                     } else if (firstVisiblePosition == 0) {
                         mPrevFirstVisibleChildHeight = firstVisibleChild.getHeight();
@@ -651,12 +692,16 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
 
     /**
      * Swaps the current adapter with the provided one. It is similar to
-     * {@link #setAdapter(UltimateViewAdapter)} but assumes existing adapter and the new adapter uses the same
+     * {@link #setAdapter(UltimateViewAdapter)} but assumes existing adapter and the new adapter
+     * uses the same
      * ViewHolder and does not clear the RecycledViewPool.
      * Note that it still calls onAdapterChanged callbacks.
      *
      * @param adapter                       The new adapter to set, or null to set no adapter.
-     * @param removeAndRecycleExistingViews If set to true, RecyclerView will recycle all existing Views. If adapters have stable ids and/or you want to animate the disappearing views, you may prefer to set this to false.
+     * @param removeAndRecycleExistingViews If set to true, RecyclerView will recycle all
+     *                                      existing Views. If adapters have stable ids and/or
+     *                                      you want to animate the disappearing views, you may
+     *                                      prefer to set this to false.
      */
     public void swapAdapter(UltimateViewAdapter adapter, boolean removeAndRecycleExistingViews) {
         mRecyclerView.swapAdapter(adapter, removeAndRecycleExistingViews);
@@ -669,7 +714,12 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
     }
 
     /**
-     * Add an {@link RecyclerView.ItemDecoration} to this RecyclerView. Item decorations can affect both measurement and drawing of individual item views. Item decorations are ordered. Decorations placed earlier in the list will be run/queried/drawn first for their effects on item views. Padding added to views will be nested; a padding added by an earlier decoration will mean further item decorations in the list will be asked to draw/pad within the previous decoration's given area.
+     * Add an {@link RecyclerView.ItemDecoration} to this RecyclerView. Item decorations can
+     * affect both measurement and drawing of individual item views. Item decorations are ordered
+     * . Decorations placed earlier in the list will be run/queried/drawn first for their effects
+     * on item views. Padding added to views will be nested; a padding added by an earlier
+     * decoration will mean further item decorations in the list will be asked to draw/pad within
+     * the previous decoration's given area.
      *
      * @param itemDecoration Decoration to add
      */
@@ -678,11 +728,16 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
     }
 
     /**
-     * Add an {@link RecyclerView.ItemDecoration} to this RecyclerView. Item decorations can affect both measurement and drawing of individual item views.
-     * <p>Item decorations are ordered. Decorations placed earlier in the list will be run/queried/drawn first for their effects on item views. Padding added to views will be nested; a padding added by an earlier decoration will mean further item decorations in the list will be asked to draw/pad within the previous decoration's given area.</p>
+     * Add an {@link RecyclerView.ItemDecoration} to this RecyclerView. Item decorations can
+     * affect both measurement and drawing of individual item views.
+     * <p>Item decorations are ordered. Decorations placed earlier in the list will be
+     * run/queried/drawn first for their effects on item views. Padding added to views will be
+     * nested; a padding added by an earlier decoration will mean further item decorations in the
+     * list will be asked to draw/pad within the previous decoration's given area.</p>
      *
      * @param itemDecoration Decoration to add
-     * @param index          Position in the decoration chain to insert this decoration at. If this value is negative the decoration will be added at the end.
+     * @param index          Position in the decoration chain to insert this decoration at. If
+     *                       this value is negative the decoration will be added at the end.
      */
     public void addItemDecoration(RecyclerView.ItemDecoration itemDecoration, int index) {
         mRecyclerView.addItemDecoration(itemDecoration, index);
@@ -691,8 +746,10 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
     /**
      * Sets the {@link RecyclerView.ItemAnimator} that will handle animations involving changes
      * to the items in this RecyclerView. By default, RecyclerView instantiates and
-     * uses an instance of {@link android.support.v7.widget.DefaultItemAnimator}. Whether item animations are enabled for the RecyclerView depends on the ItemAnimator and whether
-     * the LayoutManager {@link android.support.v7.widget.RecyclerView.LayoutManager#supportsPredictiveItemAnimations()
+     * uses an instance of {@link android.support.v7.widget.DefaultItemAnimator}. Whether item
+     * animations are enabled for the RecyclerView depends on the ItemAnimator and whether
+     * the LayoutManager {@link android.support.v7.widget.RecyclerView
+     * .LayoutManager#supportsPredictiveItemAnimations()
      * supports item animations}.
      *
      * @param animator The ItemAnimator being set. If null, no animations will occur
@@ -727,10 +784,13 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
             mSwipeRefreshLayout.setColorSchemeColors(defaultSwipeToDismissColors);
         } else {
             mSwipeRefreshLayout.setColorSchemeResources(
-                    android.R.color.holo_blue_bright,
-                    android.R.color.holo_green_light,
-                    android.R.color.holo_orange_light,
-                    android.R.color.holo_red_light);
+                    R.color.bright_blue
+//                    ,
+//                    android.R.color.holo_blue_bright,
+//                    android.R.color.holo_green_light,
+//                    android.R.color.holo_orange_light,
+//                    android.R.color.holo_red_light
+            );
 
         }
 
@@ -738,7 +798,8 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
     }
 
     /**
-     * Set the color resources used in the progress animation from color resources. The first color will also be the color of the bar that grows in response to a user swipe gesture.
+     * Set the color resources used in the progress animation from color resources. The first
+     * color will also be the color of the bar that grows in response to a user swipe gesture.
      *
      * @param colors colors in array
      */
@@ -822,7 +883,8 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
         mAdapter.setEmptyViewPolicy(policy_empty);
         mAdapter.setEmptyViewOnInitPolicy(policy_init);
 
-        if (mAdapter.getAdapterItemCount() == 0 && policy_init == UltimateRecyclerView.STARTWITH_OFFLINE_ITEMS) {
+        if (mAdapter.getAdapterItemCount() == 0 && policy_init == UltimateRecyclerView
+                .STARTWITH_OFFLINE_ITEMS) {
             showEmptyView();
         }
 
@@ -889,7 +951,8 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
     }
 
     /**
-     * Notify the widget that refresh state has changed. Do not call this when refresh is triggered by a swipe gesture.
+     * Notify the widget that refresh state has changed. Do not call this when refresh is
+     * triggered by a swipe gesture.
      *
      * @param refreshing enable the refresh loading icon
      */
@@ -958,8 +1021,10 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
      */
     public void setParallaxHeader(View header) {
         mHeader = new CustomRelativeWrapper(header.getContext());
-        mHeader.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        mHeader.addView(header, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        mHeader.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+        mHeader.addView(header, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams
+                .MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         isParallaxHeader = true;
     }
 
@@ -1004,11 +1069,12 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
         }
         mHeader.setClipY(Math.round(ofCalculated));
         if (mParallaxScroll != null) {
-            final RecyclerView.ViewHolder holder = mRecyclerView.findViewHolderForAdapterPosition(0);
+            final RecyclerView.ViewHolder holder = mRecyclerView.findViewHolderForAdapterPosition
+                    (0);
             float left;
             if (holder != null) {
                 left = Math.min(1, ((ofCalculated) / (mHeader.getHeight() * mScrollMultiplier)));
-            }else {
+            } else {
                 left = 1;
             }
             mParallaxScroll.onParallaxScroll(left, of, mHeader);
@@ -1026,7 +1092,6 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
 
     /**
      * Get the current parallax scroll multiplier.
-     *
      */
     public float getScrollMultiplier() {
         return this.mScrollMultiplier;
@@ -1248,22 +1313,26 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
     }
 
     @Deprecated
-    public void showToolbarAndFAB(Toolbar mToolbar, UltimateRecyclerView ultimateRecyclerView, int screenHeight) {
+    public void showToolbarAndFAB(Toolbar mToolbar, UltimateRecyclerView ultimateRecyclerView,
+                                  int screenHeight) {
         showToolbar(mToolbar, ultimateRecyclerView, screenHeight);
         showDefaultFloatingActionButton();
     }
 
     @Deprecated
-    public void hideToolbarAndFAB(Toolbar mToolbar, UltimateRecyclerView ultimateRecyclerView, int screenHeight) {
+    public void hideToolbarAndFAB(Toolbar mToolbar, UltimateRecyclerView ultimateRecyclerView,
+                                  int screenHeight) {
         hideToolbar(mToolbar, ultimateRecyclerView, screenHeight);
         hideDefaultFloatingActionButton();
     }
 
-    public void showToolbar(Toolbar mToolbar, UltimateRecyclerView ultimateRecyclerView, int screenHeight) {
+    public void showToolbar(Toolbar mToolbar, UltimateRecyclerView ultimateRecyclerView, int
+            screenHeight) {
         moveToolbar(mToolbar, ultimateRecyclerView, screenHeight, 0);
     }
 
-    public void hideToolbar(Toolbar mToolbar, UltimateRecyclerView ultimateRecyclerView, int screenHeight) {
+    public void hideToolbar(Toolbar mToolbar, UltimateRecyclerView ultimateRecyclerView, int
+            screenHeight) {
         moveToolbar(mToolbar, ultimateRecyclerView, screenHeight, -mToolbar.getHeight());
     }
 
@@ -1276,19 +1345,23 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    protected void moveToolbar(final Toolbar mToolbar, final UltimateRecyclerView ultimateRecyclerView, final int screenheight, float toTranslationY) {
+    protected void moveToolbar(final Toolbar mToolbar, final UltimateRecyclerView
+            ultimateRecyclerView, final int screenheight, float toTranslationY) {
         if (ViewCompat.getTranslationY(mToolbar) == toTranslationY) {
             return;
         }
-        ValueAnimator animator = ValueAnimator.ofFloat(ViewCompat.getTranslationY(mToolbar), toTranslationY).setDuration(200);
+        ValueAnimator animator = ValueAnimator.ofFloat(ViewCompat.getTranslationY(mToolbar),
+                toTranslationY).setDuration(200);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float translationY = (float) animation.getAnimatedValue();
                 ViewCompat.setTranslationY(mToolbar, translationY);
                 ViewCompat.setTranslationY((View) ultimateRecyclerView, translationY);
-                // FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) ((View) ultimateRecyclerView).getLayoutParams();
-                MarginLayoutParams layoutParams = (MarginLayoutParams) ((View) ultimateRecyclerView).getLayoutParams();
+                // FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) ((View)
+                // ultimateRecyclerView).getLayoutParams();
+                MarginLayoutParams layoutParams = (MarginLayoutParams) ((View)
+                        ultimateRecyclerView).getLayoutParams();
                 layoutParams.height = (int) -translationY + screenheight - layoutParams.topMargin;
                 ((View) ultimateRecyclerView).requestLayout();
             }
@@ -1297,19 +1370,23 @@ public class UltimateRecyclerView extends FrameLayout implements Scrollable {
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    protected void moveView(final View mView, final UltimateRecyclerView ultimateRecyclerView, final int screenheight, float toTranslationY) {
+    protected void moveView(final View mView, final UltimateRecyclerView ultimateRecyclerView,
+                            final int screenheight, float toTranslationY) {
         if (ViewCompat.getTranslationY(mView) == toTranslationY) {
             return;
         }
-        ValueAnimator animator = ValueAnimator.ofFloat(ViewCompat.getTranslationY(mView), toTranslationY).setDuration(200);
+        ValueAnimator animator = ValueAnimator.ofFloat(ViewCompat.getTranslationY(mView),
+                toTranslationY).setDuration(200);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float translationY = (float) animation.getAnimatedValue();
                 ViewCompat.setTranslationY(mView, translationY);
                 ViewCompat.setTranslationY((View) ultimateRecyclerView, translationY);
-                // FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) ((View) ultimateRecyclerView).getLayoutParams();
-                MarginLayoutParams layoutParams = (MarginLayoutParams) ((View) ultimateRecyclerView).getLayoutParams();
+                // FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) ((View)
+                // ultimateRecyclerView).getLayoutParams();
+                MarginLayoutParams layoutParams = (MarginLayoutParams) ((View)
+                        ultimateRecyclerView).getLayoutParams();
                 layoutParams.height = (int) -translationY + screenheight - layoutParams.topMargin;
                 ((View) ultimateRecyclerView).requestLayout();
             }

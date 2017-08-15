@@ -34,8 +34,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="20dp"
         android:layout_toRightOf="@id/tv_weekday"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_recharge_record_alipay"/>
+        android:scaleType="fitXY"/>
 
     <TextView
         android:id="@+id/tv_price"
