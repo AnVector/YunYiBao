@@ -36,9 +36,14 @@ public class RentHistoryAdapter extends UAdapter<DataBean> {
         if (bp && holder instanceof RentHistoryViewHolder) {
             DataBean content = mData.get((hasHeaderView() ? position - 1 : position));
             if (content == null) return;
-            ((RentHistoryViewHolder) holder).tvTitle.setText(content.getVid());
+            ((RentHistoryViewHolder) holder).tvTitle.setText("设备编号：" + content.getVid());
             ((RentHistoryViewHolder) holder).tvValue.setText(content.getStartTm() + "至" + content
                     .getEndTm());
+            if (position == getAdapterItemCount() - 1) {
+                ((RentHistoryViewHolder) holder).line.setVisibility(View.GONE);
+            } else {
+                ((RentHistoryViewHolder) holder).line.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -46,11 +51,13 @@ public class RentHistoryAdapter extends UAdapter<DataBean> {
 
         public TextView tvTitle;
         public TextView tvValue;
+        public View line;
 
         public RentHistoryViewHolder(View itemView) {
             super(itemView);
             tvTitle = (TextView) itemView.findViewById(R.id.tv_device_num);
             tvValue = (TextView) itemView.findViewById(R.id.tv_duration);
+            line = itemView.findViewById(R.id.divider_line);
         }
     }
 

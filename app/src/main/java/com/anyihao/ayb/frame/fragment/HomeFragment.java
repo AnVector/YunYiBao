@@ -320,7 +320,7 @@ public class HomeFragment extends ABaseFragment {
         Collections.sort(list, new Comparator<WifiInfoBean>() {
             @Override
             public int compare(WifiInfoBean o1, WifiInfoBean o2) {
-                return String.valueOf(o1.getLevel()).compareTo(String.valueOf(o2.getLevel()));
+                return o2.getLevel() - o1.getLevel();
             }
         });
         uploadWifiList(list);

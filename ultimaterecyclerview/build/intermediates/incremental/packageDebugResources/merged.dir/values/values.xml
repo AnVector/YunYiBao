@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="bright_blue">#2DA8F4</color>
     <color name="grey">#994d4d4d</color>
     <declare-styleable name="AddFloatingActionButton"><attr format="color" name="plusIconColor"/></declare-styleable>
     <declare-styleable name="FloatActionButton"><attr format="color" name="urv_fab_colorPressed"/><attr format="color" name="urv_fab_colorNormal"/><attr format="float" name="urv_fab_alphaPressed"/><attr format="float" name="urv_fab_alphaNormal"/><attr name="icon"/><attr format="enum" name="urv_fab_size">

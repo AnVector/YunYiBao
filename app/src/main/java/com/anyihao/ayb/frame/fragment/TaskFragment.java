@@ -40,6 +40,7 @@ import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
 import com.anyihao.ayb.frame.activity.BriberyMoneyActivity;
 import com.anyihao.ayb.frame.activity.ExchangeDetailsActivity;
+import com.anyihao.ayb.frame.activity.LoginActivity;
 import com.anyihao.ayb.listener.OnItemClickListener;
 import com.anyihao.ayb.ui.CropCircleTransformation;
 import com.bumptech.glide.Glide;
@@ -110,6 +111,7 @@ public class TaskFragment extends ABaseFragment {
     TextView tvPoints;
     @BindView(R.id.tv_my_points)
     TextView tvMyPoints;
+    private static final int REQUEST_LOGIN_CODE = 0x0001;
     private NormalAdapter mNormalAdapter;
     private LendAdapter mLendAdapter;
     private SignAdapter mSignAdapter;
@@ -117,6 +119,7 @@ public class TaskFragment extends ABaseFragment {
     private List<NormalBean> mNormalData = new ArrayList<>();
     private List<String> mWeekData = new ArrayList<>();
     private int isSign = 0;
+    private boolean isLogin;
 
     @Override
     protected void initData() {
@@ -154,6 +157,11 @@ public class TaskFragment extends ABaseFragment {
         for (int i = 0; i < 7; i++) {
             mWeekData.add(i, (i + 1) + "0");
         }
+    }
+
+    private void startActivityForLogin() {
+        Intent intent = new Intent(mContext, LoginActivity.class);
+        startActivityForResult(intent, REQUEST_LOGIN_CODE);
     }
 
     private void setPoints(String txt) {
@@ -206,6 +214,12 @@ public class TaskFragment extends ABaseFragment {
         tvAdvertisementHint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isLogin = PreferencesUtils.getBoolean(mContext.getApplicationContext(),
+                        "isLogin", false);
+                if (!isLogin) {
+                    startActivityForLogin();
+                    return;
+                }
                 Intent intent = new Intent(mContext, BriberyMoneyActivity
                         .class);
                 intent.putExtra("type", 1);
@@ -216,6 +230,12 @@ public class TaskFragment extends ABaseFragment {
         ivAdvertisement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isLogin = PreferencesUtils.getBoolean(mContext.getApplicationContext(),
+                        "isLogin", false);
+                if (!isLogin) {
+                    startActivityForLogin();
+                    return;
+                }
                 Intent intent = new Intent(mContext, BriberyMoneyActivity
                         .class);
                 intent.putExtra("type", 1);
@@ -226,6 +246,12 @@ public class TaskFragment extends ABaseFragment {
         mNormalAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
+                isLogin = PreferencesUtils.getBoolean(mContext.getApplicationContext(),
+                        "isLogin", false);
+                if (!isLogin) {
+                    startActivityForLogin();
+                    return;
+                }
                 if (o instanceof NormalBean) {
                     startExchangeActivity(((NormalBean) o).getExchangeId());
                 }
@@ -240,6 +266,12 @@ public class TaskFragment extends ABaseFragment {
         mLendAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
+                isLogin = PreferencesUtils.getBoolean(mContext.getApplicationContext(),
+                        "isLogin", false);
+                if (!isLogin) {
+                    startActivityForLogin();
+                    return;
+                }
                 if (o instanceof LendBean) {
                     startExchangeActivity(((LendBean) o).getExchangeId());
                 }
@@ -254,6 +286,12 @@ public class TaskFragment extends ABaseFragment {
         ivPointsExchange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isLogin = PreferencesUtils.getBoolean(mContext.getApplicationContext(),
+                        "isLogin", false);
+                if (!isLogin) {
+                    startActivityForLogin();
+                    return;
+                }
                 if (v.getTag(R.id.tag_exhange_img) instanceof Integer) {
                     startExchangeActivity((int) v.getTag(R.id.tag_exhange_img));
                 }
@@ -263,6 +301,12 @@ public class TaskFragment extends ABaseFragment {
         ivTicketLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isLogin = PreferencesUtils.getBoolean(mContext.getApplicationContext(),
+                        "isLogin", false);
+                if (!isLogin) {
+                    startActivityForLogin();
+                    return;
+                }
                 if (v.getTag(R.id.tag_left_img) instanceof Integer) {
                     startExchangeActivity((int) v.getTag(R.id.tag_left_img));
                 }
@@ -272,6 +316,12 @@ public class TaskFragment extends ABaseFragment {
         ivTicketRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isLogin = PreferencesUtils.getBoolean(mContext.getApplicationContext(),
+                        "isLogin", false);
+                if (!isLogin) {
+                    startActivityForLogin();
+                    return;
+                }
                 if (v.getTag(R.id.tag_right_img) instanceof Integer) {
                     startExchangeActivity((int) v.getTag(R.id.tag_right_img));
                 }

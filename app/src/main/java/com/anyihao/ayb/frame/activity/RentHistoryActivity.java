@@ -1,6 +1,5 @@
 package com.anyihao.ayb.frame.activity;
 
-import android.graphics.Color;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -85,7 +84,6 @@ public class RentHistoryActivity extends ABaseActivity {
                 }
             }
         });
-        recyclerView.setRecylerViewBackgroundColor(Color.parseColor("#ffffff"));
         recyclerView.reenableLoadmore();
         recyclerView.setAdapter(mAdapter);
     }
@@ -102,6 +100,7 @@ public class RentHistoryActivity extends ABaseActivity {
                 () {
             @Override
             public void onRefresh() {
+                recyclerView.reenableLoadmore();
                 page = 1;
                 isRefresh = true;
                 getRentHistory();
@@ -119,22 +118,31 @@ public class RentHistoryActivity extends ABaseActivity {
     }
 
     private void onFireRefresh(List<DataBean> beans) {
+        if (recyclerView == null)
+            return;
         mAdapter.removeAllInternal(mData);
         mAdapter.insert(beans);
         recyclerView.setRefreshing(false);
         layoutManager.scrollToPosition(0);
-        recyclerView.reenableLoadmore();
-    }
-
-    private void onLoadMore(List<DataBean> beans) {
-        mAdapter.insert(beans);
-        if (beans.size() < PAGE_SIZE && recyclerView != null) {
+        if (beans.size() < PAGE_SIZE) {
             recyclerView.disableLoadmore();
         }
     }
 
-    private void onLoadNoData() {
-        if (recyclerView != null) {
+    private void onLoadMore(List<DataBean> beans) {
+        if (recyclerView == null)
+            return;
+        mAdapter.insert(beans);
+        if (beans.size() < PAGE_SIZE) {
+            recyclerView.disableLoadmore();
+        }
+    }
+
+    private void onLoadNoData(int page) {
+        if (recyclerView == null)
+            return;
+        recyclerView.disableLoadmore();
+        if (page == 1) {
             recyclerView.showEmptyView();
         }
     }
@@ -173,16 +181,25 @@ public class RentHistoryActivity extends ABaseActivity {
                         onLoadMore(beans);
                     }
                 } else {
-                    if (page == 1) {
-                        onLoadNoData();
-                    }
+                    onLoadNoData(page);
                 }
             } else {
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg());
-                if (page == 1) {
-                    onLoadNoData();
-                }
+                onLoadNoData(page);
             }
         }
+    }
+
+    @Override
+    public void onFailure(String error, int page, Integer actionType) {
+        super.onFailure(error, page, actionType);
+        if (recyclerView == null)
+            return;
+        if (isRefresh) {
+            recyclerView.setRefreshing(false);
+            layoutManager.scrollToPosition(0);
+//            recyclerView.showEmptyView();
+        }
+        recyclerView.disableLoadmore();
     }
 }
