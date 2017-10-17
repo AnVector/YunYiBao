@@ -77,6 +77,7 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     private boolean needCheck = true;
     private static final int RC_LOCATION_PERM = 0x0001;
 
+    @Override
     protected void initData() {
         titleMid.setText(getString(R.string.service_location));
         toolbar.setNavigationIcon(null);
@@ -113,7 +114,7 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         MyLocationStyle myLocationStyle = new MyLocationStyle();
         myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromResource(R.drawable
                 .icon_location));
-        myLocationStyle.interval(20 * 1000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
+        myLocationStyle.interval(60 * 1000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
         myLocationStyle.strokeColor(android.R.color.transparent);
         myLocationStyle.radiusFillColor(android.R.color.transparent);
         myLocationStyle.strokeWidth(0);
@@ -236,8 +237,9 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     @Override
     protected void saveInstanceState(Bundle savedInstanceState) {
         super.saveInstanceState(savedInstanceState);
-        if (mMapView == null)
+        if (mMapView == null) {
             return;
+        }
         mMapView.onCreate(savedInstanceState);
     }
 
@@ -246,8 +248,9 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         if (actionType == 0) {
             MerchantListBean bean = GsonUtils.getInstance().transitionToBean(result,
                     MerchantListBean.class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 List<DataBean> beans = bean.getData();
                 if (beans.size() > 0) {
@@ -311,8 +314,9 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
         super.onResume();
         isFirstLoc = true;
         permissionsRequest();
-        if (mMapView == null)
+        if (mMapView == null) {
             return;
+        }
         mMapView.onResume();
     }
 
@@ -350,16 +354,18 @@ public class DiscoverFragment extends ABaseFragment implements OnMarkerClickList
     @Override
     public void onPause() {
         super.onPause();
-        if (mMapView == null)
+        if (mMapView == null) {
             return;
+        }
         mMapView.onPause();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (mMapView == null)
+        if (mMapView == null) {
             return;
+        }
         mMapView.onSaveInstanceState(outState);
     }
 

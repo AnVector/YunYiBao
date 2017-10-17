@@ -20,8 +20,9 @@ public class UserInfoAdapter extends RecyclerViewAdapter<KeyValueBean> {
 
     @Override
     public void convert(ViewHolder holder, KeyValueBean keyValueBean) {
-        if (keyValueBean == null)
+        if (keyValueBean == null) {
             return;
+        }
         String title = keyValueBean.getTitle();
         holder.setText(R.id.tv_title, title);
         switch (title) {

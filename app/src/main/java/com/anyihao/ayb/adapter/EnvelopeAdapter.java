@@ -37,7 +37,9 @@ public class EnvelopeAdapter extends UAdapter<DataBean> {
         super.onBindViewHolder(holder, position);
         if (bp && holder instanceof EnvelopeViewHolder) {
             DataBean content = mData.get((hasHeaderView() ? position - 1 : position));
-            if (content == null) return;
+            if (content == null) {
+                return;
+            }
             ((EnvelopeViewHolder) holder).tvStatus.setText(content.getSendName());
             ((EnvelopeViewHolder) holder).tvDate.setText(content.getCrtTm());
             ((EnvelopeViewHolder) holder).tvContent.setText(content.getMessage());

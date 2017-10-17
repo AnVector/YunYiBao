@@ -18,8 +18,9 @@ public class AboutUsAdapter extends RecyclerViewAdapter<KeyValueBean> {
 
     @Override
     public void convert(ViewHolder holder, KeyValueBean bean) {
-        if(bean == null)
+        if(bean == null) {
             return;
+        }
         holder.setText(R.id.tv_title, bean.getTitle());
         holder.setText(R.id.tv_value, bean.getValue());
         if(holder.getLayoutPosition() == mDatas.size() -1){

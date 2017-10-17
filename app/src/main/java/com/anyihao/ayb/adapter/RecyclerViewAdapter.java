@@ -55,8 +55,9 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<ViewHo
     // 定义对外开放的添加数据的方法
     public void add(int positionStart, int itemCount,
                     List<T> datas) {
-        if (datas == null)
+        if (datas == null) {
             return;
+        }
         if (mDatas == null) {
             mDatas = datas;
         }

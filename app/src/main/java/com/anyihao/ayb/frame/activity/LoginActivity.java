@@ -118,7 +118,7 @@ public class LoginActivity extends ABaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, GetVerifyCodeActivity.class);
                 intent.putExtra("title", "找回密码");
-                intent.putExtra("action", "MODIFYPWD");
+                intent.putExtra("action", "FORGETPWD");
                 intent.putExtra("phoneNum", "");
                 startActivity(intent);
             }

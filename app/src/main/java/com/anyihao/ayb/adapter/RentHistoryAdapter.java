@@ -35,7 +35,9 @@ public class RentHistoryAdapter extends UAdapter<DataBean> {
         super.onBindViewHolder(holder, position);
         if (bp && holder instanceof RentHistoryViewHolder) {
             DataBean content = mData.get((hasHeaderView() ? position - 1 : position));
-            if (content == null) return;
+            if (content == null) {
+                return;
+            }
             ((RentHistoryViewHolder) holder).tvTitle.setText("设备编号：" + content.getVid());
             ((RentHistoryViewHolder) holder).tvValue.setText(content.getStartTm() + "至" + content
                     .getEndTm());

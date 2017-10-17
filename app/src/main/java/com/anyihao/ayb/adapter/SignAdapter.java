@@ -21,8 +21,9 @@ public class SignAdapter extends RecyclerViewAdapter<String> {
 
     @Override
     public void convert(ViewHolder holder, String s) {
-        if (TextUtils.isEmpty(s))
+        if (TextUtils.isEmpty(s)) {
             return;
+        }
         if (s.contains("7")) {
             holder.setInVisible(R.id.line);
         }

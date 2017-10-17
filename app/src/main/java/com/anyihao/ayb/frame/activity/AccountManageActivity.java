@@ -44,6 +44,9 @@ import java.util.Map;
 
 import butterknife.BindView;
 
+/**
+ * @author Admin
+ */
 public class AccountManageActivity extends ABaseActivity {
 
     @BindView(R.id.toolbar_title_mid)
@@ -103,6 +106,7 @@ public class AccountManageActivity extends ABaseActivity {
         params.put("uid", PreferencesUtils.getString(getApplicationContext(), "uid", ""));
         params.put("appid", "");
         params.put("type", accountType);
+        params.put("userType", accountType);
         postForm(params, 1, 1);
     }
 
@@ -217,8 +221,9 @@ public class AccountManageActivity extends ABaseActivity {
         if (actionType == 0) {
             AccountListBean beans = GsonUtils.getInstance().transitionToBean(result,
                     AccountListBean.class);
-            if (beans == null)
+            if (beans == null) {
                 return;
+            }
             if (beans.getCode() == 200) {
                 mData.clear();
                 mData.addAll(beans.getData());
@@ -228,8 +233,9 @@ public class AccountManageActivity extends ABaseActivity {
 
         if (actionType == 1) {
             ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean.class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 ToastUtils.showToast(getApplicationContext(), "账号解绑成功");
                 getAccountList();
@@ -240,8 +246,9 @@ public class AccountManageActivity extends ABaseActivity {
 
         if (actionType == 2) {
             ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean.class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 ToastUtils.showToast(getApplicationContext(), "账号绑定成功");
                 getAccountList();
@@ -283,7 +290,6 @@ public class AccountManageActivity extends ABaseActivity {
 
         @Override
         public void onError(SHARE_MEDIA platform, int action, Throwable t) {
-//            SocializeUtils.safeCloseDialog(dialog);
             Logger.d(TAG, "platform=" + platform);
             Logger.d(TAG, "action = " + action);
             Logger.d(TAG, "error = " + t.getMessage());
@@ -291,7 +297,6 @@ public class AccountManageActivity extends ABaseActivity {
 
         @Override
         public void onCancel(SHARE_MEDIA platform, int action) {
-//            SocializeUtils.safeCloseDialog(dialog);
             Logger.d(TAG, "platform=" + platform);
             Logger.d(TAG, "action = " + action);
         }

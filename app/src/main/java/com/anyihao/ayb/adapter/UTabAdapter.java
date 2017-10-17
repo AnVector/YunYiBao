@@ -23,8 +23,9 @@ public class UTabAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        if (mFragments == null || mFragments.size() <= position)
+        if (mFragments == null || mFragments.size() <= position) {
             return null;
+        }
         return mFragments.get(position);
     }
 
@@ -35,8 +36,9 @@ public class UTabAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if (mTitles == null || mTitles.size() <= position)
+        if (mTitles == null || mTitles.size() <= position) {
             return null;
+        }
         return mTitles.get(position);
     }
 }

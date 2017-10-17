@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.anyihao.androidbase.utils.StatusBarUtil;
 import com.anyihao.ayb.R;
 import com.anyihao.ayb.ui.RoundedCornersTransformation;
-import com.anyihao.ayb.utils.CodeUtils;
+import com.anyihao.ayb.utils.QRCodeUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -121,7 +121,7 @@ public class QRActivity extends ABaseActivity {
                     glideAnimation) {
                 mProfile = getRoundedCornerBitmap(resource, 8);
                 if (!TextUtils.isEmpty(uid)) {
-                    ivQrCode.setImageBitmap(CodeUtils.createImage(uid, 240, 240, mProfile));
+                    ivQrCode.setImageBitmap(QRCodeUtils.createImage(uid, 240, 240, mProfile));
                 }
             }
 

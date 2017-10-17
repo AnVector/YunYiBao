@@ -22,8 +22,9 @@ public abstract class ABaseFragment extends BKBaseFragment implements IView<Inte
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-        if (TextUtils.isEmpty(error))
+        if (TextUtils.isEmpty(error)) {
             return;
+        }
         if (error.contains("ConnectException")) {
             ToastUtils.showToast(mContext.getApplicationContext(), "网络连接失败，请检查网络设置");
         } else if (error.contains("404")) {

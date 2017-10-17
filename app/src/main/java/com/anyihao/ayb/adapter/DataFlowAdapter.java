@@ -25,8 +25,9 @@ public class DataFlowAdapter extends RecyclerViewAdapter<DataBean> {
 
     @Override
     public void convert(ViewHolder holder, DataBean dataBean) {
-        if (dataBean == null)
+        if (dataBean == null) {
             return;
+        }
         if (holder.getLayoutPosition() == 0) {
             mCurrent = holder.getConvertView();
             setFocusView(mCurrent);
@@ -41,8 +42,9 @@ public class DataFlowAdapter extends RecyclerViewAdapter<DataBean> {
     }
 
     private void setFocusView(View view) {
-        if (view == null)
+        if (view == null) {
             return;
+        }
         view.setBackgroundResource(R.drawable.data_flow_item_focus_bg);
         ((TextView) view.findViewById(R.id.tv_price)).setTextColor(mCurrent
                 .getResources()
@@ -53,8 +55,9 @@ public class DataFlowAdapter extends RecyclerViewAdapter<DataBean> {
     }
 
     private void resetView() {
-        if (mCurrent == null)
+        if (mCurrent == null) {
             return;
+        }
         mCurrent.setBackgroundResource(R.drawable.data_flow_item_normal_bg);
         ((TextView) mCurrent.findViewById(R.id.tv_price)).setTextColor
                 (mContext.getResources()

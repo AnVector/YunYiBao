@@ -47,8 +47,9 @@ public class MessageActivity extends ABaseActivity {
     @Override
     protected void getExtraParams() {
         Intent intent = getIntent();
-        if (intent == null)
+        if (intent == null) {
             return;
+        }
         String action = intent.getStringExtra("action");
         if (!TextUtils.isEmpty(action)) {
             index = intent.getIntExtra("index", 0);

@@ -124,14 +124,17 @@ public class JPushReceiver extends BroadcastReceiver {
     }
 
     private void launchActivity(Context context, Bundle bundle) {
-        if (context == null || bundle == null)
+        if (context == null || bundle == null) {
             return;
+        }
         String jsonStr = bundle.getString(JPushInterface.EXTRA_EXTRA);
-        if (TextUtils.isEmpty(jsonStr))
+        if (TextUtils.isEmpty(jsonStr)) {
             return;
+        }
         JPushBean bean = GsonUtils.getInstance().transitionToBean(jsonStr, JPushBean.class);
-        if (bean == null)
+        if (bean == null) {
             return;
+        }
         Intent intent = new Intent();
         String type = bean.getType();
         String content = bean.getContent();
@@ -157,8 +160,9 @@ public class JPushReceiver extends BroadcastReceiver {
     }
 
     private void handleMessageByContent(Context context, String content) {
-        if (TextUtils.isEmpty(content))
+        if (TextUtils.isEmpty(content)) {
             return;
+        }
         Intent intent = new Intent();
         intent.setClass(context, MessageActivity.class);
         intent.putExtra("action", "notification");

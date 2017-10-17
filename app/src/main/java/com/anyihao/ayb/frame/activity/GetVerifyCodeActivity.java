@@ -351,7 +351,6 @@ public class GetVerifyCodeActivity extends ABaseActivity {
             if (resultCode == ResetPwdActivity.RESULT_RESET_PWD_SUCCESS_CODE) {
                 this.finish();
             }
-
         }
     }
 

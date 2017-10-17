@@ -55,8 +55,9 @@ public class UAdapter<T> extends UltimateViewAdapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent) {
-        if (layoutId == -1)
+        if (layoutId == -1) {
             return null;
+        }
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(layoutId, parent, false);
         return new UltimateRecyclerviewViewHolder(v);
@@ -78,8 +79,9 @@ public class UAdapter<T> extends UltimateViewAdapter {
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
 
-        if (holder == null)
+        if (holder == null) {
             return;
+        }
         //变量index设置为final的原因，可将变量index设为全局变量作为对比
         final int index = (hasHeaderView() ? position - 1 : position);
         if (hasHeaderView()) {
@@ -93,8 +95,9 @@ public class UAdapter<T> extends UltimateViewAdapter {
                 @Override
                 public void onClick(View v) {
                     if (mOnItemClickListener != null) {
-                        if (index < 0 || index >= mData.size())
+                        if (index < 0 || index >= mData.size()) {
                             return;
+                        }
                         mOnItemClickListener.onItemClick((ViewGroup) v.getParent(), v, mData.get
                                 (index), index);
                     }
@@ -106,8 +109,9 @@ public class UAdapter<T> extends UltimateViewAdapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
-        if (headerId == -1)
+        if (headerId == -1) {
             return null;
+        }
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(headerId, parent, false);
         return new RecyclerView.ViewHolder(view) {

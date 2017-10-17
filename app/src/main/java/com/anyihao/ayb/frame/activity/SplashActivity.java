@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.TextView;
 
@@ -22,6 +23,7 @@ import com.orhanobut.logger.Logger;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import butterknife.BindView;
 

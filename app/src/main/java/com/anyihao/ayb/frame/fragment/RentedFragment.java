@@ -79,8 +79,9 @@ public class RentedFragment extends ABaseFragment {
                 .EMPTY_CLEAR_ALL, new emptyViewOnShownListener() {
             @Override
             public void onEmptyViewShow(View mView) {
-                if (mView == null)
+                if (mView == null) {
                     return;
+                }
                 ImageView imvError = (ImageView) mView.findViewById(R.id.ic_error);
                 TextView tvHint = (TextView) mView.findViewById(R.id.tv_hint);
                 if (imvError != null) {
@@ -96,8 +97,9 @@ public class RentedFragment extends ABaseFragment {
     }
 
     private void getBelongs() {
-        if (TextUtils.isEmpty(status))
+        if (TextUtils.isEmpty(status)) {
             return;
+        }
         Map<String, String> params = new HashMap<>();
         params.put("cmd", "MERCHANTDEVLIST");
         params.put("uid", PreferencesUtils.getString(mContext.getApplicationContext(), "uid", ""));
@@ -106,8 +108,9 @@ public class RentedFragment extends ABaseFragment {
     }
 
     private void returnBelongs(String vid) {
-        if (TextUtils.isEmpty(vid))
+        if (TextUtils.isEmpty(vid)) {
             return;
+        }
         Map<String, String> params = new HashMap<>();
         params.put("cmd", "RETURN");
         params.put("merchantId", PreferencesUtils.getString(mContext.getApplicationContext(),
@@ -132,8 +135,9 @@ public class RentedFragment extends ABaseFragment {
     }
 
     private void onFireRefresh(List<DataBean> beans) {
-        if (recyclerView == null)
+        if (recyclerView == null) {
             return;
+        }
         mAdapter.removeAllInternal(mData);
         mAdapter.insert(beans);
         recyclerView.setRefreshing(false);
@@ -141,8 +145,9 @@ public class RentedFragment extends ABaseFragment {
     }
 
     private void onLoadNoData() {
-        if (recyclerView == null)
+        if (recyclerView == null) {
             return;
+        }
         recyclerView.showEmptyView();
     }
 
@@ -239,12 +244,14 @@ public class RentedFragment extends ABaseFragment {
     public void onSuccess(String result, int page, Integer actionType) {
         if (actionType == 0) {
             RentedBean bean = GsonUtils.getInstance().transitionToBean(result, RentedBean.class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 List<DataBean> beans = bean.getData();
-                if (beans == null)
+                if (beans == null) {
                     return;
+                }
                 if (beans.size() > 0) {
                     if (isRefresh) {
                         onFireRefresh(beans);
@@ -262,8 +269,9 @@ public class RentedFragment extends ABaseFragment {
 
         if (actionType == 1 || actionType == 2) {
             ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean.class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             ToastUtils.showToast(mContext.getApplicationContext(), bean.getMsg());
             if (bean.getCode() == 200) {
                 isRefresh = true;
@@ -275,8 +283,9 @@ public class RentedFragment extends ABaseFragment {
     @Override
     public void onFailure(String error, int page, Integer actionType) {
         super.onFailure(error, page, actionType);
-        if (recyclerView == null)
+        if (recyclerView == null) {
             return;
+        }
         if (isRefresh) {
             recyclerView.setRefreshing(false);
             layoutManager.scrollToPosition(0);

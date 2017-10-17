@@ -296,14 +296,15 @@ public class HomeFragment extends ABaseFragment {
         WifiInfoManager.getInstance(mContext).startScan();
         List<ScanResult> results = WifiInfoManager.getInstance(mContext).getWifiList();
         String ssid = WifiInfoManager.getInstance(mContext).getSSid();
-        if (results == null || results.isEmpty())
+        if (results == null || results.isEmpty()) {
             return null;
-//        Logger.d(results);
+        }
         List<WifiInfoBean> list = new ArrayList<>();
         WifiInfoBean bean;
         for (ScanResult ele : results) {
-            if (ele == null || TextUtils.isEmpty(ele.SSID))
+            if (ele == null || TextUtils.isEmpty(ele.SSID)) {
                 continue;
+            }
             if (ele.SSID.contains("IeBox")) {
                 bean = new WifiInfoBean();
                 bean.setSsid(ele.SSID);
@@ -366,8 +367,9 @@ public class HomeFragment extends ABaseFragment {
     }
 
     private void updateWifiList() {
-        if (mRecyclerView == null)
+        if (mRecyclerView == null) {
             return;
+        }
         List<WifiInfoBean> mWifiList = getIWifiList();
         mAdapter.removeAllInternal(mData);
         if (mWifiList == null || mWifiList.isEmpty()) {
@@ -376,17 +378,17 @@ public class HomeFragment extends ABaseFragment {
                 layoutManager.scrollToPosition(0);
             }
             mRecyclerView.showEmptyView();
-            return;
-        }
-        mAdapter.insert(mWifiList);
-        if (refresh) {
-//            Logger.d(mWifiList.size());
-            mRecyclerView.setRefreshing(false);
-            layoutManager.scrollToPosition(0);
-            mRecyclerView.hideEmptyView();
         } else {
-            getConnectWifi();
+            mAdapter.insert(mWifiList);
+            mRecyclerView.hideEmptyView();
+            if (refresh) {
+                mRecyclerView.setRefreshing(false);
+                layoutManager.scrollToPosition(0);
+            } else {
+                getConnectWifi();
+            }
         }
+
     }
 
     private void startScan() {
@@ -458,8 +460,9 @@ public class HomeFragment extends ABaseFragment {
         networkLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isConnected)
+                if (!isConnected) {
                     return;
+                }
                 Intent intent = new Intent(mContext, ConnectedDevicesActivity.class);
                 intent.putExtra("aliasName", aliasName);
                 startActivity(intent);
@@ -539,12 +542,10 @@ public class HomeFragment extends ABaseFragment {
                     }
                     aliasName = ((WifiInfoBean) o).getSsid();
                     if (!TextUtils.isEmpty(ssid) && ssid.contains(aliasName)) {
-                        ToastUtils.showToast(mContext.getApplicationContext(),
-                                "已成功连接到该网络，无需重复获取密码");
+                        showDialog(R.layout.dialog_wifi_password, 0);
                         return;
                     }
                     getSsidPwd();
-
                 }
             }
 
@@ -602,8 +603,9 @@ public class HomeFragment extends ABaseFragment {
     }
 
     private void getSsidPwd() {
-        if (TextUtils.isEmpty(aliasName))
+        if (TextUtils.isEmpty(aliasName)) {
             return;
+        }
         Map<String, String> params = new HashMap<>();
         params.put("cmd", "WIFIPWD");
         params.put("uid", PreferencesUtils.getString(mContext.getApplicationContext(), "uid", ""));
@@ -633,21 +635,24 @@ public class HomeFragment extends ABaseFragment {
     }
 
     private void uploadWifiList(List<WifiInfoBean> list) {
-        if (list == null || list.isEmpty())
+        if (list == null || list.isEmpty()) {
             return;
+        }
         String latitude = PreferencesUtils.getString(mContext.getApplicationContext(),
                 "latitude", "");
         String longitude = PreferencesUtils.getString(mContext.getApplicationContext(),
                 "longitude", "");
-        if (TextUtils.isEmpty(latitude) || TextUtils.isEmpty(longitude))
+        if (TextUtils.isEmpty(latitude) || TextUtils.isEmpty(longitude)) {
             return;
+        }
         StringBuilder sb = new StringBuilder();
         for (WifiInfoBean bean : list) {
             sb.append(bean.getSsid()).append(",");
         }
         String aliasName = sb.deleteCharAt(sb.length() - 1).toString();
-        if (TextUtils.isEmpty(aliasName))
+        if (TextUtils.isEmpty(aliasName)) {
             return;
+        }
         Map<String, String> params = new HashMap<>();
         params.put("cmd", "WIFILISTA");
         params.put("latitude", latitude);
@@ -818,8 +823,9 @@ public class HomeFragment extends ABaseFragment {
         if (actionType == 0) {
             CertificationStatusBean bean = GsonUtils.getInstance().transitionToBean(result,
                     CertificationStatusBean.class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 mProgress = bean.getInfoStatus();
             }
@@ -827,8 +833,9 @@ public class HomeFragment extends ABaseFragment {
 
         if (actionType == 1) {
             ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean.class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 ToastUtils.showToast(mContext.getApplicationContext(), "授权成功");
             } else {
@@ -838,8 +845,9 @@ public class HomeFragment extends ABaseFragment {
 
         if (actionType == 2) {
             SsidPwdBean bean = GsonUtils.getInstance().transitionToBean(result, SsidPwdBean.class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             int code = bean.getCode();
             switch (code) {
                 case 200://WIFI密码获取成功
@@ -872,12 +880,14 @@ public class HomeFragment extends ABaseFragment {
             AdvertisementBean bean = GsonUtils.getInstance().transitionToBean(result,
                     AdvertisementBean
                             .class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 List<DataBean> beans = bean.getData();
-                if (beans == null)
+                if (beans == null) {
                     return;
+                }
                 if (beans.size() > 0) {
                     showAdvertisement(beans);
                 }
@@ -886,8 +896,9 @@ public class HomeFragment extends ABaseFragment {
 
         if (actionType == 4) {
             IEBoxBean bean = GsonUtils.getInstance().transitionToBean(result, IEBoxBean.class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 Intent intent = new Intent(mContext, DeviceCodeActivity.class);
                 intent.putExtra("vid", bean.getVid());
@@ -900,8 +911,9 @@ public class HomeFragment extends ABaseFragment {
         if (actionType == 5) {
             UserLevelBean bean = GsonUtils.getInstance().transitionToBean(result, UserLevelBean
                     .class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 if (tvDataAmount != null) {
                     tvDataAmount.setText(String.format(getString(R.string.surplus_amount),
@@ -914,8 +926,9 @@ public class HomeFragment extends ABaseFragment {
         if (actionType == 6) {
             NewMessageBean bean = GsonUtils.getInstance().transitionToBean(result, NewMessageBean
                     .class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 if (toolbar != null) {
                     if (bean.getResult() > 0) {
@@ -929,8 +942,9 @@ public class HomeFragment extends ABaseFragment {
 
         if (actionType == 7) {
             ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean.class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 Logger.d("附近热点信息上送成功");
             } else {
@@ -940,8 +954,9 @@ public class HomeFragment extends ABaseFragment {
     }
 
     private String transferDataAmount(String amount) {
-        if (TextUtils.isEmpty(amount))
+        if (TextUtils.isEmpty(amount)) {
             return "--";
+        }
         float flow = Float.parseFloat(amount);
         if (flow >= 1024f) {
             float f = flow / 1024f;

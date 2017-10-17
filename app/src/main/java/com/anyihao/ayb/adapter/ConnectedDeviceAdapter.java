@@ -41,7 +41,9 @@ public class ConnectedDeviceAdapter extends UAdapter<DataBean> {
         super.onBindViewHolder(holder, position);
         if (bp && holder instanceof ConnectedDeviceListViewHolder) {
             DataBean content = mData.get((hasHeaderView() ? position - 1 : position));
-            if (content == null) return;
+            if (content == null) {
+                return;
+            }
             if (position == 0) {
                 ((ConnectedDeviceListViewHolder) holder).space.setVisibility(View.VISIBLE);
                 ((ConnectedDeviceListViewHolder) holder).line.setVisibility(View.GONE);

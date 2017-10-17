@@ -92,7 +92,7 @@ public class UApplication extends MultiDexApplication {
         mLocationOption = new AMapLocationClientOption();
         //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy)
-                .setInterval(300 * 1000)//设置定位间隔,单位毫秒,默认为2000ms，最低1000ms。
+                .setInterval(1800 * 1000)//设置定位间隔,单位毫秒,默认为2000ms，最低1000ms。
                 .setNeedAddress(true);//设置是否返回地址信息（默认返回地址信息）
         //初始化定位
         mLocationClient = new AMapLocationClient(this);
@@ -189,7 +189,7 @@ public class UApplication extends MultiDexApplication {
                 .showThreadInfo(true)  // (Optional) Whether to show thread info or not.
                 .methodCount(0)         // (Optional) How many method line to show. Default 2
                 .methodOffset(3)        // (Optional) Skips some method invokes in stack trace.
-                .tag("IEBox")   // (Optional) Custom tag for each log. Default PRETTY_LOGGER
+                .tag("UApplication")   // (Optional) Custom tag for each log. Default PRETTY_LOGGER
                 .build();
         Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy) {
             @Override
@@ -202,7 +202,9 @@ public class UApplication extends MultiDexApplication {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         if (newConfig.fontScale != 1)//非默认值
+        {
             getResources();
+        }
         super.onConfigurationChanged(newConfig);
     }
 

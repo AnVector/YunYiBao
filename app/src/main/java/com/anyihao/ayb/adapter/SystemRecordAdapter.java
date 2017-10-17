@@ -35,7 +35,9 @@ public class SystemRecordAdapter extends UAdapter<DataBean> {
         super.onBindViewHolder(holder, position);
         if (bp && holder instanceof SystemRecordViewHolder) {
             DataBean content = mData.get((hasHeaderView() ? position - 1 : position));
-            if (content == null) return;
+            if (content == null) {
+                return;
+            }
             ((SystemRecordViewHolder) holder).tvTitle.setText(content.getPkgInfo());
             ((SystemRecordViewHolder) holder).tvDate.setText(content.getCrtTm());
             ((SystemRecordViewHolder) holder).tvValue.setText("+" + content.getFlow());

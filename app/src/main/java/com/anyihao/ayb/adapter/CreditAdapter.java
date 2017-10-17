@@ -37,7 +37,9 @@ public class CreditAdapter extends UAdapter<DataBean> {
         super.onBindViewHolder(holder, position);
         if (bp && holder instanceof CreditViewHolder) {
             DataBean content = mData.get((hasHeaderView() ? position - 1 : position));
-            if (content == null) return;
+            if (content == null) {
+                return;
+            }
             ((CreditViewHolder) holder).tvTitle.setText(content.getDescription());
             ((CreditViewHolder) holder).tvDate.setText(content.getCrtTm());
             ((CreditViewHolder) holder).tvPoints.setText(content.getPoints());

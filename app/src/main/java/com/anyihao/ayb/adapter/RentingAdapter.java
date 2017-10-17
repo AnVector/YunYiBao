@@ -57,7 +57,9 @@ public class RentingAdapter extends UAdapter<DataBean> {
         if (holder instanceof RentingViewHolder) {
             final int index = (hasHeaderView() ? position - 1 : position);
             DataBean content = mData.get(index);
-            if (content == null) return;
+            if (content == null) {
+                return;
+            }
             ((RentingViewHolder) holder).tvDevice.setText("设备编号：" + content.getPrintId());
             ((RentingViewHolder) holder).tvUser.setText("用户：" + content.getNickname());
             ((RentingViewHolder) holder).tvDate.setText(content.getOutTm());
@@ -67,8 +69,9 @@ public class RentingAdapter extends UAdapter<DataBean> {
                 @Override
                 public void onClick(View v) {
                     if (mOnItemButtonClickListener1 != null) {
-                        if (index < 0 || index >= mData.size())
+                        if (index < 0 || index >= mData.size()) {
                             return;
+                        }
                         mOnItemButtonClickListener1.onItemButtonClick((ViewGroup) v.getParent(),
                                 v, mData.get
                                         (index), index);
@@ -80,8 +83,9 @@ public class RentingAdapter extends UAdapter<DataBean> {
                 @Override
                 public void onClick(View v) {
                     if (mOnItemButtonClickListener2 != null) {
-                        if (index < 0 || index >= mData.size())
+                        if (index < 0 || index >= mData.size()) {
                             return;
+                        }
                         mOnItemButtonClickListener2.onItemButtonClick((ViewGroup) v.getParent(),
                                 v, mData.get
                                         (index), index);

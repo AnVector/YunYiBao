@@ -248,12 +248,14 @@ public class ChartFragment extends ABaseFragment {
         if (actionType == 0) {
             DailyUsageBean bean = GsonUtils.getInstance().transitionToBean(result, DailyUsageBean
                     .class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 List<DataBean> beans = bean.getData();
-                if (beans == null)
+                if (beans == null) {
                     return;
+                }
                 if (beans.size() > 0) {
                     mDayBeans.clear();
                     mDayBeans.addAll(beans);
@@ -269,12 +271,14 @@ public class ChartFragment extends ABaseFragment {
             MonthlyUsageBean bean = GsonUtils.getInstance().transitionToBean(result,
                     MonthlyUsageBean
                             .class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 List<MonthlyUsageBean.DataBean> beans = bean.getData();
-                if (beans == null)
+                if (beans == null) {
                     return;
+                }
                 if (beans.size() > 0) {
                     mMonthBeans.clear();
                     mMonthBeans.addAll(beans);

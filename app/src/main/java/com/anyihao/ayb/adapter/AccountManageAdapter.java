@@ -20,8 +20,9 @@ public class AccountManageAdapter extends RecyclerViewAdapter<DataBean> {
 
     @Override
     public void convert(ViewHolder holder, DataBean dataBean) {
-        if (dataBean == null)
+        if (dataBean == null) {
             return;
+        }
         switch (dataBean.getType()) {
             case "QQ":
                 holder.setText(R.id.tv_title, "QQ");

@@ -165,8 +165,9 @@ public class TaskFragment extends ABaseFragment {
     }
 
     private void setPoints(String txt) {
-        if (TextUtils.isEmpty(txt) || tvMyPoints == null)
+        if (TextUtils.isEmpty(txt) || tvMyPoints == null) {
             return;
+        }
         tvMyPoints.setText(txt);
         SpannableString spannableString = new SpannableString(txt);
         RelativeSizeSpan sizeSpan = new RelativeSizeSpan(1.285f);
@@ -412,12 +413,14 @@ public class TaskFragment extends ABaseFragment {
         if (actionType == 0) {
             TaskListBean bean = GsonUtils.getInstance().transitionToBean(result,
                     TaskListBean.class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 DataBean dataBean = bean.getData();
-                if (dataBean == null)
+                if (dataBean == null) {
                     return;
+                }
                 setLimitedData(dataBean.getLimited());
                 setLendData(dataBean.getLend());
                 setNormalData(dataBean.getNormal());
@@ -432,8 +435,9 @@ public class TaskFragment extends ABaseFragment {
         }
         if (actionType == 1) {
             SignBean bean = GsonUtils.getInstance().transitionToBean(result, SignBean.class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 btnSignIn.setText("已签到");
                 setPoints("我的积分：" + bean.getPoint() + "分");
@@ -448,8 +452,9 @@ public class TaskFragment extends ABaseFragment {
     }
 
     private void setOnlineInfo(DataBean bean) {
-        if (bean == null)
+        if (bean == null) {
             return;
+        }
         if (ivUserProfile != null) {
             Glide.with(mContext)
                     .load(bean.getAvatar())
@@ -481,8 +486,9 @@ public class TaskFragment extends ABaseFragment {
     }
 
     private void setLimitedData(List<LimitedBean> beans) {
-        if (beans == null || beans.isEmpty())
+        if (beans == null || beans.isEmpty()) {
             return;
+        }
         if (beans.size() == 4) {
             if (ivPointsExchange != null) {
                 Glide.with(mContext)
@@ -555,16 +561,18 @@ public class TaskFragment extends ABaseFragment {
     }
 
     private void setLendData(List<LendBean> beans) {
-        if (beans == null || beans.isEmpty())
+        if (beans == null || beans.isEmpty()) {
             return;
+        }
         mLendData.clear();
         mLendData.addAll(beans);
         mLendAdapter.notifyDataSetChanged();
     }
 
     private void setNormalData(List<NormalBean> beans) {
-        if (beans == null || beans.isEmpty())
+        if (beans == null || beans.isEmpty()) {
             return;
+        }
         mNormalData.clear();
         mNormalData.addAll(beans);
         mNormalAdapter.notifyDataSetChanged();

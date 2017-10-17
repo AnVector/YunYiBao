@@ -45,7 +45,9 @@ public class RechargeRecordAdapter extends UAdapter<DataBean> {
         super.onBindViewHolder(holder, position);
         if (bp && holder instanceof RechargeRecordViewHolder) {
             DataBean content = mData.get((hasHeaderView() ? position - 1 : position));
-            if (content == null) return;
+            if (content == null) {
+                return;
+            }
             String pkgType = content.getPkgType();
             if ("WXPAY".equals(content.getTopupType())) {
                 ((RechargeRecordViewHolder) holder).imgPayIcon.setImageResource(R.drawable
@@ -123,8 +125,9 @@ public class RechargeRecordAdapter extends UAdapter<DataBean> {
      * @return
      */
     private String getWeekOfDate(String date) {
-        if (TextUtils.isEmpty(date))
+        if (TextUtils.isEmpty(date)) {
             return null;
+        }
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
         Date d = null;
         try {
@@ -132,8 +135,9 @@ public class RechargeRecordAdapter extends UAdapter<DataBean> {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        if (d == null)
+        if (d == null) {
             return null;
+        }
         String[] weekOfDays = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(d);
@@ -144,6 +148,7 @@ public class RechargeRecordAdapter extends UAdapter<DataBean> {
         return weekOfDays[w];
     }
 
+    @Override
     public long getItemId(int position) {
         if (customHeaderView != null) {
             position--;

@@ -41,7 +41,9 @@ public class MeAdapter extends UAdapter<KeyValueBean> {
         super.onBindViewHolder(holder, position);
         if (bp && holder instanceof MeViewHolder) {
             KeyValueBean content = mData.get((hasHeaderView() ? position - 1 : position));
-            if (content == null) return;
+            if (content == null) {
+                return;
+            }
             MeViewHolder viewHolder = (MeViewHolder) holder;
             viewHolder.tvTitle.setText(content.getTitle());
             switch (content.getTitle()) {

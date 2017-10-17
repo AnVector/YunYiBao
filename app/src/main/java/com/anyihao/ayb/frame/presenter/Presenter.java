@@ -36,16 +36,19 @@ public class Presenter extends PresenterCompat {
 
     @Override
     protected void post(final Task task) {
-        if (isViewDestroyed())
+        if (isViewDestroyed()) {
             return;
+        }
         Map<String, String> params = task.getParams();
-        if (params == null)
+        if (params == null) {
             return;
+        }
         for (Map.Entry<String, String> entry : params.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
-            if (key == null || value == null)
+            if (key == null || value == null) {
                 return;
+            }
         }
         Logger.d(params);
         OkHttpUtils
@@ -90,19 +93,22 @@ public class Presenter extends PresenterCompat {
 
     @Override
     protected void postFile(final Task task) {
-        if (isViewDestroyed())
+        if (isViewDestroyed()) {
             return;
+        }
         Map<String, String> params = task.getParams();
         Logger.d(params);
         File file = task.getFile();
         String url = task.getUrl();
-        if (params == null || file == null || TextUtils.isEmpty(url))
+        if (params == null || file == null || TextUtils.isEmpty(url)) {
             return;
+        }
         for (Map.Entry<String, String> entry : params.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
-            if (key == null || value == null)
+            if (key == null || value == null) {
                 return;
+            }
         }
 
         // form 表单形式上传
@@ -158,8 +164,9 @@ public class Presenter extends PresenterCompat {
 
     @Override
     protected void get(final Task task) {
-        if (isViewDestroyed())
+        if (isViewDestroyed()) {
             return;
+        }
         OkHttpUtils
                 .get()
                 .url(task.getUrl())
@@ -200,11 +207,13 @@ public class Presenter extends PresenterCompat {
 
     @Override
     protected void put(final Task task) {
-        if (isViewDestroyed())
+        if (isViewDestroyed()) {
             return;
+        }
         File file = task.getFile();
-        if (file == null)
+        if (file == null) {
             return;
+        }
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"),
                 file);
         OkHttpUtils

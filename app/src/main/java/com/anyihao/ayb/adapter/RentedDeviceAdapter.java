@@ -37,7 +37,9 @@ public class RentedDeviceAdapter extends UAdapter<KeyValueBean> {
         super.onBindViewHolder(holder, position);
         if (bp && holder instanceof RentedDeviceViewHolder) {
             KeyValueBean content = mData.get((hasHeaderView() ? position - 1 : position));
-            if (content == null) return;
+            if (content == null) {
+                return;
+            }
             ((RentedDeviceViewHolder) holder).tvTitle.setText(content.getTitle());
             ((RentedDeviceViewHolder) holder).tvValue.setText(content.getValue());
         }

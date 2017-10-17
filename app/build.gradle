@@ -14,7 +14,7 @@ def static String releaseVName() {
 
 //定义versionCode
 def static int releaseVCode() {
-    return 9
+    return 10
 }
 
 def gitVersionCode() {
@@ -50,7 +50,7 @@ android {
         resConfigs "zh","en"
         multiDexEnabled true //Enable multidex support
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        manifestPlaceholders = [UMENG_CHANNEL_VALUE: "GooglePlay",
+        manifestPlaceholders = [UMENG_CHANNEL_VALUE: "tencent",
                                 BUGLY_APP_ID       : "900029763",
                                 BUGLY_APP_Version  : releaseVName(),
                                 BUGLY_APP_Channel  : name,

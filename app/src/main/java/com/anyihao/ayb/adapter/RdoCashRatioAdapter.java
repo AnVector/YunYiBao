@@ -84,7 +84,9 @@ public class RdoCashRatioAdapter extends UltimateViewAdapter {
                     position < mData.size()) && (customHeaderView == null || position > 0)) {
                 ClassificationBean content = mData.get(customHeaderView != null ?
                         position - 1 : position);
-                if (content == null) return;
+                if (content == null) {
+                    return;
+                }
                 String count = content.getCount();
                 ((RdoCashRatioViewHolder) holder).tvDesc.setText(content.getRemark());
                 ((RdoCashRatioViewHolder) holder).tvCount.setText(count);
@@ -169,8 +171,9 @@ public class RdoCashRatioAdapter extends UltimateViewAdapter {
     }
 
     public String getItem(int position) {
-        if (customHeaderView != null)
+        if (customHeaderView != null) {
             position--;
+        }
         if (position >= 0 && position < mData.size()) {
             return mData.get(position).getRemark();
         }

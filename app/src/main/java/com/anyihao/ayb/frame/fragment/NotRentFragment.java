@@ -66,8 +66,9 @@ public class NotRentFragment extends ABaseFragment {
                 .EMPTY_CLEAR_ALL, new emptyViewOnShownListener() {
             @Override
             public void onEmptyViewShow(View mView) {
-                if (mView == null)
+                if (mView == null) {
                     return;
+                }
                 ImageView imvError = (ImageView) mView.findViewById(R.id.ic_error);
                 TextView tvHint = (TextView) mView.findViewById(R.id.tv_hint);
                 if (imvError != null) {
@@ -83,8 +84,9 @@ public class NotRentFragment extends ABaseFragment {
     }
 
     private void getBelongs() {
-        if (TextUtils.isEmpty(status))
+        if (TextUtils.isEmpty(status)) {
             return;
+        }
         Map<String, String> params = new HashMap<>();
         params.put("cmd", "MERCHANTDEVLIST");
         params.put("uid", PreferencesUtils.getString(mContext.getApplicationContext(), "uid", ""));
@@ -104,8 +106,9 @@ public class NotRentFragment extends ABaseFragment {
     }
 
     private void onFireRefresh(List<DataBean> beans) {
-        if (ultimateRecyclerView == null)
+        if (ultimateRecyclerView == null) {
             return;
+        }
         mAdapter.removeAllInternal(mData);
         mAdapter.insert(beans);
         ultimateRecyclerView.setRefreshing(false);
@@ -113,8 +116,9 @@ public class NotRentFragment extends ABaseFragment {
     }
 
     private void onLoadNoData() {
-        if (ultimateRecyclerView == null)
+        if (ultimateRecyclerView == null) {
             return;
+        }
         ultimateRecyclerView.showEmptyView();
     }
 
@@ -140,12 +144,14 @@ public class NotRentFragment extends ABaseFragment {
     public void onSuccess(String result, int page, Integer actionType) {
         if (actionType == 0) {
             NotRentBean bean = GsonUtils.getInstance().transitionToBean(result, NotRentBean.class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 List<DataBean> beans = bean.getData();
-                if (beans == null)
+                if (beans == null) {
                     return;
+                }
                 if (beans.size() > 0) {
                     if (isRefresh) {
                         onFireRefresh(beans);
@@ -165,8 +171,9 @@ public class NotRentFragment extends ABaseFragment {
     @Override
     public void onFailure(String error, int page, Integer actionType) {
         super.onFailure(error, page, actionType);
-        if (ultimateRecyclerView == null)
+        if (ultimateRecyclerView == null) {
             return;
+        }
         if (isRefresh) {
             ultimateRecyclerView.setRefreshing(false);
             layoutManager.scrollToPosition(0);

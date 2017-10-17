@@ -32,8 +32,9 @@ public class AuthDeviceAdapter extends UAdapter<DataBean> {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder == null)
+        if (holder == null) {
             return;
+        }
         //变量index设置为final的原因，可将变量index设为全局变量作为对比
         final int index = (hasHeaderView() ? position - 1 : position);
         if (hasHeaderView()) {

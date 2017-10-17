@@ -57,8 +57,9 @@ public class PackageFragment extends ABaseFragment {
     }
 
     private void getPackageInfo() {
-        if (TextUtils.isEmpty(flowType))
+        if (TextUtils.isEmpty(flowType)) {
             return;
+        }
         Map<String, String> params = new HashMap<>();
         params.put("cmd", "PAYINFO");
         params.put("uid", PreferencesUtils.getString(mContext.getApplicationContext(), "uid", ""));
@@ -125,8 +126,9 @@ public class PackageFragment extends ABaseFragment {
         if (actionType == 0) {
             PackageListBean bean = GsonUtils.getInstance().transitionToBean(result,
                     PackageListBean.class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 mData.clear();
                 List<DataBean> beans = bean.getData();

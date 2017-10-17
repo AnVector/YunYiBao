@@ -31,42 +31,6 @@ public class Task implements Serializable {
     @Nullable
     private File file;//put请求的文件参数
 
-    private Task(@NonNull String taskType, @Nullable String url, @Nullable String content, int
-            page, @Nullable File file,
-                 @NonNull Object actionType) {
-        this.taskType = taskType;
-        this.url = url;
-        this.content = content;
-        this.page = page;
-        this.file = file;
-        this.actionType = actionType;
-    }
-
-    private Task(@NonNull String taskType, @Nullable String url, @Nullable Map<String, String>
-            params, int page,
-                 @Nullable File
-                         file,
-                 @NonNull Object actionType) {
-        this.taskType = taskType;
-        this.url = url;
-        this.params = params;
-        this.page = page;
-        this.file = file;
-        this.actionType = actionType;
-    }
-
-    private Task(@NonNull String taskType, @Nullable String url, @Nullable String content, int
-            page, @Nullable File file,
-                 @NonNull Object actionType, @Nullable Map<String, String> params) {
-        this.taskType = taskType;
-        this.url = url;
-        this.content = content;
-        this.page = page;
-        this.file = file;
-        this.actionType = actionType;
-        this.params = params;
-    }
-
     private Task(@NonNull String taskType, @Nullable String url, int page, @NonNull Object
             actionType) {
         if (TextUtils.isEmpty(url)) {
@@ -78,44 +42,51 @@ public class Task implements Serializable {
         this.actionType = actionType;
     }
 
+    private Task(@NonNull String taskType, @Nullable String url, @Nullable File file, int page,
+                 @NonNull Object
+                         actionType) {
+        this(taskType, url, page, actionType);
+        if (file == null) {
+            throw new UnsupportedOperationException("u must transmit a valid url and a valid file");
+        }
+        this.file = file;
+    }
+
     private Task(@NonNull String taskType, @Nullable String url, @Nullable String content, int
             page, @NonNull Object
                          actionType) {
-        if (TextUtils.isEmpty(url)) {
-            throw new UnsupportedOperationException("u must transmit a valid url");
-        }
-        this.taskType = taskType;
-        this.url = url;
+        this(taskType, url, page, actionType);
         this.content = content;
-        this.page = page;
-        this.actionType = actionType;
+    }
+
+    private Task(@NonNull String taskType, @Nullable String url, @Nullable String content, int
+            page, @Nullable File file,
+                 @NonNull Object actionType) {
+        this(taskType, url, file, page, actionType);
+        this.content = content;
     }
 
     private Task(@NonNull String taskType, @Nullable String url, @Nullable String content, int
             page, @NonNull Object
                          actionType, @Nullable Map<String, String> params) {
-        if (TextUtils.isEmpty(url)) {
-            throw new UnsupportedOperationException("u must transmit a valid url");
-        }
-        this.taskType = taskType;
-        this.url = url;
-        this.content = content;
-        this.page = page;
-        this.actionType = actionType;
+        this(taskType, url, content, page, actionType);
         this.params = params;
     }
 
-    private Task(@NonNull String taskType, @Nullable String url, @Nullable File file, int page,
-                 @NonNull Object
-                         actionType) {
-        if (TextUtils.isEmpty(url) || file == null) {
-            throw new UnsupportedOperationException("u must transmit a valid url and a valid file");
-        }
-        this.taskType = taskType;
-        this.url = url;
-        this.file = file;
-        this.page = page;
-        this.actionType = actionType;
+    private Task(@NonNull String taskType, @Nullable String url, @Nullable String content, int
+            page, @Nullable File file,
+                 @NonNull Object actionType, @Nullable Map<String, String> params) {
+        this(taskType, url, content, page, file, actionType);
+        this.params = params;
+    }
+
+    private Task(@NonNull String taskType, @Nullable String url, @Nullable Map<String, String>
+            params, int page,
+                 @Nullable File
+                         file,
+                 @NonNull Object actionType) {
+        this(taskType, url, file, page, actionType);
+        this.params = params;
     }
 
     @NonNull

@@ -332,8 +332,9 @@ public class MeFragment extends ABaseFragment {
         if (actionType == 0) {
             UserLevelBean bean = GsonUtils.getInstance().transitionToBean(result, UserLevelBean
                     .class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             mData.clear();
             mData.addAll(generateKeyValueBean(bean));
             mAdapter.notifyDataSetChanged();
@@ -350,15 +351,17 @@ public class MeFragment extends ABaseFragment {
 
         if (actionType == 1) {
             ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean.class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             ToastUtils.showToast(mContext.getApplicationContext(), bean.getMsg());
         }
     }
 
     private void setHeaderData(int code, String url, String nickname) {
-        if (tvGreeting == null || icProfile == null)
+        if (tvGreeting == null || icProfile == null) {
             return;
+        }
         if (code == 200) {
             tvGreeting.setText(nickname);
             Glide.with(this).load(url)

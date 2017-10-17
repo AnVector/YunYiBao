@@ -20,8 +20,9 @@ public class RechargeRecordDetailsAdapter extends RecyclerViewAdapter<KeyValueBe
 
     @Override
     public void convert(ViewHolder holder, KeyValueBean keyValueBean) {
-        if (keyValueBean == null)
+        if (keyValueBean == null) {
             return;
+        }
         holder.setText(R.id.tv_property, keyValueBean.getTitle());
         holder.setText(R.id.tv_value, keyValueBean.getValue() + "");
         if ("流水号".equals(keyValueBean.getTitle())) {

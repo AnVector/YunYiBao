@@ -40,7 +40,9 @@ public class MainAdapter extends UAdapter<WifiInfoBean> {
         super.onBindViewHolder(holder, position);
         if (bp && holder instanceof MainViewHolder) {
             WifiInfoBean content = mData.get((hasHeaderView() ? position - 1 : position));
-            if (content == null) return;
+            if (content == null) {
+                return;
+            }
             ((MainViewHolder) holder).tvTitle.setText(content.getSsid());
             setCompoundDrawables((MainViewHolder) holder, content.getLevel());
             if (content.isConnected()) {

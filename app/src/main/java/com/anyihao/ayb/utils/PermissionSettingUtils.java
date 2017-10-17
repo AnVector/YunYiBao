@@ -40,8 +40,9 @@ public class PermissionSettingUtils {
      * @param context
      */
     public static void goToSettings(Context context) {
-        if (context == null)
+        if (context == null) {
             return;
+        }
         switch (Build.MANUFACTURER) {
             case MANUFACTURER_HUAWEI:
                 Huawei(context);

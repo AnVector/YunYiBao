@@ -72,8 +72,9 @@ public class EnvelopeFragment extends ABaseFragment {
                 .EMPTY_CLEAR_ALL, new emptyViewOnShownListener() {
             @Override
             public void onEmptyViewShow(View mView) {
-                if (mView == null)
+                if (mView == null) {
                     return;
+                }
                 ImageView imvError = (ImageView) mView.findViewById(R.id.ic_error);
                 TextView tvHint = (TextView) mView.findViewById(R.id.tv_hint);
                 if (imvError != null && tvHint != null) {
@@ -154,8 +155,9 @@ public class EnvelopeFragment extends ABaseFragment {
     }
 
     private void onFireRefresh(List<DataBean> beans) {
-        if (ultimateRecyclerView == null)
+        if (ultimateRecyclerView == null) {
             return;
+        }
         mAdapter.removeAllInternal(mData);
         mAdapter.insert(beans);
         ultimateRecyclerView.setRefreshing(false);
@@ -166,8 +168,9 @@ public class EnvelopeFragment extends ABaseFragment {
     }
 
     private void onLoadMore(List<DataBean> beans) {
-        if (ultimateRecyclerView == null)
+        if (ultimateRecyclerView == null) {
             return;
+        }
         mAdapter.insert(beans);
         if (beans.size() < PAGE_SIZE) {
             ultimateRecyclerView.disableLoadmore();
@@ -176,8 +179,9 @@ public class EnvelopeFragment extends ABaseFragment {
 
     private void onLoadNoData(int page) {
         isInited = false;
-        if (ultimateRecyclerView == null)
+        if (ultimateRecyclerView == null) {
             return;
+        }
         ultimateRecyclerView.disableLoadmore();
         if (page == 1) {
             ultimateRecyclerView.showEmptyView();
@@ -215,12 +219,14 @@ public class EnvelopeFragment extends ABaseFragment {
         if (actionType == 0) {
             RedPackageBean bean = GsonUtils.getInstance().transitionToBean(result, RedPackageBean
                     .class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 List<DataBean> beans = bean.getData();
-                if (beans == null)
+                if (beans == null) {
                     return;
+                }
                 if (beans.size() > 0) {
                     if (isRefresh) {
                         onFireRefresh(beans);
@@ -240,8 +246,9 @@ public class EnvelopeFragment extends ABaseFragment {
     @Override
     public void onFailure(String error, int page, Integer actionType) {
         super.onFailure(error, page, actionType);
-        if (ultimateRecyclerView == null)
+        if (ultimateRecyclerView == null) {
             return;
+        }
         if (isRefresh) {
             networkError = true;
             ultimateRecyclerView.setRefreshing(false);

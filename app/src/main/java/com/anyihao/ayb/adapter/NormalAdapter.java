@@ -20,8 +20,9 @@ public class NormalAdapter extends RecyclerViewAdapter<NormalBean> {
 
     @Override
     public void convert(ViewHolder holder, NormalBean normalBean) {
-        if (normalBean == null)
+        if (normalBean == null) {
             return;
+        }
         holder.setText(R.id.tv_title, "可兑换" + normalBean.getExContent() + "流量");
         holder.setText(R.id.tv_points_get, normalBean.getIntegral() + "积分");
         holder.setText(R.id.tv_surplus, "剩余" + normalBean.getExchangeTimes() + "次可兑换");
