@@ -120,24 +120,26 @@
                 android:layout_marginTop="32dp">
 
                 <TextView
-                    android:id="@+id/tv_leasing"
+                    android:id="@+id/tv_my_devices"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="44dp"
                     android:gravity="center"
-                    android:text="@string/leasing_equipment"
+                    android:layout_marginLeft="44dp"
+                    android:text="@string/device_details"
                     android:textColor="@color/main_device_info_text_color"
                     android:textSize="@dimen/font_size_normal"/>
 
                 <TextView
-                    android:id="@+id/tv_my_devices"
+                    android:id="@+id/tv_leasing"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
+                    android:clickable="false"
                     android:gravity="center"
-                    android:text="@string/my_devices"
+                    android:text="@string/leasing_equipment"
                     android:textColor="@color/main_device_info_text_color"
-                    android:textSize="@dimen/font_size_normal"/>
+                    android:textSize="@dimen/font_size_normal"
+                    android:visibility="invisible"/>
 
                 <TextView
                     android:id="@+id/tv_shop"

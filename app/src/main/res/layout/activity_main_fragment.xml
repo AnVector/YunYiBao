@@ -21,11 +21,11 @@
             android:drawableTop="@drawable/device_normal"
             android:text="@string/device"/>
 
-        <RadioButton
-            android:id="@+id/radio_button_discovery"
-            style="@style/radio_button_style"
-            android:drawableTop="@drawable/discovery_normal"
-            android:text="@string/discovery"/>
+        <!--<RadioButton-->
+            <!--android:id="@+id/radio_button_discovery"-->
+            <!--style="@style/radio_button_style"-->
+            <!--android:drawableTop="@drawable/discovery_normal"-->
+            <!--android:text="@string/discovery"/>-->
 
         <RadioButton
             android:id="@+id/radio_button_task"

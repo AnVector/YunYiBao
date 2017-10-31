@@ -37,7 +37,7 @@ public class MessageAdapter extends UAdapter<DataBean> {
         super.onBindViewHolder(holder, position);
         if (bp && holder instanceof MessageViewHolder) {
             DataBean content = mData.get((hasHeaderView() ? position - 1 : position));
-            if (content == null){
+            if (content == null) {
                 return;
             }
             ((MessageViewHolder) holder).tvStatus.setText(content.getSendName());
@@ -48,6 +48,9 @@ public class MessageAdapter extends UAdapter<DataBean> {
             } else {
                 ((MessageViewHolder) holder).dot.setVisibility(View.VISIBLE);
             }
+            if (position == mData.size() - 1) {
+                ((MessageViewHolder) holder).dividerLine.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -56,6 +59,7 @@ public class MessageAdapter extends UAdapter<DataBean> {
         public TextView tvStatus;
         public TextView tvDate;
         public TextView tvContent;
+        public View dividerLine;
         public View dot;
 
         public MessageViewHolder(View itemView) {
@@ -63,6 +67,7 @@ public class MessageAdapter extends UAdapter<DataBean> {
             tvStatus = (TextView) itemView.findViewById(R.id.tv_status);
             tvDate = (TextView) itemView.findViewById(R.id.tv_date);
             tvContent = (TextView) itemView.findViewById(R.id.tv_content);
+            dividerLine = itemView.findViewById(R.id.divider_line);
             dot = itemView.findViewById(R.id.red_dot);
         }
     }

@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
+import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.CountDownTimer;
 import android.provider.Settings;
@@ -17,6 +18,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -86,6 +88,9 @@ import butterknife.BindView;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+/**
+ * @author Admin
+ */
 public class HomeFragment extends ABaseFragment {
 
     @BindView(R.id.toolbar_title)
@@ -160,10 +165,11 @@ public class HomeFragment extends ABaseFragment {
                 ConnectivityManager manager = (ConnectivityManager) context
                         .getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo activeNetwork = manager.getActiveNetworkInfo();
-                if (activeNetwork != null) { // connected to the internet
+                // connected to the internet
+                if (activeNetwork != null) {
                     if (activeNetwork.isConnected()) {
                         if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
-                            getConnectWifi();// connected to wifi
+                            getConnectWifi();
                             refresh = false;
                             permissionsRequest();
                         }
@@ -237,6 +243,7 @@ public class HomeFragment extends ABaseFragment {
     }
 
     private void setConnectSuccess(String ssid) {
+        loading = false;
         isConnected = true;
         aliasName = ssid.replace("\"", "");
         if (progress != null) {
@@ -262,6 +269,7 @@ public class HomeFragment extends ABaseFragment {
     }
 
     private void stopAnimation() {
+        loading = false;
         isConnected = false;
         if (progress != null) {
             progress.setDotColor(Color.parseColor("#d6d7dc"));
@@ -355,6 +363,9 @@ public class HomeFragment extends ABaseFragment {
         }
     }
 
+    /**
+     * connected to wifi
+     */
     private void getConnectWifi() {
         ssid = WifiInfoManager.getInstance(mContext).getSSid();
         if (!TextUtils.isEmpty(ssid)) {
@@ -542,10 +553,12 @@ public class HomeFragment extends ABaseFragment {
                     }
                     aliasName = ((WifiInfoBean) o).getSsid();
                     if (!TextUtils.isEmpty(ssid) && ssid.contains(aliasName)) {
-                        showDialog(R.layout.dialog_wifi_password, 0);
+                        Intent intent = new Intent(mContext, ConnectedDevicesActivity.class);
+                        intent.putExtra("aliasName", aliasName);
+                        startActivity(intent);
                         return;
                     }
-                    getSsidPwd();
+                    showDialog(R.layout.dialog_confirm, 4);
                 }
             }
 
@@ -594,8 +607,8 @@ public class HomeFragment extends ABaseFragment {
                     }
                 }
             });
-            TextView tv_content = (TextView) ll_content.findViewById(R.id.tv_content);
-            tv_content.setText(advertisement.get(i).getDesc());
+            TextView tvContent = (TextView) ll_content.findViewById(R.id.tv_content);
+            tvContent.setText(advertisement.get(i).getDesc());
             if (flipper != null) {
                 flipper.addView(ll_content);
             }
@@ -608,7 +621,8 @@ public class HomeFragment extends ABaseFragment {
         }
         Map<String, String> params = new HashMap<>();
         params.put("cmd", "WIFIPWD");
-        params.put("uid", PreferencesUtils.getString(mContext.getApplicationContext(), "uid", ""));
+        params.put("uid", PreferencesUtils.getString(mContext.getApplicationContext(), "uid",
+                ""));
         params.put("aliasName", aliasName);
         postForm(params, 1, 2);
     }
@@ -672,7 +686,7 @@ public class HomeFragment extends ABaseFragment {
     }
 
     private void onGetPwdSuccess() {
-        showDialog(R.layout.dialog_wifi_password, 0);
+        connect2Wifi();
     }
 
     private void onGetPwdFailure() {
@@ -737,11 +751,17 @@ public class HomeFragment extends ABaseFragment {
                 tvTitle.setTextSize(14f);
                 btnLeft.setText(getResources().getString(R.string.cancel));
                 btnRight.setText(getResources().getString(R.string.go_to_config));
-            } else {
+            } else if (type == 3) {
                 tvTitle.setText(getResources().getString(R.string.permission_scan_hint));
                 tvTitle.setTextSize(14f);
                 btnLeft.setText(getResources().getString(R.string.cancel));
                 btnRight.setText(getResources().getString(R.string.go_to_config));
+            } else {
+                tvTitle.setText(String.format(getResources().getString(R.string
+                        .whether_to_connect), aliasName));
+                tvTitle.setTextSize(17f);
+                btnLeft.setText(getResources().getString(R.string.cancel));
+                btnRight.setText(getResources().getString(R.string.ok));
             }
         }
         OnClickListener clickListener = new OnClickListener() {
@@ -783,8 +803,42 @@ public class HomeFragment extends ABaseFragment {
     private void handleConfirm(int type) {
         if (type == 1) {
             addAuthorizedDevice();
+        } else if (type == 4) {
+            if (!loading) {
+                startAnimation();
+                loading = true;
+            }
+            getSsidPwd();
         } else {
             PermissionSettingUtils.goToSettings(mContext);
+        }
+    }
+
+    private void connect2Wifi() {
+        for (WifiConfiguration configuration :
+                WifiInfoManager.getInstance(mContext).getConfiguration()) {
+
+            Log.e("configuration", "ssid:" + configuration.SSID + "--id:" + configuration
+                    .networkId +
+                    "--priority" + configuration.priority + "--allowedAuthAlgorithms:" +
+                    configuration.allowedAuthAlgorithms +
+                    "--allowedGroupCiphers:" + configuration.allowedGroupCiphers +
+                    "--allowedKeyManagement:" + configuration.allowedKeyManagement +
+                    "--allowedAuthAlgorithms:" + configuration.allowedAuthAlgorithms
+                    + "--allowedPairwiseCiphers:" + configuration.allowedPairwiseCiphers
+                    + "--hiddenSSID:" + configuration.hiddenSSID
+                    + "--wepTxKeyIndex:" + configuration.wepTxKeyIndex
+                    + "--wepKeys:" + configuration.wepKeys[0]
+                    + "--preSharedKey" + configuration.preSharedKey
+                    + "--status:" + configuration.status);
+            if (configuration.SSID.contains(aliasName)) {
+                int type = WifiInfoManager.getInstance(mContext).getSecurity
+                        (configuration);
+                Log.e("ssidx", "type: " + type);
+                WifiInfoManager.getInstance(mContext).addNetwork(configuration);
+            } else {
+                WifiInfoManager.getInstance(mContext).disconnectWifi(configuration.networkId);
+            }
         }
     }
 
@@ -853,21 +907,15 @@ public class HomeFragment extends ABaseFragment {
                 case 200://WIFI密码获取成功
                     mPassword = bean.getPassword();
                     onGetPwdSuccess();
-                    if (loading) {
-                        stopAnimation();
-                        loading = false;
-                    }
                     break;
-                case 491://设备未授权
+                //设备未授权
+                case 491:
                     onGetPwdFailure();
                     break;
                 case 500:
-                    if (!loading) {
-                        startAnimation();
-                        loading = true;
-                    }
                     break;
-                case 468://设备正在尝试连接服务器
+                //设备正在尝试连接服务器
+                case 468:
                     ToastUtils.showToast(mContext.getApplicationContext(), bean.getMsg());
                     break;
                 default:

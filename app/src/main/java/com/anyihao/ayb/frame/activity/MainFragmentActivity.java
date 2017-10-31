@@ -59,8 +59,8 @@ public class MainFragmentActivity extends ABaseActivity {
     @BindView(R.id.radio_button_me)
     RadioButton mRadioButtonMe;
     private static boolean isExit = false;
-    @BindView(R.id.radio_button_discovery)
-    RadioButton mRadioButtonDiscovery;
+//    @BindView(R.id.radio_button_discovery)
+//    RadioButton mRadioButtonDiscovery;
     @BindView(R.id.radio_button_task)
     RadioButton mRadioButtonTask;
     @BindView(R.id.viewpager)
@@ -117,11 +117,11 @@ public class MainFragmentActivity extends ABaseActivity {
 
     private void initViewPager() {
         HomeFragment homeFragment = new HomeFragment();
-        DiscoverFragment discoverFragment = new DiscoverFragment();
+//        DiscoverFragment discoverFragment = new DiscoverFragment();
         TaskFragment taskFragment = new TaskFragment();
         MeFragment meFragment = new MeFragment();
         mFragmentList.add(homeFragment);
-        mFragmentList.add(discoverFragment);
+//        mFragmentList.add(discoverFragment);
         mFragmentList.add(taskFragment);
         mFragmentList.add(meFragment);
         uFragmentPagerAdapter = new UFragmentPagerAdapter(getSupportFragmentManager(),
@@ -153,8 +153,9 @@ public class MainFragmentActivity extends ABaseActivity {
     }
 
     private void versionUpdate(String versionName, String downloadUrl) {
-        if (TextUtils.isEmpty(versionName) || TextUtils.isEmpty(downloadUrl))
+        if (TextUtils.isEmpty(versionName) || TextUtils.isEmpty(downloadUrl)) {
             return;
+        }
         if (checkUpdate(versionName)) {
             showDialog(downloadUrl);
         }
@@ -180,15 +181,15 @@ public class MainFragmentActivity extends ABaseActivity {
         });
 
 
-        mRadioButtonDiscovery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                resetIcon();
-                changeIcon(mRadioButtonDiscovery, R.drawable.discovery_focused);
-                mCurrent = mRadioButtonDiscovery;
-                mViewPager.setCurrentItem(1);
-            }
-        });
+//        mRadioButtonDiscovery.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                resetIcon();
+//                changeIcon(mRadioButtonDiscovery, R.drawable.discovery_focused);
+//                mCurrent = mRadioButtonDiscovery;
+//                mViewPager.setCurrentItem(1);
+//            }
+//        });
 
         mRadioButtonTask.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,7 +197,7 @@ public class MainFragmentActivity extends ABaseActivity {
                 resetIcon();
                 changeIcon(mRadioButtonTask, R.drawable.task_focused);
                 mCurrent = mRadioButtonTask;
-                mViewPager.setCurrentItem(2);
+                mViewPager.setCurrentItem(1);
             }
         });
 
@@ -206,7 +207,7 @@ public class MainFragmentActivity extends ABaseActivity {
                 resetIcon();
                 changeIcon(mRadioButtonMe, R.drawable.me_focused);
                 mCurrent = mRadioButtonMe;
-                mViewPager.setCurrentItem(3, true);
+                mViewPager.setCurrentItem(2, true);
             }
         });
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -224,15 +225,15 @@ public class MainFragmentActivity extends ABaseActivity {
                         changeIcon(mRadioButtonDevice, R.drawable.device_focused);
                         mCurrent = mRadioButtonDevice;
                         break;
+//                    case 1:
+//                        changeIcon(mRadioButtonDiscovery, R.drawable.discovery_focused);
+//                        mCurrent = mRadioButtonDiscovery;
+//                        break;
                     case 1:
-                        changeIcon(mRadioButtonDiscovery, R.drawable.discovery_focused);
-                        mCurrent = mRadioButtonDiscovery;
-                        break;
-                    case 2:
                         changeIcon(mRadioButtonTask, R.drawable.task_focused);
                         mCurrent = mRadioButtonTask;
                         break;
-                    case 3:
+                    case 2:
                         changeIcon(mRadioButtonMe, R.drawable.me_focused);
                         mCurrent = mRadioButtonMe;
                         break;
@@ -256,16 +257,17 @@ public class MainFragmentActivity extends ABaseActivity {
     }
 
     private void resetIcon() {
-        if (mCurrent == null)
+        if (mCurrent == null) {
             return;
+        }
         int id = mCurrent.getId();
         switch (id) {
             case R.id.radio_button_device:
                 changeIcon(mCurrent, R.drawable.device_normal);
                 break;
-            case R.id.radio_button_discovery:
-                changeIcon(mCurrent, R.drawable.discovery_normal);
-                break;
+//            case R.id.radio_button_discovery:
+//                changeIcon(mCurrent, R.drawable.discovery_normal);
+//                break;
             case R.id.radio_button_me:
                 changeIcon(mCurrent, R.drawable.me_normal);
                 break;
@@ -338,8 +340,9 @@ public class MainFragmentActivity extends ABaseActivity {
         if (actionType == 0) {
             VersionInfoBean bean = GsonUtils.getInstance().transitionToBean(result,
                     VersionInfoBean.class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 versionUpdate(bean.getVersion(), bean.getDownloadLink());
             }

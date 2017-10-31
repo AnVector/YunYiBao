@@ -9,12 +9,20 @@ def static releaseTime() {
 
 //定义versionName
 def static String releaseVName() {
-    return "2.0.0"
+    return "2.0.1"
 }
 
 //定义versionCode
 def static int releaseVCode() {
-    return 10
+    return 11
+}
+
+/**
+ * 定义buildHost
+ * @return
+ */
+def static String hostName() {
+    return System.getProperty("user.name") + "@" + InetAddress.localHost.hostName
 }
 
 def gitVersionCode() {
@@ -45,9 +53,9 @@ android {
         applicationId "com.anyihao.ayb"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode releaseVCode()
-        versionName releaseVName()
-        resConfigs "zh","en"
+        versionCode project.hasProperty('VERSION_CODE') ? Integer.parseInt(VERSION_CODE) : releaseVCode()
+        versionName project.hasProperty('VERSION_NAME') ? VERSION_NAME : releaseVName()
+        resConfigs "zh", "en"
         multiDexEnabled true //Enable multidex support
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: "tencent",
@@ -156,9 +164,9 @@ android {
         // 如果为 true，则将所有警告视为错误
         warningsAsErrors true
         // 不检查给定的问题id
-        disable 'TypographyFractions','TypographyQuotes'
+        disable 'TypographyFractions', 'TypographyQuotes'
         // 检查给定的问题 id
-        enable 'RtlHardcoded','RtlCompat', 'RtlEnabled'
+        enable 'RtlHardcoded', 'RtlCompat', 'RtlEnabled'
         // * 仅 * 检查给定的问题 id
         check 'NewApi', 'InlinedApi'
         // 如果为true，则在错误报告的输出中不包括源代码行
@@ -179,7 +187,7 @@ android {
         htmlReport true
         // 写入报告的路径，它是可选的（默认为构建目录下的 lint-results.html ）
         htmlOutput file("lint-report.html")
-        disable 'TypographyFractions','TypographyQuotes'
+        disable 'TypographyFractions', 'TypographyQuotes'
     }
 
 
@@ -229,20 +237,19 @@ android {
     /*多渠道打包*/
     productFlavors {
         _360 {
-            applicationId = "com.anyihao.ayb"
+//            applicationId = "com.anyihao.ayb"
 //            applicationIdSuffix '.kale.dev'
 //            manifest.srcFile 'hip/AndroidManifest.xml'
         }
         tencent {
-            applicationId = "com.anyihao.ayb"
+//            applicationId = "com.anyihao.ayb"
             //applicationIdSuffix '.kale.dev'
 //            manifest.srcFile 'hip/AndroidManifest.xml'
         }
         baidu {
-            applicationId = "com.anyihao.ayb"
+//            applicationId = "com.anyihao.ayb"
             //applicationIdSuffix '.kale.dev'
 //            manifest.srcFile 'hip/AndroidManifest.xml'
-
         }
     }
     productFlavors.all {
@@ -295,7 +302,7 @@ android {
         debug {
             // 显示Log
             buildConfigField "boolean", "LOG_DEBUG", "true"
-//            buildConfigField "String", "API_URL", '"http://dev.goodev.org/"'
+            buildConfigField "String", "API_URL", '"http://122.224.91.148:8888"'
             versionNameSuffix "-debug"
             minifyEnabled true //是否进行混淆
             zipAlignEnabled true //Zipalign优化
@@ -307,6 +314,7 @@ android {
         release {
             //不显示Log
             buildConfigField "boolean", "LOG_DEBUG", "false"
+            buildConfigField "String", "API_URL", '"http://122.224.91.149:8888"'
             signingConfig signingConfigs.release //签名配置
             shrinkResources true //是否移除无用的resource文件
             minifyEnabled true //是否进行混淆

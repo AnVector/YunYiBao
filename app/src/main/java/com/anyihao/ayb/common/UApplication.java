@@ -92,7 +92,7 @@ public class UApplication extends MultiDexApplication {
         mLocationOption = new AMapLocationClientOption();
         //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy)
-                .setInterval(1800 * 1000)//设置定位间隔,单位毫秒,默认为2000ms，最低1000ms。
+                .setInterval(3600 * 1000)//设置定位间隔,单位毫秒,默认为2000ms，最低1000ms。
                 .setNeedAddress(true);//设置是否返回地址信息（默认返回地址信息）
         //初始化定位
         mLocationClient = new AMapLocationClient(this);

@@ -46,6 +46,7 @@
     <string name="permission_location_hint">在设置-应用-云逸宝-权限中开启位置信息权限，以正常使用获取附近WIFI热点信息和定位功能</string>
     <string name="permission_scan_hint">在设置-应用-云逸宝-权限中开启相机权限，以正常使用扫一扫功能</string>
     <string name="go_to_config">去设置</string>
+    <string name="whether_to_connect">是否连接到%1$s?</string>
 
     <!--Toolbar Title-->
     <string name="data_flow_charge">流量充值</string>
@@ -130,7 +131,7 @@
     <string name="disconnected">未连接</string>
     <string name="power_of_battery">设备电量</string>
     <string name="leasing_equipment">租赁设备</string>
-    <string name="my_devices">我的设备</string>
+    <string name="device_details">设备详情</string>
     <string name="no_authenticate_device_hint">您没有授权任何设备，请先授权设备再连接</string>
     <string name="refuse_to_auth">拒绝</string>
     <string name="agree_to_auth">授权</string>

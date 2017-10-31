@@ -1,9 +1,11 @@
 package com.anyihao.ayb.constant;
 
+import com.anyihao.ayb.BuildConfig;
+
 /**
  * @author Administrator
- * date: 2017/2/16 001613:54.
- * email:looper@126.com
+ *         date: 2017/2/16 001613:54.
+ *         email:looper@126.com
  */
 
 public class GlobalConsts {
@@ -25,10 +27,11 @@ public class GlobalConsts {
      */
     /**
      * public static final String PREFIX_URL = "http://192.168.0.118:8888/vrsws/vappws.json";
-     *public static final String PREFIX_URL = "http://122.224.91.149:8888/vrsws/vappws.json";
-     *
-    public static final String PREFIX_URL = "http://180.153.59.29:8888/vrsws/vappws.json";
-    public static final String PREFIX_URL = "http://122.224.91.148:8888/vrsws/vappws.json";*/
-    public static final String PREFIX_URL = "http://122.224.91.147:8888/vrsws/vappws.json";
-    public static final String FILE_PREFIX_URL = "http://122.224.91.147:8888/vrsws/upload/avatar";
+     * public static final String PREFIX_URL = "http://122.224.91.149:8888/vrsws/vappws.json";
+     * <p>
+     * public static final String PREFIX_URL = "http://180.153.59.29:8888/vrsws/vappws.json";
+     * public static final String PREFIX_URL = "http://122.224.91.148:8888/vrsws/vappws.json";
+     */
+    public static final String PREFIX_URL = BuildConfig.API_URL + "/vrsws/vappws.json";
+    public static final String FILE_PREFIX_URL = BuildConfig.API_URL + "/vrsws/upload/avatar";
 }

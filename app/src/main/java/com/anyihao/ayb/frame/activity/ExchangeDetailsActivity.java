@@ -25,6 +25,9 @@ import java.util.Map;
 
 import butterknife.BindView;
 
+/**
+ * @author Admin
+ */
 public class ExchangeDetailsActivity extends ABaseActivity {
 
     @BindView(R.id.toolbar_title_mid)
@@ -51,8 +54,9 @@ public class ExchangeDetailsActivity extends ABaseActivity {
     @Override
     protected void getExtraParams() {
         Intent intent = getIntent();
-        if (intent == null)
+        if (intent == null) {
             return;
+        }
         exchangeId = intent.getIntExtra("exchangeId", -1);
         if (exchangeId != -1) {
             getExchangeDetails();
@@ -122,7 +126,6 @@ public class ExchangeDetailsActivity extends ABaseActivity {
         if (!TextUtils.isEmpty(bean.getUpImage())) {
             Glide.with(this)
                     .load(bean.getUpImage())
-                    .placeholder(R.drawable.exchange_details_header)
                     .into(imvHeader);
         }
     }
@@ -132,8 +135,9 @@ public class ExchangeDetailsActivity extends ABaseActivity {
         if (actionType == 0) {
             ExchangeDetailsBean bean = GsonUtils.getInstance().transitionToBean(result,
                     ExchangeDetailsBean.class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 displayImage(bean);
             } else {
@@ -143,8 +147,9 @@ public class ExchangeDetailsActivity extends ABaseActivity {
 
         if (actionType == 1) {
             ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean.class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 ToastUtils.showToast(getApplicationContext(), "流量兑换成功");
                 finish();

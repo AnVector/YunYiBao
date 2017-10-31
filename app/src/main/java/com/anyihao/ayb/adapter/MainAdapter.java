@@ -72,8 +72,8 @@ public class MainAdapter extends UAdapter<WifiInfoBean> {
         }
         Drawable mDrawable = resources.getDrawable(drawableId);
         if (mDrawable != null) {
-            mDrawable.setBounds(0, 0, mDrawable.getMinimumWidth(),
-                    mDrawable.getMinimumHeight());
+            mDrawable.setBounds(0, 0, 80,
+                    64);
             holder.tvTitle.setCompoundDrawablePadding(19);
             holder.tvTitle.setCompoundDrawables(mDrawable, null, null, null);
         }

@@ -48,6 +48,9 @@ public class EnvelopeAdapter extends UAdapter<DataBean> {
             } else {
                 ((EnvelopeViewHolder) holder).dot.setVisibility(View.VISIBLE);
             }
+            if (position == mData.size() - 1) {
+                ((EnvelopeViewHolder) holder).dividerLine.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -56,6 +59,7 @@ public class EnvelopeAdapter extends UAdapter<DataBean> {
         public TextView tvStatus;
         public TextView tvDate;
         public TextView tvContent;
+        public View dividerLine;
         public View dot;
 
         public EnvelopeViewHolder(View itemView) {
@@ -63,6 +67,7 @@ public class EnvelopeAdapter extends UAdapter<DataBean> {
             tvStatus = (TextView) itemView.findViewById(R.id.tv_status);
             tvDate = (TextView) itemView.findViewById(R.id.tv_date);
             tvContent = (TextView) itemView.findViewById(R.id.tv_content);
+            dividerLine = itemView.findViewById(R.id.divider_line);
             dot = itemView.findViewById(R.id.red_dot);
         }
     }
