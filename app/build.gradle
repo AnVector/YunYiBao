@@ -9,7 +9,7 @@ def static releaseTime() {
 
 //定义versionName
 def static String releaseVName() {
-    return "2.0.1"
+    return "2.0.1";
 }
 
 //定义versionCode
@@ -53,8 +53,8 @@ android {
         applicationId "com.anyihao.ayb"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode project.hasProperty('VERSION_CODE') ? Integer.parseInt(VERSION_CODE) : releaseVCode()
-        versionName project.hasProperty('VERSION_NAME') ? VERSION_NAME : releaseVName()
+        versionCode releaseVCode()
+        versionName releaseVName()
         resConfigs "zh", "en"
         multiDexEnabled true //Enable multidex support
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

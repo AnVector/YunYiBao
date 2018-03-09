@@ -29,6 +29,9 @@ import java.util.Locale;
 
 import butterknife.BindView;
 
+/**
+ * @author Admin
+ */
 public class FlowChartActivity extends ABaseActivity {
 
     @BindView(R.id.toolbar)
@@ -68,18 +71,18 @@ public class FlowChartActivity extends ABaseActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         toolbarTitle.setText(getString(R.string.data_flow_chart));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            fakeStatusBar.setVisibility(View.VISIBLE);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            fakeStatusBar.setVisibility(View.VISIBLE);
+//        }
     }
 
-    @Override
-    protected void setStatusBarTheme() {
-        super.setStatusBarTheme();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            StatusBarUtil.setTranslucentForImageView(FlowChartActivity.this, 0, activityFlowChart);
-        }
-    }
+//    @Override
+//    protected void setStatusBarTheme() {
+//        super.setStatusBarTheme();
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            StatusBarUtil.setTranslucentForImageView(FlowChartActivity.this, 0, activityFlowChart);
+//        }
+//    }
 
     private void initViewPager() {
         ChartFragment fragment;
@@ -131,8 +134,9 @@ public class FlowChartActivity extends ABaseActivity {
                 String time = sdf.format(date);
                 ChartFragment fragment = (ChartFragment) mFragments.get(mViewpager
                         .getCurrentItem());
-                if (fragment == null)
+                if (fragment == null) {
                     return;
+                }
                 if (fragment.isVisible() && !fragment.isDetached()) {
                     fragment.queryByTime(time);
                 }
@@ -157,8 +161,9 @@ public class FlowChartActivity extends ABaseActivity {
                 String time = sdf.format(date);
                 ChartFragment fragment = (ChartFragment) mFragments.get(mViewpager
                         .getCurrentItem());
-                if (fragment == null)
+                if (fragment == null) {
                     return;
+                }
                 if (fragment.isVisible() && !fragment.isDetached()) {
                     fragment.queryByTime(time);
                 }
@@ -194,11 +199,13 @@ public class FlowChartActivity extends ABaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         ChartFragment fragment = (ChartFragment) mFragments.get(mViewpager
                 .getCurrentItem());
-        if (fragment == null)
+        if (fragment == null) {
             return true;
+        }
         Bundle bundle = fragment.getArguments();
-        if (bundle == null)
+        if (bundle == null) {
             return true;
+        }
         String cmd = bundle.getString("cmd");
         if ("DAYFLOW".equals(cmd)) {
             mPvDay.show();

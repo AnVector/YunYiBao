@@ -76,18 +76,18 @@ public class AboutUsActivity extends ABaseActivity {
         mData.clear();
         mData.addAll(generateKeyVauleBean());
         mAdapter.add(0, mData.size(), mData);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            fakeStatusBar.setVisibility(View.VISIBLE);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            fakeStatusBar.setVisibility(View.VISIBLE);
+//        }
     }
 
-    @Override
-    protected void setStatusBarTheme() {
-        super.setStatusBarTheme();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            StatusBarUtil.setTranslucentForImageView(AboutUsActivity.this, 0, activityAboutUs);
-        }
-    }
+//    @Override
+//    protected void setStatusBarTheme() {
+//        super.setStatusBarTheme();
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            StatusBarUtil.setTranslucentForImageView(AboutUsActivity.this, 0, activityAboutUs);
+//        }
+//    }
 
     @Override
     protected void initEvent() {
@@ -222,8 +222,9 @@ public class AboutUsActivity extends ABaseActivity {
         if (actionType == 0) {
             VersionInfoBean bean = GsonUtils.getInstance().transitionToBean(result,
                     VersionInfoBean.class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 versionUpdate(bean.getVersion(), bean.getDownloadLink());
             }

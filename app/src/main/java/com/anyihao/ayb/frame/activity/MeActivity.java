@@ -74,6 +74,9 @@ import fr.castorflex.android.circularprogressbar.CircularProgressDrawable;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+/**
+ * @author Admin
+ */
 public class MeActivity extends ABaseActivity {
 
     @BindView(R.id.toolbar_title_mid)
@@ -128,8 +131,9 @@ public class MeActivity extends ABaseActivity {
     @Override
     protected void getExtraParams() {
         Intent intent = getIntent();
-        if (intent == null)
+        if (intent == null) {
             return;
+        }
         uid = intent.getStringExtra("uid");
         userType = intent.getStringExtra("userType");
     }
@@ -141,16 +145,16 @@ public class MeActivity extends ABaseActivity {
             this.mActivity = new WeakReference<>(activity);
         }
 
+        @Override
         public void handleMessage(Message msg) {
             final MeActivity activity = mActivity.get();
             if (mActivity != null) {
                 switch (msg.what) {
                     case MSG_LOAD_DATA:
-                        if (activity.thread == null) {//如果已创建就不再重新创建子线程了
+                        if (activity.thread == null) {
                             activity.thread = new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    // 写子线程中的操作,解析省市区数据
                                     activity.initCity();
                                 }
                             });
@@ -173,9 +177,9 @@ public class MeActivity extends ABaseActivity {
 
     @Override
     protected void initData() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            fakeStatusBar.setVisibility(View.VISIBLE);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            fakeStatusBar.setVisibility(View.VISIBLE);
+//        }
         getUserInfo();
         mHandler.sendEmptyMessage(MSG_LOAD_DATA);
         setSupportActionBar(toolbar);
@@ -191,13 +195,13 @@ public class MeActivity extends ABaseActivity {
         initBottomDialog();
     }
 
-    @Override
-    protected void setStatusBarTheme() {
-        super.setStatusBarTheme();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            StatusBarUtil.setTranslucentForImageView(MeActivity.this, 0, activityMe);
-        }
-    }
+//    @Override
+//    protected void setStatusBarTheme() {
+//        super.setStatusBarTheme();
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            StatusBarUtil.setTranslucentForImageView(MeActivity.this, 0, activityMe);
+//        }
+//    }
 
     private void initTimePicker() {
         //控制时间范围(如果不设置范围，则使用默认时间1900-2100年，此段代码可注释)
@@ -635,8 +639,9 @@ public class MeActivity extends ABaseActivity {
         if (actionType == 0) {
             UserInfoBean bean = GsonUtils.getInstance().transitionToBean(result, UserInfoBean
                     .class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 mPhoneNum = bean.getPhoneNumber();
                 mAvatarUrl = bean.getAvatar();
@@ -651,8 +656,9 @@ public class MeActivity extends ABaseActivity {
             }
         } else {
             ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean.class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             ToastUtils.showToast(getApplicationContext(), bean.getMsg());
             if (bean.getCode() == 200) {
                 switch (actionType) {

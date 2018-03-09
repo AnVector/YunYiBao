@@ -67,20 +67,20 @@ public class AccountManageActivity extends ABaseActivity {
         return R.layout.activity_account_manage;
     }
 
-    @Override
-    protected void setStatusBarTheme() {
-        super.setStatusBarTheme();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            StatusBarUtil.setTranslucentForImageView(AccountManageActivity.this, 0,
-                    activityAccountManage);
-        }
-    }
+//    @Override
+//    protected void setStatusBarTheme() {
+//        super.setStatusBarTheme();
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            StatusBarUtil.setTranslucentForImageView(AccountManageActivity.this, 0,
+//                    activityAccountManage);
+//        }
+//    }
 
     @Override
     protected void initData() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            fakeStatusBar.setVisibility(View.VISIBLE);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            fakeStatusBar.setVisibility(View.VISIBLE);
+//        }
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);

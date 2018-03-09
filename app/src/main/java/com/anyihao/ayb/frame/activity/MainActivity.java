@@ -10,7 +10,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
@@ -53,6 +52,7 @@ import butterknife.BindView;
  * 15. final可提高程序的响应效率，类方法确定不允许被重写，对象参数前加final，表示不允许修改引用的指向。
  * 16. 不要在条件判断中执行其他复杂的语句，将复杂逻辑判断的结果赋值给一个有意义的boolean类型的变量，以提高可读性。
  * 17. 推荐尽量少用else
+ * @author Admin
  */
 public class MainActivity extends ABaseActivity {
 
@@ -101,8 +101,9 @@ public class MainActivity extends ABaseActivity {
     private IBinder.DeathRecipient mDeathRecipient = new IBinder.DeathRecipient() {
         @Override
         public void binderDied() {
-            if (mWifiInfoManager == null)
+            if (mWifiInfoManager == null) {
                 return;
+            }
             //解除Binder
             mWifiInfoManager.asBinder().unlinkToDeath(mDeathRecipient, 0);
             mWifiInfoManager = null;
@@ -193,7 +194,6 @@ public class MainActivity extends ABaseActivity {
         mColorBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                mWebview.loadUrl("javascript:setColor('#00f','这是android 原生调用JS代码的触发事件')");
                 Intent bindIntent = new Intent(MainActivity.this, PollingService.class);
                 bindService(bindIntent, mWifiManagerConnection, BIND_AUTO_CREATE);
                 mIsBound = true;
@@ -228,33 +228,16 @@ public class MainActivity extends ABaseActivity {
      */
     class ButtonClick {
 
-        //这是 button.click0() 的触发事件
-        //H5调用方法：javascript:button.click0()
+
+        @Override
         @JavascriptInterface
-        public void click0() {
-            show("title", "");
-        }
-
-        //这是 button.click0() 的触发事件，可以传递待参数
-        //H5调用方法：javascript:button.click0('参数1','参数2')
-        @JavascriptInterface
-        public void click0(String data1, String data2) {
-            show(data1, data2);
-        }
-
-
-        @JavascriptInterface  //必须添加，这样才可以标志这个类的名称是 button
+        /**
+         *必须添加，这样才可以标志这个类的名称是 button
+         */
         public String toString() {
             return "button";
         }
 
-        private void show(String title, String data) {
-            new AlertDialog.Builder(getWindow().getContext())
-                    .setTitle(title)
-                    .setMessage(data)
-                    .setPositiveButton("确定", null)
-                    .create().show();
-        }
     }
 
     @Override
@@ -264,7 +247,7 @@ public class MainActivity extends ABaseActivity {
         if (mWifiInfoManager != null && mWifiInfoManager.asBinder().isBinderAlive()) {
             try {
                 mWifiInfoManager.unregisterCallback(mTaskCallback);
-                //        解除客户端Service绑定
+                //解除客户端Service绑定
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -272,7 +255,7 @@ public class MainActivity extends ABaseActivity {
         if (mIsBound) {
             unbindService(mWifiManagerConnection);
         }
-        if(mHandler!=null){
+        if (mHandler != null) {
             mHandler.removeCallbacksAndMessages(null);
             mHandler = null;
         }

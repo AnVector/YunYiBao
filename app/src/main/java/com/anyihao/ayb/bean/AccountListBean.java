@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by Admin on 2017/6/21.
+ *
+ * @author Admin
+ * @date 2017/6/21
  */
 
 public class AccountListBean implements Serializable {

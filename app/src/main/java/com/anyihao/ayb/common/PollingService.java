@@ -26,13 +26,16 @@ import com.anyihao.ayb.frame.activity.MainActivity;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
 /**
- * Created by Administrator on 2016/11/15 0015.
+ * @author Administrator
+ * @date 2016/11/15 0015
  */
 
 public class PollingService extends Service {
@@ -129,7 +132,6 @@ public class PollingService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-//        LogUtils.e(TAG, "intent=" + intent+",flags="+flags+",startId="+startId);
         initTimerTask();
         if (intent != null) {
             dispatchClickEvent(intent.getIntExtra("command", 0));
@@ -187,9 +189,9 @@ public class PollingService extends Service {
         if (isConnected) {
             if (failTimes == 1) {
                 initUUWifiInfo();
-            } else {
-                ++failTimes;
+                return;
             }
+            ++failTimes;
         }
     }
 
@@ -381,5 +383,4 @@ public class PollingService extends Service {
         mRemoteCallbackList.kill();
         super.onDestroy();
     }
-
 }

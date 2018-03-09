@@ -41,6 +41,9 @@ import java.util.Map;
 import butterknife.BindView;
 import cn.jpush.android.api.JPushInterface;
 
+/**
+ * @author Admin
+ */
 public class SettingsActivity extends ABaseActivity {
 
     @BindView(R.id.toolbar_title_mid)
@@ -79,9 +82,9 @@ public class SettingsActivity extends ABaseActivity {
         if (!isLogin) {
             btnLogout.setText(getString(R.string.not_login));
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            fakeStatusBar.setVisibility(View.VISIBLE);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            fakeStatusBar.setVisibility(View.VISIBLE);
+//        }
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -174,13 +177,13 @@ public class SettingsActivity extends ABaseActivity {
 
     }
 
-    @Override
-    protected void setStatusBarTheme() {
-        super.setStatusBarTheme();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            StatusBarUtil.setTranslucentForImageView(SettingsActivity.this, 0, activitySettings);
-        }
-    }
+//    @Override
+//    protected void setStatusBarTheme() {
+//        super.setStatusBarTheme();
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            StatusBarUtil.setTranslucentForImageView(SettingsActivity.this, 0, activitySettings);
+//        }
+//    }
 
     private void startActivityForLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
@@ -268,8 +271,9 @@ public class SettingsActivity extends ABaseActivity {
     public void onSuccess(String result, int page, Integer actionType) {
         if (actionType == 0) {
             ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean.class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg());
                 JPushInterface.deleteAlias(this, -1);
@@ -283,8 +287,9 @@ public class SettingsActivity extends ABaseActivity {
         if (actionType == 1) {
             UserLevelBean bean = GsonUtils.getInstance().transitionToBean(result, UserLevelBean
                     .class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
 
             if (bean.getCode() == 200) {
                 isLogin = true;

@@ -44,6 +44,9 @@ import java.util.Map;
 
 import butterknife.BindView;
 
+/**
+ * @author Admin
+ */
 public class DeviceManageActivity extends ABaseActivity {
 
     @BindView(R.id.toolbar_title_mid)
@@ -71,9 +74,9 @@ public class DeviceManageActivity extends ABaseActivity {
 
     @Override
     protected void initData() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            fakeStatusBar.setVisibility(View.VISIBLE);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            fakeStatusBar.setVisibility(View.VISIBLE);
+//        }
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -92,8 +95,9 @@ public class DeviceManageActivity extends ABaseActivity {
                 .EMPTY_CLEAR_ALL, new emptyViewOnShownListener() {
             @Override
             public void onEmptyViewShow(View mView) {
-                if (mView == null)
+                if (mView == null) {
                     return;
+                }
                 ImageView imvError = (ImageView) mView.findViewById(R.id.ic_error);
                 TextView tvHint = (TextView) mView.findViewById(R.id.tv_hint);
                 if (imvError != null) {
@@ -108,14 +112,14 @@ public class DeviceManageActivity extends ABaseActivity {
         recyclerView.setAdapter(mAdapter);
     }
 
-    @Override
-    protected void setStatusBarTheme() {
-        super.setStatusBarTheme();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            StatusBarUtil.setTranslucentForImageView(DeviceManageActivity.this, 0,
-                    activityDeviceManage);
-        }
-    }
+//    @Override
+//    protected void setStatusBarTheme() {
+//        super.setStatusBarTheme();
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            StatusBarUtil.setTranslucentForImageView(DeviceManageActivity.this, 0,
+//                    activityDeviceManage);
+//        }
+//    }
 
     @Override
     protected void initEvent() {
@@ -189,8 +193,9 @@ public class DeviceManageActivity extends ABaseActivity {
         if (actionType == 0) {
             AuthorizedDeviceListBean bean = GsonUtils.getInstance().transitionToBean(result,
                     AuthorizedDeviceListBean.class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 List<DataBean> beans = bean.getData();
                 if (beans.size() > 0) {
@@ -206,8 +211,9 @@ public class DeviceManageActivity extends ABaseActivity {
 
         if (actionType == 1) {
             ResultBean bean = GsonUtils.getInstance().transitionToBean(result, ResultBean.class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 ToastUtils.showToast(getApplicationContext(), "解除授权成功");
                 getAuthorizedDevices();

@@ -38,6 +38,9 @@ import java.util.Map;
 
 import butterknife.BindView;
 
+/**
+ * @author Admin
+ */
 public class RechargeActivity extends ABaseActivity {
 
 
@@ -73,8 +76,9 @@ public class RechargeActivity extends ABaseActivity {
     @Override
     protected void getExtraParams() {
         Intent intent = getIntent();
-        if (intent == null)
+        if (intent == null) {
             return;
+        }
         String action = intent.getStringExtra("action");
         if (!TextUtils.isEmpty(action)) {
             index = intent.getIntExtra("index", 0);
@@ -140,8 +144,9 @@ public class RechargeActivity extends ABaseActivity {
             public void onClick(View v) {
                 PackageFragment fragment = (PackageFragment) mFragments.get(mViewpager
                         .getCurrentItem());
-                if (fragment == null)
+                if (fragment == null) {
                     return;
+                }
                 if (fragment.isVisible() && !fragment.isDetached()) {
                     Intent intent = new Intent(RechargeActivity.this, PayActivity.class);
                     intent.putExtra("money", fragment.getMoney());
@@ -155,8 +160,9 @@ public class RechargeActivity extends ABaseActivity {
     }
 
     private void setAmountTextStyle(double amount) {
-        if (tvFlow == null)
+        if (tvFlow == null) {
             return;
+        }
         String txt = String.format(getResources().getString(R.string
                 .data_available), transferAmount(amount));
         SpannableString spannableString = new SpannableString(txt);
@@ -184,8 +190,9 @@ public class RechargeActivity extends ABaseActivity {
         if (actionType == 0) {
             PackageListBean bean = GsonUtils.getInstance().transitionToBean(result,
                     PackageListBean.class);
-            if (bean == null)
+            if (bean == null) {
                 return;
+            }
             if (bean.getCode() == 200) {
                 tvNickname.setText(String.format(getResources().getString(R.string
                         .recharge_nick_name), bean.getNickname()));

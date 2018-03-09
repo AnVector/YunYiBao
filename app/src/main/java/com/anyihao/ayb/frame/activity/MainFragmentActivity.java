@@ -2,7 +2,6 @@ package com.anyihao.ayb.frame.activity;
 
 import android.app.DownloadManager;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -11,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -30,7 +30,6 @@ import com.anyihao.ayb.adapter.UFragmentPagerAdapter;
 import com.anyihao.ayb.bean.VersionInfoBean;
 import com.anyihao.ayb.common.PresenterFactory;
 import com.anyihao.ayb.constant.GlobalConsts;
-import com.anyihao.ayb.frame.fragment.DiscoverFragment;
 import com.anyihao.ayb.frame.fragment.HomeFragment;
 import com.anyihao.ayb.frame.fragment.MeFragment;
 import com.anyihao.ayb.frame.fragment.TaskFragment;
@@ -51,6 +50,7 @@ import butterknife.BindView;
 
 /**
  *
+ * @author Admin
  */
 public class MainFragmentActivity extends ABaseActivity {
 
@@ -70,7 +70,7 @@ public class MainFragmentActivity extends ABaseActivity {
     private List<Fragment> mFragmentList = new ArrayList<>();
     private UFragmentPagerAdapter uFragmentPagerAdapter;
     private RadioButton mCurrent;
-//    private int count;
+//  private int count;
 
     private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -88,12 +88,12 @@ public class MainFragmentActivity extends ABaseActivity {
 
     @Override
     protected void setStatusBarTheme() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            super.setStatusBarTheme();
-            StatusBarUtil.setTranslucentForImageView(this, 0, mViewPager);
-        } else {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            super.setStatusBarTheme();
+//            StatusBarUtil.setTranslucentForImageView(this, 0, mViewPager);
+//        } else {
             StatusBarUtil.setTranslucentForImageViewInFragment(MainFragmentActivity.this, null);
-        }
+//        }
     }
 
     @Override
@@ -347,5 +347,10 @@ public class MainFragmentActivity extends ABaseActivity {
                 versionUpdate(bean.getVersion(), bean.getDownloadLink());
             }
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
     }
 }

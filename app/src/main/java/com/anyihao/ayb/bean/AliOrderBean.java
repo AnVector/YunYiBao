@@ -13,7 +13,6 @@ public class AliOrderBean implements Serializable {
     private int code;
     private String msg;
     private String orderInfo;
-
     public int getCode() {
         return code;
     }

@@ -230,8 +230,9 @@ public class LoginActivity extends ABaseActivity {
         btnLogin.setEnabled(true);
         LoginBean bean = GsonUtils.getInstance().transitionToBean(result, LoginBean
                 .class);
-        if (bean == null)
+        if (bean == null) {
             return;
+        }
         if (bean.getCode() == 200) {
             if (bean.getBindStatus() == 1) {
                 ToastUtils.showToast(getApplicationContext(), bean.getMsg());

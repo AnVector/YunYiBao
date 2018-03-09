@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -21,6 +22,9 @@ import com.orhanobut.logger.Logger;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+/**
+ * @author Admin
+ */
 public abstract class ABaseActivity extends BKBaseActivity implements IView<Integer> {
 
     @Override
@@ -140,8 +144,9 @@ public abstract class ABaseActivity extends BKBaseActivity implements IView<Inte
 
     @Override
     public void onFailure(String error, int page, Integer actionType) {
-        if (TextUtils.isEmpty(error))
+        if (TextUtils.isEmpty(error)) {
             return;
+        }
         if (error.contains("ConnectException")) {
             ToastUtils.showToast(getApplicationContext(), "网络连接失败，请检查网络设置");
         } else if (error.contains("404")) {
@@ -151,5 +156,16 @@ public abstract class ABaseActivity extends BKBaseActivity implements IView<Inte
         } else {
             ToastUtils.showToast(getApplicationContext(), error);
         }
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+
+        return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
     }
 }

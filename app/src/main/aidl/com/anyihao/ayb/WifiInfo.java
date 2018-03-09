@@ -553,6 +553,32 @@ public class WifiInfo implements Parcelable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        WifiInfo wifiInfo = (WifiInfo) o;
+        return code == wifiInfo.code && seq == wifiInfo.seq && (msg != null ? msg.equals(wifiInfo
+                .msg) : wifiInfo.msg == null && (desc != null ? desc.equals(wifiInfo.desc) :
+                wifiInfo.desc == null && (data != null ? data.equals(wifiInfo.data) : wifiInfo
+                        .data == null)));
+    }
+
+    @Override
+    public int hashCode() {
+        int result = msg != null ? msg.hashCode() : 0;
+        result = 31 * result + code;
+        result = 31 * result + (desc != null ? desc.hashCode() : 0);
+        result = 31 * result + (int) (seq ^ (seq >>> 32));
+        result = 31 * result + (data != null ? data.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }

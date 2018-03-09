@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -17,10 +18,16 @@ import com.github.lzyzsd.jsbridge.BridgeWebView;
 import com.github.lzyzsd.jsbridge.CallBackFunction;
 import com.github.lzyzsd.jsbridge.DefaultHandler;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+
 import butterknife.BindView;
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 import fr.castorflex.android.circularprogressbar.CircularProgressDrawable;
 
+/**
+ * @author Admin
+ */
 public class WebActivity extends ABaseActivity {
 
     @BindView(R.id.webView)
@@ -42,10 +49,10 @@ public class WebActivity extends ABaseActivity {
     @Override
     protected void getExtraParams() {
         Intent intent = getIntent();
-        if (intent == null)
-            return;
-        targetUrl = intent.getStringExtra("url");
-        title = intent.getStringExtra("title");
+        if (intent != null) {
+            targetUrl = intent.getStringExtra("url");
+            title = intent.getStringExtra("title");
+        }
     }
 
     @Override
@@ -146,4 +153,5 @@ public class WebActivity extends ABaseActivity {
             webView.destroy();
         }
     }
+
 }
