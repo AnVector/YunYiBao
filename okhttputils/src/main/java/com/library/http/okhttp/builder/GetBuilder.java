@@ -11,7 +11,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by zhy on 15/12/14.
+ *
+ * @author zhy
+ * @date 15/12/14
  */
 public class GetBuilder extends OkHttpRequestBuilder<GetBuilder> implements HasParamsable
 {
@@ -34,10 +36,7 @@ public class GetBuilder extends OkHttpRequestBuilder<GetBuilder> implements HasP
         }
         Uri.Builder builder = Uri.parse(url).buildUpon();
         Set<String> keys = params.keySet();
-        Iterator<String> iterator = keys.iterator();
-        while (iterator.hasNext())
-        {
-            String key = iterator.next();
+        for (String key : keys) {
             builder.appendQueryParameter(key, params.get(key));
         }
         return builder.build().toString();

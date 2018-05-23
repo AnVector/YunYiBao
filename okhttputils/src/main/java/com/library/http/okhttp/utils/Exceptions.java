@@ -1,7 +1,9 @@
 package com.library.http.okhttp.utils;
 
 /**
- * Created by zhy on 15/12/14.
+ *
+ * @author zhy
+ * @date 15/12/14
  */
 public class Exceptions
 {

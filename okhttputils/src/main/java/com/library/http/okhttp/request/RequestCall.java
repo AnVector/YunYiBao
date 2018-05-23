@@ -1,7 +1,7 @@
 package com.library.http.okhttp.request;
 
 import com.library.http.okhttp.OkHttpUtils;
-import com.library.http.okhttp.callback.Callback;
+import com.library.http.okhttp.callback.BaseCallback;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -17,7 +17,7 @@ import okhttp3.Response;
  */
 public class RequestCall
 {
-    private OkHttpRequest okHttpRequest;
+    private BaseOkHttpRequest baseOkHttpRequest;
     private Request request;
     private Call call;
 
@@ -27,9 +27,9 @@ public class RequestCall
 
     private OkHttpClient clone;
 
-    public RequestCall(OkHttpRequest request)
+    public RequestCall(BaseOkHttpRequest request)
     {
-        this.okHttpRequest = request;
+        this.baseOkHttpRequest = request;
     }
 
     public RequestCall readTimeOut(long readTimeOut)
@@ -50,7 +50,7 @@ public class RequestCall
         return this;
     }
 
-    public Call buildCall(Callback callback)
+    public Call buildCall(BaseCallback callback)
     {
         request = generateRequest(callback);
 
@@ -74,12 +74,12 @@ public class RequestCall
         return call;
     }
 
-    private Request generateRequest(Callback callback)
+    private Request generateRequest(BaseCallback callback)
     {
-        return okHttpRequest.generateRequest(callback);
+        return baseOkHttpRequest.generateRequest(callback);
     }
 
-    public void execute(Callback callback)
+    public void execute(BaseCallback callback)
     {
         buildCall(callback);
 
@@ -101,9 +101,9 @@ public class RequestCall
         return request;
     }
 
-    public OkHttpRequest getOkHttpRequest()
+    public BaseOkHttpRequest getOkHttpRequest()
     {
-        return okHttpRequest;
+        return baseOkHttpRequest;
     }
 
     public Response execute() throws IOException

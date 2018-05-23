@@ -2,14 +2,17 @@ package com.library.http.okhttp.utils;
 
 import android.util.Log;
 
+import com.library.http.okhttp.common.ConfigConstants;
+
 /**
- * Created by zhy on 15/11/6.
+ *
+ * @author zhy
+ * @date 15/11/6
  */
 public class L {
-    private static boolean debug = true;
 
     public static void d(String msg) {
-        if (debug) {
+        if (ConfigConstants.DEBUG) {
             Log.d("OkHttp", msg);
         }
     }

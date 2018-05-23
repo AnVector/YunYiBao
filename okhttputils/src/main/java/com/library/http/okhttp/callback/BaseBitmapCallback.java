@@ -6,13 +6,13 @@ import android.graphics.BitmapFactory;
 import okhttp3.Response;
 
 /**
- * Created by zhy on 15/12/14.
+ *
+ * @author zhy
+ * @date 15/12/14
  */
-public abstract class BitmapCallback extends Callback<Bitmap>
-{
+public abstract class BaseBitmapCallback extends BaseCallback<Bitmap> {
     @Override
-    public Bitmap parseNetworkResponse(Response response , int id) throws Exception
-    {
+    public Bitmap parseNetworkResponse(Response response, int id) throws Exception {
         return BitmapFactory.decodeStream(response.body().byteStream());
     }
 

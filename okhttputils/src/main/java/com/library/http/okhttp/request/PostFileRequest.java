@@ -1,7 +1,7 @@
 package com.library.http.okhttp.request;
 
 import com.library.http.okhttp.OkHttpUtils;
-import com.library.http.okhttp.callback.Callback;
+import com.library.http.okhttp.callback.BaseCallback;
 import com.library.http.okhttp.utils.Exceptions;
 
 import java.io.File;
@@ -14,7 +14,7 @@ import okhttp3.RequestBody;
 /**
  * Created by zhy on 15/12/14.
  */
-public class PostFileRequest extends OkHttpRequest
+public class PostFileRequest extends BaseOkHttpRequest
 {
     private static MediaType MEDIA_TYPE_STREAM = MediaType.parse("application/octet-stream");
 
@@ -44,7 +44,7 @@ public class PostFileRequest extends OkHttpRequest
     }
 
     @Override
-    protected RequestBody wrapRequestBody(RequestBody requestBody, final Callback callback)
+    protected RequestBody wrapRequestBody(RequestBody requestBody, final BaseCallback callback)
     {
         if (callback == null) return requestBody;
         CountingRequestBody countingRequestBody = new CountingRequestBody(requestBody, new CountingRequestBody.Listener()

@@ -2,7 +2,7 @@ package com.library.http.okhttp.request;
 
 import com.library.http.okhttp.builder.PostFormBuilder;
 import com.library.http.okhttp.OkHttpUtils;
-import com.library.http.okhttp.callback.Callback;
+import com.library.http.okhttp.callback.BaseCallback;
 
 import java.io.UnsupportedEncodingException;
 import java.net.FileNameMap;
@@ -21,7 +21,7 @@ import okhttp3.RequestBody;
 /**
  * Created by zhy on 15/12/14.
  */
-public class PostFormRequest extends OkHttpRequest
+public class PostFormRequest extends BaseOkHttpRequest
 {
     private List<PostFormBuilder.FileInput> files;
 
@@ -57,7 +57,7 @@ public class PostFormRequest extends OkHttpRequest
     }
 
     @Override
-    protected RequestBody wrapRequestBody(RequestBody requestBody, final Callback callback)
+    protected RequestBody wrapRequestBody(RequestBody requestBody, final BaseCallback callback)
     {
         if (callback == null) return requestBody;
         CountingRequestBody countingRequestBody = new CountingRequestBody(requestBody, new CountingRequestBody.Listener()

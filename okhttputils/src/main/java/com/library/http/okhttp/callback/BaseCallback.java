@@ -4,15 +4,16 @@ import okhttp3.Call;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public abstract class Callback<T>
-{
+/**
+ * @author kongminghui
+ */
+public abstract class BaseCallback<T> {
     /**
      * UI Thread
      *
      * @param request
      */
-    public void onBefore(Request request, int id)
-    {
+    public void onBefore(Request request, int id) {
     }
 
     /**
@@ -20,8 +21,7 @@ public abstract class Callback<T>
      *
      * @param
      */
-    public void onAfter(int id)
-    {
+    public void onAfter(int id) {
     }
 
     /**
@@ -29,8 +29,7 @@ public abstract class Callback<T>
      *
      * @param progress
      */
-    public void inProgress(float progress, long total , int id)
-    {
+    public void inProgress(float progress, long total, int id) {
 
     }
 
@@ -40,8 +39,7 @@ public abstract class Callback<T>
      * @param response
      * @return
      */
-    public boolean validateReponse(Response response, int id)
-    {
+    public boolean validateReponse(Response response, int id) {
         return response.isSuccessful();
     }
 
@@ -49,32 +47,40 @@ public abstract class Callback<T>
      * Thread Pool Thread
      *
      * @param response
+     * @param id
+     * @return
+     * @throws Exception
      */
     public abstract T parseNetworkResponse(Response response, int id) throws Exception;
 
+    /**
+     * @param call
+     * @param e
+     * @param id
+     */
     public abstract void onError(Call call, Exception e, int id);
 
+    /**
+     * @param response
+     * @param id
+     */
     public abstract void onResponse(T response, int id);
 
 
-    public static Callback CALLBACK_DEFAULT = new Callback()
-    {
+    public static BaseCallback CALLBACK_DEFAULT = new BaseCallback() {
 
         @Override
-        public Object parseNetworkResponse(Response response, int id) throws Exception
-        {
+        public Object parseNetworkResponse(Response response, int id) throws Exception {
             return null;
         }
 
         @Override
-        public void onError(Call call, Exception e, int id)
-        {
+        public void onError(Call call, Exception e, int id) {
 
         }
 
         @Override
-        public void onResponse(Object response, int id)
-        {
+        public void onResponse(Object response, int id) {
 
         }
     };
